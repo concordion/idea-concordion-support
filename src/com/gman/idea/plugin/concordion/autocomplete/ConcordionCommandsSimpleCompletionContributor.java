@@ -13,8 +13,6 @@ import static com.gman.idea.plugin.concordion.Concordion.*;
 
 public class ConcordionCommandsSimpleCompletionContributor extends CompletionContributor {
 
-
-
     public ConcordionCommandsSimpleCompletionContributor() {
         extend(
                 CompletionType.BASIC,

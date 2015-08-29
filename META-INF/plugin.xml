@@ -20,6 +20,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsSimpleCompletionContributor"/>
+    <annotator language="HTML" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionHtmlSpecAnnotator"/>
   </extensions>
 
   <application-components>
