@@ -50,7 +50,7 @@ public final class Concordion {
 
     private static final String OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS = "Test";
 
-    public static PsiClass correspondingJavaClass(PsiFile htmlSpec) {
+    public static PsiClass correspondingJavaRunner(PsiFile htmlSpec) {
         Project project = htmlSpec.getProject();
         GlobalSearchScope scope = getProjectScope(project);
 
@@ -58,29 +58,56 @@ public final class Concordion {
         String packageName = JavaDirectoryService.getInstance().getPackage(htmlSpec.getContainingDirectory()).getQualifiedName();
         String qualifiedName = packageName + '.' + className;
 
-        PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
-        if (aClass == null) {
+        PsiClass runnerClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
+        if (runnerClass == null) {
             qualifiedName = qualifiedName + OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS;
-            aClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
+            runnerClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
         }
 
-        return aClass;
+        return runnerClass;
     }
 
-    private static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
-    private static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
+    public static PsiFile correspondingHtmlSpec(PsiClass runnerClass) {
+        String specName = runnerClass.getName();
+        String noTestSpecName = specName.endsWith(OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS) ?
+                specName.substring(0, specName.length() - OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS.length()) + '.' + HtmlFileType.INSTANCE.getDefaultExtension() : null;
+
+        specName +='.' + HtmlFileType.INSTANCE.getDefaultExtension();
+
+        PsiDirectory classDirectory = runnerClass.getContainingFile().getContainingDirectory();
+        PsiDirectory[] packageDirectories = JavaDirectoryService.getInstance().getPackage(classDirectory).getDirectories();
+        for (PsiDirectory packageDirectory : packageDirectories) {
+            PsiFile htmlSpec = packageDirectory.findFile(specName);
+            if (htmlSpec != null) {
+                return htmlSpec;
+            }
+            if (noTestSpecName == null) {
+                continue;
+            }
+            htmlSpec = packageDirectory.findFile(noTestSpecName);
+            if (htmlSpec != null) {
+                return htmlSpec;
+            }
+        }
+
+        return null;
+    }
+
+    public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
+    public static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
 
     public static boolean classAnnotatedWithConcordionRunner(PsiClass runnerClass) {
         PsiAnnotation runner = runnerClass.getModifierList().findAnnotation(JUNIT_RUN_WITH_ANNOTATION);
-        if (runner == null) {
-            return false;
-        }
-        PsiJavaCodeReferenceElement runnerReference = PsiTreeUtil.findChildOfType(runner.getParameterList(), PsiJavaCodeReferenceElement.class);
+        return runner != null && runWithAnnotationUsesConcordionRunner(runner);
+    }
+
+    public static boolean runWithAnnotationUsesConcordionRunner(PsiAnnotation runWithAnnotation) {
+        PsiJavaCodeReferenceElement runnerReference = PsiTreeUtil.findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
         if (runnerReference == null) {
             return false;
         }
 
-        Project project = runnerClass.getProject();
+        Project project = runWithAnnotation.getProject();
         GlobalSearchScope scope = getProjectScope(project);
 
         PsiClassType basicRunner = PsiType.getTypeByName(BASIC_CONCORDION_RUNNER, project, scope);
@@ -88,6 +115,7 @@ public final class Concordion {
 
         return basicRunner.isConvertibleFrom(usedRunner);
     }
+
 
     private Concordion() {
     }

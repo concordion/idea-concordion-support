@@ -15,7 +15,7 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
 
     private static final String MISSING_RUNNER_CLASS_MESSAGE = "Missing runner class";
     private static final String RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE = "Runner class is not annotated";
-    private static final String CONCORDION_CONFIGURED_MESSAGE = "In concordion";
+    private static final String CONCORDION_CONFIGURED_MESSAGE = "In concordion html spec";
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -27,12 +27,12 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
             return;
         }
 
-        PsiClass correspondingJavaClass = correspondingJavaClass(value.getContainingFile());
-        if (correspondingJavaClass == null) {
+        PsiClass correspondingJavaRunner = correspondingJavaRunner(value.getContainingFile());
+        if (correspondingJavaRunner == null) {
             Annotation errorAnnotation = holder.createErrorAnnotation(element, MISSING_RUNNER_CLASS_MESSAGE);
             errorAnnotation.setTooltip(MISSING_RUNNER_CLASS_MESSAGE);
             //TODO provide quick fix to the user
-        } else if (!classAnnotatedWithConcordionRunner(correspondingJavaClass)) {
+        } else if (!classAnnotatedWithConcordionRunner(correspondingJavaRunner)) {
             Annotation errorAnnotation = holder.createErrorAnnotation(element, RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE);
             errorAnnotation.setTooltip(RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE);
             //TODO provide quick fix to the user
