@@ -1,0 +1,33 @@
+<idea-plugin version="2">
+  <id>com.gman.idea.plugin.concordion</id>
+  <name>Concordion support</name>
+  <version>1.0</version>
+  <vendor email="gmandnepr@gmail.com" url="https://github.com/gmandnepr">Gmandnepr</vendor>
+
+  <description><![CDATA[
+      TBD
+    ]]></description>
+
+  <change-notes><![CDATA[
+      0.1 Initial features<br/>
+      <ul>
+        <li>Autocompletion with the concordion commands</li>
+      </ul>
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="131"/>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsSimpleCompletionContributor"/>
+  </extensions>
+
+  <application-components>
+  </application-components>
+
+  <project-components>
+  </project-components>
+
+  <actions>
+  </actions>
+</idea-plugin>
