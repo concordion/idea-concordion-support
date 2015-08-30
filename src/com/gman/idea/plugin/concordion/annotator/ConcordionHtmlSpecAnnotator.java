@@ -1,15 +1,18 @@
 package com.gman.idea.plugin.concordion.annotator;
 
 import com.gman.idea.plugin.concordion.Concordion;
+import com.gman.idea.plugin.concordion.ConcordionGutterRenderer;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionGutterRenderer.rendererForHtmlSpec;
 
 public class ConcordionHtmlSpecAnnotator implements Annotator {
 
@@ -27,7 +30,8 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
             return;
         }
 
-        PsiClass correspondingJavaRunner = correspondingJavaRunner(value.getContainingFile());
+        PsiFile htmlSpec = value.getContainingFile();
+        PsiClass correspondingJavaRunner = correspondingJavaRunner(htmlSpec);
         if (correspondingJavaRunner == null) {
             Annotation errorAnnotation = holder.createErrorAnnotation(element, MISSING_RUNNER_CLASS_MESSAGE);
             errorAnnotation.setTooltip(MISSING_RUNNER_CLASS_MESSAGE);
@@ -39,7 +43,7 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
         } else {
             Annotation infoAnnotation = holder.createInfoAnnotation(element.getTextRange(), CONCORDION_CONFIGURED_MESSAGE);
             infoAnnotation.setTooltip(CONCORDION_CONFIGURED_MESSAGE);
-            //TODO put glutter icon and navigate to java class
+            infoAnnotation.setGutterIconRenderer(rendererForHtmlSpec(htmlSpec, correspondingJavaRunner));
         }
     }
 }

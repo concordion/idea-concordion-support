@@ -1,6 +1,7 @@
 package com.gman.idea.plugin.concordion.annotator;
 
 import com.gman.idea.plugin.concordion.Concordion;
+import com.gman.idea.plugin.concordion.PsiUtils;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -8,10 +9,10 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionGutterRenderer.rendererForRunnerClass;
 
 public class ConcordionJavaRunnerAnnotator implements Annotator {
 
@@ -30,12 +31,9 @@ public class ConcordionJavaRunnerAnnotator implements Annotator {
             return;
         }
 
-        PsiElement runnerClass = annotation;
-        while (!(runnerClass instanceof PsiClass)) {
-            runnerClass = runnerClass.getParent();
-        }
+        PsiClass runnerClass = PsiUtils.findParent(annotation, PsiClass.class);
 
-        PsiFile htmlSpec = correspondingHtmlSpec((PsiClass) runnerClass);
+        PsiFile htmlSpec = correspondingHtmlSpec(runnerClass);
         if (htmlSpec == null) {
             Annotation errorAnnotation = holder.createErrorAnnotation(element, MISSING_HTML_SPEC_MESSAGE);
             errorAnnotation.setTooltip(MISSING_HTML_SPEC_MESSAGE);
@@ -47,7 +45,7 @@ public class ConcordionJavaRunnerAnnotator implements Annotator {
         } else {
             Annotation infoAnnotation = holder.createInfoAnnotation(element.getTextRange(), CONCORDION_CONFIGURED_MESSAGE);
             infoAnnotation.setTooltip(CONCORDION_CONFIGURED_MESSAGE);
-            //TODO put glutter icon and navigate to java class
+            infoAnnotation.setGutterIconRenderer(rendererForRunnerClass(runnerClass, htmlSpec));
         }
     }
 }
