@@ -7,6 +7,8 @@ import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -30,13 +32,17 @@ public final class Concordion {
             "example"
     ));
 
-    public static boolean isConcordionHtmlSpec(PsiFile psiFile) {
+    public static boolean isConcordionHtmlSpec(@NotNull PsiFile psiFile) {
         return HtmlFileType.INSTANCE.equals(psiFile.getFileType())
                 && psiFile.getText().contains(NAMESPACE);
     }
 
-    public static String concordionSchemaPrefixOf(HtmlFileImpl psiFile) {
-        XmlTag rootTag = psiFile.getRootTag();
+    @Nullable
+    public static String concordionSchemaPrefixOf(@NotNull PsiFile psiFile) {
+        if (!(psiFile instanceof HtmlFileImpl)) {
+            return null;
+        }
+        XmlTag rootTag = ((HtmlFileImpl) psiFile).getRootTag();
         if (rootTag == null) {
             return null;
         }
@@ -50,7 +56,8 @@ public final class Concordion {
 
     private static final String OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS = "Test";
 
-    public static PsiClass correspondingJavaRunner(PsiFile htmlSpec) {
+    @Nullable
+    public static PsiClass correspondingJavaRunner(@NotNull PsiFile htmlSpec) {
         Project project = htmlSpec.getProject();
         GlobalSearchScope scope = getProjectScope(project);
 
@@ -67,7 +74,8 @@ public final class Concordion {
         return runnerClass;
     }
 
-    public static PsiFile correspondingHtmlSpec(PsiClass runnerClass) {
+    @Nullable
+    public static PsiFile correspondingHtmlSpec(@NotNull PsiClass runnerClass) {
         String specName = runnerClass.getName();
         String noTestSpecName = specName.endsWith(OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS) ?
                 specName.substring(0, specName.length() - OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS.length()) + '.' + HtmlFileType.INSTANCE.getDefaultExtension() : null;
@@ -96,12 +104,17 @@ public final class Concordion {
     public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
     public static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
 
-    public static boolean classAnnotatedWithConcordionRunner(PsiClass runnerClass) {
-        PsiAnnotation runner = runnerClass.getModifierList().findAnnotation(JUNIT_RUN_WITH_ANNOTATION);
-        return runner != null && runWithAnnotationUsesConcordionRunner(runner);
+    public static boolean isClassAnnotatedWithConcordionRunner(@NotNull PsiClass runnerClass) {
+        PsiAnnotation runner = findJunitRunWithAnnotation(runnerClass);
+        return runner != null && isRunWithAnnotationUsesConcordionRunner(runner);
     }
 
-    public static boolean runWithAnnotationUsesConcordionRunner(PsiAnnotation runWithAnnotation) {
+    public static PsiAnnotation findJunitRunWithAnnotation(@NotNull PsiClass runnerClass) {
+        PsiModifierList modifierList = runnerClass.getModifierList();
+        return modifierList != null ? modifierList.findAnnotation(JUNIT_RUN_WITH_ANNOTATION) : null;
+    }
+
+    public static boolean isRunWithAnnotationUsesConcordionRunner(@NotNull PsiAnnotation runWithAnnotation) {
         PsiJavaCodeReferenceElement runnerReference = PsiTreeUtil.findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
         if (runnerReference == null) {
             return false;

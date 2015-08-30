@@ -1,8 +1,7 @@
 package com.gman.idea.plugin.concordion.annotator;
 
 import com.gman.idea.plugin.concordion.Concordion;
-import com.gman.idea.plugin.concordion.ConcordionGutterRenderer;
-import com.intellij.lang.annotation.Annotation;
+import com.gman.idea.plugin.concordion.ConcordionSetup;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiClass;
@@ -13,12 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.gman.idea.plugin.concordion.ConcordionGutterRenderer.rendererForHtmlSpec;
+import static com.gman.idea.plugin.concordion.ConcordionSetup.from;
+import static com.gman.idea.plugin.concordion.annotator.ConcordionSetupAnnotator.annotateSetUpIssues;
 
 public class ConcordionHtmlSpecAnnotator implements Annotator {
-
-    private static final String MISSING_RUNNER_CLASS_MESSAGE = "Missing runner class";
-    private static final String RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE = "Runner class is not annotated";
-    private static final String CONCORDION_CONFIGURED_MESSAGE = "In concordion html spec";
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -30,20 +27,17 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
             return;
         }
 
-        PsiFile htmlSpec = value.getContainingFile();
-        PsiClass correspondingJavaRunner = correspondingJavaRunner(htmlSpec);
-        if (correspondingJavaRunner == null) {
-            Annotation errorAnnotation = holder.createErrorAnnotation(element, MISSING_RUNNER_CLASS_MESSAGE);
-            errorAnnotation.setTooltip(MISSING_RUNNER_CLASS_MESSAGE);
-            //TODO provide quick fix to the user
-        } else if (!classAnnotatedWithConcordionRunner(correspondingJavaRunner)) {
-            Annotation errorAnnotation = holder.createErrorAnnotation(element, RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE);
-            errorAnnotation.setTooltip(RUNNER_CLASS_IS_NOT_ANNOTATED_MESSAGE);
-            //TODO provide quick fix to the user
-        } else {
-            Annotation infoAnnotation = holder.createInfoAnnotation(element.getTextRange(), CONCORDION_CONFIGURED_MESSAGE);
-            infoAnnotation.setTooltip(CONCORDION_CONFIGURED_MESSAGE);
-            infoAnnotation.setGutterIconRenderer(rendererForHtmlSpec(htmlSpec, correspondingJavaRunner));
+        PsiFile htmlSpec = element.getContainingFile();
+        PsiClass javaRunner = correspondingJavaRunner(htmlSpec);
+
+        ConcordionSetup setup = from(javaRunner, htmlSpec);
+
+        annotateSetUpIssues(element, holder, setup);
+
+        if (javaRunner != null) {
+            holder
+                    .createInfoAnnotation(element.getTextRange(), "")
+                    .setGutterIconRenderer(rendererForHtmlSpec(htmlSpec, javaRunner));
         }
     }
 }
