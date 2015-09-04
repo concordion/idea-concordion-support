@@ -1,0 +1,16 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<head>
+    <title>${NAME}</title>
+</head>
+<body>
+    <h1>${NAME}</h1>
+    <p>
+        Description
+    </p>
+    <div class="example">
+        <h3>Examples</h3>
+
+    </div>
+
+</body>
+</html>
