@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ConcordionMethod extends PsiElement {
 
+  @NotNull
+  ConcordionArguments getArguments();
+
 }

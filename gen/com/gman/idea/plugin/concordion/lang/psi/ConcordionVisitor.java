@@ -7,7 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public class ConcordionVisitor extends PsiElementVisitor {
 
-  public void visitExpr(@NotNull ConcordionExpr o) {
+  public void visitArguments(@NotNull ConcordionArguments o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExpression(@NotNull ConcordionExpression o) {
     visitPsiElement(o);
   }
 
@@ -20,6 +24,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
   }
 
   public void visitProperty(@NotNull ConcordionProperty o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariable(@NotNull ConcordionVariable o) {
     visitPsiElement(o);
   }
 

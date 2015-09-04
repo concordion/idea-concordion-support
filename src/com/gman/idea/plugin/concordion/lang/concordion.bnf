@@ -15,13 +15,18 @@
   tokens = [
     LPARENTH="("
     RPARENTH=")"
+    COMA=","
+    HASH="#"
   ]
 }
 
-simpleFile ::= expr_*
+simpleFile ::= expression*
 
-expr_ ::= literal|method|property
+expression ::= literal|method|property|variable
 
 literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
-method ::= IDENTIFIER '(' ')'
+method ::= IDENTIFIER '(' arguments ')'
 property ::= IDENTIFIER
+variable ::= '#' IDENTIFIER
+
+arguments ::= expression? (',' expression)*

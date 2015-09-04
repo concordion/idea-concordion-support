@@ -21,4 +21,10 @@ public class ConcordionMethodImpl extends ASTWrapperPsiElement implements Concor
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public ConcordionArguments getArguments() {
+    return findNotNullChildByClass(ConcordionArguments.class);
+  }
+
 }

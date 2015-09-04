@@ -54,8 +54,8 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 //"]"  { return ConcordionTypes.RBRACKET; }
 //
 //"."  { return ConcordionTypes.DOT; }
-//","  { return ConcordionTypes.COMMA; }
-//"#"  { return ConcordionTypes.HASH; }
+","  { return ConcordionTypes.COMA; }
+"#"  { return ConcordionTypes.HASH; }
 //"="  { return ConcordionTypes.EQ; }
 //":"  { return ConcordionTypes.COLON; }
 //

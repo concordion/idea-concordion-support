@@ -23,8 +23,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == EXPR) {
-      r = expr_(b, 0);
+    if (t == ARGUMENTS) {
+      r = arguments(b, 0);
+    }
+    else if (t == EXPRESSION) {
+      r = expression(b, 0);
     }
     else if (t == LITERAL) {
       r = literal(b, 0);
@@ -34,6 +37,9 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     }
     else if (t == PROPERTY) {
       r = property(b, 0);
+    }
+    else if (t == VARIABLE) {
+      r = variable(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -46,15 +52,58 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // literal|method|property
-  public static boolean expr_(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expr_")) return false;
+  // expression? (',' expression)*
+  public static boolean arguments(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<expr>");
+    Marker m = enter_section_(b, l, _NONE_, "<arguments>");
+    r = arguments_0(b, l + 1);
+    r = r && arguments_1(b, l + 1);
+    exit_section_(b, l, m, ARGUMENTS, r, false, null);
+    return r;
+  }
+
+  // expression?
+  private static boolean arguments_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_0")) return false;
+    expression(b, l + 1);
+    return true;
+  }
+
+  // (',' expression)*
+  private static boolean arguments_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!arguments_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "arguments_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // ',' expression
+  private static boolean arguments_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arguments_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMA);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // literal|method|property|variable
+  public static boolean expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<expression>");
     r = literal(b, l + 1);
     if (!r) r = method(b, l + 1);
     if (!r) r = property(b, l + 1);
-    exit_section_(b, l, m, EXPR, r, false, null);
+    if (!r) r = variable(b, l + 1);
+    exit_section_(b, l, m, EXPRESSION, r, false, null);
     return r;
   }
 
@@ -73,7 +122,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER '(' ')'
+  // IDENTIFIER '(' arguments ')'
   public static boolean method(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -81,6 +130,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     r = r && consumeToken(b, LPARENTH);
+    r = r && arguments(b, l + 1);
     r = r && consumeToken(b, RPARENTH);
     exit_section_(b, m, METHOD, r);
     return r;
@@ -99,16 +149,29 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // expr_*
+  // expression*
   static boolean simpleFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simpleFile")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!expr_(b, l + 1)) break;
+      if (!expression(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "simpleFile", c)) break;
       c = current_position_(b);
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // '#' IDENTIFIER
+  public static boolean variable(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variable")) return false;
+    if (!nextTokenIs(b, HASH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, HASH);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, VARIABLE, r);
+    return r;
   }
 
 }
