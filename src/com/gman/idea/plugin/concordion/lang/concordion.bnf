@@ -1,0 +1,27 @@
+{
+  parserClass="com.gman.idea.plugin.concordion.lang.ConcordionParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Concordion"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.gman.idea.plugin.concordion.lang.psi"
+  psiImplPackage="com.gman.idea.plugin.concordion.lang.psi"
+
+  elementTypeHolderClass="com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes"
+  elementTypeClass="com.gman.idea.plugin.concordion.lang.ConcordionElementType"
+  tokenTypeClass="com.gman.idea.plugin.concordion.lang.ConcordionTokenType"
+
+  tokens = [
+    LPARENTH="("
+    RPARENTH=")"
+  ]
+}
+
+simpleFile ::= expr_*
+
+expr_ ::= literal|method|property
+
+literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
+method ::= IDENTIFIER '(' ')'
+property ::= IDENTIFIER

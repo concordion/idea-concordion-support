@@ -9,17 +9,17 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      0.1 Initial features<br/>
-      <ul>
-        <li>Autocompletion with the concordion commands</li>
-      </ul>
+      TBD
     ]]>
   </change-notes>
 
   <idea-version since-build="131"/>
 
   <extensions defaultExtensionNs="com.intellij">
-    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsSimpleCompletionContributor"/>
+    <fileTypeFactory implementation="com.gman.idea.plugin.concordion.lang.ConcordionFileTypeFactory"/>
+    <lang.parserDefinition language="Concordion" implementationClass="com.gman.idea.plugin.concordion.lang.ConcordionParserDefinition"/>
+
+    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
     <annotator language="HTML" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionHtmlSpecAnnotator"/>
     <annotator language="JAVA" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionJavaRunnerAnnotator"/>
   </extensions>
