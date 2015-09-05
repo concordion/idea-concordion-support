@@ -24,7 +24,7 @@
   ]
 }
 
-file ::= (expression ';')*
+file ::= (expression ';'?)*
 
 expression ::= (literal|method|property|variable) index? ('.' expression)*
 

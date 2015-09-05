@@ -18,6 +18,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="com.gman.idea.plugin.concordion.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="com.gman.idea.plugin.concordion.lang.ConcordionParserDefinition"/>
+    <multiHostInjector implementation="com.gman.idea.plugin.concordion.lang.ConcordionLanguageInjector"/>
 
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
     <annotator language="HTML" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionHtmlSpecAnnotator"/>
