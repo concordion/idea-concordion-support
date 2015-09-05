@@ -1,7 +1,10 @@
 package com.gman.idea.plugin.concordion;
 
+import com.gman.idea.plugin.concordion.lang.ConcordionFileType;
 import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -100,6 +103,23 @@ public final class Concordion {
 
         return null;
     }
+
+    @Nullable
+    public static PsiFile unpackSpecFromLanguageInjection(PsiFile originalFile) {
+        if (!ConcordionFileType.INSTANCE.equals(originalFile.getFileType())) {
+            return originalFile;
+        }
+
+        VirtualFile virtualFile = originalFile.getVirtualFile();
+        if (!(virtualFile instanceof VirtualFileWindow)) {
+            return null;
+        }
+        VirtualFileWindow window = (VirtualFileWindow) virtualFile;
+        VirtualFile delegate = window.getDelegate();
+        return PsiManager.getInstance(originalFile.getProject()).findFile(delegate);
+    }
+
+
 
     public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
     public static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";

@@ -1,9 +1,14 @@
 package com.gman.idea.plugin.concordion.autocomplete;
 
 import com.gman.idea.plugin.concordion.Concordion;
+import com.gman.idea.plugin.concordion.lang.ConcordionFile;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionConcordionExpression;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.injected.editor.VirtualFileWindowImpl;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
@@ -23,12 +28,13 @@ import static com.gman.idea.plugin.concordion.Concordion.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
-public class ConcordionTestCommandsCompletionContributor extends CompletionContributor {
+public class ConcordionExpressionCompletionContributor extends CompletionContributor {
 
-    public ConcordionTestCommandsCompletionContributor() {
+    public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                PlatformPatterns.psiElement(XmlToken.class).withParent(XmlAttributeValue.class).with(ConcordionCommand.INSTANCE).with(ConcordionHtmlSpec.INSTANCE),
+                PlatformPatterns.psiElement().withParent(ConcordionVariable.class),
+//                PlatformPatterns.psiElement(XmlToken.class).withParent(XmlAttributeValue.class).with(ConcordionCommand.INSTANCE).with(ConcordionHtmlSpec.INSTANCE),
                 new CompositeProvider()
         );
     }
@@ -36,10 +42,10 @@ public class ConcordionTestCommandsCompletionContributor extends CompletionContr
     private static final class CompositeProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            PsiFile htmlSpec = parameters.getOriginalFile();
+            PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
             PsiClass psiClass = correspondingJavaRunner(htmlSpec);
 
-            result.addAllElements(optionsForClass(psiClass));
+            result.addElement(LookupElementBuilder.create("Hello"));
         }
 
         private Iterable<LookupElement> optionsForClass(PsiClass psiClass) {

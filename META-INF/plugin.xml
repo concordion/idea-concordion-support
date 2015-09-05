@@ -20,9 +20,11 @@
     <lang.parserDefinition language="Concordion" implementationClass="com.gman.idea.plugin.concordion.lang.ConcordionParserDefinition"/>
     <multiHostInjector implementation="com.gman.idea.plugin.concordion.lang.ConcordionLanguageInjector"/>
 
-    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
     <annotator language="HTML" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionHtmlSpecAnnotator"/>
     <annotator language="JAVA" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionJavaRunnerAnnotator"/>
+
+    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
+    <completion.contributor language="Concordion" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionExpressionCompletionContributor"/>
   </extensions>
 
   <application-components>
