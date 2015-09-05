@@ -20,18 +20,25 @@
     DOT="."
     COMA=","
     HASH="#"
+    EQ="="
+    COLON=":"
     SEMICOLON=";"
   ]
 }
 
-file ::= (expression ';'?)*
+file ::= (concordionExpression ';'?)*
 
-expression ::= (literal|method|property|variable) index? ('.' expression)*
+concordionExpression ::= concordionSetExpression|concordionIterateExpression|ognlExpression;
+
+concordionSetExpression ::= variable '=' ognlExpression
+concordionIterateExpression ::= variable ':' ognlExpression
+
+ognlExpression ::= (literal|method|property|variable) index? ('.' ognlExpression)*
 
 literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 method ::= IDENTIFIER '(' arguments ')'
 property ::= IDENTIFIER
 variable ::= '#' IDENTIFIER
 
-arguments ::= expression? (',' expression)*
-index ::= '[' expression ']'
+arguments ::= ognlExpression? (',' ognlExpression)*
+index ::= '[' ognlExpression ']'

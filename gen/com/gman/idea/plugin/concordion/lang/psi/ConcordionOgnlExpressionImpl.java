@@ -10,21 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 
-public class ConcordionExpressionImpl extends ASTWrapperPsiElement implements ConcordionExpression {
+public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implements ConcordionOgnlExpression {
 
-  public ConcordionExpressionImpl(ASTNode node) {
+  public ConcordionOgnlExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitExpression(this);
+    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitOgnlExpression(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<ConcordionExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionExpression.class);
   }
 
   @Override
@@ -43,6 +37,12 @@ public class ConcordionExpressionImpl extends ASTWrapperPsiElement implements Co
   @Nullable
   public ConcordionMethod getMethod() {
     return findChildByClass(ConcordionMethod.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ConcordionOgnlExpression> getOgnlExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpression.class);
   }
 
   @Override

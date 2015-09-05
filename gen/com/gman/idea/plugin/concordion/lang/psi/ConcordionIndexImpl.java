@@ -23,8 +23,8 @@ public class ConcordionIndexImpl extends ASTWrapperPsiElement implements Concord
 
   @Override
   @NotNull
-  public ConcordionExpression getExpression() {
-    return findNotNullChildByClass(ConcordionExpression.class);
+  public ConcordionOgnlExpression getOgnlExpression() {
+    return findNotNullChildByClass(ConcordionOgnlExpression.class);
   }
 
 }

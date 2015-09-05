@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ConcordionIndex extends PsiElement {
+public interface ConcordionConcordionExpression extends PsiElement {
 
-  @NotNull
+  @Nullable
+  ConcordionConcordionIterateExpression getConcordionIterateExpression();
+
+  @Nullable
+  ConcordionConcordionSetExpression getConcordionSetExpression();
+
+  @Nullable
   ConcordionOgnlExpression getOgnlExpression();
 
 }

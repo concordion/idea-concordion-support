@@ -48,7 +48,6 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 
 {IDENTIFIER} { return ConcordionTypes.IDENTIFIER; }
 
-";"  { return ConcordionTypes.SEMICOLON; }
 "("  { return ConcordionTypes.LPARENTH; }
 ")"  { return ConcordionTypes.RPARENTH; }
 "["  { return ConcordionTypes.LBRACKET; }
@@ -57,9 +56,11 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 "."  { return ConcordionTypes.DOT; }
 ","  { return ConcordionTypes.COMA; }
 "#"  { return ConcordionTypes.HASH; }
-//"="  { return ConcordionTypes.EQ; }
-//":"  { return ConcordionTypes.COLON; }
-//
+
+"="  { return ConcordionTypes.EQ; }
+":"  { return ConcordionTypes.COLON; }
+";"  { return ConcordionTypes.SEMICOLON; }
+
 //"!=" { return ConcordionTypes.NOT_EQUAL; }
 //"!"  { return ConcordionTypes.NEGATE; }
 //"==" { return ConcordionTypes.EQUAL; }

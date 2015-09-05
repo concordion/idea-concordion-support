@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ConcordionExpression extends PsiElement {
-
-  @NotNull
-  List<ConcordionExpression> getExpressionList();
+public interface ConcordionOgnlExpression extends PsiElement {
 
   @Nullable
   ConcordionIndex getIndex();
@@ -18,6 +15,9 @@ public interface ConcordionExpression extends PsiElement {
 
   @Nullable
   ConcordionMethod getMethod();
+
+  @NotNull
+  List<ConcordionOgnlExpression> getOgnlExpressionList();
 
   @Nullable
   ConcordionProperty getProperty();
