@@ -15,14 +15,18 @@
   tokens = [
     LPARENTH="("
     RPARENTH=")"
+    LBRACKET="["
+    RBRACKET="]"
+    DOT="."
     COMA=","
     HASH="#"
+    SEMICOLON=";"
   ]
 }
 
-simpleFile ::= expression*
+file ::= (expression ';')*
 
-expression ::= literal|method|property|variable
+expression ::= (literal|method|property|variable) index? ('.' expression)*
 
 literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 method ::= IDENTIFIER '(' arguments ')'
@@ -30,3 +34,4 @@ property ::= IDENTIFIER
 variable ::= '#' IDENTIFIER
 
 arguments ::= expression? (',' expression)*
+index ::= '[' expression ']'

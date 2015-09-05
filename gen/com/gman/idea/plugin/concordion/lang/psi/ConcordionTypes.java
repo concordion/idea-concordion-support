@@ -11,6 +11,7 @@ public interface ConcordionTypes {
 
   IElementType ARGUMENTS = new ConcordionElementType("ARGUMENTS");
   IElementType EXPRESSION = new ConcordionElementType("EXPRESSION");
+  IElementType INDEX = new ConcordionElementType("INDEX");
   IElementType LITERAL = new ConcordionElementType("LITERAL");
   IElementType METHOD = new ConcordionElementType("METHOD");
   IElementType PROPERTY = new ConcordionElementType("PROPERTY");
@@ -18,12 +19,16 @@ public interface ConcordionTypes {
 
   IElementType CHARACTER_LITERAL = new ConcordionTokenType("CHARACTER_LITERAL");
   IElementType COMA = new ConcordionTokenType(",");
+  IElementType DOT = new ConcordionTokenType(".");
   IElementType DOUBLE_LITERAL = new ConcordionTokenType("DOUBLE_LITERAL");
   IElementType HASH = new ConcordionTokenType("#");
   IElementType IDENTIFIER = new ConcordionTokenType("IDENTIFIER");
   IElementType INTEGER_LITERAL = new ConcordionTokenType("INTEGER_LITERAL");
+  IElementType LBRACKET = new ConcordionTokenType("[");
   IElementType LPARENTH = new ConcordionTokenType("(");
+  IElementType RBRACKET = new ConcordionTokenType("]");
   IElementType RPARENTH = new ConcordionTokenType(")");
+  IElementType SEMICOLON = new ConcordionTokenType(";");
   IElementType STRING_LITERAL = new ConcordionTokenType("STRING_LITERAL");
 
   class Factory {
@@ -34,6 +39,9 @@ public interface ConcordionTypes {
       }
       else if (type == EXPRESSION) {
         return new ConcordionExpressionImpl(node);
+      }
+      else if (type == INDEX) {
+        return new ConcordionIndexImpl(node);
       }
       else if (type == LITERAL) {
         return new ConcordionLiteralImpl(node);

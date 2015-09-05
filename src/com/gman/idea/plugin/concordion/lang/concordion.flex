@@ -48,12 +48,13 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 
 {IDENTIFIER} { return ConcordionTypes.IDENTIFIER; }
 
+";"  { return ConcordionTypes.SEMICOLON; }
 "("  { return ConcordionTypes.LPARENTH; }
 ")"  { return ConcordionTypes.RPARENTH; }
-//"["  { return ConcordionTypes.LBRACKET; }
-//"]"  { return ConcordionTypes.RBRACKET; }
-//
-//"."  { return ConcordionTypes.DOT; }
+"["  { return ConcordionTypes.LBRACKET; }
+"]"  { return ConcordionTypes.RBRACKET; }
+
+"."  { return ConcordionTypes.DOT; }
 ","  { return ConcordionTypes.COMA; }
 "#"  { return ConcordionTypes.HASH; }
 //"="  { return ConcordionTypes.EQ; }

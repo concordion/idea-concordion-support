@@ -15,6 +15,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIndex(@NotNull ConcordionIndex o) {
+    visitPsiElement(o);
+  }
+
   public void visitLiteral(@NotNull ConcordionLiteral o) {
     visitPsiElement(o);
   }
