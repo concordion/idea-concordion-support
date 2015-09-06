@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils;
 
 public class ConcordionVariableImpl extends ASTWrapperPsiElement implements ConcordionVariable {
 

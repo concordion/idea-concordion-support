@@ -2,7 +2,9 @@ package com.gman.idea.plugin.concordion.autocomplete;
 
 import com.gman.idea.plugin.concordion.Concordion;
 import com.gman.idea.plugin.concordion.lang.ConcordionFile;
+import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionConcordionExpression;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -33,8 +35,7 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                PlatformPatterns.psiElement().withParent(ConcordionVariable.class),
-//                PlatformPatterns.psiElement(XmlToken.class).withParent(XmlAttributeValue.class).with(ConcordionCommand.INSTANCE).with(ConcordionHtmlSpec.INSTANCE),
+                PlatformPatterns.psiElement(ConcordionTypes.CHARACTER_LITERAL).withLanguage(ConcordionLanguage.INSTANCE),
                 new CompositeProvider()
         );
     }
@@ -42,8 +43,8 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     private static final class CompositeProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
-            PsiClass psiClass = correspondingJavaRunner(htmlSpec);
+//            PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
+//            PsiClass psiClass = correspondingJavaRunner(htmlSpec);
 
             result.addElement(LookupElementBuilder.create("Hello"));
         }

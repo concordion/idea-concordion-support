@@ -35,6 +35,9 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     else if (t == CONCORDION_SET_EXPRESSION) {
       r = concordionSetExpression(b, 0);
     }
+    else if (t == FIELD) {
+      r = field(b, 0);
+    }
     else if (t == INDEX) {
       r = index(b, 0);
     }
@@ -46,9 +49,6 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     }
     else if (t == OGNL_EXPRESSION) {
       r = ognlExpression(b, 0);
-    }
-    else if (t == PROPERTY) {
-      r = property(b, 0);
     }
     else if (t == VARIABLE) {
       r = variable(b, 0);
@@ -147,6 +147,18 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean field(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "field")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, FIELD, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (concordionExpression ';'?)*
   static boolean file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file")) return false;
@@ -221,7 +233,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (literal|method|property|variable) index? ('.' ognlExpression)*
+  // (literal|method|field|variable) index? ('.' ognlExpression)*
   public static boolean ognlExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ognlExpression")) return false;
     boolean r;
@@ -233,14 +245,14 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // literal|method|property|variable
+  // literal|method|field|variable
   private static boolean ognlExpression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ognlExpression_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = literal(b, l + 1);
     if (!r) r = method(b, l + 1);
-    if (!r) r = property(b, l + 1);
+    if (!r) r = field(b, l + 1);
     if (!r) r = variable(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -273,18 +285,6 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, DOT);
     r = r && ognlExpression(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // IDENTIFIER
-  public static boolean property(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, PROPERTY, r);
     return r;
   }
 

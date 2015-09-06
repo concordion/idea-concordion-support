@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ConcordionOgnlExpression extends PsiElement {
 
   @Nullable
+  ConcordionField getField();
+
+  @Nullable
   ConcordionIndex getIndex();
 
   @Nullable
@@ -18,9 +21,6 @@ public interface ConcordionOgnlExpression extends PsiElement {
 
   @NotNull
   List<ConcordionOgnlExpression> getOgnlExpressionList();
-
-  @Nullable
-  ConcordionProperty getProperty();
 
   @Nullable
   ConcordionVariable getVariable();

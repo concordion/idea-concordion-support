@@ -1,9 +1,9 @@
 package com.gman.idea.plugin.concordion;
 
+import com.gman.idea.plugin.concordion.lang.ConcordionIcons;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiClass;
@@ -24,7 +24,7 @@ public class ConcordionGutterRenderer {
         return new LineMarkerInfo<>(
                 element,
                 element.getTextRange(),
-                AllIcons.Gutter.Unique,
+                ConcordionIcons.ICON,
                 Pass.UPDATE_ALL,
                 ConcordionGutterRenderer::generateTooltipForConcordion,
                 navigationHandler,

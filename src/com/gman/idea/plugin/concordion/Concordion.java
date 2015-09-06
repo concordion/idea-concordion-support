@@ -60,7 +60,11 @@ public final class Concordion {
     private static final String OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS = "Test";
 
     @Nullable
-    public static PsiClass correspondingJavaRunner(@NotNull PsiFile htmlSpec) {
+    public static PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
+        if (htmlSpec == null || htmlSpec.getContainingDirectory() == null) {
+            return null;
+        }
+
         Project project = htmlSpec.getProject();
         GlobalSearchScope scope = getProjectScope(project);
 
@@ -78,7 +82,11 @@ public final class Concordion {
     }
 
     @Nullable
-    public static PsiFile correspondingHtmlSpec(@NotNull PsiClass runnerClass) {
+    public static PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
+        if (runnerClass == null) {
+            return null;
+        }
+
         String specName = runnerClass.getName();
         String noTestSpecName = specName.endsWith(OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS) ?
                 specName.substring(0, specName.length() - OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS.length()) + '.' + HtmlFileType.INSTANCE.getDefaultExtension() : null;

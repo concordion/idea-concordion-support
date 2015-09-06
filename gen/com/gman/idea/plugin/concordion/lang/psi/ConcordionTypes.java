@@ -13,11 +13,11 @@ public interface ConcordionTypes {
   IElementType CONCORDION_EXPRESSION = new ConcordionElementType("CONCORDION_EXPRESSION");
   IElementType CONCORDION_ITERATE_EXPRESSION = new ConcordionElementType("CONCORDION_ITERATE_EXPRESSION");
   IElementType CONCORDION_SET_EXPRESSION = new ConcordionElementType("CONCORDION_SET_EXPRESSION");
+  IElementType FIELD = new ConcordionElementType("FIELD");
   IElementType INDEX = new ConcordionElementType("INDEX");
   IElementType LITERAL = new ConcordionElementType("LITERAL");
   IElementType METHOD = new ConcordionElementType("METHOD");
   IElementType OGNL_EXPRESSION = new ConcordionElementType("OGNL_EXPRESSION");
-  IElementType PROPERTY = new ConcordionElementType("PROPERTY");
   IElementType VARIABLE = new ConcordionElementType("VARIABLE");
 
   IElementType CHARACTER_LITERAL = new ConcordionTokenType("CHARACTER_LITERAL");
@@ -51,6 +51,9 @@ public interface ConcordionTypes {
       else if (type == CONCORDION_SET_EXPRESSION) {
         return new ConcordionConcordionSetExpressionImpl(node);
       }
+      else if (type == FIELD) {
+        return new ConcordionFieldImpl(node);
+      }
       else if (type == INDEX) {
         return new ConcordionIndexImpl(node);
       }
@@ -62,9 +65,6 @@ public interface ConcordionTypes {
       }
       else if (type == OGNL_EXPRESSION) {
         return new ConcordionOgnlExpressionImpl(node);
-      }
-      else if (type == PROPERTY) {
-        return new ConcordionPropertyImpl(node);
       }
       else if (type == VARIABLE) {
         return new ConcordionVariableImpl(node);

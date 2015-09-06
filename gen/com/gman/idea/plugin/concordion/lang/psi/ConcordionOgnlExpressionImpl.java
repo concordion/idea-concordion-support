@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils;
 
 public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implements ConcordionOgnlExpression {
 
@@ -19,6 +20,12 @@ public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implement
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitOgnlExpression(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public ConcordionField getField() {
+    return findChildByClass(ConcordionField.class);
   }
 
   @Override
@@ -43,12 +50,6 @@ public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implement
   @NotNull
   public List<ConcordionOgnlExpression> getOgnlExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public ConcordionProperty getProperty() {
-    return findChildByClass(ConcordionProperty.class);
   }
 
   @Override

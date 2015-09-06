@@ -23,6 +23,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitField(@NotNull ConcordionField o) {
+    visitPsiElement(o);
+  }
+
   public void visitIndex(@NotNull ConcordionIndex o) {
     visitPsiElement(o);
   }
@@ -36,10 +40,6 @@ public class ConcordionVisitor extends PsiElementVisitor {
   }
 
   public void visitOgnlExpression(@NotNull ConcordionOgnlExpression o) {
-    visitPsiElement(o);
-  }
-
-  public void visitProperty(@NotNull ConcordionProperty o) {
     visitPsiElement(o);
   }
 
