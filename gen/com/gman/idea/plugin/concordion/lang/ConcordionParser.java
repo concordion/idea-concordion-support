@@ -47,8 +47,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     else if (t == METHOD) {
       r = method(b, 0);
     }
-    else if (t == OGNL_EXPRESSION) {
-      r = ognlExpression(b, 0);
+    else if (t == OGNL_EXPRESSION_NEXT) {
+      r = ognlExpressionNext(b, 0);
+    }
+    else if (t == OGNL_EXPRESSION_START) {
+      r = ognlExpressionStart(b, 0);
     }
     else if (t == VARIABLE) {
       r = variable(b, 0);
@@ -64,7 +67,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ognlExpression? (',' ognlExpression)*
+  // ognlExpressionStart? (',' ognlExpressionStart)*
   public static boolean arguments(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arguments")) return false;
     boolean r;
@@ -75,14 +78,14 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ognlExpression?
+  // ognlExpressionStart?
   private static boolean arguments_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arguments_0")) return false;
-    ognlExpression(b, l + 1);
+    ognlExpressionStart(b, l + 1);
     return true;
   }
 
-  // (',' ognlExpression)*
+  // (',' ognlExpressionStart)*
   private static boolean arguments_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arguments_1")) return false;
     int c = current_position_(b);
@@ -94,32 +97,32 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ',' ognlExpression
+  // ',' ognlExpressionStart
   private static boolean arguments_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arguments_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMA);
-    r = r && ognlExpression(b, l + 1);
+    r = r && ognlExpressionStart(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // concordionSetExpression|concordionIterateExpression|ognlExpression
+  // concordionSetExpression|concordionIterateExpression|ognlExpressionStart
   public static boolean concordionExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "concordionExpression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<concordion expression>");
     r = concordionSetExpression(b, l + 1);
     if (!r) r = concordionIterateExpression(b, l + 1);
-    if (!r) r = ognlExpression(b, l + 1);
+    if (!r) r = ognlExpressionStart(b, l + 1);
     exit_section_(b, l, m, CONCORDION_EXPRESSION, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // variable ':' ognlExpression
+  // variable ':' ognlExpressionStart
   public static boolean concordionIterateExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "concordionIterateExpression")) return false;
     if (!nextTokenIs(b, HASH)) return false;
@@ -127,13 +130,13 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = variable(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && ognlExpression(b, l + 1);
+    r = r && ognlExpressionStart(b, l + 1);
     exit_section_(b, m, CONCORDION_ITERATE_EXPRESSION, r);
     return r;
   }
 
   /* ********************************************************** */
-  // variable '=' ognlExpression
+  // variable '=' ognlExpressionStart
   public static boolean concordionSetExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "concordionSetExpression")) return false;
     if (!nextTokenIs(b, HASH)) return false;
@@ -141,7 +144,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = variable(b, l + 1);
     r = r && consumeToken(b, EQ);
-    r = r && ognlExpression(b, l + 1);
+    r = r && ognlExpressionStart(b, l + 1);
     exit_section_(b, m, CONCORDION_SET_EXPRESSION, r);
     return r;
   }
@@ -190,14 +193,14 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '[' ognlExpression ']'
+  // '[' ognlExpressionStart ']'
   public static boolean index(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "index")) return false;
     if (!nextTokenIs(b, LBRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LBRACKET);
-    r = r && ognlExpression(b, l + 1);
+    r = r && ognlExpressionStart(b, l + 1);
     r = r && consumeToken(b, RBRACKET);
     exit_section_(b, m, INDEX, r);
     return r;
@@ -233,21 +236,76 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (literal|method|field|variable) index? ('.' ognlExpression)*
-  public static boolean ognlExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ognlExpression")) return false;
+  // (method|field) index? ('.' ognlExpressionNext)*
+  public static boolean ognlExpressionNext(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionNext")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, "<ognl expression>");
-    r = ognlExpression_0(b, l + 1);
-    r = r && ognlExpression_1(b, l + 1);
-    r = r && ognlExpression_2(b, l + 1);
-    exit_section_(b, l, m, OGNL_EXPRESSION, r, false, null);
+    Marker m = enter_section_(b, l, _COLLAPSE_, null);
+    r = ognlExpressionNext_0(b, l + 1);
+    r = r && ognlExpressionNext_1(b, l + 1);
+    r = r && ognlExpressionNext_2(b, l + 1);
+    exit_section_(b, l, m, OGNL_EXPRESSION_NEXT, r, false, null);
+    return r;
+  }
+
+  // method|field
+  private static boolean ognlExpressionNext_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionNext_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = method(b, l + 1);
+    if (!r) r = field(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // index?
+  private static boolean ognlExpressionNext_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionNext_1")) return false;
+    index(b, l + 1);
+    return true;
+  }
+
+  // ('.' ognlExpressionNext)*
+  private static boolean ognlExpressionNext_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionNext_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!ognlExpressionNext_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ognlExpressionNext_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // '.' ognlExpressionNext
+  private static boolean ognlExpressionNext_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionNext_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && ognlExpressionNext(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (literal|method|field|variable) index? ('.' ognlExpressionNext)?
+  public static boolean ognlExpressionStart(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionStart")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<ognl expression start>");
+    r = ognlExpressionStart_0(b, l + 1);
+    r = r && ognlExpressionStart_1(b, l + 1);
+    r = r && ognlExpressionStart_2(b, l + 1);
+    exit_section_(b, l, m, OGNL_EXPRESSION_START, r, false, null);
     return r;
   }
 
   // literal|method|field|variable
-  private static boolean ognlExpression_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ognlExpression_0")) return false;
+  private static boolean ognlExpressionStart_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionStart_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = literal(b, l + 1);
@@ -259,31 +317,26 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   // index?
-  private static boolean ognlExpression_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ognlExpression_1")) return false;
+  private static boolean ognlExpressionStart_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionStart_1")) return false;
     index(b, l + 1);
     return true;
   }
 
-  // ('.' ognlExpression)*
-  private static boolean ognlExpression_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ognlExpression_2")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!ognlExpression_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ognlExpression_2", c)) break;
-      c = current_position_(b);
-    }
+  // ('.' ognlExpressionNext)?
+  private static boolean ognlExpressionStart_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionStart_2")) return false;
+    ognlExpressionStart_2_0(b, l + 1);
     return true;
   }
 
-  // '.' ognlExpression
-  private static boolean ognlExpression_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ognlExpression_2_0")) return false;
+  // '.' ognlExpressionNext
+  private static boolean ognlExpressionStart_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ognlExpressionStart_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, DOT);
-    r = r && ognlExpression(b, l + 1);
+    r = r && ognlExpressionNext(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

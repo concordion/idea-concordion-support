@@ -48,7 +48,7 @@ public class ConcordionReference<T extends PsiElement> implements PsiReference {
     }
 
     @Override
-    public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         return owner;
     }
 

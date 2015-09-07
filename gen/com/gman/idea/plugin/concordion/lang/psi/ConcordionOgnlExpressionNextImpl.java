@@ -11,14 +11,14 @@ import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils;
 
-public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implements ConcordionOgnlExpression {
+public class ConcordionOgnlExpressionNextImpl extends ASTWrapperPsiElement implements ConcordionOgnlExpressionNext {
 
-  public ConcordionOgnlExpressionImpl(ASTNode node) {
+  public ConcordionOgnlExpressionNextImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitOgnlExpression(this);
+    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitOgnlExpressionNext(this);
     else super.accept(visitor);
   }
 
@@ -36,26 +36,14 @@ public class ConcordionOgnlExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public ConcordionLiteral getLiteral() {
-    return findChildByClass(ConcordionLiteral.class);
-  }
-
-  @Override
-  @Nullable
   public ConcordionMethod getMethod() {
     return findChildByClass(ConcordionMethod.class);
   }
 
   @Override
   @NotNull
-  public List<ConcordionOgnlExpression> getOgnlExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public ConcordionVariable getVariable() {
-    return findChildByClass(ConcordionVariable.class);
+  public List<ConcordionOgnlExpressionNext> getOgnlExpressionNextList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpressionNext.class);
   }
 
 }

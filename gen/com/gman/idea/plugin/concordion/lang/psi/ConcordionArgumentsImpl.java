@@ -24,8 +24,8 @@ public class ConcordionArgumentsImpl extends ASTWrapperPsiElement implements Con
 
   @Override
   @NotNull
-  public List<ConcordionOgnlExpression> getOgnlExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpression.class);
+  public List<ConcordionOgnlExpressionStart> getOgnlExpressionStartList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionOgnlExpressionStart.class);
   }
 
 }

@@ -14,6 +14,6 @@ public interface ConcordionConcordionExpression extends PsiElement {
   ConcordionConcordionSetExpression getConcordionSetExpression();
 
   @Nullable
-  ConcordionOgnlExpression getOgnlExpression();
+  ConcordionOgnlExpressionStart getOgnlExpressionStart();
 
 }

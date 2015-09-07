@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ConcordionIndex extends PsiElement {
 
   @NotNull
-  ConcordionOgnlExpression getOgnlExpression();
+  ConcordionOgnlExpressionStart getOgnlExpressionStart();
 
 }

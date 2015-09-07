@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ConcordionConcordionSetExpression extends PsiElement {
 
   @NotNull
-  ConcordionOgnlExpression getOgnlExpression();
+  ConcordionOgnlExpressionStart getOgnlExpressionStart();
 
   @NotNull
   ConcordionVariable getVariable();

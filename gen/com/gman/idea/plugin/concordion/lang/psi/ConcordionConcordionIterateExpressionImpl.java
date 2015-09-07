@@ -24,8 +24,8 @@ public class ConcordionConcordionIterateExpressionImpl extends ASTWrapperPsiElem
 
   @Override
   @NotNull
-  public ConcordionOgnlExpression getOgnlExpression() {
-    return findNotNullChildByClass(ConcordionOgnlExpression.class);
+  public ConcordionOgnlExpressionStart getOgnlExpressionStart() {
+    return findNotNullChildByClass(ConcordionOgnlExpressionStart.class);
   }
 
   @Override

@@ -17,7 +17,8 @@ public interface ConcordionTypes {
   IElementType INDEX = new ConcordionElementType("INDEX");
   IElementType LITERAL = new ConcordionElementType("LITERAL");
   IElementType METHOD = new ConcordionElementType("METHOD");
-  IElementType OGNL_EXPRESSION = new ConcordionElementType("OGNL_EXPRESSION");
+  IElementType OGNL_EXPRESSION_NEXT = new ConcordionElementType("OGNL_EXPRESSION_NEXT");
+  IElementType OGNL_EXPRESSION_START = new ConcordionElementType("OGNL_EXPRESSION_START");
   IElementType VARIABLE = new ConcordionElementType("VARIABLE");
 
   IElementType CHARACTER_LITERAL = new ConcordionTokenType("CHARACTER_LITERAL");
@@ -63,8 +64,11 @@ public interface ConcordionTypes {
       else if (type == METHOD) {
         return new ConcordionMethodImpl(node);
       }
-      else if (type == OGNL_EXPRESSION) {
-        return new ConcordionOgnlExpressionImpl(node);
+      else if (type == OGNL_EXPRESSION_NEXT) {
+        return new ConcordionOgnlExpressionNextImpl(node);
+      }
+      else if (type == OGNL_EXPRESSION_START) {
+        return new ConcordionOgnlExpressionStartImpl(node);
       }
       else if (type == VARIABLE) {
         return new ConcordionVariableImpl(node);

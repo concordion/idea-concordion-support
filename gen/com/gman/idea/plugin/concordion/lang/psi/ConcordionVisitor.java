@@ -39,7 +39,11 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitOgnlExpression(@NotNull ConcordionOgnlExpression o) {
+  public void visitOgnlExpressionNext(@NotNull ConcordionOgnlExpressionNext o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOgnlExpressionStart(@NotNull ConcordionOgnlExpressionStart o) {
     visitPsiElement(o);
   }
 

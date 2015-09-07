@@ -36,8 +36,8 @@ public class ConcordionConcordionExpressionImpl extends ASTWrapperPsiElement imp
 
   @Override
   @Nullable
-  public ConcordionOgnlExpression getOgnlExpression() {
-    return findChildByClass(ConcordionOgnlExpression.class);
+  public ConcordionOgnlExpressionStart getOgnlExpressionStart() {
+    return findChildByClass(ConcordionOgnlExpressionStart.class);
   }
 
 }

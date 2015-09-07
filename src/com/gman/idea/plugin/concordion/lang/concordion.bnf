@@ -30,17 +30,18 @@
 
 file ::= (concordionExpression ';'?)*
 
-concordionExpression ::= concordionSetExpression|concordionIterateExpression|ognlExpression;
+concordionExpression ::= concordionSetExpression|concordionIterateExpression|ognlExpressionStart;
 
-concordionSetExpression ::= variable '=' ognlExpression
-concordionIterateExpression ::= variable ':' ognlExpression
+concordionSetExpression ::= variable '=' ognlExpressionStart
+concordionIterateExpression ::= variable ':' ognlExpressionStart
 
-ognlExpression ::= (literal|method|field|variable) index? ('.' ognlExpression)*
+ognlExpressionStart ::= (literal|method|field|variable) index? ('.' ognlExpressionNext)?
+ognlExpressionNext ::= (method|field) index? ('.' ognlExpressionNext)*
 
 literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 method ::= IDENTIFIER '(' arguments ')' {methods=[getReferences getMethodName getMethodParametersCount]}
 field ::= IDENTIFIER {methods=[getReferences getFieldName]}
 variable ::= '#' IDENTIFIER
 
-arguments ::= ognlExpression? (',' ognlExpression)*
-index ::= '[' ognlExpression ']'
+arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*
+index ::= '[' ognlExpressionStart ']'
