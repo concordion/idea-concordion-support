@@ -10,6 +10,7 @@ import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.testFramework.LightVirtualFileBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,21 +114,30 @@ public final class Concordion {
     }
 
     @Nullable
-    public static PsiFile unpackSpecFromLanguageInjection(PsiFile originalFile) {
+    public static PsiFile unpackSpecFromLanguageInjection(@NotNull PsiFile originalFile) {
         if (!ConcordionFileType.INSTANCE.equals(originalFile.getFileType())) {
             return originalFile;
         }
 
-        VirtualFile virtualFile = originalFile.getVirtualFile();
-        if (!(virtualFile instanceof VirtualFileWindow)) {
-            return null;
+        VirtualFile delegate = getDelegate(originalFile.getVirtualFile());
+        if (delegate != null) {
+            return PsiManager.getInstance(originalFile.getProject()).findFile(delegate);
         }
-        VirtualFileWindow window = (VirtualFileWindow) virtualFile;
-        VirtualFile delegate = window.getDelegate();
-        return PsiManager.getInstance(originalFile.getProject()).findFile(delegate);
+        return null;
     }
 
-
+    @Nullable
+    private static VirtualFile getDelegate(@Nullable VirtualFile virtualFile) {
+        if (virtualFile instanceof VirtualFileWindow) {
+            //Language injection in xml
+            return ((VirtualFileWindow) virtualFile).getDelegate();
+        } else if (virtualFile instanceof LightVirtualFileBase) {
+            //In fragment editor window
+            return ((LightVirtualFileBase) virtualFile).getOriginalFile();
+        } else {
+            return null;
+        }
+    }
 
     public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
     public static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";

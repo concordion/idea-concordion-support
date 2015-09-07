@@ -49,6 +49,7 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
                 return PsiReference.EMPTY_ARRAY;
             }
 
+            //TODO not highlight arguments of the method
             return new PsiReference[] {
                     new ConcordionReference<>(element, psiMember)
             };

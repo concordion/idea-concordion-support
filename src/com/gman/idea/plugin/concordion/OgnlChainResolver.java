@@ -9,6 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.psi.search.ProjectScope.getAllScope;
 import static com.intellij.psi.search.ProjectScope.getProjectScope;
 import static java.util.Arrays.stream;
 
@@ -32,32 +33,36 @@ public class OgnlChainResolver {
         Project project = runnerClass.getProject();
 
         return new OgnlChainResolver(
-                getProjectScope(project),
+                getAllScope(project),
                 JavaPsiFacade.getInstance(project),
                 runnerClass
         );
     }
 
     @Nullable
-    public PsiMember resolveReference(@NotNull PsiElement element) {
-        return resolveReferenceInternal(1, element);
+    public PsiMember resolveReference(@NotNull PsiElement methodOrField) {
+        return resolveReferenceInternal(1, methodOrField);
+    }
+
+    @NotNull
+    public PsiMember[] resolveMembers(@NotNull PsiElement identifier) {
+        PsiClass psiClass = resolveMemberOwnerClass(1, identifier.getParent());
+        if (psiClass != null) {
+            return findMembers(psiClass);
+        }
+        return PsiMember.EMPTY_ARRAY;
     }
 
     @Nullable
-    public PsiClass resolveClassForCompletion(@NotNull PsiElement element) {
-        return resolveMemberOwnerClass(1, element);
-    }
-
-    @Nullable
-    private PsiClass resolveMemberOwnerClass (int stackDepth, @NotNull PsiElement element) {
+    private PsiClass resolveMemberOwnerClass (int stackDepth, @NotNull PsiElement methodOrField) {
         if (stackDepth > MAX_DEPTH_TO_RESOLVE) {
             return null;
         }
 
-        if (element.getParent() instanceof ConcordionOgnlExpressionStart) {
+        if (methodOrField.getParent() instanceof ConcordionOgnlExpressionStart) {
             return runnerClass;
         } else {
-            PsiMember psiMember = resolveReferenceInternal(stackDepth + 1, element.getParent().getParent().getFirstChild());
+            PsiMember psiMember = resolveReferenceInternal(stackDepth + 1, parentExpressionMethodOrField(methodOrField));
             String qualifiedName = qualifiedClassNameFromMember(psiMember);
             if (qualifiedName != null) {
                 return findClass(qualifiedName);
@@ -66,12 +71,17 @@ public class OgnlChainResolver {
         }
     }
 
-    @Nullable
-    private PsiMember resolveReferenceInternal(int stackDepth, @NotNull PsiElement element) {
+    @NotNull
+    private PsiElement parentExpressionMethodOrField(@NotNull PsiElement methodOrField) {
+        return methodOrField.getParent().getParent().getFirstChild();
+    }
 
-        PsiClass ownerClass = resolveMemberOwnerClass(stackDepth, element);
+    @Nullable
+    private PsiMember resolveReferenceInternal(int stackDepth, @NotNull PsiElement methodOrField) {
+
+        PsiClass ownerClass = resolveMemberOwnerClass(stackDepth, methodOrField);
         if (ownerClass != null) {
-            return findMemberFromClassByExpression(ownerClass, element);
+            return findMemberFromClassByExpression(ownerClass, methodOrField);
         }
         return null;
     }
@@ -93,18 +103,18 @@ public class OgnlChainResolver {
     }
 
     @Nullable
-    private PsiMember findMemberFromClassByExpression(@NotNull PsiClass owner, @Nullable PsiElement expression) {
-        if (expression instanceof ConcordionField) {
-            return findField(owner, (ConcordionField) expression);
-        } else if (expression instanceof ConcordionMethod) {
-            return findMethod(owner, (ConcordionMethod) expression);
+    private PsiMember findMemberFromClassByExpression(@NotNull PsiClass owner, @Nullable PsiElement methodOrField) {
+        if (methodOrField instanceof ConcordionField) {
+            return findField(owner, (ConcordionField) methodOrField);
+        } else if (methodOrField instanceof ConcordionMethod) {
+            return findMethod(owner, (ConcordionMethod) methodOrField);
         } else {
             return null;
         }
     }
 
     @Nullable
-    private static PsiMethod findMethod(@NotNull PsiClass clazz, @NotNull ConcordionMethod method) {
+    private PsiMethod findMethod(@NotNull PsiClass clazz, @NotNull ConcordionMethod method) {
         String name = method.getMethodName();
         int paramsCount = method.getMethodParametersCount();
         return stream(clazz.getAllMethods())
@@ -113,10 +123,23 @@ public class OgnlChainResolver {
     }
 
     @Nullable
-    private static PsiField findField(@NotNull PsiClass clazz, @NotNull ConcordionField field) {
+    private PsiField findField(@NotNull PsiClass clazz, @NotNull ConcordionField field) {
         String name = field.getFieldName();
         return stream(clazz.getAllFields())
                 .filter(f -> f.getName().equals(name))
                 .findFirst().orElse(null);
+    }
+
+    @NotNull
+    private PsiMember[] findMembers(@NotNull PsiClass clazz) {
+        PsiField[] allFields = clazz.getAllFields();
+        PsiMethod[] allMethods = clazz.getAllMethods();
+
+        PsiMember[] allMembers = new PsiMember[allFields.length + allMethods.length];
+
+        System.arraycopy(allFields, 0, allMembers, 0, allFields.length);
+        System.arraycopy(allMethods, 0, allMembers, allFields.length, allMethods.length);
+
+        return allMembers;
     }
 }

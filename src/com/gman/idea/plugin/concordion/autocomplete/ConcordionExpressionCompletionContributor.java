@@ -1,30 +1,15 @@
 package com.gman.idea.plugin.concordion.autocomplete;
 
-import com.gman.idea.plugin.concordion.Concordion;
-import com.gman.idea.plugin.concordion.lang.ConcordionFile;
+import com.gman.idea.plugin.concordion.OgnlChainResolver;
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionConcordionExpression;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.injected.editor.VirtualFileWindowImpl;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static java.util.Arrays.stream;
@@ -35,30 +20,31 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                PlatformPatterns.psiElement(ConcordionTypes.CHARACTER_LITERAL).withLanguage(ConcordionLanguage.INSTANCE),
-                new CompositeProvider()
+                PlatformPatterns.psiElement(ConcordionTypes.IDENTIFIER).withLanguage(ConcordionLanguage.INSTANCE),
+                new ConcordionExpressionProvider()
         );
     }
 
-    private static final class CompositeProvider extends CompletionProvider<CompletionParameters> {
+    private static final class ConcordionExpressionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-//            PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
-//            PsiClass psiClass = correspondingJavaRunner(htmlSpec);
+            PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
+            PsiClass psiClass = correspondingJavaRunner(htmlSpec);
 
-            result.addElement(LookupElementBuilder.create("Hello"));
+            if (htmlSpec == null || psiClass == null) {
+                return;
+            }
+
+            PsiMember[] psiMembers = OgnlChainResolver.create(psiClass).resolveMembers(parameters.getPosition());
+
+            result.addAllElements(fromMembers(psiMembers));
         }
 
-        private Iterable<LookupElement> optionsForClass(PsiClass psiClass) {
-            //TODO exclude object methods, use different paters for different commands
-            List<LookupElement> options = new ArrayList<>();
-            options.addAll(stream(psiClass.getAllMethods()).map(this::name).map(LookupElementBuilder::create).collect(toList()));
-            options.addAll(stream(psiClass.getAllFields()).map(this::name).map(LookupElementBuilder::create).collect(toList()));
-            return options;
-        }
-
-        private String name(PsiNamedElement element) {
-            return element.getName();
+        private Iterable<LookupElement> fromMembers(PsiMember[] psiMembers) {
+            return stream(psiMembers)
+                    .map(PsiMember::getName)
+                    .map(LookupElementBuilder::create)
+                    .collect(toList());
         }
     }
 }
