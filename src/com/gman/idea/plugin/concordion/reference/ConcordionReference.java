@@ -2,22 +2,23 @@ package com.gman.idea.plugin.concordion.reference;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConcordionReference<T extends PsiElement> implements PsiReference {
+public class ConcordionReference<T extends PsiMember> implements PsiReference {
 
     private final PsiElement owner;
     private final T referent;
     private final TextRange range;
 
-    public ConcordionReference(PsiElement owner, T referent) {
+    public ConcordionReference(@NotNull PsiElement owner, @NotNull T referent) {
         this.owner = owner;
         this.referent = referent;
-        this.range = new TextRange(0, owner.getTextLength());
+        this.range = createTextRange(owner, referent);
     }
 
     @Override
@@ -66,5 +67,13 @@ public class ConcordionReference<T extends PsiElement> implements PsiReference {
     @Override
     public boolean isSoft() {
         return false;
+    }
+
+    private TextRange createTextRange(@NotNull PsiElement owner, @NotNull T referent) {
+        if (referent.getName() != null) {
+            return new TextRange(0, referent.getName().length());
+        } else {
+            return new TextRange(0, owner.getTextLength());
+        }
     }
 }

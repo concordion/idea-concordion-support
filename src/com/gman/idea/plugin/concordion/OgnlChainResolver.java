@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.psi.search.ProjectScope.getAllScope;
-import static com.intellij.psi.search.ProjectScope.getProjectScope;
 import static java.util.Arrays.stream;
 
 public class OgnlChainResolver {
