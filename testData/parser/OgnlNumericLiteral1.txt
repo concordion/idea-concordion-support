@@ -1,0 +1,5 @@
+FILE(0,2)
+  ConcordionConcordionExpressionImpl(CONCORDION_EXPRESSION)(0,2)
+    ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,2)
+      ConcordionLiteralImpl(LITERAL)(0,2)
+        PsiElement(INTEGER_LITERAL)('42')(0,2)
