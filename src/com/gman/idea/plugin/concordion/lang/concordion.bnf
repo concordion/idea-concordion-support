@@ -38,7 +38,7 @@ concordionIterateExpression ::= variable ':' ognlExpressionStart
 ognlExpressionStart ::= (literal|method|field|variable) index? ('.' ognlExpressionNext)?
 ognlExpressionNext ::= (method|field) index? ('.' ognlExpressionNext)*
 
-literal ::= (STRING_LITERAL|CHARACTER_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
+literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 method ::= IDENTIFIER '(' arguments ')' {methods=[getReferences getMethodName getMethodParametersCount]}
 field ::= IDENTIFIER {methods=[getReferences getFieldName]}
 variable ::= '#' IDENTIFIER

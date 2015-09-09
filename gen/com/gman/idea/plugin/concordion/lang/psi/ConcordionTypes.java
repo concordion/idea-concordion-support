@@ -21,7 +21,6 @@ public interface ConcordionTypes {
   IElementType OGNL_EXPRESSION_START = new ConcordionElementType("OGNL_EXPRESSION_START");
   IElementType VARIABLE = new ConcordionElementType("VARIABLE");
 
-  IElementType CHARACTER_LITERAL = new ConcordionTokenType("CHARACTER_LITERAL");
   IElementType COLON = new ConcordionTokenType(":");
   IElementType COMA = new ConcordionTokenType(",");
   IElementType DOT = new ConcordionTokenType(".");
