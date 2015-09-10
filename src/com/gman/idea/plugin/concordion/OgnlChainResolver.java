@@ -61,18 +61,26 @@ public class OgnlChainResolver {
         if (methodOrField.getParent() instanceof ConcordionOgnlExpressionStart) {
             return runnerClass;
         } else {
-            PsiMember psiMember = resolveReferenceInternal(stackDepth + 1, parentExpressionMethodOrField(methodOrField));
-            String qualifiedName = qualifiedClassNameFromMember(psiMember);
-            if (qualifiedName != null) {
-                return findClass(qualifiedName);
+            PsiElement parentMethodOrField = parentExpressionMethodOrField(methodOrField);
+            if (parentMethodOrField == null) {
+                return null;
             }
-            return null;
+            PsiMember psiMember = resolveReferenceInternal(stackDepth + 1, parentMethodOrField);
+            String qualifiedName = qualifiedClassNameFromMember(psiMember);
+            if (qualifiedName == null) {
+                return null;
+            }
+            return findClass(qualifiedName);
         }
     }
 
-    @NotNull
+    @Nullable
     private PsiElement parentExpressionMethodOrField(@NotNull PsiElement methodOrField) {
-        //TODO fix for not ognl expressions
+        //Parent may not be present for some malformed chains
+        if (methodOrField.getParent() == null ||
+                methodOrField.getParent().getParent() == null) {
+            return null;
+        }
         return methodOrField.getParent().getParent().getFirstChild();
     }
 
