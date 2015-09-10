@@ -12,13 +12,14 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
 
     public ConcordionCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                PlatformPatterns.psiElement().withParent(XmlAttribute.class).with(ConcordionHtmlSpec.INSTANCE),
+                psiElement().withParent(XmlAttribute.class).with(ConcordionHtmlSpec.INSTANCE),
                 new ConcordionCommandCompletionProvider()
         );
     }

@@ -2,16 +2,20 @@ package com.gman.idea.plugin.concordion.autocomplete;
 
 import com.gman.idea.plugin.concordion.OgnlChainResolver;
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -20,7 +24,9 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                PlatformPatterns.psiElement(ConcordionTypes.IDENTIFIER).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionTypes.IDENTIFIER)
+                        .andNot(psiElement(ConcordionTypes.IDENTIFIER).withParent(ConcordionVariable.class))
+                        .withLanguage(ConcordionLanguage.INSTANCE),
                 new ConcordionExpressionProvider()
         );
     }

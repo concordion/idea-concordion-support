@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.correspondingJavaRunner;
 import static com.gman.idea.plugin.concordion.Concordion.unpackSpecFromLanguageInjection;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class ConcordionReferenceContributor extends PsiReferenceContributor {
 
@@ -17,17 +18,17 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
 
         registrar.registerReferenceProvider(
-                PlatformPatterns.psiElement(ConcordionTypes.FIELD).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionTypes.FIELD).withLanguage(ConcordionLanguage.INSTANCE),
                 new MemberReferenceProvider()
         );
 
         registrar.registerReferenceProvider(
-                PlatformPatterns.psiElement(ConcordionTypes.METHOD).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionTypes.METHOD).withLanguage(ConcordionLanguage.INSTANCE),
                 new MemberReferenceProvider()
         );
 
         registrar.registerReferenceProvider(
-                PlatformPatterns.psiElement(ConcordionTypes.VARIABLE).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionTypes.VARIABLE).withLanguage(ConcordionLanguage.INSTANCE),
                 new VariableReferenceProvider()
         );
     }
