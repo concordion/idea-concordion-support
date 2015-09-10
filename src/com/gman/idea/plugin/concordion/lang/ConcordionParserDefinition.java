@@ -23,7 +23,7 @@ public class ConcordionParserDefinition implements ParserDefinition {
 
     @NotNull
     public Lexer createLexer(Project project) {
-        return new LexerAdapter();
+        return new ConcordionLexerAdapter();
     }
 
     @NotNull

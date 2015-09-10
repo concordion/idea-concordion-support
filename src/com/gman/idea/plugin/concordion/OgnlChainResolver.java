@@ -72,6 +72,7 @@ public class OgnlChainResolver {
 
     @NotNull
     private PsiElement parentExpressionMethodOrField(@NotNull PsiElement methodOrField) {
+        //TODO fix for not ognl expressions
         return methodOrField.getParent().getParent().getFirstChild();
     }
 

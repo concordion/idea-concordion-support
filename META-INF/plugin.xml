@@ -19,6 +19,7 @@
     <fileTypeFactory implementation="com.gman.idea.plugin.concordion.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="com.gman.idea.plugin.concordion.lang.ConcordionParserDefinition"/>
     <multiHostInjector implementation="com.gman.idea.plugin.concordion.lang.ConcordionLanguageInjector"/>
+    <lang.syntaxHighlighterFactory key="Concordion" implementationClass="com.gman.idea.plugin.concordion.formatter.ConcordionSyntaxHighlighterFactory"/>
 
     <psi.referenceContributor implementation="com.gman.idea.plugin.concordion.reference.ConcordionReferenceContributor"/>
 

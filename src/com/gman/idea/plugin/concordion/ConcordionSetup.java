@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 
+//TODO convert to service and find a way to mock for tests
 public class ConcordionSetup {
 
     @Nullable public final PsiClass javaRunner;
