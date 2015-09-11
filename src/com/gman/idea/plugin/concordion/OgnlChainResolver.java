@@ -56,7 +56,7 @@ public class OgnlChainResolver {
     }
 
     @Nullable
-    private PsiClass resolveMemberOwnerClass (int stackDepth, @NotNull PsiElement methodOrField) {
+    private PsiClass resolveMemberOwnerClass(int stackDepth, @NotNull PsiElement methodOrField) {
         if (stackDepth > MAX_DEPTH_TO_RESOLVE) {
             return null;
         }
@@ -130,6 +130,7 @@ public class OgnlChainResolver {
         int paramsCount = method.getMethodParametersCount();
         return stream(clazz.getAllMethods())
                 .filter(m -> m.getName().equals(name) && m.getParameterList().getParametersCount() == paramsCount)
+                .filter(ConcordionMemberRestrictions::concordionVisibleMethod)
                 .findFirst().orElse(null);
     }
 
@@ -138,19 +139,7 @@ public class OgnlChainResolver {
         String name = field.getFieldName();
         return stream(clazz.getAllFields())
                 .filter(f -> f.getName().equals(name))
+                .filter(ConcordionMemberRestrictions::concordionVisibleField)
                 .findFirst().orElse(null);
-    }
-
-    @NotNull
-    private PsiMember[] findMembers(@NotNull PsiClass clazz) {
-        PsiField[] allFields = clazz.getAllFields();
-        PsiMethod[] allMethods = clazz.getAllMethods();
-
-        PsiMember[] allMembers = new PsiMember[allFields.length + allMethods.length];
-
-        System.arraycopy(allFields, 0, allMembers, 0, allFields.length);
-        System.arraycopy(allMethods, 0, allMembers, allFields.length, allMethods.length);
-
-        return allMembers;
     }
 }
