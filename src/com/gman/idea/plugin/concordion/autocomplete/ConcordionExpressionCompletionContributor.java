@@ -38,16 +38,13 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
                 return;
             }
 
-            PsiMember[] psiMembers = OgnlChainResolver.create(javaRunner).resolveMembers(parameters.getPosition());
-
-            result.addAllElements(fromMembers(psiMembers));
+            result.addAllElements(
+                    OgnlChainResolver
+                            .create(javaRunner)
+                            .resolveMembers(parameters.getPosition())
+                            .createAutoCompleteInformation()
+            );
         }
 
-        private Iterable<LookupElement> fromMembers(PsiMember[] psiMembers) {
-            return stream(psiMembers)
-                    .map(PsiMember::getName)
-                    .map(LookupElementBuilder::create)
-                    .collect(toList());
-        }
     }
 }

@@ -16,12 +16,15 @@ public class OgnlChainResolver {
 
     public static final int MAX_DEPTH_TO_RESOLVE = 5;
 
-    private GlobalSearchScope scope;
-    private JavaPsiFacade javaPsiFacade;
+    @NotNull private GlobalSearchScope scope;
+    @NotNull private JavaPsiFacade javaPsiFacade;
+    @NotNull private PsiClass runnerClass;
 
-    private PsiClass runnerClass;
-
-    private OgnlChainResolver(GlobalSearchScope scope, JavaPsiFacade javaPsiFacade, PsiClass runnerClass) {
+    private OgnlChainResolver(
+            @NotNull GlobalSearchScope scope,
+            @NotNull JavaPsiFacade javaPsiFacade,
+            @NotNull PsiClass runnerClass
+    ) {
         this.scope = scope;
         this.javaPsiFacade = javaPsiFacade;
         this.runnerClass = runnerClass;
@@ -44,12 +47,12 @@ public class OgnlChainResolver {
     }
 
     @NotNull
-    public PsiMember[] resolveMembers(@NotNull PsiElement identifier) {
+    public ClassMemberInformation resolveMembers(@NotNull PsiElement identifier) {
         PsiClass psiClass = resolveMemberOwnerClass(1, identifier.getParent());
         if (psiClass != null) {
-            return findMembers(psiClass);
+            return ClassMemberInformation.fromPsiClass(psiClass);
         }
-        return PsiMember.EMPTY_ARRAY;
+        return ClassMemberInformation.EMPTY;
     }
 
     @Nullable
