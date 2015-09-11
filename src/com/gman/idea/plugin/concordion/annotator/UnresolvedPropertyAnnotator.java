@@ -1,10 +1,12 @@
 package com.gman.idea.plugin.concordion.annotator;
 
+import com.gman.idea.plugin.concordion.Concordion;
+import com.gman.idea.plugin.concordion.action.quickfix.CreateFieldFromConcordionUsage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 public class UnresolvedPropertyAnnotator implements Annotator {
@@ -19,7 +21,15 @@ public class UnresolvedPropertyAnnotator implements Annotator {
     }
 
     private void reportUnresolvedField(@NotNull ConcordionField field, @NotNull AnnotationHolder holder) {
-        holder.createErrorAnnotation(field.getNode(), "Field not found");
+        PsiFile htmlSpec = Concordion.unpackSpecFromLanguageInjection(field.getContainingFile());
+        PsiClass javaRunner = Concordion.correspondingJavaRunner(htmlSpec);
+
+        if (htmlSpec == null || javaRunner == null) {
+            return;
+        }
+        holder
+                .createErrorAnnotation(field.getNode(), "Field not found")
+                .registerFix(new CreateFieldFromConcordionUsage(javaRunner, field));
     }
 
     private void reportUnresolvedMethod(@NotNull ConcordionMethod method, @NotNull AnnotationHolder holder) {

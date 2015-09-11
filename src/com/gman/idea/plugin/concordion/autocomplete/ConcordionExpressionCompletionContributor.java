@@ -2,20 +2,17 @@ package com.gman.idea.plugin.concordion.autocomplete;
 
 import com.gman.idea.plugin.concordion.OgnlChainResolver;
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -25,7 +22,7 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
         extend(
                 CompletionType.BASIC,
                 psiElement(ConcordionTypes.IDENTIFIER)
-                        .andNot(psiElement(ConcordionTypes.IDENTIFIER).withParent(ConcordionVariable.class))
+                        .withParent(or(psiElement(ConcordionTypes.FIELD), psiElement(ConcordionTypes.METHOD)))
                         .withLanguage(ConcordionLanguage.INSTANCE),
                 new ConcordionExpressionProvider()
         );
@@ -35,13 +32,13 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
             PsiFile htmlSpec = unpackSpecFromLanguageInjection(parameters.getOriginalFile());
-            PsiClass psiClass = correspondingJavaRunner(htmlSpec);
+            PsiClass javaRunner = correspondingJavaRunner(htmlSpec);
 
-            if (htmlSpec == null || psiClass == null) {
+            if (htmlSpec == null || javaRunner == null) {
                 return;
             }
 
-            PsiMember[] psiMembers = OgnlChainResolver.create(psiClass).resolveMembers(parameters.getPosition());
+            PsiMember[] psiMembers = OgnlChainResolver.create(javaRunner).resolveMembers(parameters.getPosition());
 
             result.addAllElements(fromMembers(psiMembers));
         }
