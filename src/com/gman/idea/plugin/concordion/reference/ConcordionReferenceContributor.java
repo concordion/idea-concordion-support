@@ -3,13 +3,11 @@ package com.gman.idea.plugin.concordion.reference;
 import com.gman.idea.plugin.concordion.OgnlChainResolver;
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
 import com.gman.idea.plugin.concordion.lang.psi.*;
-import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static com.gman.idea.plugin.concordion.Concordion.correspondingJavaRunner;
-import static com.gman.idea.plugin.concordion.Concordion.unpackSpecFromLanguageInjection;
+import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class ConcordionReferenceContributor extends PsiReferenceContributor {
