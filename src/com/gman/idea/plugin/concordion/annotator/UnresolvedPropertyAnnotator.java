@@ -28,6 +28,7 @@ public class UnresolvedPropertyAnnotator implements Annotator {
         if (htmlSpec == null || javaRunner == null) {
             return;
         }
+
         holder
                 .createErrorAnnotation(field.getNode(), "Field not found")
                 .registerFix(new CreateFieldFromConcordionUsage(javaRunner, field));

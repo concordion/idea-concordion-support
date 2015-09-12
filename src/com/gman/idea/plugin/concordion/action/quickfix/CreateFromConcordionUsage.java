@@ -1,5 +1,6 @@
 package com.gman.idea.plugin.concordion.action.quickfix;
 
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionOgnlExpressionStart;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.util.EditSourceUtil;
 import com.intellij.openapi.editor.Editor;
@@ -14,11 +15,11 @@ import org.jetbrains.annotations.Nullable;
 public abstract class CreateFromConcordionUsage<T extends PsiElement> extends BaseIntentionAction {
 
     @Nullable protected final PsiClass javaRunner;
-    @NotNull protected final T soure;
+    @NotNull protected final T source;
 
     public CreateFromConcordionUsage(@Nullable PsiClass javaRunner, @NotNull T source, String text) {
         this.javaRunner = javaRunner;
-        this.soure = source;
+        this.source = source;
         setText(text);
     }
 
@@ -31,7 +32,7 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return javaRunner != null;
+        return javaRunner != null && source.getParent() instanceof ConcordionOgnlExpressionStart;//Only in test class for now
     }
 
     @Override

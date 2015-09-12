@@ -12,7 +12,6 @@ import static com.intellij.psi.search.ProjectScope.getAllScope;
 
 public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<ConcordionField> {
 
-    //TODO check target of creation and its scope
     public CreateFieldFromConcordionUsage(@Nullable PsiClass javaRunner, @NotNull ConcordionField source) {
         super(javaRunner, source, "Create field from usage");
     }
@@ -21,7 +20,7 @@ public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<Co
     protected PsiMember createdMember(Project project, PsiElementFactory factory) {
         PsiType defaultFieldType = PsiType.getTypeByName("java.lang.Object", project, getAllScope(project));
 
-        PsiField createdField = factory.createField(soure.getFieldName(), defaultFieldType);
+        PsiField createdField = factory.createField(source.getFieldName(), defaultFieldType);
         createdField.getModifierList().setModifierProperty(PUBLIC, true);
 
         return CreateFieldFromUsageHelper.insertField(javaRunner, createdField, javaRunner);
