@@ -1,6 +1,7 @@
 package com.gman.idea.plugin.concordion.annotator;
 
 import com.gman.idea.plugin.concordion.action.quickfix.CreateFieldFromConcordionUsage;
+import com.gman.idea.plugin.concordion.action.quickfix.CreateMethodFromConcordionUsage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -35,6 +36,15 @@ public class UnresolvedPropertyAnnotator implements Annotator {
     }
 
     private void reportUnresolvedMethod(@NotNull ConcordionMethod method, @NotNull AnnotationHolder holder) {
-        holder.createErrorAnnotation(method.getNode(), "Method not found");
+        PsiFile htmlSpec = unpackSpecFromLanguageInjection(method.getContainingFile());
+        PsiClass javaRunner = correspondingJavaRunner(htmlSpec);
+
+        if (htmlSpec == null || javaRunner == null) {
+            return;
+        }
+
+        holder
+                .createErrorAnnotation(method.getNode(), "Method not found")
+                .registerFix(new CreateMethodFromConcordionUsage(javaRunner, method));
     }
 }

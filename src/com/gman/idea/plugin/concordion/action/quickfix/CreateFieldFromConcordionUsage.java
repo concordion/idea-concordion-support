@@ -23,6 +23,8 @@ public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<Co
         PsiField createdField = factory.createField(source.getFieldName(), defaultFieldType);
         createdField.getModifierList().setModifierProperty(PUBLIC, true);
 
-        return CreateFieldFromUsageHelper.insertField(javaRunner, createdField, javaRunner);
+        createdField = (PsiField) javaRunner.add(createdField);
+
+        return createdField;
     }
 }
