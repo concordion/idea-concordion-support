@@ -1,12 +1,12 @@
 package com.gman.idea.plugin.concordion.lang;
 
 import com.gman.idea.plugin.concordion.Concordion;
-import com.gman.idea.plugin.concordion.PsiUtils;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class ConcordionLanguageInjector implements MultiHostInjector {
             return;
         }
         XmlAttributeValue attributeValue = (XmlAttributeValue) context;
-        XmlAttribute attribute = PsiUtils.findParent(attributeValue, XmlAttribute.class);
+        XmlAttribute attribute = PsiTreeUtil.getParentOfType(attributeValue, XmlAttribute.class);
         if (!Concordion.NAMESPACE.equalsIgnoreCase(attribute.getNamespace())) {
             return;
         }
