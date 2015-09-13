@@ -1,6 +1,6 @@
 package com.gman.idea.plugin.concordion.completion;
 
-import com.gman.idea.plugin.concordion.ConcordionLightCodeInsightFixtureTestCase;
+import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompleteWithConcordionCommandsTest extends ConcordionLightCodeInsightFixtureTestCase {
+public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {

@@ -9,7 +9,7 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
-public abstract class ConcordionLightCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
+public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
     protected VirtualFile copyJavaRunnerToConcordionProject(String javaRunner) {
         return  myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner);

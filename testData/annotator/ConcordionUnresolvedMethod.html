@@ -1,0 +1,14 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+    <span c:assertEquals="<error descr="Method not found">unresolvedMethod()</error>">42</span>
+
+    <span c:assertEquals="<error descr="Method not found">unresolvedMethod(#arg1)</error>">42</span>
+
+    <span c:assertEquals="<error descr="Method not found">unresolvedMethod(#arg1, #arg2, #arg3)</error>">42</span>
+
+</body>
+</html>

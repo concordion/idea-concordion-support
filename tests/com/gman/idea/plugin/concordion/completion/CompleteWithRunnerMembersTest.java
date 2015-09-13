@@ -1,20 +1,12 @@
 package com.gman.idea.plugin.concordion.completion;
 
-import com.gman.idea.plugin.concordion.ConcordionLightCodeInsightFixtureTestCase;
+import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.jetbrains.jps.model.java.JavaResourceRootType;
-import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompleteWithRunnerMembersTest extends ConcordionLightCodeInsightFixtureTestCase {
+public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
