@@ -5,7 +5,6 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,20 +12,18 @@ public class CompleteWithConcordionCommandsTest extends ConcordionLightCodeInsig
 
     @Override
     protected String getTestDataPath() {
-        return "testData/completion/concordionCommands";
+        return "testData/completion";
     }
 
     public void testShouldCompleteConcordionCommandsInHtnlTags() {
 
-        copyJavaRunnerToConcordionProject("ConcordionSpec.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionSpec.html");
+        copyJavaRunnerToConcordionProject("ConcordionCommands.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionCommands.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-
         myFixture.complete(CompletionType.BASIC, 1);
 
-        List<String> options = myFixture.getLookupElementStrings();
-        assertThat(options).containsAll(Arrays.asList(
+        assertThat(myFixture.getLookupElementStrings()).containsAll(Arrays.asList(
                 "c:assertEquals", "c:assert-equals",
                 "c:assertTrue", "c:assert-true",
                 "c:assertFalse", "c:assert-false",

@@ -1,40 +1,46 @@
 package com.gman.idea.plugin.concordion;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.PsiTestUtil;
+import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
-public abstract class ConcordionLightCodeInsightFixtureTestCase extends LightCodeInsightFixtureTestCase {
-
-    private static final String SOURCES_DIR = "/src/src";
-    private static final String RESOURCES_DIR = "/src/resources";
-    private static final String PROJECT_PACKAGE = "/com/test/";
+public abstract class ConcordionLightCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
     protected VirtualFile copyJavaRunnerToConcordionProject(String javaRunner) {
-        return  myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, SOURCES_DIR + PROJECT_PACKAGE + javaRunner);
+        return  myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner);
     }
 
     protected VirtualFile copyHtmlSpecToConcordionProject(String htmlSpec) {
-        return  myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, SOURCES_DIR + PROJECT_PACKAGE + htmlSpec);
+        return  myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        ModifiableRootModel model = ModuleRootManager.getInstance(myFixture.getModule()).getModifiableModel();
-        ContentEntry contentEntry = model.getContentEntries()[0];
-        contentEntry.removeSourceFolder(contentEntry.getSourceFolders()[0]);
-        model.getContentEntries()[0].addSourceFolder("temp://" + SOURCES_DIR, JavaSourceRootType.TEST_SOURCE);
-        model.getContentEntries()[0].addSourceFolder("temp://" + RESOURCES_DIR, JavaResourceRootType.TEST_RESOURCE);
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            model.commit();
-            myFixture.getModule().getProject().save();
-        });
+        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(myModule).getSourceRoots();
+        if (sourceRoots.length == 1) {
+            VirtualFile root = ModuleRootManager.getInstance(myModule).getSourceRoots()[0];
+            Ref<VirtualFile> src = new Ref<>();
+            Ref<VirtualFile> resources = new Ref<>();
+
+            ApplicationManager.getApplication().runWriteAction(() -> {
+                try {
+                    src.set(root.createChildDirectory(this, "src"));
+                    resources.set(root.createChildDirectory(this, "resources"));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            PsiTestUtil.removeSourceRoot(myModule, root);
+            PsiTestUtil.addSourceRoot(myModule, src.get(), JavaSourceRootType.TEST_SOURCE);
+            PsiTestUtil.addSourceRoot(myModule, resources.get(), JavaResourceRootType.TEST_RESOURCE);
+        }
     }
 }

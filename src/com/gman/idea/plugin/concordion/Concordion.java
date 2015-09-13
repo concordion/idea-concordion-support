@@ -70,8 +70,11 @@ public final class Concordion {
         GlobalSearchScope scope = getProjectScope(project);
 
         String className = htmlSpec.getName().substring(0, htmlSpec.getName().indexOf('.'));
-        String packageName = JavaDirectoryService.getInstance().getPackage(htmlSpec.getContainingDirectory()).getQualifiedName();
-        String qualifiedName = packageName + '.' + className;
+        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(htmlSpec.getContainingDirectory());
+        if (aPackage == null) {
+            return null;
+        }
+        String qualifiedName = aPackage.getQualifiedName() + '.' + className;
 
         PsiClass runnerClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
         if (runnerClass == null) {
@@ -95,8 +98,11 @@ public final class Concordion {
         specName +='.' + HtmlFileType.INSTANCE.getDefaultExtension();
 
         PsiDirectory classDirectory = runnerClass.getContainingFile().getContainingDirectory();
-        PsiDirectory[] packageDirectories = JavaDirectoryService.getInstance().getPackage(classDirectory).getDirectories();
-        for (PsiDirectory packageDirectory : packageDirectories) {
+        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(classDirectory);
+        if (aPackage == null) {
+            return null;
+        }
+        for (PsiDirectory packageDirectory : aPackage.getDirectories()) {
             PsiFile htmlSpec = packageDirectory.findFile(specName);
             if (htmlSpec != null) {
                 return htmlSpec;
