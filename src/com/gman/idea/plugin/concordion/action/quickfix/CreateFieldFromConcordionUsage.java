@@ -1,7 +1,6 @@
 package com.gman.idea.plugin.concordion.action.quickfix;
 
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
-import com.intellij.codeInsight.daemon.impl.quickfix.CreateFieldFromUsageHelper;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;

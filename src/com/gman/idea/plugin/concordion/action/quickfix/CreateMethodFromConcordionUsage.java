@@ -1,6 +1,5 @@
 package com.gman.idea.plugin.concordion.action.quickfix;
 
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
