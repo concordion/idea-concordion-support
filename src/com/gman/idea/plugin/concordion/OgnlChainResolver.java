@@ -78,7 +78,7 @@ public class OgnlChainResolver {
     }
 
     @Nullable
-    private PsiElement parentExpressionMethodOrField(@NotNull PsiElement methodOrField) {
+    public static PsiElement parentExpressionMethodOrField(@NotNull PsiElement methodOrField) {
         //Parent may not be present for some malformed chains
         if (methodOrField.getParent() == null ||
                 methodOrField.getParent().getParent() == null) {
