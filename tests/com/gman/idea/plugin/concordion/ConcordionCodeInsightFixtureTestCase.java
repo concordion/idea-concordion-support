@@ -25,7 +25,7 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
 
         VirtualFile[] sourceRoots = ModuleRootManager.getInstance(myModule).getSourceRoots();
         if (sourceRoots.length == 1) {
-            VirtualFile root = ModuleRootManager.getInstance(myModule).getSourceRoots()[0];
+            VirtualFile root = sourceRoots[0];
             Ref<VirtualFile> src = new Ref<>();
             Ref<VirtualFile> resources = new Ref<>();
 

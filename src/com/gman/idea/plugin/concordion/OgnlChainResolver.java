@@ -126,8 +126,8 @@ public class OgnlChainResolver {
 
     @Nullable
     private PsiMethod findMethod(@NotNull PsiClass clazz, @NotNull ConcordionMethod method) {
-        String name = method.getMethodName();
-        int paramsCount = method.getMethodParametersCount();
+        String name = method.getName();
+        int paramsCount = method.getParametersCount();
         return stream(clazz.getAllMethods())
                 .filter(m -> m.getName().equals(name) && m.getParameterList().getParametersCount() == paramsCount)
                 .filter(ConcordionMemberRestrictions::concordionVisibleMethod)
@@ -136,7 +136,7 @@ public class OgnlChainResolver {
 
     @Nullable
     private PsiField findField(@NotNull PsiClass clazz, @NotNull ConcordionField field) {
-        String name = field.getFieldName();
+        String name = field.getName();
         return stream(clazz.getAllFields())
                 .filter(f -> f.getName().equals(name))
                 .filter(ConcordionMemberRestrictions::concordionVisibleField)

@@ -10,8 +10,8 @@ public interface ConcordionOgnlExpressionStart extends PsiElement {
   @Nullable
   ConcordionField getField();
 
-  @Nullable
-  ConcordionIndex getIndex();
+  @NotNull
+  List<ConcordionIndex> getIndexList();
 
   @Nullable
   ConcordionLiteral getLiteral();

@@ -14,17 +14,17 @@ public class ConcordionPsiUtils {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
 
-    public static String getMethodName(ConcordionMethod method) {
+    public static String getName(ConcordionMethod method) {
         ASTNode identifierNode = method.getNode().findChildByType(ConcordionTypes.IDENTIFIER);
         return identifierNode != null ? identifierNode.getText() : null;
     }
 
-    public static int getMethodParametersCount(ConcordionMethod method) {
+    public static int getParametersCount(ConcordionMethod method) {
         ASTNode arguments = method.getNode().findChildByType(ConcordionTypes.ARGUMENTS);
         return (arguments.getChildren(null).length + 1) / 2;
     }
 
-    public static String getFieldName(ConcordionField field) {
+    public static String getName(ConcordionField field) {
         ASTNode identifierNode = field.getNode().findChildByType(ConcordionTypes.IDENTIFIER);
         return identifierNode != null ? identifierNode.getText() : null;
     }

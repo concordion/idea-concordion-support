@@ -35,12 +35,12 @@ concordionExpression ::= concordionSetExpression|concordionIterateExpression|ogn
 concordionSetExpression ::= variable '=' ognlExpressionStart
 concordionIterateExpression ::= variable ':' ognlExpressionStart
 
-ognlExpressionStart ::= (literal|method|field|variable) index? ('.' ognlExpressionNext)?
-ognlExpressionNext ::= (method|field) index? ('.' ognlExpressionNext)*
+ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressionNext)?
+ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
 
 literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
-method ::= IDENTIFIER '(' arguments ')' {methods=[getReferences getMethodName getMethodParametersCount]}
-field ::= IDENTIFIER {methods=[getReferences getFieldName]}
+method ::= IDENTIFIER '(' arguments ')' {methods=[getReferences getName getParametersCount]}
+field ::= IDENTIFIER {methods=[getReferences getName]}
 variable ::= '#' IDENTIFIER
 
 arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*

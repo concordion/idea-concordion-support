@@ -13,8 +13,8 @@ public interface ConcordionMethod extends PsiElement {
 
   PsiReference[] getReferences();
 
-  String getMethodName();
+  String getName();
 
-  int getMethodParametersCount();
+  int getParametersCount();
 
 }

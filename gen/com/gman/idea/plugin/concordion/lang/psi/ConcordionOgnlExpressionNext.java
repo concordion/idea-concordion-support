@@ -10,8 +10,8 @@ public interface ConcordionOgnlExpressionNext extends PsiElement {
   @Nullable
   ConcordionField getField();
 
-  @Nullable
-  ConcordionIndex getIndex();
+  @NotNull
+  List<ConcordionIndex> getIndexList();
 
   @Nullable
   ConcordionMethod getMethod();

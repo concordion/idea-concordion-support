@@ -27,8 +27,8 @@ public class ConcordionFieldImpl extends ASTWrapperPsiElement implements Concord
     return ConcordionPsiUtils.getReferences(this);
   }
 
-  public String getFieldName() {
-    return ConcordionPsiUtils.getFieldName(this);
+  public String getName() {
+    return ConcordionPsiUtils.getName(this);
   }
 
 }

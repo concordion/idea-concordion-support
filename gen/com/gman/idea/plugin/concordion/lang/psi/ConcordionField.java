@@ -10,6 +10,6 @@ public interface ConcordionField extends PsiElement {
 
   PsiReference[] getReferences();
 
-  String getFieldName();
+  String getName();
 
 }

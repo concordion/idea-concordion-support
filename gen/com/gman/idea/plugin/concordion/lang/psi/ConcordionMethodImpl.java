@@ -33,12 +33,12 @@ public class ConcordionMethodImpl extends ASTWrapperPsiElement implements Concor
     return ConcordionPsiUtils.getReferences(this);
   }
 
-  public String getMethodName() {
-    return ConcordionPsiUtils.getMethodName(this);
+  public String getName() {
+    return ConcordionPsiUtils.getName(this);
   }
 
-  public int getMethodParametersCount() {
-    return ConcordionPsiUtils.getMethodParametersCount(this);
+  public int getParametersCount() {
+    return ConcordionPsiUtils.getParametersCount(this);
   }
 
 }

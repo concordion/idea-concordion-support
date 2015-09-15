@@ -19,10 +19,10 @@ public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<C
     protected PsiMember createdMember(Project project, PsiElementFactory factory) {
         PsiType defaultType = PsiType.getTypeByName("java.lang.Object", project, getAllScope(project));
 
-        PsiMethod createdMethod = factory.createMethod(source.getMethodName(), defaultType);
+        PsiMethod createdMethod = factory.createMethod(source.getName(), defaultType);
         createdMethod.getModifierList().setModifierProperty(PUBLIC, true);
 
-        for (int i = 0; i < source.getMethodParametersCount(); i++) {
+        for (int i = 0; i < source.getParametersCount(); i++) {
             createdMethod.getParameterList().add(factory.createParameter("param" + i, defaultType));
         }
         createdMethod.getBody().add(factory.createStatementFromText("return null;", null));

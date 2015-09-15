@@ -19,7 +19,7 @@ public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<Co
     protected PsiMember createdMember(Project project, PsiElementFactory factory) {
         PsiType defaultFieldType = PsiType.getTypeByName("java.lang.Object", project, getAllScope(project));
 
-        PsiField createdField = factory.createField(source.getFieldName(), defaultFieldType);
+        PsiField createdField = factory.createField(source.getName(), defaultFieldType);
         createdField.getModifierList().setModifierProperty(PUBLIC, true);
 
         createdField = (PsiField) javaRunner.add(createdField);

@@ -29,9 +29,9 @@ public class ConcordionOgnlExpressionNextImpl extends ASTWrapperPsiElement imple
   }
 
   @Override
-  @Nullable
-  public ConcordionIndex getIndex() {
-    return findChildByClass(ConcordionIndex.class);
+  @NotNull
+  public List<ConcordionIndex> getIndexList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcordionIndex.class);
   }
 
   @Override
