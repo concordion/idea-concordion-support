@@ -1,17 +1,34 @@
 <idea-plugin version="2">
   <id>com.gman.idea.plugin.concordion</id>
   <name>Concordion support</name>
-  <version>1.0</version>
-  <vendor email="gmandnepr@gmail.com" url="https://github.com/gmandnepr">Gmandnepr</vendor>
+  <version>0.1</version>
+  <vendor email="gmandnepr@gmail.com" url="https://github.com/gmandnepr/IdeaConcordionSupport">Ievgen Degtiarenko</vendor>
 
   <description><![CDATA[
-      TBD
+<p>
+    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> testing framework.
+    <br/><b>Plugin homepage</b>
+    <br/><a href="https://github.com/gmandnepr/IdeaConcordionSupport">https://github.com/gmandnepr/IdeaConcordionSupport</a>
+    <br/>Issues, feature proposals and tested pull requests are welcome
+</p>
     ]]></description>
 
   <change-notes><![CDATA[
-      TBD
-    ]]>
-  </change-notes>
+<p>
+    Version 0.2<br/>
+    <ul>
+        <li>Refactoring</li>
+    </ul>
+    Version 0.1<br/>
+    <ul>
+        <li>Autocomplete with concordion commands</li>
+        <li>Autocomplete with fields and methods of concordion runner class</li>
+        <li>Navigation between concordion html spec and java runner class</li>
+        <li>Ctrl+click navigation and usages search for concordion expressions</li>
+        <li>Quick fields and methods creation from usages</li>
+    </ul>
+</p>
+    ]]></change-notes>
 
   <idea-version since-build="131"/>
 
