@@ -1,11 +1,14 @@
 package com.gman.idea.plugin.concordion;
 
 
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
+import com.sun.istack.internal.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,7 +25,11 @@ public class ClassMemberInformation {
 
     public static final ClassMemberInformation EMPTY = new ClassMemberInformation(emptyList(), emptyList());
 
-    public static ClassMemberInformation fromPsiClass(@NotNull PsiClass psiClass) {
+
+    public static ClassMemberInformation fromPsiClass(@Nullable PsiClass psiClass) {
+        if (psiClass == null) {
+            return EMPTY;
+        }
         return new ClassMemberInformation(
                 asList(psiClass.getAllFields()),
                 asList(psiClass.getAllMethods())

@@ -62,6 +62,7 @@ public final class Concordion {
 
     @Nullable
     public static PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
+        //TODO seems to be used a lot. Cache?
         if (htmlSpec == null || htmlSpec.getContainingDirectory() == null) {
             return null;
         }
@@ -125,9 +126,14 @@ public final class Concordion {
             return originalFile;
         }
 
-        VirtualFile delegate = getDelegate(originalFile.getVirtualFile());
-        if (delegate != null) {
-            return PsiManager.getInstance(originalFile.getProject()).findFile(delegate);
+        VirtualFile file = originalFile.getVirtualFile();
+
+        while (file != null && file.getParent() == null) {
+            file = getDelegate(file);
+        }
+
+        if (file != null) {
+            return PsiManager.getInstance(originalFile.getProject()).findFile(file);
         }
         return null;
     }

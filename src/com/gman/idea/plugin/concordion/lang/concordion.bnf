@@ -12,8 +12,6 @@
   elementTypeClass="com.gman.idea.plugin.concordion.lang.ConcordionElementType"
   tokenTypeClass="com.gman.idea.plugin.concordion.lang.ConcordionTokenType"
 
-  psiImplUtilClass="com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils"
-
   tokens = [
     LPARENTH="("
     RPARENTH=")"
@@ -39,8 +37,15 @@ ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressi
 ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
 
 literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
-method ::= IDENTIFIER '(' arguments ')' {methods=[getReferences getName getParametersCount]}
-field ::= IDENTIFIER {methods=[getReferences getName]}
+method ::= IDENTIFIER '(' arguments ')' {
+  implements="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternal"
+  extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternalImpl"
+}
+field ::= IDENTIFIER {
+  implements="com.gman.idea.plugin.concordion.lang.psi.ConcordionFieldInternal"
+  extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionFieldInternalImpl"
+
+}
 variable ::= '#' IDENTIFIER
 
 arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*

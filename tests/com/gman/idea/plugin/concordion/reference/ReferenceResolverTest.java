@@ -1,7 +1,7 @@
 package com.gman.idea.plugin.concordion.reference;
 
 import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
-import com.gman.idea.plugin.concordion.OgnlChainResolver;
+import com.gman.idea.plugin.concordion.lang.psi.AbstractConcordionPsiElement;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -55,7 +55,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         ConcordionMethod chainNext = elementUnderCaret();
         PsiMethod chainNextMethod = resolveReferences(chainNext);
 
-        PsiElement chainStart = OgnlChainResolver.parentExpressionMethodOrField(chainNext);
+        PsiElement chainStart = AbstractConcordionPsiElement.parentConcordionExpressionOf(chainNext);
         PsiField chainStartField = resolveReferences(chainStart);
 
         assertThat(chainStartField.getName()).isEqualTo("chainStart");

@@ -4,12 +4,7 @@ package com.gman.idea.plugin.concordion.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 
-public interface ConcordionField extends PsiElement {
-
-  PsiReference[] getReferences();
-
-  String getName();
+public interface ConcordionField extends ConcordionFieldInternal {
 
 }

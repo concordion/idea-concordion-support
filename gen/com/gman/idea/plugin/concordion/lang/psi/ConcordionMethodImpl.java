@@ -8,11 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils;
-import com.intellij.psi.PsiReference;
 
-public class ConcordionMethodImpl extends ASTWrapperPsiElement implements ConcordionMethod {
+public class ConcordionMethodImpl extends ConcordionMethodInternalImpl implements ConcordionMethod {
 
   public ConcordionMethodImpl(ASTNode node) {
     super(node);
@@ -27,18 +24,6 @@ public class ConcordionMethodImpl extends ASTWrapperPsiElement implements Concor
   @NotNull
   public ConcordionArguments getArguments() {
     return findNotNullChildByClass(ConcordionArguments.class);
-  }
-
-  public PsiReference[] getReferences() {
-    return ConcordionPsiUtils.getReferences(this);
-  }
-
-  public String getName() {
-    return ConcordionPsiUtils.getName(this);
-  }
-
-  public int getParametersCount() {
-    return ConcordionPsiUtils.getParametersCount(this);
   }
 
 }

@@ -8,11 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.gman.idea.plugin.concordion.lang.ConcordionPsiUtils;
-import com.intellij.psi.PsiReference;
 
-public class ConcordionFieldImpl extends ASTWrapperPsiElement implements ConcordionField {
+public class ConcordionFieldImpl extends ConcordionFieldInternalImpl implements ConcordionField {
 
   public ConcordionFieldImpl(ASTNode node) {
     super(node);
@@ -21,14 +18,6 @@ public class ConcordionFieldImpl extends ASTWrapperPsiElement implements Concord
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitField(this);
     else super.accept(visitor);
-  }
-
-  public PsiReference[] getReferences() {
-    return ConcordionPsiUtils.getReferences(this);
-  }
-
-  public String getName() {
-    return ConcordionPsiUtils.getName(this);
   }
 
 }

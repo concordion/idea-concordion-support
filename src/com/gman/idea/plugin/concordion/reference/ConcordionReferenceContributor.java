@@ -1,13 +1,11 @@
 package com.gman.idea.plugin.concordion.reference;
 
-import com.gman.idea.plugin.concordion.OgnlChainResolver;
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
 import com.gman.idea.plugin.concordion.lang.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class ConcordionReferenceContributor extends PsiReferenceContributor {
@@ -35,21 +33,17 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            PsiFile containingFile = unpackSpecFromLanguageInjection(element.getContainingFile());
-            PsiClass psiClass = correspondingJavaRunner(containingFile);
-
-            if (containingFile == null || psiClass == null) {
+            if (!(element instanceof ConcordionPsiElement)) {
                 return PsiReference.EMPTY_ARRAY;
             }
 
-            PsiMember psiMember = OgnlChainResolver.create(psiClass).resolveReference(element);
-
-            if (psiMember == null) {
+            PsiMember containingMember = ((ConcordionPsiElement) element).getContainingMember();
+            if (containingMember == null) {
                 return PsiReference.EMPTY_ARRAY;
             }
 
             return new PsiReference[] {
-                    new ConcordionReference<>(element, psiMember)
+                    new ConcordionReference<>(element, containingMember)
             };
         }
     }

@@ -4,17 +4,10 @@ package com.gman.idea.plugin.concordion.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 
-public interface ConcordionMethod extends PsiElement {
+public interface ConcordionMethod extends ConcordionMethodInternal {
 
   @NotNull
   ConcordionArguments getArguments();
-
-  PsiReference[] getReferences();
-
-  String getName();
-
-  int getParametersCount();
 
 }
