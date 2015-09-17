@@ -8,7 +8,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.testFramework.LightVirtualFileBase;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 import static com.intellij.psi.search.ProjectScope.getProjectScope;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 public final class Concordion {
 
-    public static final String NAMESPACE = "http://www.concordion.org/2007/concordion";
     public static final List<String> COMMANDS = unmodifiableList(asList(
             "assertEquals", "assert-equals",
             "assertTrue", "assert-true",
@@ -36,9 +35,15 @@ public final class Concordion {
             "example"
     ));
 
+    private static final String CONCORDION_NAMESPACE = "http://www.concordion.org/2007/concordion";
+
     public static boolean isConcordionHtmlSpec(@NotNull PsiFile psiFile) {
         return HtmlFileType.INSTANCE.equals(psiFile.getFileType())
-                && psiFile.getText().contains(NAMESPACE);
+                && psiFile.getText().contains(CONCORDION_NAMESPACE);//TODO better check
+    }
+
+    public static boolean isConcordionNamespace(String namespace) {
+        return CONCORDION_NAMESPACE.equalsIgnoreCase(namespace);
     }
 
     @Nullable
@@ -51,7 +56,7 @@ public final class Concordion {
             return null;
         }
         for (Map.Entry<String, String> declaration : rootTag.getLocalNamespaceDeclarations().entrySet()) {
-            if (NAMESPACE.equalsIgnoreCase(declaration.getValue())) {
+            if (CONCORDION_NAMESPACE.equalsIgnoreCase(declaration.getValue())) {
                 return declaration.getKey();
             }
         }
@@ -151,8 +156,8 @@ public final class Concordion {
         }
     }
 
-    public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
-    public static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
+    private static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
+    private static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
 
     public static boolean isClassAnnotatedWithConcordionRunner(@NotNull PsiClass runnerClass) {
         PsiAnnotation runner = findJunitRunWithAnnotation(runnerClass);
@@ -164,8 +169,12 @@ public final class Concordion {
         return modifierList != null ? modifierList.findAnnotation(JUNIT_RUN_WITH_ANNOTATION) : null;
     }
 
+    public static boolean isJunitRunWithAnnotation(@NotNull PsiAnnotation runWithAnnotation) {
+        return JUNIT_RUN_WITH_ANNOTATION.equals(runWithAnnotation.getQualifiedName());
+    }
+
     public static boolean isRunWithAnnotationUsesConcordionRunner(@NotNull PsiAnnotation runWithAnnotation) {
-        PsiJavaCodeReferenceElement runnerReference = PsiTreeUtil.findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
+        PsiJavaCodeReferenceElement runnerReference = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
         if (runnerReference == null) {
             return false;
         }

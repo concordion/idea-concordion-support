@@ -20,16 +20,13 @@ public class ConcordionJavaRunnerAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-        if (!(element instanceof PsiAnnotation)) {
-            return;
-        }
-        PsiAnnotation annotation = (PsiAnnotation) element;
-        if (!Concordion.JUNIT_RUN_WITH_ANNOTATION.equals(annotation.getQualifiedName())
-                || !isRunWithAnnotationUsesConcordionRunner(annotation)) {
+        if (!(element instanceof PsiAnnotation)
+                || !isJunitRunWithAnnotation((PsiAnnotation) element)
+                || !isRunWithAnnotationUsesConcordionRunner((PsiAnnotation) element)) {
             return;
         }
 
-        PsiClass javaRunner = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
+        PsiClass javaRunner = PsiTreeUtil.getParentOfType(element, PsiClass.class);
         PsiFile htmlSpec = correspondingHtmlSpec(javaRunner);
 
         ConcordionSetup setup = from(javaRunner, htmlSpec);

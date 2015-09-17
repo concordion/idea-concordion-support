@@ -19,11 +19,9 @@ public class ConcordionHtmlSpecAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-        if (!(element instanceof XmlAttributeValue)) {
-            return;
-        }
-        XmlAttributeValue value = (XmlAttributeValue) element;
-        if (!Concordion.NAMESPACE.equalsIgnoreCase(value.getValue())) {
+        if (!isConcordionHtmlSpec(element.getContainingFile())
+                || !(element instanceof XmlAttributeValue)
+                || !isConcordionNamespace(((XmlAttributeValue) element).getValue())) {
             return;
         }
 
