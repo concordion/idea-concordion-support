@@ -18,20 +18,13 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     protected PsiMember containingMember;
     protected PsiType type;
 
-    public AbstractConcordionPsiElement(ASTNode node) {
+    public AbstractConcordionPsiElement(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        ASTNode identifierNode = identifierNode();
-        return identifierNode != null ? identifierNode.getPsi() : null;
     }
 
     @Override
     public String getName() {
-        ASTNode identifierNode = identifierNode();
+        ASTNode identifierNode = getNode().findChildByType(ConcordionTypes.IDENTIFIER);
         return identifierNode != null ? identifierNode.getText() : null;
     }
 
@@ -84,11 +77,6 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     @Nullable
     private ConcordionPsiElement parentConcordionExpression() {
         return parentConcordionExpressionOf(this);
-    }
-
-    @Nullable
-    private ASTNode identifierNode() {
-        return getNode().findChildByType(ConcordionTypes.IDENTIFIER);
     }
 
     public static ConcordionPsiElement parentConcordionExpressionOf(ConcordionPsiElement current) {

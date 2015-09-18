@@ -1,13 +1,8 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 
-public interface ConcordionPsiElement extends PsiNameIdentifierOwner {
-
-    String getName();
+public interface ConcordionPsiElement extends PsiNamedElement {
 
     PsiClass getContainingClass();
 
