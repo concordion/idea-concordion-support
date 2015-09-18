@@ -1,5 +1,6 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
+import com.gman.idea.plugin.concordion.lang.ConcordionElementFactory;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
@@ -30,7 +31,11 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
 
     @Override
     public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
-        return null;//TODO implement for renaming
+        ASTNode identifier = getNode().findChildByType(ConcordionTypes.IDENTIFIER);
+        if (identifier != null) {
+            getNode().replaceChild(identifier, ConcordionElementFactory.createIdentifier(getProject(), name).getNode());
+        }
+        return this;
     }
 
     @NotNull
