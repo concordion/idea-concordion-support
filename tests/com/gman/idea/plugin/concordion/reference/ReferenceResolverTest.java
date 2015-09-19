@@ -5,10 +5,7 @@ import com.gman.idea.plugin.concordion.lang.psi.AbstractConcordionPsiElement;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,8 +18,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testShouldResolveFieldReference() {
 
-        copyJavaRunnerToConcordionProject("ConcordionFieldReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionFieldReference.html");
+        copyJavaRunnerToConcordionProject("FieldReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("FieldReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -32,23 +29,88 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("propertyToResolve");
     }
 
-    public void testShouldResolveMethodReference() {
+    public void testShouldResolveInheritedFieldReference() {
 
-        copyJavaRunnerToConcordionProject("ConcordionMethodReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionMethodReference.html");
+        copyJavaRunnerToConcordionProject("Parent.java");
+        copyJavaRunnerToConcordionProject("InheritedFieldReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedFieldReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
-        ConcordionMethod concordionField = elementUnderCaret();
-        PsiMethod method = resolveReferences(concordionField);
+        ConcordionField concordionField = elementUnderCaret();
+        PsiField javaField = resolveReferences(concordionField);
+
+        assertThat(javaField.getName()).isEqualTo("inheritedField");
+    }
+
+    public void testShouldResolveMethodReference() {
+
+        copyJavaRunnerToConcordionProject("MethodReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodReference.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
 
         assertThat(method.getName()).isEqualTo("methodToResolve");
     }
 
+    public void testShouldResolveMethodWithArgumentsReference() {
+
+        copyJavaRunnerToConcordionProject("MethodWithArgumentsReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithArgumentsReference.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
+
+        assertThat(method.getName()).isEqualTo("methodToResolve");
+        assertThat(method.getParameterList().getParameters()).hasSize(6);
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(6);
+    }
+
+    public void testShouldResolveOverloadedMethodReference() {
+
+        copyJavaRunnerToConcordionProject("OverloadedMethodReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodReference.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
+
+        assertThat(method.getName()).isEqualTo("methodToResolve");
+        assertThat(method.getParameterList().getParameters()).hasSize(2);
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(2);
+
+        PsiClass containingClass = method.getContainingClass();
+        for (PsiMethod psiMethod : containingClass.getMethods()) {
+            if (psiMethod.getParameterList().getParametersCount() != 2) {
+                assertThat(psiMethod.getReferences()).hasSize(0);
+            }
+        }
+    }
+
+    public void testShouldResolveInheritedMethodReferences() {
+
+        copyJavaRunnerToConcordionProject("Parent.java");
+        copyJavaRunnerToConcordionProject("InheritedMethodReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedMethodReference.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod javaMethod = resolveReferences(concordionMethod);
+
+        assertThat(javaMethod.getName()).isEqualTo("inheritedMethod");
+    }
+
     public void testShouldResolveChains() {
 
-        copyJavaRunnerToConcordionProject("ConcordionChainReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionChainReference.html");
+        copyJavaRunnerToConcordionProject("ChainReference.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

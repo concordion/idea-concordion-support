@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import java.lang.Object;
 
 @RunWith(ConcordionRunner.class)
-public class ConcordionChainReference {
+public class ChainReference {
 
     public Next chainStart = new Next();
 

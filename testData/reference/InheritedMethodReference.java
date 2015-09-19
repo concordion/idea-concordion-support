@@ -4,8 +4,6 @@ import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
 
 @RunWith(ConcordionRunner.class)
-public class ConcordionFieldReference {
-
-    public int propertyToResolve = 42;
+public class InheritedMethodReference extends Parent {
 
 }
