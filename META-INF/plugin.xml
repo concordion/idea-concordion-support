@@ -6,7 +6,7 @@
 
   <description><![CDATA[
 <p>
-    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> testing framework.
+    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> (1.5.1) testing framework.
     <br/><b>Plugin homepage</b>
     <br/><a href="https://github.com/gmandnepr/IdeaConcordionSupport">https://github.com/gmandnepr/IdeaConcordionSupport</a>
     <br/>Issues, feature proposals and tested pull requests are welcome
@@ -15,10 +15,6 @@
 
   <change-notes><![CDATA[
 <p>
-    Version 0.2<br/>
-    <ul>
-        <li>Refactoring</li>
-    </ul>
     Version 0.1<br/>
     <ul>
         <li>Autocomplete with concordion commands</li>
@@ -26,6 +22,7 @@
         <li>Navigation between concordion html spec and java runner class</li>
         <li>Ctrl+click navigation and usages search for concordion expressions</li>
         <li>Quick fields and methods creation from usages</li>
+        <li>Renaming support</li>
     </ul>
 </p>
     ]]></change-notes>
