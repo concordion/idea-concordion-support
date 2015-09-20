@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.gman.idea.plugin.concordion</id>
   <name>Concordion support</name>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/gmandnepr/IdeaConcordionSupport">Ievgen Degtiarenko</vendor>
 
   <description><![CDATA[

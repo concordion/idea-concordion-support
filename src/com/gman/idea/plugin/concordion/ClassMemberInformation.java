@@ -1,15 +1,12 @@
 package com.gman.idea.plugin.concordion;
 
-
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
-import com.sun.istack.internal.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
