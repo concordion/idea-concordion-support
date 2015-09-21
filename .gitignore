@@ -1,5 +1,6 @@
 build/
 out/
+idea-sandbox/
 .gradle
 .idea/
 #*.iml
