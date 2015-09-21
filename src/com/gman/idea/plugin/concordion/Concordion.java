@@ -10,8 +10,11 @@ import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.testFramework.LightVirtualFileBase;
+import org.concordion.api.FullOGNL;
+import org.concordion.integration.junit4.ConcordionRunner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Map;
@@ -156,8 +159,14 @@ public final class Concordion {
         }
     }
 
-    private static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
-    private static final String BASIC_CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
+    private static final String JUNIT_RUN_WITH_ANNOTATION = RunWith.class.getName();
+    private static final String BASIC_CONCORDION_RUNNER = ConcordionRunner.class.getName();
+    private static final String USING_FULL_OGNL = FullOGNL.class.getName();
+
+    public static boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
+        PsiModifierList modifierList = runnerClass.getModifierList();
+        return modifierList != null && modifierList.findAnnotation(USING_FULL_OGNL) != null;
+    }
 
     public static boolean isClassAnnotatedWithConcordionRunner(@NotNull PsiClass runnerClass) {
         PsiAnnotation runner = findJunitRunWithAnnotation(runnerClass);
@@ -175,19 +184,8 @@ public final class Concordion {
 
     public static boolean isRunWithAnnotationUsesConcordionRunner(@NotNull PsiAnnotation runWithAnnotation) {
         PsiJavaCodeReferenceElement runnerReference = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
-        if (runnerReference == null) {
-            return false;
-        }
-
-        Project project = runWithAnnotation.getProject();
-        GlobalSearchScope scope = getProjectScope(project);
-
-        PsiClassType basicRunner = PsiType.getTypeByName(BASIC_CONCORDION_RUNNER, project, scope);
-        PsiClassType usedRunner = PsiType.getTypeByName(runnerReference.getQualifiedName(), project, scope);
-
-        return basicRunner.isConvertibleFrom(usedRunner);
+        return runnerReference != null && BASIC_CONCORDION_RUNNER.equals(runnerReference.getQualifiedName());
     }
-
 
     private Concordion() {
     }

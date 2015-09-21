@@ -1,6 +1,5 @@
 package com.gman.idea.plugin.concordion.annotator;
 
-import com.gman.idea.plugin.concordion.Concordion;
 import com.gman.idea.plugin.concordion.ConcordionSetup;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;

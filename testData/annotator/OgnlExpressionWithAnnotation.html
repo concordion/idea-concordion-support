@@ -1,0 +1,29 @@
+<!-- @RunWith annotation is missing because JUnit library is not added to the testing set up. If it is added then we have exception accessing PSI tree. Also schema is not resolved -->
+<html xmlns:c=<error descr="@RunWith annotation is missing"><info descr="">"http://www.concordion.org/2007/concordion"</info></error>>
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+    <span c:set="<inject descr="null">#var</inject>">value</span>
+
+    <span c:assertEquals="<inject descr="null">property.<error descr="Method not found">toString()</error></inject>">value</span>
+
+    <span c:assertEquals="<inject descr="null">method().<error descr="Method not found">toString()</error></inject>">value</span>
+
+    <span c:assertEquals="<inject descr="null">#var.<error descr="Method not found">toString()</error></inject>">value</span>
+
+    <table c:verifyRows="<inject descr="null">#loop : holder().data()</inject>">
+        <tr>
+            <td c:assertEquals="<inject descr="null">#loop</inject>">Val</td>
+        </tr>
+    </table>
+
+    <table c:execute="<inject descr="null">#loop = holder().data()</inject>">
+        <tr>
+            <td c:assertEquals="<inject descr="null">#loop</inject>">Val</td>
+        </tr>
+    </table>
+
+</body>
+</html>

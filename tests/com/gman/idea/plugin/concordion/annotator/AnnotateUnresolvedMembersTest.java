@@ -16,7 +16,7 @@ public class AnnotateUnresolvedMembersTest extends ConcordionCodeInsightFixtureT
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionUnresolvedField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.checkHighlighting(true, true, true, true);
+        myFixture.checkHighlighting(true, true, true);
     }
 
     public void testShouldMarkUnresolvedConcordionMethods() {
@@ -25,6 +25,6 @@ public class AnnotateUnresolvedMembersTest extends ConcordionCodeInsightFixtureT
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionUnresolvedMethod.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.checkHighlighting(true, true, true, true);
+        myFixture.checkHighlighting(true, true, true);
     }
 }
