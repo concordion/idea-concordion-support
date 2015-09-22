@@ -5,18 +5,13 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
-
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
     //TODO find a good way to cache (no outdated date, ok with renaming)
-    protected PsiClass containingClass;
-    protected PsiMember containingMember;
     protected PsiType type;
 
     public AbstractConcordionPsiElement(@NotNull ASTNode node) {
@@ -45,42 +40,15 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     }
 
     @Override
-    public PsiClass getContainingClass() {
-        return determineContainingClass();
-    }
-
-    @Override
-    public PsiMember getContainingMember() {
-        return determineContainingMember();
-    }
-
-    @Override
     public PsiType getType() {
         return determineType();
     }
 
     @Nullable
-    protected PsiClass determineContainingClass() {
-        if (getParent() instanceof ConcordionOgnlExpressionStart) {
-            PsiFile htmlRunner = unpackSpecFromLanguageInjection(getContainingFile());
-            return correspondingJavaRunner(htmlRunner);
-        } else {
-            ConcordionPsiElement parent = parentConcordionExpression();
-            if (parent == null) {
-                return null;
-            }
-            return PsiUtil.resolveClassInType(parent.getType());
-        }
-    }
-
-    @Nullable
-    protected abstract PsiMember determineContainingMember();
-
-    @Nullable
     protected abstract PsiType determineType();
 
     @Nullable
-    private ConcordionPsiElement parentConcordionExpression() {
+    protected ConcordionPsiElement parentConcordionExpression() {
         return parentConcordionExpressionOf(this);
     }
 

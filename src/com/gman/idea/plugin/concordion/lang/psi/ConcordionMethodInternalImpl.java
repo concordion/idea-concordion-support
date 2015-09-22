@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static java.util.Arrays.stream;
 
-public abstract class ConcordionMethodInternalImpl extends AbstractConcordionPsiElement implements ConcordionMethodInternal {
+public abstract class ConcordionMethodInternalImpl extends AbstractConcordionMember implements ConcordionMethodInternal {
 
     public ConcordionMethodInternalImpl(ASTNode node) {
         super(node);

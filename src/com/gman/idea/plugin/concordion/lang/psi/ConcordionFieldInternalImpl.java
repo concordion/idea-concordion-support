@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import static com.intellij.psi.search.GlobalSearchScope.allScope;
 import static java.util.Arrays.stream;
 
-public abstract class ConcordionFieldInternalImpl extends AbstractConcordionPsiElement implements ConcordionFieldInternal {
+public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMember implements ConcordionFieldInternal {
 
     private static final String MAP_TYPE = java.util.Map.class.getName();
 

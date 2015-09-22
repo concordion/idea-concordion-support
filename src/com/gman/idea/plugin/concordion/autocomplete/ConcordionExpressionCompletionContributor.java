@@ -1,7 +1,7 @@
 package com.gman.idea.plugin.concordion.autocomplete;
 
 import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionMember;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.psi.*;
@@ -27,13 +27,13 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     private static final class ConcordionExpressionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            PsiElement methodOrField = parameters.getPosition().getParent();
-            if (!(methodOrField instanceof ConcordionPsiElement)) {
+            PsiElement concordionMember = parameters.getPosition().getParent();
+            if (!(concordionMember instanceof ConcordionMember)) {
                 return;
             }
 
             result.addAllElements(
-                    fromPsiClass(((ConcordionPsiElement) methodOrField).getContainingClass()).createAutoCompleteInformation()
+                    fromPsiClass(((ConcordionMember) concordionMember).getContainingClass()).createAutoCompleteInformation()
             );
         }
 

@@ -33,18 +33,18 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            if (!(element instanceof ConcordionPsiElement)) {
+            if (!(element instanceof ConcordionMember)) {
                 return PsiReference.EMPTY_ARRAY;
             }
 
-            ConcordionPsiElement concordionPsiElement = (ConcordionPsiElement) element;
-            PsiMember containingMember = concordionPsiElement.getContainingMember();
+            ConcordionMember concordionMember = (ConcordionMember) element;
+            PsiMember containingMember = concordionMember.getContainingMember();
             if (containingMember == null) {
                 return PsiReference.EMPTY_ARRAY;
             }
 
             return new PsiReference[] {
-                    new ConcordionReference<>(concordionPsiElement, containingMember)
+                    new ConcordionReference<>(concordionMember, containingMember)
             };
         }
     }
