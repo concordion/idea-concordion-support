@@ -44,6 +44,10 @@
 
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionExpressionCompletionContributor"/>
+
+    <localInspection language="Concordion" id="usingMapKeyAsField" displayName="Using map key as a field"
+                     groupName="Concordion" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingMapKeyAsField"/>
   </extensions>
 
   <application-components>
