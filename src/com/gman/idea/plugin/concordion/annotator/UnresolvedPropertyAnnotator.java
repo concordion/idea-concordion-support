@@ -4,6 +4,7 @@ import com.gman.idea.plugin.concordion.action.quickfix.CreateFieldFromConcordion
 import com.gman.idea.plugin.concordion.action.quickfix.CreateMethodFromConcordionUsage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionField;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.*;
@@ -15,9 +16,17 @@ public class UnresolvedPropertyAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element instanceof ConcordionField && element.getReferences().length == 0) {
+        if (!(element instanceof ConcordionPsiElement)) {
+            return;
+        }
+        ConcordionPsiElement concordionPsiElement = (ConcordionPsiElement) element;
+        if (concordionPsiElement.isResolvable()) {
+            return;
+        }
+
+        if (element instanceof ConcordionField) {
             reportUnresolvedField((ConcordionField) element, holder);
-        } else if (element instanceof ConcordionMethod && element.getReferences().length == 0) {
+        } else if (element instanceof ConcordionMethod) {
             reportUnresolvedMethod((ConcordionMethod) element, holder);
         }
     }

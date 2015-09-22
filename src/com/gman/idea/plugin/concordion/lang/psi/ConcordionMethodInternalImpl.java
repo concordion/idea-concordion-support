@@ -16,6 +16,11 @@ public abstract class ConcordionMethodInternalImpl extends AbstractConcordionPsi
         super(node);
     }
 
+    @Override
+    public boolean isResolvable() {
+        return determineContainingMember() != null;
+    }
+
     @Nullable
     @Override
     protected PsiMethod determineContainingMember() {

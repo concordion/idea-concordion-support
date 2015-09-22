@@ -5,6 +5,8 @@
 </head>
 <body>
 
+    <span c:assertEquals="<inject descr="null">resolvedMethod()</inject>">42</span>
+
     <span c:assertEquals="<error descr="Method not found">unresolvedMethod()</error>">42</span>
 
     <span c:assertEquals="<error descr="Method not found">unresolvedMethod(#arg1)</error>">42</span>

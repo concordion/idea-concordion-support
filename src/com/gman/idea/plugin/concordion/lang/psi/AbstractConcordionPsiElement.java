@@ -14,7 +14,7 @@ import static com.gman.idea.plugin.concordion.Concordion.*;
 
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
-    //TODO find a way to cache
+    //TODO find a good way to cache (no outdated date, ok with renaming)
     protected PsiClass containingClass;
     protected PsiMember containingMember;
     protected PsiType type;

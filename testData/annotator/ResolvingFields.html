@@ -5,7 +5,12 @@
 </head>
 <body>
 
+    <span c:assertEquals="<inject descr="null">resolvedProperty</inject>">42</span>
+
     <span c:assertEquals="<error descr="Field not found">unresolvedProperty</error>">42</span>
+
+    <!--ignored as can not access property on property for now-->
+    <!--span c:assertEquals="properties.propertyKey">42</span-->
 
 </body>
 </html>
