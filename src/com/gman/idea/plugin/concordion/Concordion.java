@@ -2,12 +2,13 @@ package com.gman.idea.plugin.concordion;
 
 import com.gman.idea.plugin.concordion.lang.ConcordionFileType;
 import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.injected.editor.VirtualFileWindow;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.testFramework.LightVirtualFileBase;
 import org.concordion.api.FullOGNL;
@@ -19,7 +20,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Map;
 
-import static com.intellij.psi.search.ProjectScope.getProjectScope;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
@@ -66,66 +66,73 @@ public final class Concordion {
         return null;
     }
 
-    private static final String OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS = "Test";
+    private static final String OPTIONAL_TEST_SUFFIX = "Test";
 
     @Nullable
-    public static PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
+    public static PsiFile correspondingSpecFile(@Nullable PsiFile file) {
         //TODO seems to be used a lot. Cache?
-        if (htmlSpec == null || htmlSpec.getContainingDirectory() == null) {
+        if (file == null
+                || file.getContainingDirectory() == null
+                || !isConcordionType(file.getFileType())) {
             return null;
         }
 
-        Project project = htmlSpec.getProject();
-        GlobalSearchScope scope = getProjectScope(project);
-
-        String className = htmlSpec.getName().substring(0, htmlSpec.getName().indexOf('.'));
-        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(htmlSpec.getContainingDirectory());
+        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(file.getContainingDirectory());
         if (aPackage == null) {
             return null;
         }
-        String qualifiedName = aPackage.getQualifiedName() + '.' + className;
 
-        PsiClass runnerClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
-        if (runnerClass == null) {
-            qualifiedName = qualifiedName + OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS;
-            runnerClass = JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
+        String specName = extractSpecNameNoTest(file.getName());
+        String extension = pairedType(file.getFileType()).getDefaultExtension();
+
+        return findFirstFileInPackage(aPackage, specName + '.' + extension, specName + OPTIONAL_TEST_SUFFIX + '.' + extension);
+    }
+
+    private static boolean isConcordionType(@NotNull FileType type) {
+        return JavaFileType.INSTANCE.equals(type) || HtmlFileType.INSTANCE.equals(type);
+    }
+
+    @NotNull
+    private static String extractSpecNameNoTest(@NotNull String fileName) {
+        String specName = fileName.substring(0, fileName.indexOf('.'));
+        if (specName.endsWith(OPTIONAL_TEST_SUFFIX)) {
+            specName = specName.substring(0, specName.length() - OPTIONAL_TEST_SUFFIX.length());
         }
+        return specName;
+    }
 
-        return runnerClass;
+    @NotNull
+    private static FileType pairedType(@NotNull FileType type) {
+        if (JavaFileType.INSTANCE.equals(type)) {
+            return HtmlFileType.INSTANCE;
+        } else if (HtmlFileType.INSTANCE.equals(type)) {
+            return JavaFileType.INSTANCE;
+        } else {
+            throw new IllegalArgumentException(type.getDefaultExtension() + " is not allowed here!");
+        }
+    }
+
+    @Nullable
+    private static PsiFile findFirstFileInPackage(@NotNull PsiPackage aPackage, @NotNull String... names) {
+        for (PsiDirectory directory : aPackage.getDirectories()) {
+            for (String name : names) {
+                PsiFile file = directory.findFile(name);
+                if (file != null) {
+                    return file;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
+        return PsiTreeUtil.getChildOfType(correspondingSpecFile(htmlSpec), PsiClass.class);
     }
 
     @Nullable
     public static PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
-        if (runnerClass == null) {
-            return null;
-        }
-
-        String specName = runnerClass.getName();
-        String noTestSpecName = specName.endsWith(OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS) ?
-                specName.substring(0, specName.length() - OPTIONAL_CONCORDION_SUFFIX_FOR_RUNNER_CLASS.length()) + '.' + HtmlFileType.INSTANCE.getDefaultExtension() : null;
-
-        specName +='.' + HtmlFileType.INSTANCE.getDefaultExtension();
-
-        PsiDirectory classDirectory = runnerClass.getContainingFile().getContainingDirectory();
-        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(classDirectory);
-        if (aPackage == null) {
-            return null;
-        }
-        for (PsiDirectory packageDirectory : aPackage.getDirectories()) {
-            PsiFile htmlSpec = packageDirectory.findFile(specName);
-            if (htmlSpec != null) {
-                return htmlSpec;
-            }
-            if (noTestSpecName == null) {
-                continue;
-            }
-            htmlSpec = packageDirectory.findFile(noTestSpecName);
-            if (htmlSpec != null) {
-                return htmlSpec;
-            }
-        }
-
-        return null;
+        return runnerClass != null ? correspondingSpecFile(runnerClass.getContainingFile()) : null;
     }
 
     @Nullable
