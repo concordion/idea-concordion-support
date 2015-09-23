@@ -57,5 +57,11 @@
   </project-components>
 
   <actions>
+      <action id="concordionSpecFilesNavigation"
+              text="Navigate between html spec and corresponding java runner"
+              description="Navigate between html spec and corresponding java runner"
+              class="com.gman.idea.plugin.concordion.action.NavigateBetweenConcordionSpecFiles">
+          <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
+      </action>
   </actions>
 </idea-plugin>
