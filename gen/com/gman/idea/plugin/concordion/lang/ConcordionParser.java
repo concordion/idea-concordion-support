@@ -207,16 +207,34 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL
+  // (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL) {
+  // }
   public static boolean literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "literal")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<literal>");
+    r = literal_0(b, l + 1);
+    r = r && literal_1(b, l + 1);
+    exit_section_(b, l, m, LITERAL, r, false, null);
+    return r;
+  }
+
+  // STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL
+  private static boolean literal_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "literal_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, STRING_LITERAL);
     if (!r) r = consumeToken(b, DOUBLE_LITERAL);
     if (!r) r = consumeToken(b, INTEGER_LITERAL);
-    exit_section_(b, l, m, LITERAL, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
+  }
+
+  // {
+  // }
+  private static boolean literal_1(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */

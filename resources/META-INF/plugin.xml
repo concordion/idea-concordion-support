@@ -19,7 +19,7 @@
     <ul>
         <li>Autocomplete with concordion commands</li>
         <li>Autocomplete with fields and methods of concordion runner class</li>
-        <li>Navigation between concordion html spec and java runner class</li>
+        <li>Navigation between concordion html spec and java runner class using (S) icon over concordion files and navigation action</li>
         <li>Ctrl+click navigation and usages search for concordion expressions</li>
         <li>Quick fields and methods creation from usages</li>
         <li>Renaming support</li>
@@ -59,8 +59,8 @@
 
   <actions>
       <action id="concordionSpecFilesNavigation"
-              text="Navigate between html spec and corresponding java runner"
-              description="Navigate between html spec and corresponding java runner"
+              text="Navigate between concordion spec and fixture"
+              description="Navigate between concordion spec and fixture"
               class="com.gman.idea.plugin.concordion.action.NavigateBetweenConcordionSpecFiles">
           <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
       </action>

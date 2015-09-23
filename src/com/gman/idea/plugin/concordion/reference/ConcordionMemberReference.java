@@ -10,13 +10,13 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConcordionReference<T extends PsiMember> implements PsiReference {
+public class ConcordionMemberReference<T extends PsiMember> implements PsiReference {
 
     private final ConcordionPsiElement owner;
-    private final T referent;
+    private final T referent;//TODO replace with SmartPsiElementPointer?
     private final TextRange range;
 
-    public ConcordionReference(@NotNull ConcordionPsiElement owner, @NotNull T referent) {
+    public ConcordionMemberReference(@NotNull ConcordionPsiElement owner, @NotNull T referent) {
         this.owner = owner;
         this.referent = referent;
         this.range = createTextRange(owner, referent);

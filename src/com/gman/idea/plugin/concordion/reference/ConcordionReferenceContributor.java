@@ -14,6 +14,7 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
 
         registrar.registerReferenceProvider(
+//                or(psiElement(ConcordionTypes.FIELD), psiElement(ConcordionTypes.METHOD)),
                 psiElement(ConcordionTypes.FIELD).withLanguage(ConcordionLanguage.INSTANCE),
                 new MemberReferenceProvider()
         );
@@ -44,7 +45,7 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
             }
 
             return new PsiReference[] {
-                    new ConcordionReference<>(concordionMember, containingMember)
+                    new ConcordionMemberReference<>(concordionMember, containingMember)
             };
         }
     }
@@ -53,7 +54,18 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            return PsiReference.EMPTY_ARRAY;
+            if (!(element instanceof ConcordionVariable)) {
+                return PsiReference.EMPTY_ARRAY;
+            }
+
+            ConcordionVariable concordionVariable = (ConcordionVariable) element;
+            if (concordionVariable.getName() == null) {
+                return PsiReference.EMPTY_ARRAY;
+            }
+
+            return new PsiReference[] {
+                    new ConcordionVariableReference(concordionVariable)
+            };
         }
     }
 }

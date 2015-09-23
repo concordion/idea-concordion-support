@@ -36,7 +36,9 @@ concordionIterateExpression ::= variable ':' ognlExpressionStart
 ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressionNext)?
 ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
 
-literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
+literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL) {
+
+}
 method ::= IDENTIFIER '(' arguments ')' {
   implements="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternal"
   extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternalImpl"
@@ -46,7 +48,10 @@ field ::= IDENTIFIER {
   extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionFieldInternalImpl"
 
 }
-variable ::= '#' IDENTIFIER
+variable ::= '#' IDENTIFIER {
+  implements="com.gman.idea.plugin.concordion.lang.psi.ConcordionVariableInternal"
+  extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionVariableInternalImpl"
+}
 
 arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*
 index ::= '[' ognlExpressionStart ']'

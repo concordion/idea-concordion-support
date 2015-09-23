@@ -3,12 +3,14 @@ package com.gman.idea.plugin.concordion;
 import com.gman.idea.plugin.concordion.lang.ConcordionFileType;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.injected.editor.DocumentWindowImpl;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.testFramework.LightVirtualFileBase;
 import org.concordion.api.FullOGNL;
@@ -133,6 +135,28 @@ public final class Concordion {
     @Nullable
     public static PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
         return runnerClass != null ? correspondingSpecFile(runnerClass.getContainingFile()) : null;
+    }
+
+    @Nullable
+    public static String unpackConcordionCommand(@NotNull PsiElement element) {
+        PsiFile containingFile = element.getContainingFile();
+        if (containingFile == null) {
+            return null;
+        }
+        VirtualFile virtualFile = containingFile.getVirtualFile();
+        if (!(virtualFile instanceof VirtualFileWindow)) {
+            return null;
+        }
+        DocumentWindowImpl documentWindow = (DocumentWindowImpl) ((VirtualFileWindow) virtualFile).getDocumentWindow();
+        PsiLanguageInjectionHost xmlAttributeValue = documentWindow.getShreds().getHostPointer().getElement();
+        if (xmlAttributeValue == null) {
+            return null;
+        }
+        XmlAttribute xmlAttribute = PsiTreeUtil.getParentOfType(xmlAttributeValue, XmlAttribute.class);
+        if (xmlAttribute == null) {
+            return null;
+        }
+        return xmlAttribute.getLocalName();
     }
 
     @Nullable

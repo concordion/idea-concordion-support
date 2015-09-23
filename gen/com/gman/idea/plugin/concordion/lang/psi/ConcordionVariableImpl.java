@@ -8,9 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 
-public class ConcordionVariableImpl extends ASTWrapperPsiElement implements ConcordionVariable {
+public class ConcordionVariableImpl extends ConcordionVariableInternalImpl implements ConcordionVariable {
 
   public ConcordionVariableImpl(ASTNode node) {
     super(node);

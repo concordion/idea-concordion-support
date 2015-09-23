@@ -13,7 +13,7 @@ import static com.gman.idea.plugin.concordion.Concordion.unpackSpecFromLanguageI
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
-    //TODO find a good way to cache (no outdated date, ok with renaming)
+    //TODO find a good way to cache (no outdated date, ok with renaming) using SmartPsiElementPointer?
     protected PsiClass containingClass;
     protected PsiMember containingMember;
 
