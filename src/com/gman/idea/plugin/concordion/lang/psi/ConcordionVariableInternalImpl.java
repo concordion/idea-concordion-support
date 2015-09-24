@@ -5,6 +5,8 @@ import com.intellij.psi.PsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.gman.idea.plugin.concordion.ConcordionVariableInformation.forVariable;
+
 public abstract class ConcordionVariableInternalImpl extends AbstractConcordionPsiElement implements ConcordionVariableInternal {
 
     public ConcordionVariableInternalImpl(@NotNull ASTNode node) {
@@ -14,11 +16,11 @@ public abstract class ConcordionVariableInternalImpl extends AbstractConcordionP
     @Nullable
     @Override
     protected PsiType determineType() {
-        return null;//TODO implement
+        return forVariable(this).determineType();
     }
 
     @Override
     public boolean isResolvable() {
-        return false;//TODO implement
+        return forVariable(this).isDeclared();
     }
 }
