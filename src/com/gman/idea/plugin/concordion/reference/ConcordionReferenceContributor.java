@@ -38,14 +38,8 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
                 return PsiReference.EMPTY_ARRAY;
             }
 
-            ConcordionMember concordionMember = (ConcordionMember) element;
-            PsiMember containingMember = concordionMember.getContainingMember();
-            if (containingMember == null) {
-                return PsiReference.EMPTY_ARRAY;
-            }
-
             return new PsiReference[] {
-                    new ConcordionMemberReference<>(concordionMember, containingMember)
+                    new ConcordionMemberReference((ConcordionMember) element)
             };
         }
     }

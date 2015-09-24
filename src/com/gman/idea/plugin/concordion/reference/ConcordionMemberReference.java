@@ -1,81 +1,19 @@
 package com.gman.idea.plugin.concordion.reference;
 
-import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
-import com.intellij.openapi.util.TextRange;
+import com.gman.idea.plugin.concordion.lang.psi.ConcordionMember;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConcordionMemberReference<T extends PsiMember> implements PsiReference {
+public class ConcordionMemberReference extends AbstractConcordionReference<ConcordionMember> {
 
-    private final ConcordionPsiElement owner;
-    private final T referent;//TODO replace with SmartPsiElementPointer?
-    private final TextRange range;
-
-    public ConcordionMemberReference(@NotNull ConcordionPsiElement owner, @NotNull T referent) {
-        this.owner = owner;
-        this.referent = referent;
-        this.range = createTextRange(owner, referent);
-    }
-
-    @Override
-    public PsiElement getElement() {
-        return owner;
-    }
-
-    @Override
-    public TextRange getRangeInElement() {
-        return range;
+    public ConcordionMemberReference(@NotNull ConcordionMember owner) {
+        super(owner);
     }
 
     @Nullable
     @Override
     public PsiElement resolve() {
-        return referent;
-    }
-
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return owner.getText();
-    }
-
-    @Override
-    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        owner.setName(newElementName);
-        return referent;
-    }
-
-    @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return owner;
-    }
-
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        return referent.equals(element);
-    }
-
-    @NotNull
-    @Override
-    public Object[] getVariants() {
-        return ArrayUtil.EMPTY_OBJECT_ARRAY;
-    }
-
-    @Override
-    public boolean isSoft() {
-        return false;
-    }
-
-    private TextRange createTextRange(@NotNull PsiElement owner, @NotNull T referent) {
-        if (referent.getName() != null) {
-            return new TextRange(0, referent.getName().length());
-        } else {
-            return new TextRange(0, owner.getTextLength());
-        }
+        return owner.getContainingMember();
     }
 }
