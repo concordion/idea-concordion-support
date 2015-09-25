@@ -9,6 +9,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
@@ -157,37 +158,6 @@ public final class Concordion {
             return null;
         }
         return xmlAttribute.getLocalName();
-    }
-
-    @Nullable
-    public static PsiFile unpackSpecFromLanguageInjection(@NotNull PsiFile originalFile) {
-        if (!ConcordionFileType.INSTANCE.equals(originalFile.getFileType())) {
-            return originalFile;
-        }
-
-        VirtualFile file = originalFile.getVirtualFile();
-
-        while (file != null && file.getParent() == null) {
-            file = getDelegate(file);
-        }
-
-        if (file != null) {
-            return PsiManager.getInstance(originalFile.getProject()).findFile(file);
-        }
-        return null;
-    }
-
-    @Nullable
-    private static VirtualFile getDelegate(@Nullable VirtualFile virtualFile) {
-        if (virtualFile instanceof VirtualFileWindow) {
-            //Language injection in xml
-            return ((VirtualFileWindow) virtualFile).getDelegate();
-        } else if (virtualFile instanceof LightVirtualFileBase) {
-            //In fragment editor window
-            return ((LightVirtualFileBase) virtualFile).getOriginalFile();
-        } else {
-            return null;
-        }
     }
 
     private static final String JUNIT_RUN_WITH_ANNOTATION = RunWith.class.getName();

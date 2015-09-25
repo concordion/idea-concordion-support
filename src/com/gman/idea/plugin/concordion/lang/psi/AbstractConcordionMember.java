@@ -8,8 +8,8 @@ import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.gman.idea.plugin.concordion.Concordion.correspondingJavaRunner;
-import static com.gman.idea.plugin.concordion.Concordion.unpackSpecFromLanguageInjection;
+import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
@@ -34,7 +34,7 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     @Nullable
     protected PsiClass determineContainingClass() {
         if (getParent() instanceof ConcordionOgnlExpressionStart) {
-            PsiFile htmlRunner = unpackSpecFromLanguageInjection(getContainingFile());
+            PsiFile htmlRunner = getTopLevelFile(this);
             return correspondingJavaRunner(htmlRunner);
         } else {
             ConcordionPsiElement parent = parentConcordionExpression();

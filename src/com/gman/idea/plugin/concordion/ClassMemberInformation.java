@@ -27,6 +27,7 @@ public class ClassMemberInformation {
         if (psiClass == null) {
             return EMPTY;
         }
+//        .getPresentation().getPresentableText()
         return new ClassMemberInformation(
                 asList(psiClass.getAllFields()),
                 asList(psiClass.getAllMethods())

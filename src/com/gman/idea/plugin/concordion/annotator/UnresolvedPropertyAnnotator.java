@@ -11,6 +11,7 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 
 public class UnresolvedPropertyAnnotator implements Annotator {
 
@@ -32,7 +33,7 @@ public class UnresolvedPropertyAnnotator implements Annotator {
     }
 
     private void reportUnresolvedField(@NotNull ConcordionField field, @NotNull AnnotationHolder holder) {
-        PsiFile htmlSpec = unpackSpecFromLanguageInjection(field.getContainingFile());
+        PsiFile htmlSpec = getTopLevelFile(field);
         PsiClass javaRunner = correspondingJavaRunner(htmlSpec);
 
         if (htmlSpec == null || javaRunner == null) {
@@ -45,7 +46,7 @@ public class UnresolvedPropertyAnnotator implements Annotator {
     }
 
     private void reportUnresolvedMethod(@NotNull ConcordionMethod method, @NotNull AnnotationHolder holder) {
-        PsiFile htmlSpec = unpackSpecFromLanguageInjection(method.getContainingFile());
+        PsiFile htmlSpec = getTopLevelFile(method);
         PsiClass javaRunner = correspondingJavaRunner(htmlSpec);
 
         if (htmlSpec == null || javaRunner == null) {

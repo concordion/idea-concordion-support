@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.gman.idea.plugin.concordion.Concordion.unpackSpecFromLanguageInjection;
+import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 import static com.intellij.psi.search.ProjectScope.getAllScope;
 import static java.util.Arrays.asList;
 
@@ -42,7 +42,7 @@ public class ConcordionVariableInformation {
 
     @Nullable
     public PsiElement findDeclaration() {
-        PsiFile htmlSpec = unpackSpecFromLanguageInjection(variable.getContainingFile());
+        PsiFile htmlSpec = getTopLevelFile(variable);
         if (htmlSpec == null) {
             return null;
         }
