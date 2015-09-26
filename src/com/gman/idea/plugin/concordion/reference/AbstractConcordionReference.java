@@ -10,13 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractConcordionReference<T extends ConcordionPsiElement> implements PsiReference {
 
-
     protected final T owner;
     protected final TextRange range;
 
-    public AbstractConcordionReference(@NotNull T owner) {
+    public AbstractConcordionReference(@NotNull T owner, @NotNull TextRange range) {
         this.owner = owner;
-        this.range = new TextRange(0, owner.getTextLength());
+        this.range = range;
     }
 
     @Override
