@@ -37,7 +37,9 @@
 
     <psi.referenceContributor language="Concordion" implementation="com.gman.idea.plugin.concordion.reference.ConcordionReferenceContributor"/>
 
-    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedPropertyAnnotator"/>
+    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedFieldAnnotator"/>
+    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedMethodAnnotator"/>
+    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedVariableAnnotator"/>
     <annotator language="HTML" implementationClass="com.gman.idea.plugin.concordion.annotator.ConcordionFullOgnlRequiredAnnotator"/>
 
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
