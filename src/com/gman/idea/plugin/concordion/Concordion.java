@@ -1,6 +1,5 @@
 package com.gman.idea.plugin.concordion;
 
-import com.gman.idea.plugin.concordion.lang.ConcordionFileType;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.injected.editor.DocumentWindowImpl;
@@ -9,11 +8,9 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.testFramework.LightVirtualFileBase;
 import org.concordion.api.FullOGNL;
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -153,7 +151,7 @@ public final class Concordion {
         if (xmlAttributeValue == null) {
             return null;
         }
-        XmlAttribute xmlAttribute = PsiTreeUtil.getParentOfType(xmlAttributeValue, XmlAttribute.class);
+        XmlAttribute xmlAttribute = getParentOfType(xmlAttributeValue, XmlAttribute.class);
         if (xmlAttribute == null) {
             return null;
         }

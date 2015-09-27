@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Collections.singletonList;
 
 public class ConcordionLanguageInjector implements MultiHostInjector {
@@ -24,7 +25,7 @@ public class ConcordionLanguageInjector implements MultiHostInjector {
             return;
         }
         XmlAttributeValue attributeValue = (XmlAttributeValue) context;
-        XmlAttribute attribute = PsiTreeUtil.getParentOfType(attributeValue, XmlAttribute.class);
+        XmlAttribute attribute = getParentOfType(attributeValue, XmlAttribute.class);
         if (attribute == null
                 || !isConcordionNamespace(attribute.getNamespace())) {
             return;

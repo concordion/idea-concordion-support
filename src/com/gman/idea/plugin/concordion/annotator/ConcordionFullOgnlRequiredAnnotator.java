@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 
@@ -39,7 +40,7 @@ public class ConcordionFullOgnlRequiredAnnotator implements Annotator {
         }
 
         XmlAttribute attribute = (XmlAttribute) element;
-        XmlAttributeValue value = PsiTreeUtil.findChildOfType(attribute, XmlAttributeValue.class);
+        XmlAttributeValue value = findChildOfType(attribute, XmlAttributeValue.class);
 
         if (value == null) {
             return;

@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.getTopLevelFile;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.typeOfExpression;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 public class ConcordionVariableUsage {
 
@@ -117,9 +119,20 @@ public class ConcordionVariableUsage {
         return false;
     }
 
-    @NotNull
+    @Nullable
     public PsiType determineType() {
-        return PsiType.NULL;
+        //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
+        if (variable == null || variableParent == null) {
+            return null;
+        }
+        if (variableParent instanceof ConcordionConcordionSetExpression) {
+            ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);
+            return expr != null ? typeOfExpression(expr) : null;
+        }
+        if (variableParent instanceof ConcordionOgnlExpressionStart) {
+            return PsiType.NULL;
+        }
+        return null;
     }
 
     @Nullable

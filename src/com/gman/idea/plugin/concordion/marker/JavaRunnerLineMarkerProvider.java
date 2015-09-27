@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.gman.idea.plugin.concordion.LineMarker.*;
+import static com.intellij.psi.util.PsiTreeUtil.getChildOfType;
 
 public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
     @Nullable
@@ -28,7 +29,7 @@ public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
         PsiClass javaRunner = (PsiClass) element;
         PsiFile htmlSpec = correspondingHtmlSpec(javaRunner);
 
-        PsiIdentifier className = PsiTreeUtil.getChildOfType(element, PsiIdentifier.class);
+        PsiIdentifier className = getChildOfType(element, PsiIdentifier.class);
 
         if (className == null || htmlSpec == null) {
             return null;
