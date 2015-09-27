@@ -124,6 +124,6 @@ public class ConcordionVariableUsage {
 
     @Nullable
     public PsiElement resolve() {
-        return variableParent;
+        return variable;
     }
 }
