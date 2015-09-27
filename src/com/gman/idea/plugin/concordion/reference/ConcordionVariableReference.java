@@ -1,12 +1,13 @@
 package com.gman.idea.plugin.concordion.reference;
 
+import com.gman.idea.plugin.concordion.ConcordionVariableUsage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.gman.idea.plugin.concordion.ConcordionVariableInformation.forVariable;
+import static com.gman.idea.plugin.concordion.ConcordionVariableUsage.findDeclaration;
 
 public class ConcordionVariableReference extends AbstractConcordionReference<ConcordionVariable> {
 
@@ -17,7 +18,8 @@ public class ConcordionVariableReference extends AbstractConcordionReference<Con
     @Nullable
     @Override
     public PsiElement resolve() {
-        return forVariable(owner).findDeclaration();
+        ConcordionVariableUsage declaration = findDeclaration(owner);
+        return declaration != null ? declaration.resolve() : null;
     }
 
     private static TextRange createRange(@NotNull ConcordionVariable owner) {

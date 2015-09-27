@@ -1,11 +1,12 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
+import com.gman.idea.plugin.concordion.ConcordionVariableUsage;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.gman.idea.plugin.concordion.ConcordionVariableInformation.forVariable;
+import static com.gman.idea.plugin.concordion.ConcordionVariableUsage.findDeclaration;
 
 public abstract class ConcordionVariableInternalImpl extends AbstractConcordionPsiElement implements ConcordionVariableInternal {
 
@@ -16,11 +17,12 @@ public abstract class ConcordionVariableInternalImpl extends AbstractConcordionP
     @Nullable
     @Override
     protected PsiType determineType() {
-        return forVariable(this).determineType();
+        ConcordionVariableUsage declaration = findDeclaration(this);
+        return declaration != null ? declaration.determineType() : null;
     }
 
     @Override
     public boolean isResolvable() {
-        return forVariable(this).isDeclared();
+        return findDeclaration(this) != null;
     }
 }
