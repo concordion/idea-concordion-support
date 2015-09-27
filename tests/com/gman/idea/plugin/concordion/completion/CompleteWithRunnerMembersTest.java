@@ -15,8 +15,8 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
 
     public void testShouldCompleteConcordionExpressionWithRunnerProperties() {
 
-        copyJavaRunnerToConcordionProject("ConcordionFields.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionFields.html");
+        copyJavaRunnerToConcordionProject("Fields.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Fields.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.complete(CompletionType.BASIC, 1);
@@ -29,8 +29,8 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
 
     public void testShouldCompleteConcordionExpressionWithRunnerMethods() throws Exception {
 
-        copyJavaRunnerToConcordionProject("ConcordionMethods.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionMethods.html");
+        copyJavaRunnerToConcordionProject("Methods.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Methods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.complete(CompletionType.BASIC, 1);
@@ -39,5 +39,44 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .contains("publicMethod")
                 .contains("staticMethod")
                 .doesNotContain("privateMethod");
+    }
+
+    public void testShouldCompleteWithNestedMembersOfField() {
+
+        copyJavaRunnerToConcordionProject("NestedMembersOfField.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfField.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("field")
+                .contains("method");
+    }
+
+    public void testShouldCompleteWithNestedMembersOfMethods() {
+
+        copyJavaRunnerToConcordionProject("NestedMembersOfMethod.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfMethod.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("field")
+                .contains("method");
+    }
+
+    public void testShouldCompleteWithNestedMembersOfVariables() {
+
+        copyJavaRunnerToConcordionProject("NestedMembersOfVariable.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("field")
+                .contains("method");
     }
 }

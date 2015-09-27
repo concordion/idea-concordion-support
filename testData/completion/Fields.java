@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import java.lang.String;
 
 @RunWith(ConcordionRunner.class)
-public class ConcordionFields {
+public class Fields {
 
     private int privateProperty = 41;
 

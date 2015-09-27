@@ -17,8 +17,8 @@ public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFix
 
     public void testShouldCompleteConcordionCommandsInHtnlTags() {
 
-        copyJavaRunnerToConcordionProject("ConcordionCommands.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ConcordionCommands.html");
+        copyJavaRunnerToConcordionProject("Commands.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Commands.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.complete(CompletionType.BASIC, 1);
