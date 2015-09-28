@@ -1,11 +1,14 @@
 package com.gman.idea.plugin.concordion.completion;
 
+import com.gman.idea.plugin.concordion.Concordion;
 import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.Arrays;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFixtureTestCase {
@@ -15,7 +18,7 @@ public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFix
         return "testData/completion";
     }
 
-    public void testShouldCompleteConcordionCommandsInHtnlTags() {
+    public void testShouldCompleteConcordionCommandsInHtmlTags() {
 
         copyJavaRunnerToConcordionProject("Commands.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Commands.html");
@@ -23,16 +26,10 @@ public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFix
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.complete(CompletionType.BASIC, 1);
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(Arrays.asList(
-                "c:assertEquals", "c:assert-equals",
-                "c:assertTrue", "c:assert-true",
-                "c:assertFalse", "c:assert-false",
-                "c:echo",
-                "c:execute",
-                "c:run",
-                "c:set",
-                "c:verifyRows", "c:verify-rows",
-                "c:example"
-        ));
+        assertThat(myFixture.getLookupElementStrings()).containsAll(commandsWithSchemaPrefix("c", Concordion.COMMANDS));
+    }
+
+    private List<String> commandsWithSchemaPrefix(String schemaPrefix, List<String> commands) {
+        return commands.stream().map(c -> schemaPrefix + ':' + c).collect(toList());
     }
 }

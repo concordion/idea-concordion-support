@@ -31,11 +31,13 @@ public final class Concordion {
             "assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
-            "echo",
             "execute",
-            "run",
             "set",
+            "echo",
             "verifyRows", "verify-rows",
+            "matchStrategy", "match-strategy",
+            "matchingRole", "matching-role",
+            "run",
             "example"
     ));
 
