@@ -43,12 +43,12 @@ public class ClassMemberInformation {
         List<LookupElement> lookups = new ArrayList<>();
 
         fields.stream()
-                .filter(ConcordionMemberRestrictions::concordionVisibleField)
+                .filter(ConcordionPsiUtils::concordionVisibleField)
                 .map(ClassMemberInformation::toFieldLookup)
                 .collect(toCollection(() -> lookups));
 
         methods.stream()
-                .filter(ConcordionMemberRestrictions::concordionVisibleMethod)
+                .filter(ConcordionPsiUtils::concordionVisibleMethod)
                 .map(ClassMemberInformation::toMethodLookup)
                 .collect(toCollection(() -> lookups));
 

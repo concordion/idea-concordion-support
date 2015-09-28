@@ -1,16 +1,15 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
-import com.gman.idea.plugin.concordion.ConcordionMemberRestrictions;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.*;
 import static com.intellij.psi.search.GlobalSearchScope.allScope;
-import static java.util.Arrays.stream;
+import static java.lang.Character.toUpperCase;
 
 public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMember implements ConcordionFieldInternal {
 
@@ -45,22 +44,35 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
 
     @Nullable
     @Override
-    protected PsiField determineContainingMember() {
+    protected PsiMember determineContainingMember() {
         PsiClass containingClass = determineContainingClass();
         if (containingClass == null) {
             return null;
         }
         String name = getName();
-        return stream(containingClass.getAllFields())
-                .filter(f -> f.getName().equals(name))
-                .filter(ConcordionMemberRestrictions::concordionVisibleField)
-                .findFirst().orElse(null);
+        if (name == null) {
+            return null;
+        }
+        return firstNotNullIfPresent(
+                findMethodInClass(containingClass, correspondingGetterName(name), 0),
+                findFieldInClass(containingClass, name)
+        );
     }
 
     @Nullable
     @Override
     protected PsiType determineType() {
-        PsiField containingMember = determineContainingMember();
-        return containingMember != null ? containingMember.getType() : null;
+        PsiMember containingMember = determineContainingMember();
+        if (containingMember instanceof PsiField) {
+            return ((PsiField) containingMember).getType();
+        } else if (containingMember instanceof PsiMethod) {
+            return ((PsiMethod) containingMember).getReturnType();
+        }
+        //TODO return PsiType.NULL if map
+        return null;
+    }
+
+    private String correspondingGetterName(@NotNull String name) {
+        return  "get" + toUpperCase(name.charAt(0)) + name.substring(1);
     }
 }

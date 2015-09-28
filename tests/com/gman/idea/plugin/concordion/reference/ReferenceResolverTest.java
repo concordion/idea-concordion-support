@@ -46,6 +46,20 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("inheritedField");
     }
 
+    public void testShouldResolveGetterAsAFieldIfPresent() {
+
+        copyJavaRunnerToConcordionProject("GetterAsAField.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("GetterAsAField.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionField concordionField = elementUnderCaret();
+        PsiMethod javaGetter = resolveReferences(concordionField);
+
+        assertThat(javaGetter).isNotNull();
+        assertThat(javaGetter.getName()).isEqualTo("getPropertyToResolve");
+    }
+
     public void testShouldResolveMethodReference() {
 
         copyJavaRunnerToConcordionProject("MethodReference.java");
