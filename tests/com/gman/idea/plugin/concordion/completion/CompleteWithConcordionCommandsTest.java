@@ -5,7 +5,6 @@ import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
