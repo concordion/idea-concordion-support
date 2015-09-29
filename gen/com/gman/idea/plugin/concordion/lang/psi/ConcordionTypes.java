@@ -10,15 +10,14 @@ import com.gman.idea.plugin.concordion.lang.ConcordionTokenType;
 public interface ConcordionTypes {
 
   IElementType ARGUMENTS = new ConcordionElementType("ARGUMENTS");
-  IElementType CONCORDION_EXPRESSION = new ConcordionElementType("CONCORDION_EXPRESSION");
-  IElementType CONCORDION_ITERATE_EXPRESSION = new ConcordionElementType("CONCORDION_ITERATE_EXPRESSION");
-  IElementType CONCORDION_SET_EXPRESSION = new ConcordionElementType("CONCORDION_SET_EXPRESSION");
   IElementType FIELD = new ConcordionElementType("FIELD");
   IElementType INDEX = new ConcordionElementType("INDEX");
+  IElementType ITERATE_EXPRESSION = new ConcordionElementType("ITERATE_EXPRESSION");
   IElementType LITERAL = new ConcordionElementType("LITERAL");
   IElementType METHOD = new ConcordionElementType("METHOD");
   IElementType OGNL_EXPRESSION_NEXT = new ConcordionElementType("OGNL_EXPRESSION_NEXT");
   IElementType OGNL_EXPRESSION_START = new ConcordionElementType("OGNL_EXPRESSION_START");
+  IElementType SET_EXPRESSION = new ConcordionElementType("SET_EXPRESSION");
   IElementType VARIABLE = new ConcordionElementType("VARIABLE");
 
   IElementType COLON = new ConcordionTokenType(":");
@@ -42,20 +41,14 @@ public interface ConcordionTypes {
        if (type == ARGUMENTS) {
         return new ConcordionArgumentsImpl(node);
       }
-      else if (type == CONCORDION_EXPRESSION) {
-        return new ConcordionConcordionExpressionImpl(node);
-      }
-      else if (type == CONCORDION_ITERATE_EXPRESSION) {
-        return new ConcordionConcordionIterateExpressionImpl(node);
-      }
-      else if (type == CONCORDION_SET_EXPRESSION) {
-        return new ConcordionConcordionSetExpressionImpl(node);
-      }
       else if (type == FIELD) {
         return new ConcordionFieldImpl(node);
       }
       else if (type == INDEX) {
         return new ConcordionIndexImpl(node);
+      }
+      else if (type == ITERATE_EXPRESSION) {
+        return new ConcordionIterateExpressionImpl(node);
       }
       else if (type == LITERAL) {
         return new ConcordionLiteralImpl(node);
@@ -68,6 +61,9 @@ public interface ConcordionTypes {
       }
       else if (type == OGNL_EXPRESSION_START) {
         return new ConcordionOgnlExpressionStartImpl(node);
+      }
+      else if (type == SET_EXPRESSION) {
+        return new ConcordionSetExpressionImpl(node);
       }
       else if (type == VARIABLE) {
         return new ConcordionVariableImpl(node);

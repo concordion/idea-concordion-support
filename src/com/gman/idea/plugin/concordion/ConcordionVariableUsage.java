@@ -1,5 +1,6 @@
 package com.gman.idea.plugin.concordion;
 
+import com.gman.idea.plugin.concordion.lang.ConcordionFile;
 import com.gman.idea.plugin.concordion.lang.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -108,11 +109,11 @@ public class ConcordionVariableUsage {
                 && !"execute".equals(attribute.getLocalName())) {
             return false;
         }
-        if (variableParent instanceof ConcordionConcordionSetExpression) {
+        if (variableParent instanceof ConcordionSetExpression) {
             return true;
         }
         if (variableParent instanceof ConcordionOgnlExpressionStart
-                && variableParent.getParent() instanceof ConcordionConcordionExpression
+                && variableParent.getParent() instanceof ConcordionFile
                 && "set".equals(attribute.getLocalName())) {
             return true;
         }
@@ -125,7 +126,7 @@ public class ConcordionVariableUsage {
         if (variable == null || variableParent == null) {
             return null;
         }
-        if (variableParent instanceof ConcordionConcordionSetExpression) {
+        if (variableParent instanceof ConcordionSetExpression) {
             ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);
             return expr != null ? typeOfExpression(expr) : null;
         }

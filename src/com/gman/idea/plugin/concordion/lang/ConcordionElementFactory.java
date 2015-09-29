@@ -14,7 +14,7 @@ public final class ConcordionElementFactory {
     @NotNull
     public static PsiElement createIdentifier(@NotNull Project project, @NotNull String name) {
         PsiFile dummy = PsiFileFactory.getInstance(project).createFileFromText("dummy", ConcordionFileType.INSTANCE, name);
-        //file / concordionExpression / ognlExpressionStart / field / identifier
-        return dummy.getFirstChild().getFirstChild().getFirstChild().getFirstChild();
+        //file -> ognlExpressionStart -> field -> identifier
+        return dummy.getFirstChild().getFirstChild().getFirstChild();
     }
 }

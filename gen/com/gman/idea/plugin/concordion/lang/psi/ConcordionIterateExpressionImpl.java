@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 
-public class ConcordionConcordionSetExpressionImpl extends ASTWrapperPsiElement implements ConcordionConcordionSetExpression {
+public class ConcordionIterateExpressionImpl extends ASTWrapperPsiElement implements ConcordionIterateExpression {
 
-  public ConcordionConcordionSetExpressionImpl(ASTNode node) {
+  public ConcordionIterateExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitConcordionSetExpression(this);
+    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitIterateExpression(this);
     else super.accept(visitor);
   }
 

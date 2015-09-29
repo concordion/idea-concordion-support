@@ -11,23 +11,15 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitConcordionExpression(@NotNull ConcordionConcordionExpression o) {
-    visitPsiElement(o);
-  }
-
-  public void visitConcordionIterateExpression(@NotNull ConcordionConcordionIterateExpression o) {
-    visitPsiElement(o);
-  }
-
-  public void visitConcordionSetExpression(@NotNull ConcordionConcordionSetExpression o) {
-    visitPsiElement(o);
-  }
-
   public void visitField(@NotNull ConcordionField o) {
     visitFieldInternal(o);
   }
 
   public void visitIndex(@NotNull ConcordionIndex o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIterateExpression(@NotNull ConcordionIterateExpression o) {
     visitPsiElement(o);
   }
 
@@ -44,6 +36,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
   }
 
   public void visitOgnlExpressionStart(@NotNull ConcordionOgnlExpressionStart o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSetExpression(@NotNull ConcordionSetExpression o) {
     visitPsiElement(o);
   }
 

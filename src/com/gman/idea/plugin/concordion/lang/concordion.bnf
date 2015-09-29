@@ -26,19 +26,16 @@
   ]
 }
 
-file ::= (concordionExpression ';'?)*
+file ::= setExpression|iterateExpression|ognlExpressionStart;
 
-concordionExpression ::= concordionSetExpression|concordionIterateExpression|ognlExpressionStart;
-
-concordionSetExpression ::= variable '=' ognlExpressionStart
-concordionIterateExpression ::= variable ':' ognlExpressionStart
+setExpression ::= variable '=' ognlExpressionStart
+iterateExpression ::= variable ':' ognlExpressionStart
 
 ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressionNext)?
 ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
 
-literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL) {
+literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 
-}
 method ::= IDENTIFIER '(' arguments ')' {
   implements="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternal"
   extends="com.gman.idea.plugin.concordion.lang.psi.ConcordionMethodInternalImpl"

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ConcordionConcordionSetExpression extends PsiElement {
+public interface ConcordionSetExpression extends PsiElement {
 
   @NotNull
   ConcordionOgnlExpressionStart getOgnlExpressionStart();
