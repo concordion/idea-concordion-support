@@ -207,6 +207,21 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
+    public void testShouldResolveReservedVariable() {
+
+        copyJavaRunnerToConcordionProject("ReservedVariable.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReservedVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("TEXT");
+        assertThat(declaration).isEqualTo(variable);
+    }
+
     private <T extends PsiElement> T elementUnderCaret() {
         return (T) myFixture.getFile().findElementAt(myFixture.getCaretOffset() - 1).getParent();
     }

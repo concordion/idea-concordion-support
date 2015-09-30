@@ -21,6 +21,7 @@ import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 public class ConcordionVariableUsage {
 
     private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = setOf("set", "execute", "verifyRows", "verify-rows");
+    private static final Set<String> RESERVED_VARIABLES = setOf("TEXT", "HREF", "LEVEL");
 
     @Nullable private XmlAttribute attribute;
     @Nullable private XmlAttributeValue attributeValue;
@@ -95,6 +96,9 @@ public class ConcordionVariableUsage {
         if (attribute == null) {
             return false;
         }
+        if (variable != null && RESERVED_VARIABLES.contains(variable.getName())) {
+            return true;
+        }
         if (!COMMANDS_THAT_CAN_SET_VARIABLE.contains(attribute.getLocalName())) {
             return false;
         }
@@ -117,6 +121,9 @@ public class ConcordionVariableUsage {
         //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
         if (variable == null || variableParent == null) {
             return null;
+        }
+        if (RESERVED_VARIABLES.contains(variable.getName())) {
+            return PsiType.NULL;
         }
         if (variableParent instanceof ConcordionSetExpression) {
             ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);
