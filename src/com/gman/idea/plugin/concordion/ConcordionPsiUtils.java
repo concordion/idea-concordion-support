@@ -3,18 +3,15 @@ package com.gman.idea.plugin.concordion;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionOgnlExpressionNext;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionOgnlExpressionStart;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
 import static com.intellij.psi.PsiModifier.STATIC;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 
 public final class ConcordionPsiUtils {
@@ -32,10 +29,22 @@ public final class ConcordionPsiUtils {
                 return typedElement.getType();
             }
             if (start.getLiteral() != null) {
+                //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
                 return PsiType.NULL;
             }
             return null;
         }
+    }
+
+
+    public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
+
+    @Nullable
+    public static PsiType listParameterType(@NotNull PsiType listPsiType) {
+        return stream(listPsiType.getSuperTypes())
+                .filter(st -> st.getCanonicalText().startsWith(ITERABLE))
+                .map(st -> ((PsiClassType) st).getParameters()[0])
+                .findFirst().orElse(null);
     }
 
     @Nullable
@@ -81,5 +90,11 @@ public final class ConcordionPsiUtils {
     @Nullable
     public static <T> T firstNotNullIfPresent(@NotNull T... elements) {
         return stream(elements).filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
+    @NotNull
+    public static <T> Set<T> setOf(@NotNull T... elements) {
+        //should I use google guava just for this?
+        return new HashSet<>(asList(elements));
     }
 }

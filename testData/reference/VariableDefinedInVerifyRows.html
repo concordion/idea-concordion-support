@@ -1,0 +1,23 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+<table c:verifyRows="#var : data()">
+    <tr>
+        <th c:assert-equals="#var<caret>">item</th>
+    </tr>
+    <tr>
+        <td>a</td>
+    </tr>
+    <tr>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>c</td>
+    </tr>
+</table>
+
+</body>
+</html>

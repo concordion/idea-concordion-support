@@ -12,11 +12,15 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.getTopLevelFile;
-import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.typeOfExpression;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.*;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 public class ConcordionVariableUsage {
+
+    private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = setOf("set", "execute", "verifyRows", "verify-rows");
 
     @Nullable private XmlAttribute attribute;
     @Nullable private XmlAttributeValue attributeValue;
@@ -66,47 +70,32 @@ public class ConcordionVariableUsage {
 
     @NotNull
     private static ConcordionVariableUsage fromTokenAt(@NotNull PsiElement element, int pos) {
-        XmlAttribute attribute = null;
-        XmlAttributeValue value = null;
-        ConcordionVariable variable = null;
-        PsiElement variableParen = null;
+        ConcordionVariableUsage usage = new ConcordionVariableUsage();
 
         if (element.getParent() instanceof XmlAttributeValue) {
-            value = (XmlAttributeValue) element.getParent();
+            usage.attributeValue = (XmlAttributeValue) element.getParent();
         }
-        if (value != null && value.getParent() instanceof XmlAttribute) {
-            attribute = (XmlAttribute) value.getParent();
+        if (usage.attributeValue != null && usage.attributeValue.getParent() instanceof XmlAttribute) {
+            usage.attribute = (XmlAttribute) usage.attributeValue.getParent();
         }
-        if (value != null) {
-            PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) value, pos);
+        if (usage.attributeValue != null) {
+            PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) usage.attributeValue, pos);
             if (injected != null && injected.getParent() instanceof ConcordionVariable) {
-                variable = (ConcordionVariable) injected.getParent();
+                usage.variable = (ConcordionVariable) injected.getParent();
             }
         }
-        if (variable != null) {
-            variableParen = variable.getParent();
+        if (usage.variable != null) {
+            usage.variableParent = usage.variable.getParent();
         }
 
-        return new ConcordionVariableUsage(attribute, value, variable, variableParen);
-    }
-
-    private ConcordionVariableUsage(
-            @Nullable XmlAttribute attribute,
-            @Nullable XmlAttributeValue attributeValue,
-            @Nullable ConcordionVariable variable,
-            @Nullable PsiElement variableParent) {
-        this.attribute = attribute;
-        this.attributeValue = attributeValue;
-        this.variable = variable;
-        this.variableParent = variableParent;
+        return usage;
     }
 
     public boolean isDeclaration() {
         if (attribute == null) {
             return false;
         }
-        if (!"set".equals(attribute.getLocalName())
-                && !"execute".equals(attribute.getLocalName())) {
+        if (!COMMANDS_THAT_CAN_SET_VARIABLE.contains(attribute.getLocalName())) {
             return false;
         }
         if (variableParent instanceof ConcordionSetExpression) {
@@ -115,6 +104,9 @@ public class ConcordionVariableUsage {
         if (variableParent instanceof ConcordionOgnlExpressionStart
                 && variableParent.getParent() instanceof ConcordionFile
                 && "set".equals(attribute.getLocalName())) {
+            return true;
+        }
+        if (variableParent instanceof ConcordionIterateExpression) {
             return true;
         }
         return false;
@@ -132,6 +124,17 @@ public class ConcordionVariableUsage {
         }
         if (variableParent instanceof ConcordionOgnlExpressionStart) {
             return PsiType.NULL;
+        }
+        if (variableParent instanceof ConcordionIterateExpression) {
+            ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);
+            if (expr == null) {
+                return null;
+            }
+            PsiType iterator = typeOfExpression(expr);
+            if (iterator == null) {
+                return null;
+            }
+            return listParameterType(iterator);
         }
         return null;
     }

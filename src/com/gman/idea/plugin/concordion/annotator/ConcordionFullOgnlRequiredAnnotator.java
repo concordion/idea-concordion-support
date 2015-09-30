@@ -5,30 +5,27 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.setOf;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singleton;
 
 public class ConcordionFullOgnlRequiredAnnotator implements Annotator {
 
-    private static final Set<String> SET_COMMANDS = singleton("set");
-    private static final Set<String> VERIFY_ROW_COMMANDS = new HashSet<>(asList("verifyRows", "verify-rows"));
-    private static final Set<String> EVALUATE_COMMANDS = new HashSet<>(asList("assertEquals", "assert-equals",
+    private static final Set<String> SET_COMMANDS = setOf("set");
+    private static final Set<String> VERIFY_ROW_COMMANDS = setOf("verifyRows", "verify-rows");
+    private static final Set<String> EVALUATE_COMMANDS = setOf("assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
             "echo",
-            "execute"));
+            "execute");
     public static final String MESSAGE = "This may be valid OGNL expression, however it is considered complex by Concordion and will not be evaluated at runtime. Simplify it or use @FullOGNL annotation over test fixture";
 
     @Override

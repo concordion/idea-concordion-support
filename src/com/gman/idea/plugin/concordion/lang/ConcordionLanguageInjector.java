@@ -9,18 +9,17 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.setOf;
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class ConcordionLanguageInjector implements MultiHostInjector {
 
-    private static final Set<String> CONCORDION_TAGS_FOR_EXPRESSION_INJECTION = new HashSet<>(asList(
+    private static final Set<String> CONCORDION_TAGS_FOR_EXPRESSION_INJECTION = setOf(
             "assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
@@ -28,7 +27,7 @@ public class ConcordionLanguageInjector implements MultiHostInjector {
             "execute",
             "set",
             "verifyRows", "verify-rows"
-    ));
+    );
 
     @Override
     public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {

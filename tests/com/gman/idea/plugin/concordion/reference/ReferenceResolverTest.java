@@ -177,6 +177,36 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
+    public void testShouldResolveVariableFromExecuteCommand() {
+
+        copyJavaRunnerToConcordionProject("VariableDefinedInExecute.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInExecute.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("var");
+        assertThat(declaration).isNotEqualTo(variable);
+    }
+
+    public void testShouldResolveVariableFromVerifyRowsCommand() {
+
+        copyJavaRunnerToConcordionProject("VariableDefinedInVerifyRows.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInVerifyRows.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("var");
+        assertThat(declaration).isNotEqualTo(variable);
+    }
+
     private <T extends PsiElement> T elementUnderCaret() {
         return (T) myFixture.getFile().findElementAt(myFixture.getCaretOffset() - 1).getParent();
     }
