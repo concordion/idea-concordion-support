@@ -37,7 +37,7 @@ public abstract class AbstractConcordionReference<T extends ConcordionPsiElement
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         owner.setName(newElementName);
-        return resolve();
+        return owner;
     }
 
     @Override

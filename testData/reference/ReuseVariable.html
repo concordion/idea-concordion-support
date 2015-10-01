@@ -1,0 +1,13 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+<span c:set="#var">var</span>
+<span c:execute="consumeString(#var<caret>)">
+    <span c:set="#var">nested</span>
+</span>
+
+</body>
+</html>

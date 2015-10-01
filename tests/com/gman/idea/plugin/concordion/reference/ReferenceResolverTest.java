@@ -7,6 +7,7 @@ import com.gman.idea.plugin.concordion.lang.psi.ConcordionMethod;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -220,6 +221,25 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotNull();
         assertThat(declaration.getName()).isEqualTo("TEXT");
         assertThat(declaration).isEqualTo(variable);
+    }
+
+    public void testShouldResolveLastAssignmentInCaseOfVariableReuse() {
+        //Should resolve inner var set as it executed last before method run
+        copyJavaRunnerToConcordionProject("ReuseVariable.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReuseVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("var");
+
+        //In this case variable declared on inner level after it is actually used on outer
+        assertThat(InjectedLanguageUtil.findInjectionHost(declaration).getTextOffset())
+                .isGreaterThan(InjectedLanguageUtil.findInjectionHost(variable).getTextOffset());
+
     }
 
     private <T extends PsiElement> T elementUnderCaret() {

@@ -39,12 +39,10 @@ public class ConcordionVariableUsage {
         if (varName == null) {
             return null;
         }
-
+        int varNameLength = varName.length();
         int endOfScopePosition = findEndOfScopePosition(variable);
-        for (int pos = text.indexOf(varName);
-             pos != -1 && pos <= endOfScopePosition;
-             pos = text.indexOf(varName, pos+1)) {
 
+        for (int pos = text.lastIndexOf(varName, endOfScopePosition); pos >= 0; pos = text.lastIndexOf(varName, pos - varNameLength)) {
             PsiElement elementAt = htmlSpec.findElementAt(pos);
             if (elementAt != null) {
                 ConcordionVariableUsage usage = fromTokenAt(elementAt, pos);
