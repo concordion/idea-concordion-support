@@ -7,9 +7,8 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static com.gman.idea.plugin.concordion.ConcordionPatternConditions.MATCHING_ROLE_ATTRIBUTE;
-import static com.gman.idea.plugin.concordion.ConcordionPatternConditions.MATCH_STRATEGY_ATTRIBUTE;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.gman.idea.plugin.concordion.ConcordionPatterns.concordionElement;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.setOf;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -18,12 +17,12 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
     public ConcordionNonExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                psiElement().withParent(XmlAttributeValue.class).with(MATCH_STRATEGY_ATTRIBUTE),
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("matchStrategy", "match-strategy")),
                 new ConcordionMatchStrategyProvider()
         );
         extend(
                 CompletionType.BASIC,
-                psiElement().withParent(XmlAttributeValue.class).with(MATCHING_ROLE_ATTRIBUTE),
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("matchingRole", "matching-Role")),
                 new ConcordionMatchingRoleProvider()
         );
     }

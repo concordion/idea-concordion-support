@@ -90,7 +90,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
         }
 
         public ComplicatedExpression(Consumer<String> validator, Function<String, String> transformer) {
-            super("SimpleExpression");
+            super("ComplicatedExpression");
             this.validator = validator;
             this.transformer = transformer;
         }

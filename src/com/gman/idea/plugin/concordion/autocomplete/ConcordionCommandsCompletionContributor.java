@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
-import static com.gman.idea.plugin.concordion.ConcordionPatternConditions.CONCORDION_HTML_SPEC;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.gman.idea.plugin.concordion.ConcordionPatterns.concordionElement;
 import static java.util.stream.Collectors.toList;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
@@ -20,7 +19,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
     public ConcordionCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                psiElement().withParent(XmlAttribute.class).with(CONCORDION_HTML_SPEC),
+                concordionElement().withParent(XmlAttribute.class).withConcordionHtmlSpec(),
                 new ConcordionCommandCompletionProvider()
         );
     }
