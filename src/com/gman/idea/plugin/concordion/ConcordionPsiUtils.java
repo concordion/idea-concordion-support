@@ -13,6 +13,7 @@ import static com.intellij.psi.PsiModifier.PUBLIC;
 import static com.intellij.psi.PsiModifier.STATIC;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static java.util.Collections.singleton;
 
 public final class ConcordionPsiUtils {
 
@@ -95,6 +96,9 @@ public final class ConcordionPsiUtils {
     @NotNull
     public static <T> Set<T> setOf(@NotNull T... elements) {
         //should I use google guava just for this?
+        if (elements.length == 1) {
+            return singleton(elements[0]);
+        }
         return new HashSet<>(asList(elements));
     }
 }

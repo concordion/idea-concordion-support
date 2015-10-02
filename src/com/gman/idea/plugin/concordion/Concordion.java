@@ -2,14 +2,10 @@ package com.gman.idea.plugin.concordion;
 
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.injected.editor.DocumentWindowImpl;
-import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import org.concordion.api.FullOGNL;
 import org.concordion.integration.junit4.ConcordionRunner;
@@ -21,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
-import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -44,17 +39,16 @@ public final class Concordion {
     private static final String CONCORDION_NAMESPACE = "http://www.concordion.org/2007/concordion";
 
     public static boolean isConcordionHtmlSpec(@NotNull PsiFile psiFile) {
-        return HtmlFileType.INSTANCE.equals(psiFile.getFileType())
-                && psiFile.getText().contains(CONCORDION_NAMESPACE);//TODO better check
+        return concordionSchemaPrefixOf(psiFile) != null;
     }
 
-    public static boolean isConcordionNamespace(String namespace) {
+    public static boolean isConcordionNamespace(@Nullable String namespace) {
         return CONCORDION_NAMESPACE.equalsIgnoreCase(namespace);
     }
 
     @Nullable
     public static String concordionSchemaPrefixOf(@NotNull PsiFile psiFile) {
-        if (!(psiFile instanceof HtmlFileImpl)) {
+        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
             return null;
         }
         XmlTag rootTag = ((HtmlFileImpl) psiFile).getRootTag();
@@ -136,28 +130,6 @@ public final class Concordion {
     @Nullable
     public static PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
         return runnerClass != null ? correspondingSpecFile(runnerClass.getContainingFile()) : null;
-    }
-
-    @Nullable
-    public static String unpackConcordionCommand(@NotNull PsiElement element) {
-        PsiFile containingFile = element.getContainingFile();
-        if (containingFile == null) {
-            return null;
-        }
-        VirtualFile virtualFile = containingFile.getVirtualFile();
-        if (!(virtualFile instanceof VirtualFileWindow)) {
-            return null;
-        }
-        DocumentWindowImpl documentWindow = (DocumentWindowImpl) ((VirtualFileWindow) virtualFile).getDocumentWindow();
-        PsiLanguageInjectionHost xmlAttributeValue = documentWindow.getShreds().getHostPointer().getElement();
-        if (xmlAttributeValue == null) {
-            return null;
-        }
-        XmlAttribute xmlAttribute = getParentOfType(xmlAttributeValue, XmlAttribute.class);
-        if (xmlAttribute == null) {
-            return null;
-        }
-        return xmlAttribute.getLocalName();
     }
 
     private static final String JUNIT_RUN_WITH_ANNOTATION = RunWith.class.getName();

@@ -4,13 +4,11 @@ import com.gman.idea.plugin.concordion.lang.ConcordionLanguage;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionMember;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionTypes;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.gman.idea.plugin.concordion.ClassMemberInformation.fromPsiClass;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 
 public class ConcordionExpressionCompletionContributor extends CompletionContributor {
 
@@ -18,7 +16,7 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
         extend(
                 CompletionType.BASIC,
                 psiElement(ConcordionTypes.IDENTIFIER)
-                        .withParent(or(psiElement(ConcordionTypes.FIELD), psiElement(ConcordionTypes.METHOD)))
+                        .withParent(ConcordionMember.class)
                         .withLanguage(ConcordionLanguage.INSTANCE),
                 new ConcordionExpressionProvider()
         );
@@ -27,13 +25,10 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     private static final class ConcordionExpressionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            PsiElement concordionMember = parameters.getPosition().getParent();
-            if (!(concordionMember instanceof ConcordionMember)) {
-                return;
-            }
+            ConcordionMember concordionMember = (ConcordionMember) parameters.getPosition().getParent();
 
             result.addAllElements(
-                    fromPsiClass(((ConcordionMember) concordionMember).getContainingClass()).createAutoCompleteInformation()
+                    fromPsiClass(concordionMember.getContainingClass()).createAutoCompleteInformation()
             );
         }
 
