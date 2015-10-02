@@ -17,7 +17,7 @@ import java.util.Set;
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 
-public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPattern<T,ConcordionElementPattern<T>> {
+public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
 
     public static final Key<PsiFile> HTML_SPEC = new Key<>("CONCORDION_HTML_SPEC");
     public static final Key<PsiClass> TEST_FIXTURE = new Key<>("CONCORDION_TEST_FIXTURE");
@@ -26,11 +26,7 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
         super(aClass);
     }
 
-    public ConcordionElementPattern(@NotNull final InitialPatternCondition<T> condition) {
-        super(condition);
-    }
-
-    public ConcordionElementPattern<T> withConcordionHtmlSpec() {
+    public Self withConcordionHtmlSpec() {
         return with(new PatternCondition<T>("withConcordionHtmlSpec") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
@@ -39,7 +35,7 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
         });
     }
 
-    public ConcordionElementPattern<T> withFoundTestFixture() {
+    public Self withFoundTestFixture() {
         return with(new PatternCondition<T>("withFoundTestFixture") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
@@ -57,7 +53,7 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
         });
     }
 
-    public ConcordionElementPattern<T> withFullOgnl(boolean isUsingFullOgnl) {
+    public Self withFullOgnl(boolean isUsingFullOgnl) {
         return with(new PatternCondition<T>("withFullOgnl") {
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
@@ -67,7 +63,7 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
         });
     }
 
-    public ConcordionElementPattern<T> withConcordionSchemaAttribute() {
+    public Self withConcordionSchemaAttribute() {
         return with(new PatternCondition<T>("withConcordionShemaAttribute") {
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
@@ -77,7 +73,7 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
         });
     }
 
-    public ConcordionElementPattern<T> withConcordionCommand(Set<String> commands) {
+    public Self withConcordionCommand(Set<String> commands) {
         return with(new PatternCondition<T>("withConcordionCommand") {
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
@@ -85,5 +81,12 @@ public class ConcordionElementPattern<T extends PsiElement> extends PsiElementPa
                 return attribute != null && commands.contains(attribute.getLocalName());
             }
         });
+    }
+
+    public static class Capture<T extends PsiElement> extends ConcordionElementPattern<T, Capture<T>> {
+
+        protected Capture(final Class<T> aClass) {
+            super(aClass);
+        }
     }
 }

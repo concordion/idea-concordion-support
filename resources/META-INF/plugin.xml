@@ -39,21 +39,22 @@
 
     <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedFieldAnnotator"/>
     <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedMethodAnnotator"/>
-    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedVariableAnnotator"/>
 
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionNonExpressionCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionExpressionCompletionContributor"/>
 
-    <localInspection language="Concordion" id="usingMapKeyAsField" displayName="Using map key as a field"
-                     groupName="Concordion" enabledByDefault="true" level="WARNING"
-                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingMapKeyAsField"/>
     <localInspection language="HTML" id="usingFullOgnlExpression" displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
                      groupName="Concordion" enabledByDefault="true" level="ERROR"
                      implementationClass="com.gman.idea.plugin.concordion.inspection.FullOgnlRequired"/>
-
-      <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.gman.idea.plugin.concordion.marker.HtmlSpecLineMarkerProvider"/>
-      <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.gman.idea.plugin.concordion.marker.JavaRunnerLineMarkerProvider"/>
+    <localInspection language="Concordion" id="usingMapKeyAsField" displayName="Using map key as a field"
+                     groupName="Concordion" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingMapKeyAsField"/>
+    <localInspection language="Concordion" id="usingUndeclaredVariable" displayName="Using undeclared variable"
+                     groupName="Concordion" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingUndeclaredVariable"/>
+    <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.gman.idea.plugin.concordion.marker.HtmlSpecLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.gman.idea.plugin.concordion.marker.JavaRunnerLineMarkerProvider"/>
   </extensions>
 
   <application-components>
@@ -63,11 +64,11 @@
   </project-components>
 
   <actions>
-      <action id="concordionSpecFilesNavigation"
-              text="Navigate between concordion spec and fixture"
-              description="Navigate between concordion spec and fixture"
-              class="com.gman.idea.plugin.concordion.action.NavigateBetweenConcordionSpecFiles">
-          <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
-      </action>
+    <action id="concordionSpecFilesNavigation"
+            text="Navigate between concordion spec and fixture"
+            description="Navigate between concordion spec and fixture"
+            class="com.gman.idea.plugin.concordion.action.NavigateBetweenConcordionSpecFiles">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
+    </action>
   </actions>
 </idea-plugin>

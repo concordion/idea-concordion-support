@@ -29,7 +29,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
             "execute");
 
 
-    private static final ConcordionElementPattern<XmlAttributeValue> TOO_COMPLEX_CONCORDION_EXPRESSION =
+    private static final ConcordionElementPattern.Capture<XmlAttributeValue> TOO_COMPLEX_CONCORDION_EXPRESSION =
             concordionElement(XmlAttributeValue.class)
                     .withParent(XmlAttribute.class)
                     .withConcordionHtmlSpec()
