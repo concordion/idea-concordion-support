@@ -32,7 +32,7 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return javaRunner != null && source.getParent() instanceof ConcordionOgnlExpressionStart;//Only in test class for now
+        return javaRunner != null && source.getParent() instanceof ConcordionOgnlExpressionStart;
     }
 
     @Override

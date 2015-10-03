@@ -7,8 +7,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,13 +60,18 @@ public class ConcordionVariableUsage {
     private static int findEndOfScopePosition(@NotNull ConcordionVariableInternal variable) {
         //xmlAttributeValue -> xmlAttribute -> xmlTag -> closingTag
         PsiLanguageInjectionHost injectionHost = InjectedLanguageUtil.findInjectionHost(variable);
-        if (injectionHost == null
-                || injectionHost.getParent() == null
-                || injectionHost.getParent().getParent() == null
-                || injectionHost.getParent().getParent().getFirstChild() == null) {
+        if (injectionHost == null) {
             return -1;
         }
-        return injectionHost.getParent().getParent().getLastChild().getTextOffset();
+        XmlTag openingTag = PsiTreeUtil.getParentOfType(injectionHost, XmlTag.class);
+        if (openingTag == null) {
+            return -1;
+        }
+        PsiElement closingTag = openingTag.getLastChild();
+
+        return closingTag != null
+                ? closingTag.getTextOffset()
+                : openingTag.getTextOffset();
     }
 
     @NotNull
