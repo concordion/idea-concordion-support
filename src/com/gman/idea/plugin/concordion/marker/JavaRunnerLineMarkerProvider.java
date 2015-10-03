@@ -1,42 +1,42 @@
 package com.gman.idea.plugin.concordion.marker;
 
+import com.gman.idea.plugin.concordion.ConcordionElementPattern;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionElementPattern.*;
+import static com.gman.idea.plugin.concordion.ConcordionPatterns.*;
 import static com.gman.idea.plugin.concordion.LineMarker.*;
-import static com.intellij.psi.util.PsiTreeUtil.getChildOfType;
 
 public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
+
+    private static final ConcordionElementPattern.Capture<PsiIdentifier> CLASS_NAME =
+            concordionElement(PsiIdentifier.class).withParent(PsiClass.class).withSuperParent(2, PsiFile.class).withFoundHtmlSpec();
+
     @Nullable
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
-        if (!(element instanceof PsiClass)
-                || !(element.getParent() instanceof PsiFile)) {
-            return null;
+
+        ProcessingContext context = new ProcessingContext();
+        if (CLASS_NAME.accepts(element, context)) {
+
+            PsiFile htmlSpec = context.get(HTML_SPEC);
+            PsiClass testFixture = context.get(TEST_FIXTURE);
+
+            return infoFor(testFixture, withNavigationTo(htmlSpec));
         }
 
-        PsiClass javaRunner = (PsiClass) element;
-        PsiFile htmlSpec = correspondingHtmlSpec(javaRunner);
-
-        PsiIdentifier className = getChildOfType(element, PsiIdentifier.class);
-
-        if (className == null || htmlSpec == null) {
-            return null;
-        }
-
-        return infoFor(className, withNavigationTo(htmlSpec));
-
+        return null;
     }
 
     @Override

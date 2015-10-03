@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
-import static com.gman.idea.plugin.concordion.ConcordionExpressionPatterns.concordionElement;
+import static com.gman.idea.plugin.concordion.ConcordionExpressionPatterns.*;
 
 public class UsingUndeclaredVariable extends LocalInspectionTool {
 
     private static final ConcordionExpressionElementPattern.Capture<ConcordionVariable> UNDECLARED_VARIABLE =
-            concordionElement(ConcordionVariable.class).withResolved(false);
+            concordionExpressionElement(ConcordionVariable.class).withResolved(false);
 
     @NotNull
     @Override

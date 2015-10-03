@@ -1,7 +1,6 @@
 package com.gman.idea.plugin.concordion;
 
 import com.intellij.openapi.util.Key;
-import com.intellij.patterns.InitialPatternCondition;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiClass;
@@ -49,6 +48,21 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 context.put(TEST_FIXTURE, testFixture);
 
                 return testFixture != null;
+            }
+        });
+    }
+
+    public Self withFoundHtmlSpec() {
+        return with(new PatternCondition<T>("withFoundHtmlSpec") {
+            @Override
+            public boolean accepts(@NotNull T t, ProcessingContext context) {
+                PsiClass testFixture = PsiTreeUtil.getParentOfType(t, PsiClass.class);
+                PsiFile htmlSpec = correspondingHtmlSpec(testFixture);
+
+                context.put(HTML_SPEC, htmlSpec);
+                context.put(TEST_FIXTURE, testFixture);
+
+                return htmlSpec != null;
             }
         });
     }
