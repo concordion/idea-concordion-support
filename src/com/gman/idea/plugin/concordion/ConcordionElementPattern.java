@@ -39,7 +39,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiFile htmlSpec = element.getContainingFile();
-                if (htmlSpec == null) {
+                if (htmlSpec == null || htmlSpec.getParent() == null) {
                     htmlSpec = getTopLevelFile(element);
                 }
                 PsiClass testFixture = correspondingJavaRunner(htmlSpec);
