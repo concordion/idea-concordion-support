@@ -41,14 +41,6 @@ public final class ConcordionPsiUtils {
     public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
 
     @Nullable
-    public static PsiType listParameterType(@NotNull PsiType listPsiType) {
-        return stream(listPsiType.getSuperTypes())
-                .filter(st -> st.getCanonicalText().startsWith(ITERABLE))
-                .map(st -> ((PsiClassType) st).getParameters()[0])
-                .findFirst().orElse(null);
-    }
-
-    @Nullable
     private static PsiType typeOfChain(@NotNull ConcordionOgnlExpressionNext next) {
         Iterator<ConcordionOgnlExpressionNext> following = next.getOgnlExpressionNextList().iterator();
         if (following.hasNext()) {
@@ -60,6 +52,14 @@ public final class ConcordionPsiUtils {
             }
             return null;
         }
+    }
+
+    @Nullable
+    public static PsiType listParameterType(@NotNull PsiType listPsiType) {
+        return stream(listPsiType.getSuperTypes())
+                .filter(st -> st.getCanonicalText().startsWith(ITERABLE))
+                .map(st -> ((PsiClassType) st).getParameters()[0])
+                .findFirst().orElse(null);
     }
 
     @Nullable

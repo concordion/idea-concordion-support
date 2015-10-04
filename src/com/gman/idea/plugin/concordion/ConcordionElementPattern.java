@@ -42,7 +42,10 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 if (htmlSpec == null || htmlSpec.getParent() == null) {
                     htmlSpec = getTopLevelFile(element);
                 }
-                PsiClass testFixture = correspondingJavaRunner(htmlSpec);
+                if (htmlSpec == null) {
+                    return false;
+                }
+                PsiClass testFixture = ConcordionNavigationService.getInstance(htmlSpec.getProject()).correspondingJavaRunner(htmlSpec);
 
                 context.put(HTML_SPEC, htmlSpec);
                 context.put(TEST_FIXTURE, testFixture);
@@ -57,7 +60,10 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
                 PsiClass testFixture = PsiTreeUtil.getParentOfType(t, PsiClass.class);
-                PsiFile htmlSpec = correspondingHtmlSpec(testFixture);
+                if (testFixture == null) {
+                    return false;
+                }
+                PsiFile htmlSpec = ConcordionNavigationService.getInstance(testFixture.getProject()).correspondingHtmlSpec(testFixture);
 
                 context.put(HTML_SPEC, htmlSpec);
                 context.put(TEST_FIXTURE, testFixture);

@@ -1,5 +1,6 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
+import com.gman.idea.plugin.concordion.ConcordionNavigationService;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
@@ -35,7 +36,7 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     protected PsiClass determineContainingClass() {
         if (getParent() instanceof ConcordionOgnlExpressionStart) {
             PsiFile htmlRunner = getTopLevelFile(this);
-            return correspondingJavaRunner(htmlRunner);
+            return ConcordionNavigationService.getInstance(getProject()).correspondingJavaRunner(htmlRunner);
         } else {
             ConcordionPsiElement parent = parentConcordionExpression();
             if (parent == null) {

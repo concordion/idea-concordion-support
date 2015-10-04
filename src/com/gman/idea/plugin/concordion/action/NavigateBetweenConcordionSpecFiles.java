@@ -1,5 +1,6 @@
 package com.gman.idea.plugin.concordion.action;
 
+import com.gman.idea.plugin.concordion.ConcordionNavigationService;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
@@ -9,8 +10,6 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-
-import static com.gman.idea.plugin.concordion.Concordion.correspondingSpecFile;
 
 public class NavigateBetweenConcordionSpecFiles extends EditorAction {
 
@@ -27,7 +26,7 @@ public class NavigateBetweenConcordionSpecFiles extends EditorAction {
                 return;
             }
             PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(virtualFile);
-            PsiFile correspondingFile = correspondingSpecFile(file);
+            PsiFile correspondingFile = ConcordionNavigationService.getInstance(editor.getProject()).correspondingSpecFile(file);
             if (correspondingFile != null) {
                 correspondingFile.navigate(true);
             }

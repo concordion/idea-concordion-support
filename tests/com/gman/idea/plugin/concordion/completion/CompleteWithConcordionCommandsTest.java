@@ -1,7 +1,7 @@
 package com.gman.idea.plugin.concordion.completion;
 
-import com.gman.idea.plugin.concordion.Concordion;
 import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
+import com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -25,7 +25,7 @@ public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFix
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.complete(CompletionType.BASIC, 1);
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(commandsWithSchemaPrefix("c", Concordion.COMMANDS));
+        assertThat(myFixture.getLookupElementStrings()).containsAll(commandsWithSchemaPrefix("c", ConcordionCommandsCompletionContributor.ALL_COMMANDS));
     }
 
     private List<String> commandsWithSchemaPrefix(String schemaPrefix, List<String> commands) {

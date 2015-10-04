@@ -54,6 +54,9 @@
                      implementationClass="com.gman.idea.plugin.concordion.inspection.UsingUndeclaredVariable"/>
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.gman.idea.plugin.concordion.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.gman.idea.plugin.concordion.marker.JavaRunnerLineMarkerProvider"/>
+
+    <projectService serviceInterface="com.gman.idea.plugin.concordion.ConcordionNavigationService"
+                    serviceImplementation="com.gman.idea.plugin.concordion.ConcordionNavigationService"/>
   </extensions>
 
   <application-components>

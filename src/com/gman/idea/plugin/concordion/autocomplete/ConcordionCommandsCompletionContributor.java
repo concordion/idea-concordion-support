@@ -9,12 +9,29 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.gman.idea.plugin.concordion.ConcordionPatterns.concordionElement;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
+
+    public static final List<String> ALL_COMMANDS = unmodifiableList(asList(
+            "assertEquals", "assert-equals",
+            "assertTrue", "assert-true",
+            "assertFalse", "assert-false",
+            "execute",
+            "set",
+            "echo",
+            "verifyRows", "verify-rows",
+            "matchStrategy", "match-strategy",
+            "matchingRole", "matching-role",
+            "run",
+            "example"
+    ));
 
     public ConcordionCommandsCompletionContributor() {
         extend(
@@ -30,7 +47,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
 
             result.addAllElements(forCommands(
                     concordionSchemaPrefixOf(parameters.getOriginalFile()),
-                    Concordion.COMMANDS
+                    ALL_COMMANDS
             ));
         }
     }
