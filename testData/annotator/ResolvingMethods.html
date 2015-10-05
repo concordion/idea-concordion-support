@@ -1,0 +1,20 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+    <span c:assertEquals="resolvedMethod()">42</span>
+
+    <span c:assertEquals="resolvedMethodWithArg(#arg1)">42</span>
+
+    <span c:assertEquals="resolvedMethodWithArgs(#arg1, #arg2, #arg3)">42</span>
+
+    <span c:assertEquals="unresolvedMethod()">42</span>
+
+    <span c:assertEquals="unresolvedMethod(#arg1)">42</span>
+
+    <span c:assertEquals="unresolvedMethod(#arg1, #arg2, #arg3)">42</span>
+
+</body>
+</html>
