@@ -17,13 +17,13 @@ public abstract class ConcordionMethodInternalImpl extends AbstractConcordionMem
 
     @Override
     public boolean isResolvable() {
-        return determineContainingMember() != null;
+        return getContainingMember() != null;
     }
 
     @Nullable
     @Override
     protected PsiMethod determineContainingMember() {
-        PsiClass containingClass = determineContainingClass();
+        PsiClass containingClass = getContainingClass();
         if (containingClass == null) {
             return null;
         }
@@ -33,7 +33,7 @@ public abstract class ConcordionMethodInternalImpl extends AbstractConcordionMem
     @Nullable
     @Override
     protected PsiType determineType() {
-        PsiMethod containingMember = determineContainingMember();
+        PsiMethod containingMember = (PsiMethod) getContainingMember();
         return containingMember != null ? containingMember.getReturnType() : null;
     }
 

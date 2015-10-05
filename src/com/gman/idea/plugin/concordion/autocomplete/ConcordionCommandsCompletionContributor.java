@@ -1,6 +1,5 @@
 package com.gman.idea.plugin.concordion.autocomplete;
 
-import com.gman.idea.plugin.concordion.Concordion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.*;
 import static com.gman.idea.plugin.concordion.ConcordionPatterns.concordionElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;

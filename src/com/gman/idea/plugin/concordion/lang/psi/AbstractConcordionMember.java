@@ -1,6 +1,8 @@
 package com.gman.idea.plugin.concordion.lang.psi;
 
 import com.gman.idea.plugin.concordion.ConcordionNavigationService;
+import com.gman.idea.plugin.concordion.ConcordionPsiUtils;
+import com.gman.idea.plugin.concordion.PsiElementCached;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
@@ -9,14 +11,12 @@ import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
 import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
-    //TODO find a good way to cache (no outdated date, ok with renaming) using SmartPsiElementPointer?
-    protected PsiClass containingClass;
-    protected PsiMember containingMember;
+    protected PsiElementCached<PsiClass> containingClass = new PsiElementCached<>(PsiClass::getQualifiedName);
+    protected PsiElementCached<PsiMember> containingMember = new PsiElementCached<>(ConcordionPsiUtils::memberIdentity);
 
     public AbstractConcordionMember(@NotNull ASTNode node) {
         super(node);
@@ -24,12 +24,12 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
 
     @Override
     public PsiClass getContainingClass() {
-        return determineContainingClass();
+        return containingClass.getOrCompute(this::determineContainingClass);
     }
 
     @Override
     public PsiMember getContainingMember() {
-        return determineContainingMember();
+        return containingMember.getOrCompute(this::determineContainingMember);
     }
 
     @Nullable

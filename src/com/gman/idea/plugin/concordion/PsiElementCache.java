@@ -1,23 +1,37 @@
 package com.gman.idea.plugin.concordion;
 
-import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class PsiElementCache<T extends PsiNamedElement> {
+public class PsiElementCache<T extends PsiElement> {
 
+    private final Function<T, String> identityFunction;
     private final Map<String, CachedPsiElement<T>> cache;
 
-    public PsiElementCache() {
-        this(new WeakHashMap<>());
+    public PsiElementCache(@NotNull Function<T, String> identityFunction) {
+        this(identityFunction, new WeakHashMap<>());
     }
 
-    public PsiElementCache(Map<String, CachedPsiElement<T>> cache) {
+    public PsiElementCache(@NotNull Function<T, String> identityFunction, @NotNull Map<String, CachedPsiElement<T>> cache) {
+        this.identityFunction = identityFunction;
         this.cache = cache;
     }
 
-    public T get(String key) {
+    public void put(@NotNull String key, @Nullable T value) {
+        if (value != null) {
+            cache.put(key, new CachedPsiElement<>(identityFunction, value));
+        }
+    }
+
+    @Nullable
+    public T get(@NotNull String key) {
         CachedPsiElement<T> cached = cache.get(key);
         if (cached == null) {
             return null;
@@ -29,26 +43,30 @@ public class PsiElementCache<T extends PsiNamedElement> {
         return cached.get();
     }
 
-    public void put(String key, T value) {
-        cache.put(key, create(value));
+    @Nullable
+    public T getOrCompute(@NotNull String key, @NotNull Supplier<T> supplier) {
+        T t = get(key);
+        if (t == null) {
+            t = supplier.get();
+            put(key, t);
+        }
+        return t;
     }
 
-    public static <T extends PsiNamedElement> CachedPsiElement<T> create(T element) {
-        return new CachedPsiElement<>(element.getName(), element);
-    }
+    protected static class CachedPsiElement<T extends PsiElement> {
 
-    public static class CachedPsiElement<T extends PsiNamedElement> {
-
-        private final String originalName;
+        private final Function<T, String> identityFunction;
         private final T element;
+        private final String identity;
 
-        private CachedPsiElement(String originalName, T element) {
-            this.originalName = originalName;
+        public CachedPsiElement(Function<T, String> identityFunction, T element) {
+            this.identityFunction = identityFunction;
             this.element = element;
+            this.identity = identityFunction.apply(element);
         }
 
         public boolean isValid() {
-            return originalName.equals(element.getName()) && element.isValid();
+            return Objects.equals(identity, identityFunction.apply(element)) && element.isValid();
         }
 
         public T get() {

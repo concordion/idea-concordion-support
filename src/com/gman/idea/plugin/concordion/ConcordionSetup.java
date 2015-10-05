@@ -7,7 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.*;
 
+@Deprecated
 //TODO convert to service and find a way to mock for tests
 public class ConcordionSetup {
 

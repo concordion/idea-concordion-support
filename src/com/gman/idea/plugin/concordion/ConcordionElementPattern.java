@@ -6,14 +6,16 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
+import org.concordion.api.FullOGNL;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-import static com.gman.idea.plugin.concordion.Concordion.*;
+import static com.gman.idea.plugin.concordion.ConcordionPsiUtils.*;
 import static com.gman.idea.plugin.concordion.ConcordionInjectionUtils.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
@@ -79,6 +81,11 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             public boolean accepts(@NotNull T t, ProcessingContext context) {
                 PsiClass testFixture = context.get(TEST_FIXTURE);
                 return testFixture != null && isUsingFullOgnl(testFixture) == isUsingFullOgnl;
+            }
+
+            private boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
+                PsiModifierList modifierList = runnerClass.getModifierList();
+                return modifierList != null && modifierList.findAnnotation(FullOGNL.class.getName()) != null;
             }
         });
     }

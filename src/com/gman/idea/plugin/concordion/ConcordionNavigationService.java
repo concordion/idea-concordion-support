@@ -16,7 +16,7 @@ public class ConcordionNavigationService {
         return ServiceManager.getService(project, ConcordionNavigationService.class);
     }
 
-    private final PsiElementCache<PsiFile> cache = new PsiElementCache<>();
+    private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(f -> f.getVirtualFile().getPath());
 
     @Nullable
     public  PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
@@ -33,20 +33,9 @@ public class ConcordionNavigationService {
         if (file == null) {
             return null;
         }
-
         String path = file.getVirtualFile().getPath();
-        PsiFile cachedFile = cache.get(path);
-        if (cachedFile != null) {
-            return cachedFile;
-        }
 
-        PsiFile correspondingSpecFile = findCorrespondingSpecFile(file);
-        if (correspondingSpecFile == null) {
-            return null;
-        }
-
-        cache.put(path, correspondingSpecFile);
-        return correspondingSpecFile;
+        return cache.getOrCompute(path, () -> findCorrespondingSpecFile(file));
     }
 
     private  final String OPTIONAL_TEST_SUFFIX = "Test";

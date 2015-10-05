@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public final class ConcordionSetupAnnotator {
 
     private ConcordionSetupAnnotator() {

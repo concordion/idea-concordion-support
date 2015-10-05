@@ -21,15 +21,15 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
 
     @Override
     public boolean isResolvable() {
-        return determineContainingMember() != null || isKeyInMap();
+        return getContainingMember() != null || isKeyInMap();
     }
 
     @Override
     public boolean isKeyInMap() {
-        if (determineContainingMember() != null) {
+        if (getContainingMember() != null) {
             return false;
         }
-        PsiClass psiClass = determineContainingClass();
+        PsiClass psiClass = getContainingClass();
         if (psiClass == null) {
             return false;
         }
@@ -45,7 +45,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
     @Nullable
     @Override
     protected PsiMember determineContainingMember() {
-        PsiClass containingClass = determineContainingClass();
+        PsiClass containingClass = getContainingClass();
         if (containingClass == null) {
             return null;
         }
@@ -62,7 +62,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
     @Nullable
     @Override
     protected PsiType determineType() {
-        PsiMember containingMember = determineContainingMember();
+        PsiMember containingMember = getContainingMember();
         if (containingMember instanceof PsiField) {
             return ((PsiField) containingMember).getType();
         } else if (containingMember instanceof PsiMethod) {

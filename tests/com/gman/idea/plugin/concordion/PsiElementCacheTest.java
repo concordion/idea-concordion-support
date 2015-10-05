@@ -1,6 +1,6 @@
 package com.gman.idea.plugin.concordion;
 
-import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiClass;
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -12,16 +12,24 @@ import static org.mockito.Mockito.when;
 
 public class PsiElementCacheTest extends TestCase {
 
-    private final Map<String, PsiElementCache.CachedPsiElement<PsiNamedElement>> spy = new HashMap<>();
-    private final PsiElementCache<PsiNamedElement> testingInstance = new PsiElementCache<>(spy);
+    private final Map<String, PsiElementCache.CachedPsiElement<PsiClass>> spy = new HashMap<>();
+    private final PsiElementCache<PsiClass> testingInstance = new PsiElementCache<>(PsiClass::getName, spy);
+
+    private final String notAddedKey = "notAddedKey";
+    private final String notAddedName = "notAddedName";
+    private PsiClass notAddedPsiElement;
 
     private final String testKey = "testKey";
     private final String testName = "testName";
-    private PsiNamedElement testPsiElement;
+    private PsiClass testPsiElement;
 
     @Override
     protected void setUp() throws Exception {
-        testPsiElement = mock(PsiNamedElement.class);
+        notAddedPsiElement = mock(PsiClass.class);
+        when(notAddedPsiElement.getName()).thenReturn(notAddedName);
+        when(notAddedPsiElement.isValid()).thenReturn(true);
+
+        testPsiElement = mock(PsiClass.class);
         when(testPsiElement.getName()).thenReturn(testName);
         when(testPsiElement.isValid()).thenReturn(true);
         testingInstance.put(testKey, testPsiElement);
@@ -33,11 +41,17 @@ public class PsiElementCacheTest extends TestCase {
     }
 
     public void testMissingElementShouldBeNull() {
-        assertThat(testingInstance.get("notThereYet")).isNull();
+        assertThat(testingInstance.get(notAddedKey)).isNull();
     }
 
     public void testAddedElementShouldBeCached() {
         assertThat(testingInstance.get(testKey)).isNotNull().isSameAs(testPsiElement);
+    }
+
+    public void testAddedNullShouldNotBeCached() {
+        int initialSize = spy.size();
+        testingInstance.put(notAddedKey, null);
+        assertThat(spy.size()).isEqualTo(initialSize);
     }
 
     public void testRenamedElementShouldBeEvicted() {
@@ -50,5 +64,20 @@ public class PsiElementCacheTest extends TestCase {
         when(testPsiElement.isValid()).thenReturn(false);
         assertThat(testingInstance.get(testKey)).isNull();
         assertThat(spy.get(testKey)).isNull();
+    }
+
+    public void testNotUsingSupplierIfAlreadyCached() {
+        assertThat(testingInstance.getOrCompute(testKey, () -> {
+            throw new RuntimeException("should not be called");
+        })).isSameAs(testPsiElement);
+    }
+
+    public void testComputeIfElementIsAbsent() {
+        assertThat(testingInstance.getOrCompute(notAddedKey, () -> notAddedPsiElement)).isSameAs(notAddedPsiElement);
+    }
+
+    public void testComputedValueIsAddedToCache() {
+        testingInstance.getOrCompute(notAddedKey, () -> notAddedPsiElement);
+        assertThat(testingInstance.get(notAddedKey)).isSameAs(notAddedPsiElement);
     }
 }

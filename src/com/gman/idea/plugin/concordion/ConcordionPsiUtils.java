@@ -3,11 +3,15 @@ package com.gman.idea.plugin.concordion;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionOgnlExpressionNext;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionOgnlExpressionStart;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionPsiElement;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import com.intellij.psi.xml.XmlTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
 import static com.intellij.psi.PsiModifier.STATIC;
@@ -86,6 +90,40 @@ public final class ConcordionPsiUtils {
     public static boolean concordionVisibleMethod(@NotNull PsiMethod psiMethod) {
         return psiMethod.getModifierList().hasModifierProperty(PUBLIC)
                 && !psiMethod.isConstructor();//Yes, static methods are accepted, static fields are not
+    }
+
+    @Nullable
+    public static String memberIdentity(@NotNull PsiMember member) {
+        return member.getContainingClass() != null
+                ? member.getContainingClass().getQualifiedName() + ':' + member.getName()
+                : member.getName();
+    }
+
+    private static final String CONCORDION_NAMESPACE = "http://www.concordion.org/2007/concordion";
+
+    public static boolean isConcordionHtmlSpec(@NotNull PsiFile psiFile) {
+        return concordionSchemaPrefixOf(psiFile) != null;
+    }
+
+    public static boolean isConcordionNamespace(@Nullable String namespace) {
+        return CONCORDION_NAMESPACE.equalsIgnoreCase(namespace);
+    }
+
+    @Nullable
+    public static String concordionSchemaPrefixOf(@NotNull PsiFile psiFile) {
+        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
+            return null;
+        }
+        XmlTag rootTag = ((HtmlFileImpl) psiFile).getRootTag();
+        if (rootTag == null) {
+            return null;
+        }
+        for (Map.Entry<String, String> declaration : rootTag.getLocalNamespaceDeclarations().entrySet()) {
+            if (CONCORDION_NAMESPACE.equalsIgnoreCase(declaration.getValue())) {
+                return declaration.getKey();
+            }
+        }
+        return null;
     }
 
     @Nullable
