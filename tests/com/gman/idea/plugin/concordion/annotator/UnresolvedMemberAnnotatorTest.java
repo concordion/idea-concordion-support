@@ -4,9 +4,8 @@ import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.gman.idea.plugin.concordion.HighlightingAssert;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import static com.gman.idea.plugin.concordion.HighlightingAssert.anInfo;
-import static com.gman.idea.plugin.concordion.HighlightingAssert.assertThat;
-import static com.intellij.lang.annotation.HighlightSeverity.ERROR;
+import static com.gman.idea.plugin.concordion.HighlightingAssert.*;
+import static com.intellij.lang.annotation.HighlightSeverity.*;
 
 public class UnresolvedMemberAnnotatorTest extends ConcordionCodeInsightFixtureTestCase {
 

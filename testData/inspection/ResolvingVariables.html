@@ -1,0 +1,21 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+    <span c:set="#definedBeforehand">42</span>
+    <span c:execute="consumeString(#definedBeforehand)"></span>
+
+    <span c:example="consumeString(#definedInside)">
+        <span c:set="#definedInside">42</span>
+    </span>
+
+    <span c:execute="consumeString(#TEXT)">42</span>
+
+    <span c:execute="consumeString(#undefined)">42</span>
+
+    <span c:execute="consumeString(#definedToLate)"></span>
+    <span c:set="#definedToLate">42</span>
+</body>
+</html>
