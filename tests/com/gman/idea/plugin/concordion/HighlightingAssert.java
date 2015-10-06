@@ -26,27 +26,23 @@ public class HighlightingAssert extends AbstractAssert<HighlightingAssert, List<
         return hasNo(anInfo().withSeverity(INJECTED));
     }
 
-    public HighlightingAssert has(Info info) {
+    public HighlightingAssert has(Info info, long expectedCount) {
 
-        long count = count(info);
-        if (count != 1) {
-            failWithMessage("Expected single fragment '%s' with severity '%s' and description '%s' but found %d",
-                    info.text, info.severity, info.description, count);
+        long actualCount = count(info);
+        if (actualCount != expectedCount) {
+            failWithMessage("Expected %d fragment(s) '%s' with severity '%s' and description '%s' but found %d",
+                    expectedCount, info.text, info.severity, info.description, actualCount);
         }
 
         return this;
     }
 
+    public HighlightingAssert has(Info info) {
+        return has(info, 1);
+    }
+
     public HighlightingAssert hasNo(Info info) {
-
-        long count = count(info);
-
-        if (count != 0) {
-            failWithMessage("Expected no fragment '%s' with severity '%s' and description '%s' but found %d",
-                    info.text, info.severity, info.description, count);
-        }
-
-        return this;
+        return has(info, 0);
     }
 
     private long count(Info info) {

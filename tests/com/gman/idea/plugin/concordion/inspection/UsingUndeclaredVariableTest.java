@@ -1,7 +1,6 @@
 package com.gman.idea.plugin.concordion.inspection;
 
 import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import static com.gman.idea.plugin.concordion.HighlightingAssert.*;
