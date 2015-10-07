@@ -41,6 +41,12 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             PsiTestUtil.removeSourceRoot(myModule, root);
             PsiTestUtil.addSourceRoot(myModule, src.get(), JavaSourceRootType.TEST_SOURCE);
             PsiTestUtil.addSourceRoot(myModule, resources.get(), JavaResourceRootType.TEST_RESOURCE);
+
+            PsiTestUtil.addLibrary(myModule, "testData/lib/hamcrest-core-1.3.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/junit-4.12.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/xom-1.2.5.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/ognl-2.6.9.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-1.5.1.jar");
         }
     }
 }

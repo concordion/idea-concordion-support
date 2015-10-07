@@ -36,10 +36,7 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
 
     }
 
-    /**
-     * Does not resolve jdk types and qualified names tests
-     */
-    public void ignoredTestDoesNotErrorOutComplexExpressionWithFullOgnlTestFixture() {
+    public void testDoesNotErrorOutComplexExpressionWithFullOgnlTestFixture() {
         copyJavaRunnerToConcordionProject("ComplexExpressions.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ComplexExpressions.html");
 
