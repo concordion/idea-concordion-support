@@ -239,7 +239,19 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         //In this case variable declared on inner level after it is actually used on outer
         assertThat(InjectedLanguageUtil.findInjectionHost(declaration).getTextOffset())
                 .isGreaterThan(InjectedLanguageUtil.findInjectionHost(variable).getTextOffset());
+    }
 
+    public void testVariableDeclarationIsResolvedOnlyByFullNameMatch() {
+        //first simple implementation resolved #thevar or #variable as declaration for #var :D
+        copyJavaRunnerToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNull();
     }
 
     private <T extends PsiElement> T elementUnderCaret() {

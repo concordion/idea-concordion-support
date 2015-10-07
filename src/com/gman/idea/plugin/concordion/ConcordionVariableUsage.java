@@ -48,7 +48,7 @@ public class ConcordionVariableUsage {
             PsiElement elementAt = htmlSpec.findElementAt(pos);
             if (elementAt != null) {
                 ConcordionVariableUsage usage = fromTokenAt(elementAt, pos);
-                if (usage.isDeclaration()) {
+                if (usage.isUsageOf(varName) && usage.isDeclaration()) {
                     return usage;
                 }
             }
@@ -95,6 +95,10 @@ public class ConcordionVariableUsage {
         }
 
         return usage;
+    }
+
+    public boolean isUsageOf(String varName) {
+        return variable != null && varName.equals(variable.getName());
     }
 
     public boolean isDeclaration() {
