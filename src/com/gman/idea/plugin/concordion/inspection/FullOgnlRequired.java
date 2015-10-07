@@ -64,7 +64,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
                 super.visitElement(element);
 
                 if (TOO_COMPLEX_CONCORDION_EXPRESSION.accepts(element)) {
-                    holder.registerProblem(element, "Not using @FullOGNL");
+                    holder.registerProblem(element, "Complex expression with fixture not annotated with @FullOGNL");
                 }
             }
         };

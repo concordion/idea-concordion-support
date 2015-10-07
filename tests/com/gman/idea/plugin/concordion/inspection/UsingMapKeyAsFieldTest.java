@@ -13,6 +13,9 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         return "testData/inspection";
     }
 
+    /**
+     * Does not resolve jdk types and qualified names tests
+     */
     public void ignoreTestWarnUsingFieldAsKeyInMap() {
         copyJavaRunnerToConcordionProject("UsingMapKeyAsField.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("UsingMapKeyAsField.html");
@@ -20,7 +23,6 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.enableInspections(UsingMapKeyAsField.class);
 
-        //Does not resolve jdk types in tests
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("key").withDescription("Using map key as a field"), 2);
     }
