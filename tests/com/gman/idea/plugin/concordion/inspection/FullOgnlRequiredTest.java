@@ -2,6 +2,7 @@ package com.gman.idea.plugin.concordion.inspection;
 
 import com.gman.idea.plugin.concordion.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiClass;
 
 import static com.gman.idea.plugin.concordion.HighlightingAssert.*;
 import static com.intellij.lang.annotation.HighlightSeverity.*;
@@ -13,12 +14,17 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         return "testData/inspection";
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        myFixture.enableInspections(FullOgnlRequired.class);
+    }
+
     public void testErrorOutComplexOgnlExpression() {
         copyJavaRunnerToConcordionProject("SimpleExpressions.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("SimpleExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(FullOgnlRequired.class);
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
@@ -29,7 +35,6 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("SimpleExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(FullOgnlRequired.class);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
@@ -41,7 +46,22 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ComplexExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(FullOgnlRequired.class);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
+
+    }
+
+    public void testDoesNotErrorOutComplexExpressionWithFullOgnlParentOfTestFixture() {
+
+        copyJavaRunnerToConcordionProject("AnnotatedParent.java");
+        copyJavaRunnerToConcordionProject("InheritedFullOgnlAnnotation.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedFullOgnlAnnotation.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        PsiClass aClass = myFixture.findClass("com.test.AnnotatedParent");
+        System.out.println(aClass);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));

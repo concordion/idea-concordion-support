@@ -1,12 +1,11 @@
 package com.test;
 
+import org.concordion.api.FullOGNL;
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
 
 @RunWith(ConcordionRunner.class)
-public class SimpleExpressions {
+@FullOGNL
+public abstract class AnnotatedParent {
 
-    public String buildString() {
-        return "";
-    }
 }

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
 import static com.intellij.psi.PsiModifier.STATIC;
@@ -82,9 +81,26 @@ public final class ConcordionPsiUtils {
                 .findFirst().orElse(null);
     }
 
+    @Nullable
+    public static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
+        for (PsiClass current = psiClass; current != null ; current = current.getSuperClass()) {
+            PsiModifierList modifiers = current.getModifierList();
+            if (modifiers == null) {
+                continue;
+            }
+            PsiAnnotation annotation = modifiers.findAnnotation(qualifiedName);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+        return null;
+    }
+
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {
-        return psiField.getModifierList().hasModifierProperty(PUBLIC)
-                && !psiField.getModifierList().hasModifierProperty(STATIC);
+        PsiModifierList modifiers = psiField.getModifierList();
+        return modifiers != null
+                && modifiers.hasModifierProperty(PUBLIC)
+                && !modifiers.hasModifierProperty(STATIC);
     }
 
     public static boolean concordionVisibleMethod(@NotNull PsiMethod psiMethod) {

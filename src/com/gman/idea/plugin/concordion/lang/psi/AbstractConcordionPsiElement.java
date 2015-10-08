@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
-    //TODO find a good way to cache (no outdated date, ok with renaming)
+    //TODO find a good way to cache (no outdated, ok with renaming)
     protected PsiType type;
 
     public AbstractConcordionPsiElement(@NotNull ASTNode node) {

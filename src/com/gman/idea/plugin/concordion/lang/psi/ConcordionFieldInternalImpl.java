@@ -68,7 +68,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         } else if (containingMember instanceof PsiMethod) {
             return ((PsiMethod) containingMember).getReturnType();
         }
-        //TODO return PsiType.NULL if map
+        //TODO return PsiType.NULL if parent is a map
         return null;
     }
 

@@ -84,8 +84,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             }
 
             private boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
-                PsiModifierList modifierList = runnerClass.getModifierList();
-                return modifierList != null && modifierList.findAnnotation(FullOGNL.class.getName()) != null;
+                return findAnnotationInClassHierarchy(runnerClass, FullOGNL.class.getName()) != null;
             }
         });
     }
