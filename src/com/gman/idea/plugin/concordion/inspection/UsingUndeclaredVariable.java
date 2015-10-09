@@ -4,7 +4,6 @@ import com.gman.idea.plugin.concordion.ConcordionExpressionElementPattern;
 import com.gman.idea.plugin.concordion.lang.psi.ConcordionVariable;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,17 +16,11 @@ public class UsingUndeclaredVariable extends LocalInspectionTool {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
-
-        return new PsiElementVisitor() {
-            @Override
-            public void visitElement(PsiElement element) {
-                super.visitElement(element);
-
-                if (UNDECLARED_VARIABLE.accepts(element)) {
-                    holder.registerProblem(element, "Using undeclared variable");
-                }
-            }
-        };
+    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
+        return new ConcordionInspectionVisitor<>(
+                UNDECLARED_VARIABLE,
+                holder,
+                "Using undeclared variable"
+        );
     }
 }

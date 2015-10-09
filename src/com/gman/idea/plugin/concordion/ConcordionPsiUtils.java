@@ -41,9 +41,6 @@ public final class ConcordionPsiUtils {
         }
     }
 
-
-    public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
-
     @Nullable
     private static PsiType typeOfChain(@NotNull ConcordionOgnlExpressionNext next) {
         Iterator<ConcordionOgnlExpressionNext> following = next.getOgnlExpressionNextList().iterator();
@@ -58,6 +55,9 @@ public final class ConcordionPsiUtils {
         }
     }
 
+    private static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
+
+    //TODO this does not always result in iterable in parent classes, fix
     @Nullable
     public static PsiType listParameterType(@NotNull PsiType listPsiType) {
         return stream(listPsiType.getSuperTypes())

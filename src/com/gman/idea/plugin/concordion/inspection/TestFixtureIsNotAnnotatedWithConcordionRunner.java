@@ -19,15 +19,10 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunner extends LocalInspecti
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
-        return new PsiElementVisitor() {
-            @Override
-            public void visitElement(PsiElement element) {
-                super.visitElement(element);
-
-                if (MISCONFIGURED_TEST_FIXTURE.accepts(element)) {
-                    holder.registerProblem(element, "Test fixture is not annotated with @RunWith(ConcordionRunner.class)");
-                }
-            }
-        };
+        return new ConcordionInspectionVisitor<>(
+                MISCONFIGURED_TEST_FIXTURE,
+                holder,
+                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
+        );
     }
 }

@@ -57,17 +57,12 @@ public class FullOgnlRequired extends LocalInspectionTool {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
-        return new PsiElementVisitor() {
-            @Override
-            public void visitElement(PsiElement element) {
-                super.visitElement(element);
-
-                if (TOO_COMPLEX_CONCORDION_EXPRESSION.accepts(element)) {
-                    holder.registerProblem(element, "Complex expression with fixture not annotated with @FullOGNL");
-                }
-            }
-        };
+    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
+        return new ConcordionInspectionVisitor<>(
+                TOO_COMPLEX_CONCORDION_EXPRESSION,
+                holder,
+                "Complex expression with fixture not annotated with @FullOGNL"
+        );
     }
 
     private static String extractEvaluationExpressionFromVerifyRows(String evaluateRowsExpression) {
