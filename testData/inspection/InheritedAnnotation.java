@@ -1,6 +1,6 @@
 package com.test;
 
-public class InheritedFullOgnlAnnotation extends AnnotatedParent {
+public class InheritedAnnotation extends AnnotatedParent {
 
     public String buildString() {
         return "";

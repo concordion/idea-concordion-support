@@ -13,12 +13,17 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         return "testData/inspection";
     }
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        myFixture.enableInspections(UsingUndeclaredVariable.class);
+    }
+
     public void testWarnUndeclaredVariableUsage() {
         copyJavaRunnerToConcordionProject("ResolvingVariables.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("#undefined").withDescription("Using undeclared variable"));
@@ -29,7 +34,6 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("#definedToLate").withDescription("Using undeclared variable"));
@@ -40,7 +44,6 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#definedBeforehand").withDescription("Using undeclared variable"));
@@ -51,7 +54,6 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#definedInside").withDescription("Using undeclared variable"));
@@ -62,7 +64,6 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#TEXT").withDescription("Using undeclared variable"));

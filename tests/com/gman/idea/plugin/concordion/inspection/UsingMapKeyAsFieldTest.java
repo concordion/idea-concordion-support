@@ -13,6 +13,12 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         return "testData/inspection";
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        myFixture.enableInspections(UsingMapKeyAsField.class);
+    }
+
     /**
      * Does not resolve jdk types and qualified names tests
      */
@@ -21,7 +27,6 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("UsingMapKeyAsField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingMapKeyAsField.class);
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("key").withDescription("Using map key as a field"), 2);
@@ -32,7 +37,6 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("UsingMapKeyAsField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.enableInspections(UsingMapKeyAsField.class);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("inner").withDescription("Using map key as a field"));

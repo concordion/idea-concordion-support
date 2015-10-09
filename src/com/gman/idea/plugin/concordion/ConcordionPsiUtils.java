@@ -14,6 +14,7 @@ import java.util.*;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
 import static com.intellij.psi.PsiModifier.STATIC;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Collections.singleton;
@@ -94,6 +95,15 @@ public final class ConcordionPsiUtils {
             }
         }
         return null;
+    }
+
+    @Nullable
+    public static String runnerQualifiedNameFromRunWithAnnotation(@NotNull PsiAnnotation runWith) {
+        PsiJavaCodeReferenceElement runner = findChildOfType(runWith.getParameterList(), PsiJavaCodeReferenceElement.class);
+        if (runner == null) {
+            return null;
+        }
+        return runner.getQualifiedName();
     }
 
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {

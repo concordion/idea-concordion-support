@@ -43,15 +43,35 @@
     <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionNonExpressionCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionExpressionCompletionContributor"/>
 
-    <localInspection language="HTML" id="usingFullOgnlExpression" displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
-                     groupName="Concordion" enabledByDefault="true" level="ERROR"
+    <localInspection language="JAVA"
+                     id="testFixtureIsNotAnnotatedWithConcordionRunner"
+                     groupName="Concordion"
+                     displayName="Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
+                     enabledByDefault="true"
+                     level="ERROR"
+                     implementationClass="com.gman.idea.plugin.concordion.inspection.TestFixtureIsNotAnnotatedWithConcordionRunner"/>
+    <localInspection language="HTML"
+                     id="usingFullOgnlExpression"
+                     groupName="Concordion"
+                     displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
+                     enabledByDefault="true"
+                     level="ERROR"
                      implementationClass="com.gman.idea.plugin.concordion.inspection.FullOgnlRequired"/>
-    <localInspection language="Concordion" id="usingMapKeyAsField" displayName="Using map key as a field"
-                     groupName="Concordion" enabledByDefault="true" level="WARNING"
+    <localInspection language="Concordion"
+                     id="usingMapKeyAsField"
+                     groupName="Concordion"
+                     displayName="Using map key as a field"
+                     enabledByDefault="true"
+                     level="WARNING"
                      implementationClass="com.gman.idea.plugin.concordion.inspection.UsingMapKeyAsField"/>
-    <localInspection language="Concordion" id="usingUndeclaredVariable" displayName="Using undeclared variable"
-                     groupName="Concordion" enabledByDefault="true" level="WARNING"
+    <localInspection language="Concordion"
+                     id="usingUndeclaredVariable"
+                     groupName="Concordion"
+                     displayName="Using undeclared variable"
+                     enabledByDefault="true"
+                     level="WARNING"
                      implementationClass="com.gman.idea.plugin.concordion.inspection.UsingUndeclaredVariable"/>
+
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.gman.idea.plugin.concordion.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.gman.idea.plugin.concordion.marker.JavaRunnerLineMarkerProvider"/>
 
