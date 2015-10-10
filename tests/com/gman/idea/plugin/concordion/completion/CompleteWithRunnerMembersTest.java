@@ -94,4 +94,17 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
         assertThat(myFixture.getLookupElementStrings()).
                 contains("method");
     }
+
+    public void testNoDuplicatedMembersInCompletion() {
+        //PsiClass#getFields() and PsiClass#getMethods() return declared field and member in class and each of its parents.
+        copyJavaRunnerToConcordionProject("NoDuplicatedMemebrsInCompletion.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoDuplicatedMemebrsInCompletion.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings()).
+                containsOnlyOnce("method").
+                containsOnlyOnce("field");
+    }
 }
