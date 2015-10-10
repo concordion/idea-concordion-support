@@ -20,9 +20,9 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
     }
 
     /**
-     * Does not resolve jdk types and qualified names tests
+     * Does not resolve jdk types and qualified names in tests
      */
-    public void ignoreTestWarnUsingFieldAsKeyInMap() {
+    public void ignoredTestWarnUsingFieldAsKeyInMap() {
         copyJavaRunnerToConcordionProject("UsingMapKeyAsField.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("UsingMapKeyAsField.html");
 

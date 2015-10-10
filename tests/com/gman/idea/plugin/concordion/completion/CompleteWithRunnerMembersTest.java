@@ -13,7 +13,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
         return "testData/completion";
     }
 
-    public void testShouldCompleteConcordionExpressionWithRunnerProperties() {
+    public void testCompleteConcordionExpressionWithRunnerProperties() {
 
         copyJavaRunnerToConcordionProject("Fields.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Fields.html");
@@ -27,7 +27,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .doesNotContain("staticProperty");
     }
 
-    public void testShouldCompleteConcordionExpressionWithRunnerMethods() throws Exception {
+    public void testCompleteConcordionExpressionWithRunnerMethods() {
 
         copyJavaRunnerToConcordionProject("Methods.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Methods.html");
@@ -41,7 +41,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .doesNotContain("privateMethod");
     }
 
-    public void testShouldCompleteWithNestedMembersOfField() {
+    public void testCompleteWithNestedMembersOfField() {
 
         copyJavaRunnerToConcordionProject("NestedMembersOfField.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfField.html");
@@ -54,7 +54,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .contains("method");
     }
 
-    public void testShouldCompleteWithNestedMembersOfMethods() {
+    public void testCompleteWithNestedMembersOfMethods() {
 
         copyJavaRunnerToConcordionProject("NestedMembersOfMethod.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfMethod.html");
@@ -67,7 +67,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .contains("method");
     }
 
-    public void testShouldCompleteWithNestedMembersOfVariables() {
+    public void testCompleteWithNestedMembersOfVariables() {
 
         copyJavaRunnerToConcordionProject("NestedMembersOfVariable.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVariable.html");
@@ -78,5 +78,20 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
         assertThat(myFixture.getLookupElementStrings())
                 .contains("field")
                 .contains("method");
+    }
+
+    /**
+     * Does not resolve jdk types and qualified names in tests
+     */
+    public void ignoredTestCompleteWithMembersOfVerifyRowsLoopVariable() {
+        //type of variable produced by verifyRows command is determined by generic parameter of the iterable
+        copyJavaRunnerToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings()).
+                contains("method");
     }
 }

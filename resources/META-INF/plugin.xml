@@ -19,7 +19,7 @@
     <ul>
         <li>Autocomplete with concordion commands</li>
         <li>Autocomplete with fields and methods of concordion runner class</li>
-        <li>Navigation between concordion html spec and java runner class using (S) icon over concordion files and navigation action</li>
+        <li>Navigation between concordion html spec and test fixture using concordion icon and navigation action</li>
         <li>Ctrl+click navigation and usages search for concordion expressions</li>
         <li>Quick fields and methods creation from usages</li>
         <li>Renaming support</li>

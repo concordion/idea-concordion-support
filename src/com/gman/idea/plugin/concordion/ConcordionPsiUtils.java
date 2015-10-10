@@ -57,13 +57,34 @@ public final class ConcordionPsiUtils {
 
     private static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
 
-    //TODO this does not always result in iterable in parent classes, fix
     @Nullable
     public static PsiType listParameterType(@NotNull PsiType listPsiType) {
-        return stream(listPsiType.getSuperTypes())
+        return hierarchy(listPsiType, new HashSet<>()).stream()
                 .filter(st -> st.getCanonicalText().startsWith(ITERABLE))
-                .map(st -> ((PsiClassType) st).getParameters()[0])
+                .map(ConcordionPsiUtils::iterableGeneric)
+                .filter(Objects::nonNull)
                 .findFirst().orElse(null);
+    }
+
+    @NotNull
+    private static Set<PsiType> hierarchy(@NotNull PsiType currentType, @NotNull Set<PsiType> hierarchy) {
+        hierarchy.add(currentType);
+        for (PsiType superType : currentType.getSuperTypes()) {
+            hierarchy(superType, hierarchy);
+        }
+        return hierarchy;
+    }
+
+    @Nullable
+    private static PsiType iterableGeneric(@NotNull PsiType iterable) {
+        if (!(iterable instanceof PsiClassType)) {
+            return null;
+        }
+        PsiType[] parameters = ((PsiClassType) iterable).getParameters();
+        if (parameters.length != 1) {
+            return null;
+        }
+        return parameters[0];
     }
 
     @Nullable
