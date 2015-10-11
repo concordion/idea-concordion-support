@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class LineMarker {
 
+    public static final String CONCORDION_TOOLTIP = "Concordion";
+
     public static LineMarkerInfo<PsiElement> infoFor(@NotNull PsiElement element, @NotNull GutterIconNavigationHandler<PsiElement> navigationHandler) {
         return new LineMarkerInfo<>(
                 element,
@@ -25,7 +27,7 @@ public class LineMarker {
 
     @NotNull
     public static String generateTooltipForConcordion(@NotNull PsiElement element) {
-        return "Concordion";
+        return CONCORDION_TOOLTIP;
     }
 
     @NotNull
