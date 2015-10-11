@@ -1,14 +1,16 @@
 package com.gman.idea.plugin.concordion;
 
-import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+
+import static java.util.Arrays.stream;
 
 public class ConcordionNavigationService {
 
@@ -16,16 +18,16 @@ public class ConcordionNavigationService {
         return ServiceManager.getService(project, ConcordionNavigationService.class);
     }
 
-    private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(f -> f.getVirtualFile().getPath());
+    private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
     @Nullable
     public  PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
-        return PsiTreeUtil.getChildOfType(correspondingSpecFile(htmlSpec), PsiClass.class);
+        return PsiTreeUtil.getChildOfType(correspondingJavaFile(htmlSpec), PsiClass.class);
     }
 
     @Nullable
     public  PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
-        return runnerClass != null ? correspondingSpecFile(runnerClass.getContainingFile()) : null;
+        return runnerClass != null ? correspondingHtmlFile(runnerClass.getContainingFile()) : null;
     }
 
     @Nullable
@@ -33,65 +35,97 @@ public class ConcordionNavigationService {
         if (file == null) {
             return null;
         }
-        String path = file.getVirtualFile().getPath();
 
-        return cache.getOrCompute(path, () -> findCorrespondingSpecFile(file));
+        return JavaFileType.INSTANCE.equals(file.getFileType())
+                ? correspondingHtmlFile(file)
+                : correspondingJavaFile(file);
     }
 
     private  final String OPTIONAL_TEST_SUFFIX = "Test";
+    private  final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     @Nullable
-    private PsiFile findCorrespondingSpecFile(@NotNull PsiFile file) {
-        if (file.getContainingDirectory() == null
-                || !isConcordionType(file.getFileType())) {
+    private PsiFile correspondingJavaFile(@Nullable PsiFile htmlFile) {
+        if (!canBeNavigated(htmlFile)) {
             return null;
         }
 
-        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(file.getContainingDirectory());
+        String specName = removeExtension(htmlFile.getName());
+
+        if (!specName.equals(removeOptionalSuffix(specName))) {
+            return null;
+        }
+
+        return cache.getOrCompute(getIdentityKey(htmlFile), () -> findCorrespondingSpecFile(
+                htmlFile.getContainingDirectory(),
+                specName + ".java",
+                specName + OPTIONAL_TEST_SUFFIX + ".java",
+                specName + OPTIONAL_FIXTURE_SUFFIX + ".java"
+        ));
+    }
+
+    @Nullable
+    private PsiFile correspondingHtmlFile(@Nullable PsiFile javaFile) {
+        if (!canBeNavigated(javaFile)) {
+            return null;
+        }
+
+        String specName = removeOptionalSuffix(removeExtension(javaFile.getName()));
+
+        return cache.getOrCompute(getIdentityKey(javaFile), () -> findCorrespondingSpecFile(
+                javaFile.getContainingDirectory(),
+                specName + ".html"
+        ));
+    }
+
+    @Nullable
+    private PsiFile findCorrespondingSpecFile(@NotNull PsiDirectory oneOfPackageDirs, @NotNull String... names) {
+        PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(oneOfPackageDirs);
         if (aPackage == null) {
             return null;
         }
 
-        String specName = extractSpecNameNoTest(file.getName());
-        String extension = pairedType(file.getFileType()).getDefaultExtension();
-
-        return findFirstFileInPackage(aPackage, specName + '.' + extension, specName + OPTIONAL_TEST_SUFFIX + '.' + extension);
-    }
-
-    private  boolean isConcordionType(@NotNull FileType type) {
-        return JavaFileType.INSTANCE.equals(type) || HtmlFileType.INSTANCE.equals(type);
-    }
-
-    @NotNull
-    private  String extractSpecNameNoTest(@NotNull String fileName) {
-        String specName = fileName.substring(0, fileName.indexOf('.'));
-        if (specName.endsWith(OPTIONAL_TEST_SUFFIX)) {
-            specName = specName.substring(0, specName.length() - OPTIONAL_TEST_SUFFIX.length());
-        }
-        return specName;
-    }
-
-    @NotNull
-    private  FileType pairedType(@NotNull FileType type) {
-        if (JavaFileType.INSTANCE.equals(type)) {
-            return HtmlFileType.INSTANCE;
-        } else if (HtmlFileType.INSTANCE.equals(type)) {
-            return JavaFileType.INSTANCE;
-        } else {
-            throw new IllegalArgumentException(type.getDefaultExtension() + " is not allowed here!");
-        }
+        return stream(aPackage.getDirectories())
+                .map(directory -> findFirstFile(directory, names))
+                .filter(Objects::nonNull)
+                .findFirst().orElse(null);
     }
 
     @Nullable
-    private  PsiFile findFirstFileInPackage(@NotNull PsiPackage aPackage, @NotNull String... names) {
-        for (PsiDirectory directory : aPackage.getDirectories()) {
-            for (String name : names) {
-                PsiFile file = directory.findFile(name);
-                if (file != null) {
-                    return file;
-                }
-            }
+    private PsiFile findFirstFile(@NotNull PsiDirectory directory, @NotNull String[] names) {
+        return stream(names)
+                .map(directory::findFile)
+                .filter(Objects::nonNull)
+                .findFirst().orElse(null);
+    }
+
+    private boolean canBeNavigated(@Nullable PsiFile file) {
+        return file != null && file.getContainingDirectory() != null;
+    }
+
+    @NotNull
+    private  String removeExtension(@NotNull String fileName) {
+        return fileName.substring(0, fileName.indexOf('.'));
+    }
+
+    @NotNull
+    private String removeSuffix(@NotNull String text, @NotNull String suffix) {
+        return text.substring(0, text.length() - suffix.length());
+    }
+
+    @NotNull
+    private String removeOptionalSuffix(@NotNull String specName) {
+        if (specName.endsWith(OPTIONAL_TEST_SUFFIX)) {
+            return removeSuffix(specName, OPTIONAL_TEST_SUFFIX);
+        } else if (specName.endsWith(OPTIONAL_FIXTURE_SUFFIX)) {
+            return removeSuffix(specName, OPTIONAL_FIXTURE_SUFFIX);
+        } else {
+            return specName;
         }
-        return null;
+    }
+
+    @NotNull
+    private static String getIdentityKey(@NotNull PsiFile file) {
+        return file.getVirtualFile().getPath();
     }
 }

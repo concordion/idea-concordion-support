@@ -34,7 +34,7 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertThat(myFixture.findAllGutters()).hasConcordionGutter();
     }
 
-    public void ignoredTestSpecShouldNotHaveTestSuffix() {
+    public void testSpecShouldNotHaveTestSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec3Test.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec3Test.html");
 
@@ -45,7 +45,7 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
     }
 
-    public void ignoredTestFixtureMayHaveOptionalFixtureSuffix() {
+    public void testFixtureMayHaveOptionalFixtureSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec4Fixture.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec4.html");
 
@@ -56,7 +56,7 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertThat(myFixture.findAllGutters()).hasConcordionGutter();
     }
 
-    public void ignoredTestSpecShouldNotHaveFixtureSuffix() {
+    public void testSpecShouldNotHaveFixtureSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec5Fixture.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec5Fixture.html");
 
