@@ -1,0 +1,54 @@
+{
+  parserClass="org.concordion.plugin.idea.lang.ConcordionParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Concordion"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.concordion.plugin.idea.lang.psi"
+  psiImplPackage="org.concordion.plugin.idea.lang.psi"
+
+  elementTypeHolderClass="org.concordion.plugin.idea.lang.psi.ConcordionTypes"
+  elementTypeClass="org.concordion.plugin.idea.lang.ConcordionElementType"
+  tokenTypeClass="org.concordion.plugin.idea.lang.ConcordionTokenType"
+
+  tokens = [
+    LPARENTH="("
+    RPARENTH=")"
+    LBRACKET="["
+    RBRACKET="]"
+    DOT="."
+    COMA=","
+    HASH="#"
+    EQ="="
+    COLON=":"
+    SEMICOLON=";"
+  ]
+}
+
+file ::= setExpression|iterateExpression|ognlExpressionStart;
+
+setExpression ::= variable '=' ognlExpressionStart
+iterateExpression ::= variable ':' ognlExpressionStart
+
+ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressionNext)?
+ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
+
+literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
+
+method ::= IDENTIFIER '(' arguments ')' {
+  implements="org.concordion.plugin.idea.lang.psi.ConcordionMethodInternal"
+  extends="org.concordion.plugin.idea.lang.psi.ConcordionMethodInternalImpl"
+}
+field ::= IDENTIFIER {
+  implements="org.concordion.plugin.idea.lang.psi.ConcordionFieldInternal"
+  extends="org.concordion.plugin.idea.lang.psi.ConcordionFieldInternalImpl"
+
+}
+variable ::= '#' IDENTIFIER {
+  implements="org.concordion.plugin.idea.lang.psi.ConcordionVariableInternal"
+  extends="org.concordion.plugin.idea.lang.psi.ConcordionVariableInternalImpl"
+}
+
+arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*
+index ::= '[' ognlExpressionStart ']'

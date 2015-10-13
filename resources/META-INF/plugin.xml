@@ -1,14 +1,14 @@
 <idea-plugin version="2">
-  <id>com.gman.idea.plugin.concordion</id>
+  <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
   <version>0.1-SNAPSHOT</version>
-  <vendor email="gmandnepr@gmail.com" url="https://github.com/gmandnepr/IdeaConcordionSupport">Ievgen Degtiarenko</vendor>
+  <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/IdeaConcordionSupport">Ievgen Degtiarenko</vendor>
 
   <description><![CDATA[
 <p>
-    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> (1.5.1) testing framework.
+    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
     <br/><b>Plugin homepage</b>
-    <br/><a href="https://github.com/gmandnepr/IdeaConcordionSupport">https://github.com/gmandnepr/IdeaConcordionSupport</a>
+    <br/><a href="https://github.com/concordion/IdeaConcordionSupport">https://github.com/concordion/IdeaConcordionSupport</a>
     <br/>Issues, feature proposals and tested pull requests are welcome
 </p>
     ]]></description>
@@ -30,18 +30,18 @@
   <idea-version since-build="133"/>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="com.gman.idea.plugin.concordion.lang.ConcordionFileTypeFactory"/>
-    <lang.parserDefinition language="Concordion" implementationClass="com.gman.idea.plugin.concordion.lang.ConcordionParserDefinition"/>
-    <multiHostInjector implementation="com.gman.idea.plugin.concordion.lang.ConcordionLanguageInjector"/>
-    <lang.syntaxHighlighterFactory key="Concordion" implementationClass="com.gman.idea.plugin.concordion.formatter.ConcordionSyntaxHighlighterFactory"/>
+    <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
+    <lang.parserDefinition language="Concordion" implementationClass="org.concordion.plugin.idea.lang.ConcordionParserDefinition"/>
+    <multiHostInjector implementation="org.concordion.plugin.idea.lang.ConcordionLanguageInjector"/>
+    <lang.syntaxHighlighterFactory key="Concordion" implementationClass="org.concordion.plugin.idea.formatter.ConcordionSyntaxHighlighterFactory"/>
 
-    <psi.referenceContributor language="Concordion" implementation="com.gman.idea.plugin.concordion.reference.ConcordionReferenceContributor"/>
+    <psi.referenceContributor language="Concordion" implementation="org.concordion.plugin.idea.reference.ConcordionReferenceContributor"/>
 
-    <annotator language="Concordion" implementationClass="com.gman.idea.plugin.concordion.annotator.UnresolvedMemberAnnotator"/>
+    <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedMemberAnnotator"/>
 
-    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionCommandsCompletionContributor"/>
-    <completion.contributor language="HTML" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionNonExpressionCompletionContributor"/>
-    <completion.contributor language="Concordion" implementationClass="com.gman.idea.plugin.concordion.autocomplete.ConcordionExpressionCompletionContributor"/>
+    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
+    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>
+    <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionExpressionCompletionContributor"/>
 
     <localInspection language="JAVA"
                      id="testFixtureIsNotAnnotatedWithConcordionRunner"
@@ -49,34 +49,34 @@
                      displayName="Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
                      enabledByDefault="true"
                      level="ERROR"
-                     implementationClass="com.gman.idea.plugin.concordion.inspection.TestFixtureIsNotAnnotatedWithConcordionRunner"/>
+                     implementationClass="org.concordion.plugin.idea.inspection.TestFixtureIsNotAnnotatedWithConcordionRunner"/>
     <localInspection language="HTML"
                      id="usingFullOgnlExpression"
                      groupName="Concordion"
                      displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
                      enabledByDefault="true"
                      level="ERROR"
-                     implementationClass="com.gman.idea.plugin.concordion.inspection.FullOgnlRequired"/>
+                     implementationClass="org.concordion.plugin.idea.inspection.FullOgnlRequired"/>
     <localInspection language="Concordion"
                      id="usingMapKeyAsField"
                      groupName="Concordion"
                      displayName="Using map key as a field"
                      enabledByDefault="true"
                      level="WARNING"
-                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingMapKeyAsField"/>
+                     implementationClass="org.concordion.plugin.idea.inspection.UsingMapKeyAsField"/>
     <localInspection language="Concordion"
                      id="usingUndeclaredVariable"
                      groupName="Concordion"
                      displayName="Using undeclared variable"
                      enabledByDefault="true"
                      level="WARNING"
-                     implementationClass="com.gman.idea.plugin.concordion.inspection.UsingUndeclaredVariable"/>
+                     implementationClass="org.concordion.plugin.idea.inspection.UsingUndeclaredVariable"/>
 
-    <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.gman.idea.plugin.concordion.marker.HtmlSpecLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.gman.idea.plugin.concordion.marker.JavaRunnerLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="HTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaRunnerLineMarkerProvider"/>
 
-    <projectService serviceInterface="com.gman.idea.plugin.concordion.ConcordionNavigationService"
-                    serviceImplementation="com.gman.idea.plugin.concordion.ConcordionNavigationService"/>
+    <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
+                    serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
   </extensions>
 
   <application-components>
@@ -89,7 +89,7 @@
     <action id="concordionSpecFilesNavigation"
             text="Navigate between concordion spec and fixture"
             description="Navigate between concordion spec and fixture"
-            class="com.gman.idea.plugin.concordion.action.NavigateBetweenConcordionSpecFiles">
+            class="org.concordion.plugin.idea.action.NavigateBetweenConcordionSpecFiles">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
     </action>
   </actions>

@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'org.jetbrains.intellij'
 
-group 'com.gman.idea.plugin.concordion'
+group 'org.concordion.plugin.idea'
 version '0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
