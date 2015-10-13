@@ -14,7 +14,7 @@ public class CompleteWithSpecialValuesTest extends ConcordionCodeInsightFixtureT
         return "testData/completion";
     }
 
-    public void testShouldCompleteMatchStrategyWithPredefinedStrategies() {
+    public void testCompleteMatchStrategyWithPredefinedStrategies() {
 
         copyJavaRunnerToConcordionProject("MatchStrategy.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchStrategy.html");
@@ -25,7 +25,7 @@ public class CompleteWithSpecialValuesTest extends ConcordionCodeInsightFixtureT
         assertThat(myFixture.getLookupElementStrings()).containsAll(asList("Default", "BestMatch", "KeyMatch"));
     }
 
-    public void testShouldCompleteMatchingRoleWithKeyRole() {
+    public void testCompleteMatchingRoleWithKeyRole() {
 
         copyJavaRunnerToConcordionProject("MatchingRole.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchingRole.html");
@@ -34,5 +34,15 @@ public class CompleteWithSpecialValuesTest extends ConcordionCodeInsightFixtureT
         myFixture.complete(CompletionType.BASIC, 1);
 
         assertThat(myFixture.getLookupElementStrings()).contains("key");
+    }
+    
+    public void testCompleteStatus() {
+        copyJavaRunnerToConcordionProject("Status.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Status.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings()).containsAll(asList("ExpectedToPass", "ExpectedToFail", "Unimplemented"));
     }
 }

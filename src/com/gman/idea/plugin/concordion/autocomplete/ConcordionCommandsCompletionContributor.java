@@ -29,7 +29,8 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
             "matchStrategy", "match-strategy",
             "matchingRole", "matching-role",
             "run",
-            "example"
+            "example",
+            "status"
     ));
 
     public ConcordionCommandsCompletionContributor() {

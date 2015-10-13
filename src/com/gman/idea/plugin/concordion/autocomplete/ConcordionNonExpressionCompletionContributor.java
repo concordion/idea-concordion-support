@@ -25,6 +25,11 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
                 concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("matchingRole", "matching-Role")),
                 new ConcordionMatchingRoleProvider()
         );
+        extend(
+                CompletionType.BASIC,
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("status")),
+                new ConcordionStatusProvider()
+        );
     }
 
     private static final class ConcordionMatchStrategyProvider extends CompletionProvider<CompletionParameters> {
@@ -39,6 +44,13 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
             result.addAllElements(fromStrings("key"));
+        }
+    }
+
+    private static final class ConcordionStatusProvider extends CompletionProvider<CompletionParameters> {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            result.addAllElements(fromStrings("Unimplemented", "ExpectedToFail", "ExpectedToPass"));
         }
     }
 
