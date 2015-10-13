@@ -1,6 +1,6 @@
 # IdeaConcordionSupport
 
-[![Build Status](https://travis-ci.org/gmandnepr/IdeaConcordionSupport.svg)](https://travis-ci.org/gmandnepr/IdeaConcordionSupport)
+[![Build Status](https://travis-ci.org/concordion/IdeaConcordionSupport.svg)](https://travis-ci.org/concordion/IdeaConcordionSupport)
 
 This plugin provides support for [concordion](http://concordion.org/) framework.
 
