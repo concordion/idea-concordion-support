@@ -1,14 +1,14 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.1-SNAPSHOT</version>
-  <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/IdeaConcordionSupport">Ievgen Degtiarenko</vendor>
+  <version>0.1</version>
+  <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <description><![CDATA[
 <p>
     <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
     <br/><b>Plugin homepage</b>
-    <br/><a href="https://github.com/concordion/IdeaConcordionSupport">https://github.com/concordion/IdeaConcordionSupport</a>
+    <br/><a href="https://github.com/concordion/idea-concordion-support">https://github.com/concordion/idea-concordion-support</a>
     <br/>Issues, feature proposals and tested pull requests are welcome
 </p>
     ]]></description>
@@ -19,7 +19,7 @@
     <ul>
         <li>Autocomplete with concordion commands</li>
         <li>Autocomplete with fields and methods of concordion runner class</li>
-        <li>Navigation between concordion html spec and test fixture using concordion icon and navigation action</li>
+        <li>Navigation between concordion html spec and test fixture using concordion icon and navigation action (ctrl + shift + s)</li>
         <li>Ctrl+click navigation and usages search for concordion expressions</li>
         <li>Quick fields and methods creation from usages</li>
         <li>Renaming support</li>
