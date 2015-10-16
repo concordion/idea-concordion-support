@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.getTopLevelFile;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
@@ -41,21 +42,12 @@ public class ConcordionVariableUsage {
             return emptyList();
         }
 
-        List<ConcordionVariableUsage> usages = new ArrayList<>();
-
-        String text = htmlSpec.getText();
-        int endOfScopePosition = findEndOfScopePosition(injection);
-        for (int pos = text.lastIndexOf('#', endOfScopePosition); pos >= 0; pos = text.lastIndexOf('#', pos - 1)) {
-            PsiElement elementAt = htmlSpec.findElementAt(pos);
-            if (elementAt != null) {
-                ConcordionVariableUsage usage = fromTokenAt(elementAt, pos);
-                if (usage.isDeclaration()) {
-                    usages.add(usage);
-                }
-            }
-        }
-
-        return usages;
+        return new TextReverseSearcher(htmlSpec.getText(), "#", findEndOfScopePosition(injection)).stream()
+                .map(pos -> ownerAndPosition(htmlSpec, pos))
+                .filter(Objects::nonNull)
+                .map(ConcordionVariableUsage::fromOwnerAndPosition)
+                .filter(ConcordionVariableUsage::isDeclaration)
+                .collect(toList());
     }
 
     @Nullable
@@ -64,25 +56,18 @@ public class ConcordionVariableUsage {
         if (htmlSpec == null) {
             return null;
         }
-        String text = htmlSpec.getText();
         String varName = variable.getName();
         if (varName == null) {
             return null;
         }
-        int varNameLength = varName.length();
-        int endOfScopePosition = findEndOfScopePosition(variable);
 
-        for (int pos = text.lastIndexOf(varName, endOfScopePosition); pos >= 0; pos = text.lastIndexOf(varName, pos - varNameLength)) {
-            PsiElement elementAt = htmlSpec.findElementAt(pos);
-            if (elementAt != null) {
-                ConcordionVariableUsage usage = fromTokenAt(elementAt, pos);
-                if (usage.isUsageOf(varName) && usage.isDeclaration()) {
-                    return usage;
-                }
-            }
-        }
-
-        return null;
+        return new TextReverseSearcher(htmlSpec.getText(), varName, findEndOfScopePosition(variable)).stream()
+                .map(pos -> ownerAndPosition(htmlSpec, pos))
+                .filter(Objects::nonNull)
+                .map(ConcordionVariableUsage::fromOwnerAndPosition)
+                .filter(usage -> usage.isUsageOf(varName))
+                .filter(ConcordionVariableUsage::isDeclaration)
+                .findFirst().orElse(null);
     }
 
     private static int findEndOfScopePosition(@NotNull PsiElement injection) {
@@ -103,17 +88,17 @@ public class ConcordionVariableUsage {
     }
 
     @NotNull
-    private static ConcordionVariableUsage fromTokenAt(@NotNull PsiElement element, int pos) {
+    private static ConcordionVariableUsage fromOwnerAndPosition(@NotNull OwnerAndPosition ownerAndPosition) {
         ConcordionVariableUsage usage = new ConcordionVariableUsage();
 
-        if (element.getParent() instanceof XmlAttributeValue) {
-            usage.attributeValue = (XmlAttributeValue) element.getParent();
+        if (ownerAndPosition.owner.getParent() instanceof XmlAttributeValue) {
+            usage.attributeValue = (XmlAttributeValue) ownerAndPosition.owner.getParent();
         }
         if (usage.attributeValue != null && usage.attributeValue.getParent() instanceof XmlAttribute) {
             usage.attribute = (XmlAttribute) usage.attributeValue.getParent();
         }
         if (usage.attributeValue != null) {
-            PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) usage.attributeValue, pos);
+            PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) usage.attributeValue, ownerAndPosition.position);
             if (injected != null && injected.getParent() instanceof ConcordionVariable) {
                 usage.variable = (ConcordionVariable) injected.getParent();
             }
@@ -123,6 +108,22 @@ public class ConcordionVariableUsage {
         }
 
         return usage;
+    }
+
+    @Nullable
+    private static OwnerAndPosition ownerAndPosition(@NotNull PsiFile htmlSpec, int position) {
+        PsiElement owner = htmlSpec.findElementAt(position);
+        return owner != null ? new OwnerAndPosition(owner, position) : null;
+    }
+
+    private static final class OwnerAndPosition {
+        @NotNull private final PsiElement owner;
+        private final int position;
+
+        public OwnerAndPosition(@NotNull PsiElement owner, int position) {
+            this.owner = owner;
+            this.position = position;
+        }
     }
 
     public boolean isUsageOf(@NotNull String varName) {
@@ -160,14 +161,14 @@ public class ConcordionVariableUsage {
             return null;
         }
         if (RESERVED_VARIABLES.contains(variable.getName())) {
-            return PsiType.NULL;
+            return ConcordionPsiUtils.DYNAMIC;
         }
         if (variableParent instanceof ConcordionSetExpression) {
             ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);
             return expr != null ? typeOfExpression(expr) : null;
         }
         if (variableParent instanceof ConcordionOgnlExpressionStart) {
-            return PsiType.NULL;
+            return ConcordionPsiUtils.DYNAMIC;
         }
         if (variableParent instanceof ConcordionIterateExpression) {
             ConcordionOgnlExpressionStart expr = findChildOfType(variableParent, ConcordionOgnlExpressionStart.class);

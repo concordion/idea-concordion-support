@@ -24,6 +24,21 @@ public final class ConcordionPsiUtils {
     private ConcordionPsiUtils() {
     }
 
+    public static final PsiType DYNAMIC = new PsiPrimitiveType("?", new PsiAnnotation[0]);
+
+    @Nullable
+    public static ConcordionPsiElement parentConcordionExpressionOf(@NotNull ConcordionPsiElement current) {
+        //Parent may not be present for some malformed chains
+        if (current.getParent() == null || current.getParent().getParent() == null) {
+            return null;
+        }
+        PsiElement parent = current.getParent().getParent().getFirstChild();
+        if (!(parent instanceof ConcordionPsiElement)) {
+            return null;
+        }
+        return (ConcordionPsiElement) parent;
+    }
+
     @Nullable
     public static PsiType typeOfExpression(@NotNull ConcordionOgnlExpressionStart start) {
         if (start.getOgnlExpressionNext() != null) {
@@ -35,7 +50,7 @@ public final class ConcordionPsiUtils {
             }
             if (start.getLiteral() != null) {
                 //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
-                return PsiType.NULL;
+                return ConcordionPsiUtils.DYNAMIC;
             }
             return null;
         }

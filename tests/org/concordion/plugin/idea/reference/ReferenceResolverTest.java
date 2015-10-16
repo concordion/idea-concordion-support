@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.reference;
 
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
-import org.concordion.plugin.idea.lang.psi.AbstractConcordionPsiElement;
 import org.concordion.plugin.idea.lang.psi.ConcordionField;
 import org.concordion.plugin.idea.lang.psi.ConcordionMethod;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
@@ -10,6 +9,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.parentConcordionExpressionOf;
 
 public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase {
 
@@ -139,7 +139,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         ConcordionMethod chainNext = elementUnderCaret();
         PsiMethod chainNextMethod = resolveReferences(chainNext);
 
-        PsiElement chainStart = AbstractConcordionPsiElement.parentConcordionExpressionOf(chainNext);
+        PsiElement chainStart = parentConcordionExpressionOf(chainNext);
         PsiField chainStartField = resolveReferences(chainStart);
 
         assertThat(chainStartField).isNotNull();

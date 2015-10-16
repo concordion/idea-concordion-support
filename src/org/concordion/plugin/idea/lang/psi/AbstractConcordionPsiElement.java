@@ -9,6 +9,8 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
     //TODO find a good way to cache (no outdated, ok with renaming)
@@ -50,17 +52,5 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     @Nullable
     protected ConcordionPsiElement parentConcordionExpression() {
         return parentConcordionExpressionOf(this);
-    }
-
-    public static ConcordionPsiElement parentConcordionExpressionOf(ConcordionPsiElement current) {
-        //Parent may not be present for some malformed chains
-        if (current.getParent() == null || current.getParent().getParent() == null) {
-            return null;
-        }
-        PsiElement parent = current.getParent().getParent().getFirstChild();
-        if (!(parent instanceof ConcordionPsiElement)) {
-            return null;
-        }
-        return (ConcordionPsiElement) parent;
     }
 }

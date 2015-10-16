@@ -90,7 +90,7 @@ public class CompleteInformation {
 
     @NotNull
     private static String variableTypeText(@Nullable PsiType psiType) {
-        return psiType == null || PsiType.NULL.equals(psiType) ? "?" : psiType.getPresentableText();
+        return psiType == null ? "?" : psiType.getPresentableText();
     }
 
     @NotNull
