@@ -13,9 +13,11 @@ It is built by gradle so it does not require to have intellij idea plugin sdk se
 
 # Supported features
 
- - Autocomplete with concordion commands
- - Autocomplete with fields and methods of concordion runner class
- - Navigation between concordion html spec and test fixture using concordion icon and navigation action
- - Ctrl+click navigation and usages search for concordion expressions
- - Quick fields and methods creation from usages
- - Renaming support
+- Autocomplete with spec variables
+- Autocomplete with concordion commands
+- Autocomplete with members of the fixture
+- Autocomplete chains with members
+- Navigation between concordion html spec and test fixture using concordion icon and navigation action (ctrl + shift + s)
+- Ctrl+click navigation and usages search for concordion expressions
+- Quick fields and methods creation from usages
+- Renaming support

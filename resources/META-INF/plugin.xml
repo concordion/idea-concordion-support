@@ -1,24 +1,28 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <description><![CDATA[
 <p>
-    <br/>This plugin provides support for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
-    <br/><b>Plugin homepage</b>
-    <br/><a href="https://github.com/concordion/idea-concordion-support">https://github.com/concordion/idea-concordion-support</a>
-    <br/>Issues, feature proposals and tested pull requests are welcome
+    <br/>This plugin provides support such as autocompletion, navigation between spec files, go to declaration and renaming for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
+    <br/>Plugin homepage: <a href="https://github.com/concordion/idea-concordion-support">https://github.com/concordion/idea-concordion-support</a>
+    <br/>Require idea 14.1+ running on jdk 8
 </p>
     ]]></description>
 
   <change-notes><![CDATA[
 <p>
+    Version 0.2<br/>
+    <ul>
+        <li>Autocomplete with spec variables</li>
+    </ul>
     Version 0.1<br/>
     <ul>
         <li>Autocomplete with concordion commands</li>
-        <li>Autocomplete with fields and methods of concordion runner class</li>
+        <li>Autocomplete with members of the fixture</li>
+        <li>Autocomplete chains with members</li>
         <li>Navigation between concordion html spec and test fixture using concordion icon and navigation action (ctrl + shift + s)</li>
         <li>Ctrl+click navigation and usages search for concordion expressions</li>
         <li>Quick fields and methods creation from usages</li>
