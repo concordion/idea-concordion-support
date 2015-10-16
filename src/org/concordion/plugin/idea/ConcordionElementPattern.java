@@ -18,6 +18,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
 
     public static final Key<PsiFile> HTML_SPEC = new Key<>("CONCORDION_HTML_SPEC");
     public static final Key<PsiClass> TEST_FIXTURE = new Key<>("CONCORDION_TEST_FIXTURE");
+    public static final int PARENT_OF_THE_PARENT = 2;
 
     public ConcordionElementPattern(final Class<T> aClass) {
         super(aClass);

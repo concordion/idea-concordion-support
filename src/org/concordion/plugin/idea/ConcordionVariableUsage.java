@@ -14,8 +14,9 @@ import com.intellij.psi.xml.XmlTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
+import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.getTopLevelFile;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
@@ -29,6 +30,33 @@ public class ConcordionVariableUsage {
     @Nullable private XmlAttributeValue attributeValue;
     @Nullable private ConcordionVariable variable;
     @Nullable private PsiElement variableParent;
+
+    @NotNull
+    public static List<ConcordionVariableUsage> findAllDeclarationsFrom(@Nullable PsiFile injection) {
+        if (injection == null) {
+            return emptyList();
+        }
+        PsiFile htmlSpec = getTopLevelFile(injection);
+        if (htmlSpec == null) {
+            return emptyList();
+        }
+
+        List<ConcordionVariableUsage> usages = new ArrayList<>();
+
+        String text = htmlSpec.getText();
+        int endOfScopePosition = findEndOfScopePosition(injection);
+        for (int pos = text.lastIndexOf('#', endOfScopePosition); pos >= 0; pos = text.lastIndexOf('#', pos - 1)) {
+            PsiElement elementAt = htmlSpec.findElementAt(pos);
+            if (elementAt != null) {
+                ConcordionVariableUsage usage = fromTokenAt(elementAt, pos);
+                if (usage.isDeclaration()) {
+                    usages.add(usage);
+                }
+            }
+        }
+
+        return usages;
+    }
 
     @Nullable
     public static ConcordionVariableUsage findDeclaration(@NotNull ConcordionVariableInternal variable) {
@@ -57,9 +85,9 @@ public class ConcordionVariableUsage {
         return null;
     }
 
-    private static int findEndOfScopePosition(@NotNull ConcordionVariableInternal variable) {
+    private static int findEndOfScopePosition(@NotNull PsiElement injection) {
         //xmlAttributeValue -> xmlAttribute -> xmlTag -> closingTag
-        PsiLanguageInjectionHost injectionHost = InjectedLanguageUtil.findInjectionHost(variable);
+        PsiLanguageInjectionHost injectionHost = InjectedLanguageUtil.findInjectionHost(injection);
         if (injectionHost == null) {
             return -1;
         }
@@ -97,7 +125,7 @@ public class ConcordionVariableUsage {
         return usage;
     }
 
-    public boolean isUsageOf(String varName) {
+    public boolean isUsageOf(@NotNull String varName) {
         return variable != null && varName.equals(variable.getName());
     }
 
@@ -158,5 +186,10 @@ public class ConcordionVariableUsage {
     @Nullable
     public PsiElement resolve() {
         return variable;
+    }
+
+    @Nullable
+    public String getName() {
+        return variable != null ? '#' + nullToEmpty(variable.getName()) : null;
     }
 }

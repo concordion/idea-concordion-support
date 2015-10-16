@@ -6,14 +6,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureTestCase {
+public class ConcordionExpressionCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
         return "testData/completion";
     }
 
-    public void testCompleteConcordionExpressionWithRunnerProperties() {
+    public void testCompleteConcordionExpressionWithFixtureProperties() {
 
         copyJavaRunnerToConcordionProject("Fields.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Fields.html");
@@ -27,7 +27,7 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .doesNotContain("staticProperty");
     }
 
-    public void testCompleteConcordionExpressionWithRunnerMethods() {
+    public void testCompleteConcordionExpressionWithFixtureMethods() {
 
         copyJavaRunnerToConcordionProject("Methods.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Methods.html");
@@ -39,6 +39,34 @@ public class CompleteWithRunnerMembersTest extends ConcordionCodeInsightFixtureT
                 .contains("publicMethod")
                 .contains("staticMethod")
                 .doesNotContain("privateMethod");
+    }
+
+    public void testCompleteWithVariablesOfCurrentScope() {
+
+        copyJavaRunnerToConcordionProject("Variables.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Variables.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
+                .contains("#nested")
+                .doesNotContain("#after");
+    }
+
+    public void testDoesNotCompleteChainWithVariables() {
+
+        copyJavaRunnerToConcordionProject("ChainFromVariable.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainFromVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .doesNotContain("#before")
+                .doesNotContain("#nested")
+                .doesNotContain("#after");
     }
 
     public void testCompleteWithNestedMembersOfField() {

@@ -10,14 +10,14 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompleteWithConcordionCommandsTest extends ConcordionCodeInsightFixtureTestCase {
+public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
         return "testData/completion";
     }
 
-    public void testShouldCompleteConcordionCommandsInHtmlTags() {
+    public void testCompleteConcordionCommandsInHtmlTags() {
 
         copyJavaRunnerToConcordionProject("Commands.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Commands.html");

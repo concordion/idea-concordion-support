@@ -173,6 +173,11 @@ public final class ConcordionPsiUtils {
         return null;
     }
 
+    @NotNull
+    public static String nullToEmpty(@Nullable String str) {
+        return str != null ? str : "";
+    }
+
     @Nullable
     public static <T> T firstNotNullIfPresent(@NotNull T... elements) {
         return stream(elements).filter(Objects::nonNull).findFirst().orElse(null);

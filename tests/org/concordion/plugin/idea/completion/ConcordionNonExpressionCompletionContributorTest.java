@@ -7,7 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompleteWithSpecialValuesTest extends ConcordionCodeInsightFixtureTestCase {
+public class ConcordionNonExpressionCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {

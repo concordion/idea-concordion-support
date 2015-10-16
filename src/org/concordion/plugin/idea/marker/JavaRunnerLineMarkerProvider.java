@@ -21,7 +21,10 @@ import static org.concordion.plugin.idea.LineMarker.*;
 public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
 
     private static final ConcordionElementPattern.Capture<PsiIdentifier> CLASS_NAME =
-            concordionElement(PsiIdentifier.class).withParent(PsiClass.class).withSuperParent(2, PsiFile.class).withFoundHtmlSpec();
+            concordionElement(PsiIdentifier.class)
+                    .withParent(PsiClass.class)
+                    .withSuperParent(PARENT_OF_THE_PARENT, PsiFile.class)
+                    .withFoundHtmlSpec();
 
     @Nullable
     @Override
