@@ -1,0 +1,15 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+<span c:set="#dataVar = dataMethod()"></span>
+
+<span c:assertEquals="dataMethod().length">0</span>
+<span c:assertEquals="dataProperty.length">0</span>
+<span c:assertEquals="#dataVar.length">0</span>
+
+
+</body>
+</html>

@@ -12,12 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static com.intellij.psi.PsiModifier.PUBLIC;
-import static com.intellij.psi.PsiModifier.STATIC;
-import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
-import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
-import static java.util.Collections.singleton;
+import static com.intellij.psi.PsiModifier.*;
+import static com.intellij.psi.util.PsiTreeUtil.*;
+import static java.util.Arrays.*;
+import static java.util.Collections.*;
 
 public final class ConcordionPsiUtils {
 
@@ -25,19 +23,6 @@ public final class ConcordionPsiUtils {
     }
 
     public static final PsiType DYNAMIC = new PsiPrimitiveType("?", new PsiAnnotation[0]);
-
-    @Nullable
-    public static ConcordionPsiElement parentConcordionExpressionOf(@NotNull ConcordionPsiElement current) {
-        //Parent may not be present for some malformed chains
-        if (current.getParent() == null || current.getParent().getParent() == null) {
-            return null;
-        }
-        PsiElement parent = current.getParent().getParent().getFirstChild();
-        if (!(parent instanceof ConcordionPsiElement)) {
-            return null;
-        }
-        return (ConcordionPsiElement) parent;
-    }
 
     @Nullable
     public static PsiType typeOfExpression(@NotNull ConcordionOgnlExpressionStart start) {
@@ -68,6 +53,18 @@ public final class ConcordionPsiUtils {
             }
             return null;
         }
+    }
+
+    public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {
+        ConcordionOgnlExpressionNext next = getParentOfType(concordionPsiElement, ConcordionOgnlExpressionNext.class);
+        if (next != null) {
+            return next.getIndexList().size();
+        }
+        ConcordionOgnlExpressionStart start = getParentOfType(concordionPsiElement, ConcordionOgnlExpressionStart.class);
+        if (start != null) {
+            return start.getIndexList().size();
+        }
+        return 0;
     }
 
     private static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();

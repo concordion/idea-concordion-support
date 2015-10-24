@@ -41,16 +41,32 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
         return ReferenceProvidersRegistry.getReferencesFromProviders(this);
     }
 
+    @Nullable
+    public ConcordionPsiElement getConcordionParent() {
+        //Parent may not be present for some malformed chains
+        if (getParent() == null || getParent().getParent() == null) {
+            return null;
+        }
+        PsiElement parent = getParent().getParent().getFirstChild();
+        if (!(parent instanceof ConcordionPsiElement)) {
+            return null;
+        }
+        return (ConcordionPsiElement) parent;
+    }
+
     @Override
     public PsiType getType() {
         return determineType();
     }
 
-    @Nullable
-    protected abstract PsiType determineType();
+    @Override
+    public boolean isArray() {
+        PsiType type = getType();
+        int arrayDimensions = type != null ? type.getArrayDimensions() : 0;
+
+        return arrayDimensions > arrayDimensionsUsed(this);
+    }
 
     @Nullable
-    protected ConcordionPsiElement parentConcordionExpression() {
-        return parentConcordionExpressionOf(this);
-    }
+    protected abstract PsiType determineType();
 }

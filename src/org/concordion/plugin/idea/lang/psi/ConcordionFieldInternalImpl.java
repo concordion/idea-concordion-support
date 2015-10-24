@@ -21,7 +21,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
 
     @Override
     public boolean isResolvable() {
-        return getContainingMember() != null || isKeyInMap();
+        return getContainingMember() != null || isKeyInMap() || isArrayLength();
     }
 
     @Override
@@ -40,6 +40,14 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         PsiType containingType = PsiType.getTypeByName(psiClass.getQualifiedName(), project, resolveScope);
 
         return mapType.isAssignableFrom(containingType);
+    }
+
+    @Override
+    public boolean isArrayLength() {
+        ConcordionPsiElement concordionParent = getConcordionParent();
+        return concordionParent != null
+                && concordionParent.isArray()
+                && "length".equals(getName());
     }
 
     @Nullable

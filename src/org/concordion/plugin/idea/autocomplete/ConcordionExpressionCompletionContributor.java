@@ -1,9 +1,13 @@
 package org.concordion.plugin.idea.autocomplete;
 
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.lang.psi.ConcordionMember;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
+import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.util.ProcessingContext;
@@ -36,10 +40,16 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     private static final class MembersCompletionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            ConcordionMember concordionMember = (ConcordionMember) parameters.getPosition().getParent();
+            ConcordionMember member = (ConcordionMember) parameters.getPosition().getParent();
+            ConcordionPsiElement parent = member.getConcordionParent();
+
+            //TODO extract language level from module/project settings
+            PsiClass owner = (parent != null && parent.isArray())
+                    ? JavaPsiFacade.getElementFactory(member.getProject()).getArrayClass(LanguageLevel.JDK_1_8)
+                    : member.getContainingClass();
 
             result.addAllElements(
-                    fromMembersOf(concordionMember.getContainingClass()).createAutoCompleteInformation()
+                    fromMembersOf(owner).createAutoCompleteInformation()
             );
         }
     }

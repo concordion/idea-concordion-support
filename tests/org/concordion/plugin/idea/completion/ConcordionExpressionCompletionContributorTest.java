@@ -108,6 +108,19 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .contains("method");
     }
 
+    public void testCompleteWithLengthPropertyForArrays() {
+
+        copyJavaRunnerToConcordionProject("LengthOfArray.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("LengthOfArray.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.complete(CompletionType.BASIC, 1);
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("length", "clone")
+                .doesNotContain("field", "method");//this should not complete wih methods of array elements
+    }
+
     /**
      * Does not resolve jdk types and qualified names in tests
      */

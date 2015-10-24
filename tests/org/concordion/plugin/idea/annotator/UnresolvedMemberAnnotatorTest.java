@@ -71,4 +71,15 @@ public class UnresolvedMemberAnnotatorTest extends ConcordionCodeInsightFixtureT
                 .hasNo(prototype.copy().withText("resolvedMethodWithArg(#arg1)"))
                 .hasNo(prototype.copy().withText("resolvedMethodWithArgs(#arg1, #arg2, #arg3)"));
     }
+
+    public void testDoesNotErrorOutArraysLengthProperty() {
+
+        copyJavaRunnerToConcordionProject("LengthOfArray.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("LengthOfArray.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNo(anInfo().withSeverity(ERROR).withDescription("Member not found").withText("length"));
+    }
 }

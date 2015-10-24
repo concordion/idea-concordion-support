@@ -5,7 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ConcordionPsiElement extends PsiNamedElement {
 
-    @Nullable PsiType getType();
+    @Nullable
+    ConcordionPsiElement getConcordionParent();
+
+    @Nullable
+    PsiType getType();
 
     boolean isResolvable();
+
+    boolean isArray();
 }

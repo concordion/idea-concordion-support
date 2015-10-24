@@ -9,7 +9,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.parentConcordionExpressionOf;
 
 public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase {
 
@@ -18,7 +17,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         return "testData/reference";
     }
 
-    public void testShouldResolveFieldReference() {
+    public void testResolveFieldReference() {
 
         copyJavaRunnerToConcordionProject("FieldReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("FieldReference.html");
@@ -32,7 +31,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("propertyToResolve");
     }
 
-    public void testShouldResolveInheritedFieldReference() {
+    public void testResolveInheritedFieldReference() {
 
         copyJavaRunnerToConcordionProject("Parent.java");
         copyJavaRunnerToConcordionProject("InheritedFieldReference.java");
@@ -47,7 +46,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("inheritedField");
     }
 
-    public void testShouldResolveGetterAsAFieldIfPresent() {
+    public void testResolveGetterAsAFieldIfPresent() {
 
         copyJavaRunnerToConcordionProject("GetterAsAField.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("GetterAsAField.html");
@@ -61,7 +60,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaGetter.getName()).isEqualTo("getPropertyToResolve");
     }
 
-    public void testShouldResolveMethodReference() {
+    public void testResolveMethodReference() {
 
         copyJavaRunnerToConcordionProject("MethodReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodReference.html");
@@ -75,7 +74,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(method.getName()).isEqualTo("methodToResolve");
     }
 
-    public void testShouldResolveMethodWithArgumentsReference() {
+    public void testResolveMethodWithArgumentsReference() {
 
         copyJavaRunnerToConcordionProject("MethodWithArgumentsReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithArgumentsReference.html");
@@ -91,7 +90,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(concordionMethod.getParametersCount()).isEqualTo(6);
     }
 
-    public void testShouldResolveOverloadedMethodReference() {
+    public void testResolveOverloadedMethodReference() {
 
         copyJavaRunnerToConcordionProject("OverloadedMethodReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodReference.html");
@@ -114,7 +113,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         }
     }
 
-    public void testShouldResolveInheritedMethodReferences() {
+    public void testResolveInheritedMethodReferences() {
 
         copyJavaRunnerToConcordionProject("Parent.java");
         copyJavaRunnerToConcordionProject("InheritedMethodReference.java");
@@ -129,7 +128,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaMethod.getName()).isEqualTo("inheritedMethod");
     }
 
-    public void testShouldResolveChains() {
+    public void testResolveChains() {
 
         copyJavaRunnerToConcordionProject("ChainReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainReference.html");
@@ -139,7 +138,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         ConcordionMethod chainNext = elementUnderCaret();
         PsiMethod chainNextMethod = resolveReferences(chainNext);
 
-        PsiElement chainStart = parentConcordionExpressionOf(chainNext);
+        PsiElement chainStart = chainNext.getConcordionParent();
         PsiField chainStartField = resolveReferences(chainStart);
 
         assertThat(chainStartField).isNotNull();
@@ -148,7 +147,26 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(chainNextMethod.getName()).isEqualTo("chainNext");
     }
 
-    public void testShouldResolveVariableReference() {
+    public void testResolveChainsWithArrays() {
+
+        copyJavaRunnerToConcordionProject("ChainReferenceWithArray.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainReferenceWithArray.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod chainNext = elementUnderCaret();
+        PsiMethod chainNextMethod = resolveReferences(chainNext);
+
+        PsiElement chainStart = chainNext.getConcordionParent();
+        PsiField chainStartField = resolveReferences(chainStart);
+
+        assertThat(chainStartField).isNotNull();
+        assertThat(chainStartField.getName()).isEqualTo("chainStart");
+        assertThat(chainNextMethod).isNotNull();
+        assertThat(chainNextMethod.getName()).isEqualTo("chainNext");
+    }
+
+    public void testResolveVariableReference() {
 
         copyJavaRunnerToConcordionProject("VariableReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableReference.html");
@@ -163,7 +181,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testShouldResolveVariableReferenceFromNestedScope() {
+    public void testResolveVariableReferenceFromNestedScope() {
 
         copyJavaRunnerToConcordionProject("VariableReferenceFromNestedScope.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableReferenceFromNestedScope.html");
@@ -178,7 +196,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testShouldResolveVariableFromExecuteCommand() {
+    public void testResolveVariableFromExecuteCommand() {
 
         copyJavaRunnerToConcordionProject("VariableDefinedInExecute.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInExecute.html");
@@ -193,7 +211,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testShouldResolveVariableFromVerifyRowsCommand() {
+    public void testResolveVariableFromVerifyRowsCommand() {
 
         copyJavaRunnerToConcordionProject("VariableDefinedInVerifyRows.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInVerifyRows.html");
@@ -208,7 +226,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testShouldResolveReservedVariable() {
+    public void testResolveReservedVariable() {
 
         copyJavaRunnerToConcordionProject("ReservedVariable.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReservedVariable.html");
@@ -223,8 +241,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isEqualTo(variable);
     }
 
-    public void testShouldResolveLastAssignmentInCaseOfVariableReuse() {
-        //Should resolve inner var set as it executed last before method run
+    public void testResolveLastAssignmentInCaseOfVariableReuse() {
+        // resolve inner var set as it executed last before method run
         copyJavaRunnerToConcordionProject("ReuseVariable.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReuseVariable.html");
 

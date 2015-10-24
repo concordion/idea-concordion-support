@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.lang.psi;
 
+import com.intellij.psi.PsiType;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
 import org.concordion.plugin.idea.PsiElementCached;
@@ -11,6 +12,7 @@ import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.psi.search.GlobalSearchScope.allScope;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
@@ -38,11 +40,15 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
             PsiFile htmlRunner = getTopLevelFile(this);
             return ConcordionNavigationService.getInstance(getProject()).correspondingJavaRunner(htmlRunner);
         } else {
-            ConcordionPsiElement parent = parentConcordionExpression();
+            ConcordionPsiElement parent = getConcordionParent();
             if (parent == null) {
                 return null;
             }
-            return PsiUtil.resolveClassInType(parent.getType());
+            return PsiUtil.resolveClassInType(
+                    parent.isArray()
+                            ? PsiType.getJavaLangObject(getManager(), allScope(getProject()))
+                            : parent.getType()
+            );
         }
     }
 
