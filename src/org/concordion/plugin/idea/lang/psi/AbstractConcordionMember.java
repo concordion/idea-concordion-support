@@ -3,6 +3,7 @@ package org.concordion.plugin.idea.lang.psi;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.ConcordionPsiTypeUtils;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
 import org.concordion.plugin.idea.PsiElementCached;
 import com.intellij.lang.ASTNode;
@@ -10,10 +11,13 @@ import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
+    //TODO use PsiCachedValuesFactory?
+    //TODO use PsiClassType not to lose generics
     protected PsiElementCached<PsiClass> containingClass = new PsiElementCached<>(PsiClass::getQualifiedName);
     protected PsiElementCached<PsiMember> containingMember = new PsiElementCached<>(ConcordionPsiUtils::memberIdentity);
 
@@ -51,6 +55,8 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
 
     @Nullable
     private PsiType deriveType(@NotNull ConcordionPsiElement parent, @NotNull PsiType parentType) {
+        //TODO unwrap mixed types: array of list of map (hope nobody uses that)
+
         int arrayDimensions = parentType.getArrayDimensions();
         if (arrayDimensions > 0) {
             int usedBrackets = parent.usedBrackets();
@@ -66,8 +72,13 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
             }
         }
 
-        //TODO list type
-        //TODO map type
+        if (isIterable(parentType, getProject())) {
+            return unwrapType(parentType, parent.usedBrackets(), ConcordionPsiTypeUtils::iterableParameterType);
+        }
+
+        if (isMap(parentType, getProject())) {
+            return unwrapType(parentType, parent.usedBrackets(), ConcordionPsiTypeUtils::mapValueParameterType);
+        }
 
         return parentType;
     }

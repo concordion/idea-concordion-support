@@ -67,38 +67,6 @@ public final class ConcordionPsiUtils {
         return 0;
     }
 
-    private static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
-
-    @Nullable
-    public static PsiType listParameterType(@NotNull PsiType listPsiType) {
-        return hierarchy(listPsiType, new HashSet<>()).stream()
-                .filter(st -> st.getCanonicalText().startsWith(ITERABLE))
-                .map(ConcordionPsiUtils::iterableGeneric)
-                .filter(Objects::nonNull)
-                .findFirst().orElse(null);
-    }
-
-    @NotNull
-    private static Set<PsiType> hierarchy(@NotNull PsiType currentType, @NotNull Set<PsiType> hierarchy) {
-        hierarchy.add(currentType);
-        for (PsiType superType : currentType.getSuperTypes()) {
-            hierarchy(superType, hierarchy);
-        }
-        return hierarchy;
-    }
-
-    @Nullable
-    private static PsiType iterableGeneric(@NotNull PsiType iterable) {
-        if (!(iterable instanceof PsiClassType)) {
-            return null;
-        }
-        PsiType[] parameters = ((PsiClassType) iterable).getParameters();
-        if (parameters.length != 1) {
-            return null;
-        }
-        return parameters[0];
-    }
-
     @Nullable
     public static PsiMethod findMethodInClass(PsiClass containingClass, @Nullable String name, int paramsCount) {
         return stream(containingClass.getAllMethods())

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
-import static com.intellij.psi.search.ProjectScope.getAllScope;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findObject;
 
 public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<ConcordionMethod> {
 
@@ -17,7 +17,7 @@ public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<C
 
     @Override
     protected PsiMember createdMember(Project project, PsiElementFactory factory) {
-        PsiType defaultType = PsiType.getTypeByName("java.lang.Object", project, getAllScope(project));
+        PsiType defaultType = findObject(project);
 
         PsiMethod createdMethod = factory.createMethod(source.getName(), defaultType);
         createdMethod.getModifierList().setModifierProperty(PUBLIC, true);

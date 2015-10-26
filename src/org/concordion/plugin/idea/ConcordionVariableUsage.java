@@ -18,8 +18,9 @@ import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static org.concordion.plugin.idea.ConcordionInjectionUtils.getTopLevelFile;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
+import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 public class ConcordionVariableUsage {
@@ -179,7 +180,7 @@ public class ConcordionVariableUsage {
             if (iterator == null) {
                 return null;
             }
-            return listParameterType(iterator);
+            return iterableParameterType(iterator);
         }
         return null;
     }

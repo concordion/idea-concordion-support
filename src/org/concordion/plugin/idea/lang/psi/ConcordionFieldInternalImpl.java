@@ -1,19 +1,15 @@
 package org.concordion.plugin.idea.lang.psi;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static com.intellij.psi.search.GlobalSearchScope.allScope;
 import static java.lang.Character.toUpperCase;
 
 public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMember implements ConcordionFieldInternal {
-
-    private static final String MAP_TYPE = java.util.Map.class.getName();
 
     public ConcordionFieldInternalImpl(ASTNode node) {
         super(node);
@@ -33,13 +29,10 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         if (psiClass == null) {
             return false;
         }
-        Project project = getProject();
-        GlobalSearchScope resolveScope = allScope(project);
 
-        PsiType mapType = PsiType.getTypeByName(MAP_TYPE, project, resolveScope);
-        PsiType containingType = PsiType.getTypeByName(psiClass.getQualifiedName(), project, resolveScope);
+        PsiType containingType = findType(psiClass.getQualifiedName(), getProject());
 
-        return mapType.isAssignableFrom(containingType);
+        return isMap(containingType, getProject());
     }
 
     @Nullable
@@ -67,8 +60,9 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
             return ((PsiField) containingMember).getType();
         } else if (containingMember instanceof PsiMethod) {
             return ((PsiMethod) containingMember).getReturnType();
+        } else if (isKeyInMap()) {
+            return mapValueParameterType(findType(getContainingClass().getQualifiedName(), getProject()));
         }
-        //TODO return PsiType.NULL if parent is a map
         return null;
     }
 
