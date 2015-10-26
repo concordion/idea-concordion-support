@@ -41,15 +41,15 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
             ConcordionMember member = (ConcordionMember) parameters.getPosition().getParent();
-            ConcordionPsiElement parent = member.getConcordionParent();
+//            ConcordionPsiElement parent = member.getConcordionParent();
 
-            //TODO extract language level from module/project settings
-            PsiClass owner = (parent != null && parent.isArray())
-                    ? JavaPsiFacade.getElementFactory(member.getProject()).getArrayClass(LanguageLevel.JDK_1_8)
-                    : member.getContainingClass();
+//            //TODO extract language level from module/project settings
+//            PsiClass owner = (parent != null && parent.isArray())
+//                    ? JavaPsiFacade.getElementFactory(member.getProject()).getArrayClass(LanguageLevel.JDK_1_8)
+//                    : member.getContainingClass();
 
             result.addAllElements(
-                    fromMembersOf(owner).createAutoCompleteInformation()
+                    fromMembersOf(member.getContainingClass()).createAutoCompleteInformation()
             );
         }
     }

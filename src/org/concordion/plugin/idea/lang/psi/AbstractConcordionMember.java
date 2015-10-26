@@ -1,18 +1,15 @@
 package org.concordion.plugin.idea.lang.psi;
 
-import com.intellij.psi.PsiType;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.*;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
 import org.concordion.plugin.idea.PsiElementCached;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMember;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.psi.search.GlobalSearchScope.allScope;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
@@ -44,12 +41,35 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
             if (parent == null) {
                 return null;
             }
-            return PsiUtil.resolveClassInType(
-                    parent.isArray()
-                            ? PsiType.getJavaLangObject(getManager(), allScope(getProject()))
-                            : parent.getType()
-            );
+            PsiType parentType = parent.getType();
+            if (parentType == null) {
+                return null;
+            }
+            return PsiUtil.resolveClassInType(deriveType(parent, parentType));
         }
+    }
+
+    @Nullable
+    private PsiType deriveType(@NotNull ConcordionPsiElement parent, @NotNull PsiType parentType) {
+        int arrayDimensions = parentType.getArrayDimensions();
+        if (arrayDimensions > 0) {
+            int usedBrackets = parent.usedBrackets();
+
+            if (usedBrackets == arrayDimensions) {
+                return parentType;
+            } else if (usedBrackets < arrayDimensions) {
+                //array type
+                return JavaPsiFacade.getElementFactory(getProject()).getArrayClassType(parentType, LanguageLevel.JDK_1_8);
+            } else {
+                //too much [] used
+                return null;
+            }
+        }
+
+        //TODO list type
+        //TODO map type
+
+        return parentType;
     }
 
     @Nullable

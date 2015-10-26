@@ -11,7 +11,7 @@ public interface ConcordionPsiElement extends PsiNamedElement {
     @Nullable
     PsiType getType();
 
-    boolean isResolvable();
+    int usedBrackets();
 
-    boolean isArray();
+    boolean isResolvable();
 }

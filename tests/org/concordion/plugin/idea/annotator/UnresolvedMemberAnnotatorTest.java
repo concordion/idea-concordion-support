@@ -2,10 +2,7 @@ package org.concordion.plugin.idea.annotator;
 
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import org.concordion.plugin.idea.HighlightingAssert;
-import com.intellij.codeInsight.daemon.GutterMark;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.util.Collection;
 
 import static org.concordion.plugin.idea.HighlightingAssert.*;
 import static com.intellij.lang.annotation.HighlightSeverity.*;
@@ -26,9 +23,6 @@ public class UnresolvedMemberAnnotatorTest extends ConcordionCodeInsightFixtureT
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(ERROR).withText("unresolvedProperty").withDescription("Member not found"));
-
-        Collection<GutterMark> allGutters = myFixture.findAllGutters();
-        System.out.println(allGutters.iterator().next().getTooltipText());
     }
 
     public void testDoesNotErrorOutResolvedFields() {

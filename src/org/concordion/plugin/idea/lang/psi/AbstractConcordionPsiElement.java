@@ -9,7 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.arrayDimensionsUsed;
 
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
@@ -60,11 +60,8 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     }
 
     @Override
-    public boolean isArray() {
-        PsiType type = getType();
-        int arrayDimensions = type != null ? type.getArrayDimensions() : 0;
-
-        return arrayDimensions > arrayDimensionsUsed(this);
+    public int usedBrackets() {
+        return arrayDimensionsUsed(this);
     }
 
     @Nullable

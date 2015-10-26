@@ -16,54 +16,40 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        myFixture.enableInspections(UsingUndeclaredVariable.class);
-    }
 
-    public void testWarnUndeclaredVariableUsage() {
+        myFixture.enableInspections(UsingUndeclaredVariable.class);
+
         copyJavaRunnerToConcordionProject("ResolvingVariables.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
+    }
+
+    public void testWarnUndeclaredVariableUsage() {
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("#undefined").withDescription("Using undeclared variable"));
     }
 
     public void testWarnUsingBeforeDeclaring() {
-        copyJavaRunnerToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
                 .has(anInfo().withSeverity(WARNING).withText("#definedToLate").withDescription("Using undeclared variable"));
     }
 
     public void testDoNotWarnUsageOfDeclaredVariable() {
-        copyJavaRunnerToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#definedBeforehand").withDescription("Using undeclared variable"));
     }
 
     public void testDoNotWarnUsageOfNestedDeclaration() {
-        copyJavaRunnerToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#definedInside").withDescription("Using undeclared variable"));
     }
 
     public void testDoNotWarnUsageOfReservedFariableWithoutDeclaration() {
-        copyJavaRunnerToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(WARNING).withText("#TEXT").withDescription("Using undeclared variable"));
