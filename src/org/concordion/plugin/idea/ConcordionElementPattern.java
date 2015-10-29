@@ -7,8 +7,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
-import org.concordion.api.FullOGNL;
-import org.concordion.integration.junit4.ConcordionRunner;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.RunWith;
 
@@ -81,7 +79,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             }
 
             private boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
-                return ConcordionPsiUtils.findAnnotationInClassHierarchy(runnerClass, FullOGNL.class.getName()) != null;
+                return ConcordionPsiUtils.findAnnotationInClassHierarchy(runnerClass, ConcordionPsiTypeUtils.CONCORDION_FULL_OGNL) != null;
             }
         });
     }
@@ -100,7 +98,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                     return false;
                 }
                 String runnerQualifiedName = ConcordionPsiUtils.runnerQualifiedNameFromRunWithAnnotation(runWithAnnotation);
-                return ConcordionRunner.class.getName().equals(runnerQualifiedName);
+                return ConcordionPsiTypeUtils.CONCORDION_RUNNER.equals(runnerQualifiedName);
             }
         });
     }

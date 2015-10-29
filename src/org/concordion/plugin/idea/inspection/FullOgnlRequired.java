@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import org.concordion.internal.MultiPattern;
 import org.concordion.plugin.idea.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -12,7 +13,6 @@ import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
@@ -40,17 +40,17 @@ public class FullOgnlRequired extends LocalInspectionTool {
                             concordionElement(XmlAttributeValue.class)
                                     .withConcordionCommand(SET_COMMANDS)
                                     .with(new ComplicatedExpression(
-                                            SimpleEvaluator::validateSetVariableExpression
+                                            SimpleEvaluator.SET_VARIABLE_PATTERNS
                                     )),
                             concordionElement(XmlAttributeValue.class)
                                     .withConcordionCommand(EVALUATE_COMMANDS)
                                     .with(new ComplicatedExpression(
-                                            SimpleEvaluator::validateEvaluationExpression
+                                            SimpleEvaluator.EVALUATION_PATTERNS
                                     )),
                             concordionElement(XmlAttributeValue.class)
                                     .withConcordionCommand(VERIFY_ROW_COMMANDS)
                                     .with(new ComplicatedExpression(
-                                            SimpleEvaluator::validateEvaluationExpression,
+                                            SimpleEvaluator.EVALUATION_PATTERNS,
                                             FullOgnlRequired::extractEvaluationExpressionFromVerifyRows
                                     ))
                     );
@@ -77,31 +77,22 @@ public class FullOgnlRequired extends LocalInspectionTool {
 
     public static final class ComplicatedExpression extends PatternCondition<XmlAttributeValue> {
 
-        private final Consumer<String> validator;
+        private final MultiPattern multiPattern;
         private final Function<String, String> transformer;
 
-        public ComplicatedExpression(Consumer<String> validator) {
-            this(validator, null);
+        public ComplicatedExpression(MultiPattern multiPattern) {
+            this(multiPattern, Function.<String>identity());
         }
 
-        public ComplicatedExpression(Consumer<String> validator, Function<String, String> transformer) {
+        public ComplicatedExpression(MultiPattern multiPattern, Function<String, String> transformer) {
             super("ComplicatedExpression");
-            this.validator = validator;
+            this.multiPattern = multiPattern;
             this.transformer = transformer;
         }
 
         @Override
         public boolean accepts(@NotNull XmlAttributeValue attributeValue, ProcessingContext context) {
-            try {
-                String expression = attributeValue.getValue();
-                if (transformer != null) {
-                    expression = transformer.apply(expression);
-                }
-                validator.accept(expression);
-                return false;//simple
-            } catch (RuntimeException e){
-                return true;//complex
-            }
+            return !multiPattern.matches(transformer.apply(attributeValue.getValue()));
         }
     }
 }

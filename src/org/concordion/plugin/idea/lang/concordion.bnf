@@ -43,7 +43,6 @@ method ::= IDENTIFIER '(' arguments ')' {
 field ::= IDENTIFIER {
   implements="org.concordion.plugin.idea.lang.psi.ConcordionFieldInternal"
   extends="org.concordion.plugin.idea.lang.psi.ConcordionFieldInternalImpl"
-
 }
 variable ::= '#' IDENTIFIER {
   implements="org.concordion.plugin.idea.lang.psi.ConcordionVariableInternal"

@@ -55,8 +55,6 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
 
     @Nullable
     private PsiType deriveType(@NotNull ConcordionPsiElement parent, @NotNull PsiType parentType) {
-        //TODO unwrap mixed types: array of list of map (hope nobody uses that)
-
         int arrayDimensions = parentType.getArrayDimensions();
         if (arrayDimensions > 0) {
             int usedBrackets = parent.usedBrackets();
