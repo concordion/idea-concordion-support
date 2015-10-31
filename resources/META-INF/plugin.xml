@@ -4,11 +4,14 @@
   <version>0.2</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
+  <depends>com.intellij.modules.java</depends>
+  <depends>JUnit</depends>
+
   <description><![CDATA[
 <p>
     <br/>This plugin provides support such as autocompletion, navigation between spec files, go to declaration and renaming for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
     <br/>Plugin homepage: <a href="https://github.com/concordion/idea-concordion-support">https://github.com/concordion/idea-concordion-support</a>
-    <br/>Require idea 14.1+ running on jdk 8
+    <br/>Require idea 14.1+ with JUnit plugin running on jdk 8
 </p>
     ]]></description>
 
@@ -17,6 +20,8 @@
     Version 0.2<br/>
     <ul>
         <li>Autocomplete with spec variables</li>
+        <li>Better ognl expression type derivation</li>
+        <li>Run concordion spec from HTML file</li>
     </ul>
     Version 0.1<br/>
     <ul>
@@ -81,6 +86,8 @@
 
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
+
+    <runConfigurationProducer implementation="org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer"/>
   </extensions>
 
   <application-components>
