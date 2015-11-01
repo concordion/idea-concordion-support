@@ -9,9 +9,9 @@
 
   <description><![CDATA[
 <p>
-    <br/>This plugin provides support such as autocompletion, navigation between spec files, go to declaration and renaming for <a href="http://concordion.org/">http://concordion.org/</a> (2.0) testing framework.
+    <br/>This plugin provides support such as autocompletion, navigation between spec files, go to declaration and renaming for <a href="http://concordion.org/">http://concordion.org/</a> testing framework.
     <br/>Plugin homepage: <a href="https://github.com/concordion/idea-concordion-support">https://github.com/concordion/idea-concordion-support</a>
-    <br/>Require idea 14.1+ with JUnit plugin running on jdk 8
+    <br/>Require idea 14.1+ with JUnit plugin running on jdk 8 (project may use any jdk)
 </p>
     ]]></description>
 
