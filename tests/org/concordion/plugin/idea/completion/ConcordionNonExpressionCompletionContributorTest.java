@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.completion;
 
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import static java.util.Arrays.asList;
@@ -20,7 +19,7 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchStrategy.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings()).containsAll(asList("Default", "BestMatch", "KeyMatch"));
     }
@@ -31,7 +30,7 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchingRole.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings()).contains("key");
     }
@@ -41,7 +40,7 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Status.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings()).containsAll(asList("ExpectedToPass", "ExpectedToFail", "Unimplemented"));
     }

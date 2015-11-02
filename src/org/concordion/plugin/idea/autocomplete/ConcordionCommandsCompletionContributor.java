@@ -55,7 +55,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
     private static Iterable<LookupElement> forCommands(String prefix, Collection<String> commands) {
         return commands.stream()
                 .map(c -> prefix + ':' + c)
-                .map(c -> LookupElementBuilder.create(c).withInsertHandler(XmlAttributeInsertHandler.INSTANCE))
+                .map(c -> LookupElementBuilder.create(c).withInsertHandler(ConcordionCommandInsertionHandler.INSTANCE))
                 .collect(toList());
     }
 }

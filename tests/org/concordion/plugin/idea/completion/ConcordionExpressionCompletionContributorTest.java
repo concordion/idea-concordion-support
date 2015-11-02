@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.completion;
 
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +18,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Fields.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicProperty")
@@ -33,7 +32,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Methods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicMethod")
@@ -47,7 +46,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Variables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("#before")
@@ -61,7 +60,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainFromVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .doesNotContain("#before")
@@ -75,7 +74,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("field")
@@ -88,7 +87,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfMethod.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("field")
@@ -101,7 +100,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("field")
@@ -114,7 +113,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("LengthOfArray.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("length", "clone")
@@ -130,7 +129,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings()).
                 contains("method");
@@ -142,7 +141,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoDuplicatedMemebrsInCompletion.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.complete(CompletionType.BASIC, 1);
+        myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings()).
                 containsOnlyOnce("method").
