@@ -26,7 +26,6 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
         extend(
                 CompletionType.BASIC,
                 psiElement(ConcordionTypes.IDENTIFIER)
-                        .withParent(ConcordionMember.class)
                         .withSuperParent(PARENT_OF_THE_PARENT, ConcordionOgnlExpressionStart.class)
                         .withLanguage(ConcordionLanguage.INSTANCE),
                 new VariablesCompletionProvider()

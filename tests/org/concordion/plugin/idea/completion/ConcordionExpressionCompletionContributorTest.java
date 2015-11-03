@@ -54,6 +54,20 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("#after");
     }
 
+    public void testCompleteWithVariablesOfCurrentScopeIfHashCharAlreadyPresent() {
+
+        copyJavaRunnerToConcordionProject("VariablesAfterHashChar.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariablesAfterHashChar.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
+                .contains("#nested")
+                .doesNotContain("#after");
+    }
+
     public void testDoesNotCompleteChainWithVariables() {
 
         copyJavaRunnerToConcordionProject("ChainFromVariable.java");
