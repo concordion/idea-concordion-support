@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 import static java.util.Arrays.stream;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
 public class ConcordionNavigationService {
 
@@ -22,12 +23,17 @@ public class ConcordionNavigationService {
 
     @Nullable
     public  PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
-        return PsiTreeUtil.getChildOfType(correspondingJavaFile(htmlSpec), PsiClass.class);
+        PsiClass testFixture = PsiTreeUtil.getChildOfType(correspondingJavaFile(htmlSpec), PsiClass.class);
+        return isConcordionSpecAndFixture(htmlSpec, testFixture) ? testFixture : null;
     }
 
     @Nullable
-    public  PsiFile correspondingHtmlSpec(@Nullable PsiClass runnerClass) {
-        return runnerClass != null ? correspondingHtmlFile(runnerClass.getContainingFile()) : null;
+    public  PsiFile correspondingHtmlSpec(@Nullable PsiClass testFixture) {
+        if (testFixture == null) {
+            return null;
+        }
+        PsiFile htmlSpec = correspondingHtmlFile(testFixture.getContainingFile());
+        return isConcordionSpecAndFixture(htmlSpec, testFixture) ? htmlSpec : null;
     }
 
     @Nullable
@@ -101,6 +107,11 @@ public class ConcordionNavigationService {
 
     private boolean canBeNavigated(@Nullable PsiFile file) {
         return file != null && file.getContainingDirectory() != null;
+    }
+
+    private boolean isConcordionSpecAndFixture(@Nullable PsiFile spec, @Nullable PsiClass fixture) {
+        return (spec != null && isConcordionHtmlSpec(spec))
+                || (fixture != null && isConcordionFixture(fixture));
     }
 
     @NotNull

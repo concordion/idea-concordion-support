@@ -107,6 +107,20 @@ public final class ConcordionPsiUtils {
         return runner.getQualifiedName();
     }
 
+    public static final String CONCORDION_FULL_OGNL = "org.concordion.api.FullOGNL";
+    public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
+    public static final String CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
+
+
+    public static boolean isConcordionFixture(@NotNull PsiClass psiClass) {
+        PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(psiClass, JUNIT_RUN_WITH_ANNOTATION);
+        if (runWithAnnotation == null) {
+            return false;
+        }
+        String runnerQualifiedName = runnerQualifiedNameFromRunWithAnnotation(runWithAnnotation);
+        return CONCORDION_RUNNER.equals(runnerQualifiedName);
+    }
+
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {
         PsiModifierList modifiers = psiField.getModifierList();
         return modifiers != null

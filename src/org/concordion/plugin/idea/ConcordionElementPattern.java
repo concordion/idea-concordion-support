@@ -8,9 +8,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import org.junit.runner.RunWith;
 
 import java.util.Set;
+
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
 
@@ -26,7 +27,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withConcordionHtmlSpec") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return ConcordionPsiUtils.isConcordionHtmlSpec(element.getContainingFile());
+                return isConcordionHtmlSpec(element.getContainingFile());
             }
         });
     }
@@ -79,7 +80,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             }
 
             private boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
-                return ConcordionPsiUtils.findAnnotationInClassHierarchy(runnerClass, ConcordionPsiTypeUtils.CONCORDION_FULL_OGNL) != null;
+                return findAnnotationInClassHierarchy(runnerClass, CONCORDION_FULL_OGNL) != null;
             }
         });
     }
@@ -89,16 +90,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
                 PsiClass testFixture = context.get(TEST_FIXTURE);
-                return testFixture != null && concordionRunnerConfigured(testFixture) == configured;
-            }
-
-            private boolean concordionRunnerConfigured(@NotNull PsiClass testFixture) {
-                PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, RunWith.class.getName());
-                if (runWithAnnotation == null) {
-                    return false;
-                }
-                String runnerQualifiedName = ConcordionPsiUtils.runnerQualifiedNameFromRunWithAnnotation(runWithAnnotation);
-                return ConcordionPsiTypeUtils.CONCORDION_RUNNER.equals(runnerQualifiedName);
+                return testFixture != null && isConcordionFixture(testFixture) == configured;
             }
         });
     }
@@ -108,7 +100,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T t, ProcessingContext context) {
                 XmlAttribute attribute = PsiTreeUtil.getParentOfType(t, XmlAttribute.class);
-                return attribute != null && ConcordionPsiUtils.isConcordionNamespace(attribute.getNamespace());
+                return attribute != null && isConcordionNamespace(attribute.getNamespace());
             }
         });
     }

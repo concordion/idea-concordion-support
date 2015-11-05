@@ -22,9 +22,6 @@ public final class ConcordionPsiTypeUtils {
     public static final String MAP = java.util.Map.class.getName();
     public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
 
-    public static final String CONCORDION_FULL_OGNL = "org.concordion.api.FullOGNL";
-    public static final String CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
-
     public static PsiType findObject(@NotNull Project project) {
         return findType(OBJECT, project);
     }
