@@ -16,6 +16,7 @@ import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 public final class ConcordionPsiUtils {
 
@@ -23,6 +24,11 @@ public final class ConcordionPsiUtils {
     }
 
     public static final PsiType DYNAMIC = new PsiPrimitiveType("?", new PsiAnnotation[0]);
+
+    @NotNull
+    public static List<PsiType> typeOfExpressions(@NotNull List<ConcordionOgnlExpressionStart> starts) {
+        return starts.stream().map(ConcordionPsiUtils::typeOfExpression).collect(toList());
+    }
 
     @Nullable
     public static PsiType typeOfExpression(@NotNull ConcordionOgnlExpressionStart start) {
@@ -68,11 +74,26 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static PsiMethod findMethodInClass(PsiClass containingClass, @Nullable String name, int paramsCount) {
+    public static PsiMethod findMethodInClass(@NotNull PsiClass containingClass, @Nullable String name, @NotNull List<PsiType> arguments) {
         return stream(containingClass.getAllMethods())
-                .filter(m -> m.getName().equals(name) && m.getParameterList().getParametersCount() == paramsCount)
+                .filter(m -> m.getName().equals(name))
+                .filter(m -> argumentTypesMatchParameterTypes(m.getParameterList().getParameters(), arguments))
                 .filter(ConcordionPsiUtils::concordionVisibleMethod)
                 .findFirst().orElse(null);
+    }
+
+    private static boolean argumentTypesMatchParameterTypes(@NotNull PsiParameter[] parameters, @NotNull List<PsiType> arguments) {
+        if (arguments.size() != parameters.length) {
+            return false;
+        }
+        for (int p = 0; p < parameters.length; p++) {
+            PsiType argument = arguments.get(p);
+            PsiType parameter = parameters[p].getType();
+            if (argument != null && argument != DYNAMIC && !parameter.isAssignableFrom(argument)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Nullable

@@ -17,7 +17,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         return "testData/reference";
     }
 
-    public void testResolveFieldReference() {
+    public void testResolveField() {
 
         copyJavaRunnerToConcordionProject("FieldReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("FieldReference.html");
@@ -31,7 +31,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("propertyToResolve");
     }
 
-    public void testResolveInheritedFieldReference() {
+    public void testResolveInheritedField() {
 
         copyJavaRunnerToConcordionProject("Parent.java");
         copyJavaRunnerToConcordionProject("InheritedFieldReference.java");
@@ -60,7 +60,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaGetter.getName()).isEqualTo("getPropertyToResolve");
     }
 
-    public void testResolveMethodReference() {
+    public void testResolveMethod() {
 
         copyJavaRunnerToConcordionProject("MethodReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodReference.html");
@@ -74,7 +74,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(method.getName()).isEqualTo("methodToResolve");
     }
 
-    public void testResolveMethodWithArgumentsReference() {
+    public void testResolveMethodWithArguments() {
 
         copyJavaRunnerToConcordionProject("MethodWithArgumentsReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithArgumentsReference.html");
@@ -90,27 +90,41 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(concordionMethod.getParametersCount()).isEqualTo(6);
     }
 
-    public void testResolveOverloadedMethodReference() {
+    public void testResolveOverloadedMethodsWithDifferentArgumentsNumber() {
 
-        copyJavaRunnerToConcordionProject("OverloadedMethodReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodReference.html");
+        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsNumber.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsNumber.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         ConcordionMethod concordionMethod = elementUnderCaret();
-        PsiMethod method = resolveReferences(concordionMethod);
+        PsiMethod javaMethod = resolveReferences(concordionMethod);
 
-        assertThat(method).isNotNull();
-        assertThat(method.getName()).isEqualTo("methodToResolve");
-        assertThat(method.getParameterList().getParameters()).hasSize(2);
+        assertThat(javaMethod).isNotNull();
+        assertThat(javaMethod.getName()).isEqualTo("methodToResolve");
+        assertThat(javaMethod.getParameterList().getParameters()).hasSize(2);
         assertThat(concordionMethod.getParametersCount()).isEqualTo(2);
+    }
 
-        PsiClass containingClass = method.getContainingClass();
-        for (PsiMethod psiMethod : containingClass.getMethods()) {
-            if (psiMethod.getParameterList().getParametersCount() != 2) {
-                assertThat(psiMethod.getReferences()).hasSize(0);
-            }
-        }
+    public void testResolveOverloadedMethodsWithDifferentArgumentsType() {
+
+        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsType.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsType.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod javaMethod = resolveReferences(concordionMethod);
+
+        assertThat(javaMethod).isNotNull();
+        assertThat(javaMethod.getName()).isEqualTo("methodToResolve");
+        assertThat(javaMethod.getParameterList().getParameters()).hasSize(3);
+
+        assertThat(methodParameterType(javaMethod, 0)).isEqualTo("reference.OverloadedMethodArgumentsType.B");
+        assertThat(methodParameterType(javaMethod, 1)).isEqualTo("int");
+        assertThat(methodParameterType(javaMethod, 2)).isEqualTo("reference.OverloadedMethodArgumentsType.A");
+
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(3);
     }
 
     public void testResolveInheritedMethodReferences() {
@@ -166,7 +180,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(chainNextMethod.getName()).isEqualTo("chainNext");
     }
 
-    public void testResolveVariableReference() {
+    public void testResolveVariable() {
 
         copyJavaRunnerToConcordionProject("VariableReference.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableReference.html");
@@ -282,4 +296,7 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         return (T) references[0].resolve();
     }
 
+    private String methodParameterType(PsiMethod method, int parameter) {
+        return method.getParameterList().getParameters()[parameter].getType().getCanonicalText();
+    }
 }

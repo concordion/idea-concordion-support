@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import java.lang.Object;
 
 @RunWith(ConcordionRunner.class)
-public class OverloadedMethodReference {
+public class OverloadedMethodArgumentsNumber {
 
     public int methodToResolve() {
         return 42;

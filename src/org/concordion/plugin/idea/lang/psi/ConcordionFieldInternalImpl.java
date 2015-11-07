@@ -5,6 +5,7 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static java.util.Collections.emptyList;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static java.lang.Character.toUpperCase;
@@ -47,7 +48,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
             return null;
         }
         return firstNotNullIfPresent(
-                findMethodInClass(containingClass, correspondingGetterName(name), 0),
+                findMethodInClass(containingClass, correspondingGetterName(name), emptyList()),
                 findFieldInClass(containingClass, name)
         );
     }
