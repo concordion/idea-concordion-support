@@ -8,9 +8,9 @@ import java.lang.Object;
 @RunWith(ConcordionRunner.class)
 public class MethodWithArgumentsReference {
 
-    public String field;
+    public Object field;
 
-    public String method() {
+    public Object method() {
         return null;
     }
 

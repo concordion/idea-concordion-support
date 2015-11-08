@@ -90,6 +90,38 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(concordionMethod.getParametersCount()).isEqualTo(6);
     }
 
+    public void testResolveMethodWithVarArgs() {
+
+        copyJavaRunnerToConcordionProject("MethodWithVarArg.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithVarArg.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
+
+        assertThat(method).isNotNull();
+        assertThat(method.getName()).isEqualTo("sum");
+        assertThat(method.getParameterList().getParameters()).hasSize(1);
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(3);
+    }
+
+    public void testResolveMethodWithVarArgsWithExplicitArray() {
+
+        copyJavaRunnerToConcordionProject("MethodWithVarArgArray.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithVarArgArray.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
+
+        assertThat(method).isNotNull();
+        assertThat(method.getName()).isEqualTo("sum");
+        assertThat(method.getParameterList().getParameters()).hasSize(1);
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(1);
+    }
+
     public void testResolveOverloadedMethodsWithDifferentArgumentsNumber() {
 
         copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsNumber.java");

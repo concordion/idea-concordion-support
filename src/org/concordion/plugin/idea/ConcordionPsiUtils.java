@@ -83,17 +83,38 @@ public final class ConcordionPsiUtils {
     }
 
     private static boolean argumentTypesMatchParameterTypes(@NotNull PsiParameter[] parameters, @NotNull List<PsiType> arguments) {
-        if (arguments.size() != parameters.length) {
-            return false;
+        if (parameters.length == 0) {
+            return arguments.isEmpty();
         }
-        for (int p = 0; p < parameters.length; p++) {
-            PsiType argument = arguments.get(p);
-            PsiType parameter = parameters[p].getType();
-            if (argument != null && argument != DYNAMIC && !parameter.isAssignableFrom(argument)) {
+
+        int lastParameterIndex = parameters.length - 1;
+        for (int p = 0; p < lastParameterIndex; p++) {
+            if (!validArgumentType(arguments.get(p), parameters[p].getType())) {
                 return false;
             }
         }
-        return true;
+        if (!parameters[lastParameterIndex].isVarArgs()) {
+            return parameters.length == arguments.size()
+                    && validArgumentType(arguments.get(lastParameterIndex), parameters[lastParameterIndex].getType());
+        } else {
+            //array is passed into vararg
+            if (parameters.length == arguments.size() && validArgumentType(arguments.get(lastParameterIndex), parameters[lastParameterIndex].getType())) {
+                return true;
+            }
+            PsiType last = parameters[lastParameterIndex].getType().getDeepComponentType();
+            for (int a = lastParameterIndex; a < arguments.size(); a++) {
+                if (!validArgumentType(arguments.get(a), last)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    private static boolean validArgumentType(PsiType argument, PsiType parameter) {
+        return argument == null
+                || argument == DYNAMIC
+                || parameter.isAssignableFrom(argument);
     }
 
     @Nullable
