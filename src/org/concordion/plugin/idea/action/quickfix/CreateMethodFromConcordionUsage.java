@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findObject;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.DYNAMIC;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.typeOfExpressions;
 
 public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<ConcordionMethod> {
 
@@ -22,8 +24,13 @@ public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<C
         PsiMethod createdMethod = factory.createMethod(source.getName(), defaultType);
         createdMethod.getModifierList().setModifierProperty(PUBLIC, true);
 
-        for (int i = 0; i < source.getParametersCount(); i++) {
-            createdMethod.getParameterList().add(factory.createParameter("param" + i, defaultType));
+        int parameterNumber = 0;
+        for (PsiType psiType : typeOfExpressions(source.getArguments().getOgnlExpressionStartList())) {
+            createdMethod.getParameterList().add(factory.createParameter(
+                    "param" + parameterNumber,
+                    psiType == null || psiType == DYNAMIC ? defaultType : psiType
+            ));
+            parameterNumber++;
         }
         createdMethod.getBody().add(factory.createStatementFromText("return null;", null));
 

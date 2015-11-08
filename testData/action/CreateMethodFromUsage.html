@@ -1,0 +1,12 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion">
+<head>
+    <title>Test spec</title>
+</head>
+<body>
+
+<span c:set="#arg">1</span>
+
+<span c:assertEquals="createMe(#arg, field, method(), 0, 0.0, 'a')<caret>">42</span>
+
+</body>
+</html>
