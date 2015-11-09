@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.0.22'
+    id 'org.jetbrains.intellij' version '0.0.27'
 }
 
 apply plugin: 'java'
@@ -21,10 +21,9 @@ repositories {
 }
 
 intellij {
-    version '14.1.4'
-    plugins 'junit'
     pluginName 'IdeaConcordionSupport'
-    sandboxDirectory 'idea-sandbox'
+    plugins 'junit'
+    downloadSources false
 }
 
 dependencies {

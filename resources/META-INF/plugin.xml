@@ -36,7 +36,7 @@
 </p>
     ]]></change-notes>
 
-  <idea-version since-build="133"/>
+  <idea-version since-build="143"/>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
