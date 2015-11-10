@@ -46,7 +46,8 @@
 
     <psi.referenceContributor language="Concordion" implementation="org.concordion.plugin.idea.reference.ConcordionReferenceContributor"/>
 
-    <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedMemberAnnotator"/>
+    <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedFieldAnnotator"/>
+    <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedMethodAnnotator"/>
 
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>

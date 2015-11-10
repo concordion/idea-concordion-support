@@ -1,12 +1,8 @@
 package org.concordion.plugin.idea.annotator;
 
 import org.concordion.plugin.idea.ConcordionExpressionElementPattern;
-import org.concordion.plugin.idea.action.quickfix.CreateFieldFromConcordionUsage;
 import org.concordion.plugin.idea.action.quickfix.CreateFromConcordionUsage;
-import org.concordion.plugin.idea.action.quickfix.CreateMethodFromConcordionUsage;
-import org.concordion.plugin.idea.lang.psi.ConcordionField;
 import org.concordion.plugin.idea.lang.psi.ConcordionMember;
-import org.concordion.plugin.idea.lang.psi.ConcordionMethod;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiClass;
@@ -17,33 +13,30 @@ import org.jetbrains.annotations.NotNull;
 import static org.concordion.plugin.idea.ConcordionElementPattern.TEST_FIXTURE;
 import static org.concordion.plugin.idea.ConcordionExpressionPatterns.concordionExpressionElement;
 
-public class UnresolvedMemberAnnotator implements Annotator {
+public abstract class UnresolvedMemberAnnotator<T extends ConcordionMember> implements Annotator {
 
-    private static final ConcordionExpressionElementPattern.Capture<ConcordionMember> UNRESOLVED_MEMBER =
-            concordionExpressionElement(ConcordionMember.class).withFoundTestFixture().withResolved(false);
+    private final ConcordionExpressionElementPattern.Capture<T> unresolvedMember;
+
+    public UnresolvedMemberAnnotator(Class<T> member) {
+        this.unresolvedMember = concordionExpressionElement(member).withFoundTestFixture().withResolved(false);;
+    }
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
 
         ProcessingContext context = new ProcessingContext();
-        if (UNRESOLVED_MEMBER.accepts(element, context)) {
+        if (unresolvedMember.accepts(element, context)) {
 
             PsiClass testFixture = context.get(TEST_FIXTURE);
 
             holder
-                    .createErrorAnnotation(element, "Member not found")
-                    .registerFix(createFix(testFixture, (ConcordionMember) element));
+                    .createErrorAnnotation(element, createDescription((T) element))
+                    .registerFix(createFix(testFixture, (T) element));
 
         }
     }
 
-    private CreateFromConcordionUsage<? extends ConcordionMember> createFix(PsiClass testFixture, ConcordionMember member) {
-        if (member instanceof ConcordionField) {
-            return new CreateFieldFromConcordionUsage(testFixture, (ConcordionField) member);
-        }
-        if (member instanceof ConcordionMethod) {
-            return new CreateMethodFromConcordionUsage(testFixture, (ConcordionMethod) member);
-        }
-        throw new IllegalArgumentException("Unexpected concordion member");
-    }
+    protected abstract String createDescription(@NotNull T element);
+
+    protected abstract CreateFromConcordionUsage<T> createFix(@NotNull PsiClass testFixture, @NotNull T element);
 }
