@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.2</version>
+  <version>0.3</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -17,6 +17,14 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.3<br/>
+    <ul>
+        <li>Number of issues fixed (detection of concordion spec and fixture #7, extra namespace added #6, caching issue)</li>
+        <li>Better resolving of overloaded methods</li>
+        <li>Better error message for unresolved fields and usages</li>
+        <li>Guess types of arguments while creating method from usage</li>
+        <li>Supported by idea 15</li>
+    </ul>
     Version 0.2<br/>
     <ul>
         <li>Autocomplete with spec variables</li>
@@ -35,8 +43,6 @@
     </ul>
 </p>
     ]]></change-notes>
-
-  <idea-version since-build="143"/>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>

@@ -6,7 +6,7 @@ apply plugin: 'java'
 apply plugin: 'org.jetbrains.intellij'
 
 group 'org.concordion.plugin.idea'
-version '0.2-SNAPSHOT'
+version '0.3'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -24,6 +24,7 @@ intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
     downloadSources false
+    version '15.0'
 }
 
 dependencies {
