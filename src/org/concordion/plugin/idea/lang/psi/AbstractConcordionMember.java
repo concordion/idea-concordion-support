@@ -2,15 +2,13 @@ package org.concordion.plugin.idea.lang.psi;
 
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import org.concordion.plugin.idea.ConcordionNavigationService;
-import org.concordion.plugin.idea.ConcordionPsiTypeUtils;
-import org.concordion.plugin.idea.ConcordionPsiUtils;
-import org.concordion.plugin.idea.PsiElementCached;
+import org.concordion.plugin.idea.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
@@ -18,8 +16,8 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
 
     //TODO use PsiCachedValuesFactory?
     //TODO use PsiClassType not to lose generics
-    protected PsiElementCached<PsiClass> containingClass = new PsiElementCached<>(PsiClass::getQualifiedName);
-    protected PsiElementCached<PsiMember> containingMember = new PsiElementCached<>(ConcordionPsiUtils::memberIdentity);
+    protected PsiElementCache<PsiClass> containingClass = new PsiElementCache<>(PsiClass::getQualifiedName);
+    protected PsiElementCache<PsiMember> containingMember = new PsiElementCache<>(ConcordionPsiUtils::memberIdentity);
 
     public AbstractConcordionMember(@NotNull ASTNode node) {
         super(node);
@@ -27,12 +25,12 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
 
     @Override
     public PsiClass getContainingClass() {
-        return containingClass.getOrCompute(this::determineContainingClass);
+        return containingClass.getOrCompute(nullToEmpty(getName()), this::determineContainingClass);
     }
 
     @Override
     public PsiMember getContainingMember() {
-        return containingMember.getOrCompute(this::determineContainingMember);
+        return containingMember.getOrCompute(nullToEmpty(getName()), this::determineContainingMember);
     }
 
     @Nullable
