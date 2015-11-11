@@ -1,10 +1,12 @@
-# IdeaConcordionSupport
-
-[![Build Status](https://travis-ci.org/concordion/idea-concordion-support.svg)](https://travis-ci.org/concordion/idea-concordion-support)
+# IdeaConcordionSupport [![Build Status](https://travis-ci.org/concordion/idea-concordion-support.svg)](https://travis-ci.org/concordion/idea-concordion-support)
 
 This plugin provides support for [concordion](http://concordion.org/) framework.
 
-It can be installed from Intellij IDEA plugins (search for *Concordion support*) or downloaded [here](https://plugins.jetbrains.com/plugin/7978)
+It can be installed from Intellij IDEA plugins (search for *Concordion support*) or downloaded 
+
+[here](https://plugins.jetbrains.com/plugin/7978)
+
+![demo](http://plugins.jetbrains.com/files/7978/screenshot_15440.png)
 
 It is built by gradle so it does not require to have intellij idea plugin sdk set up to start development.
 
