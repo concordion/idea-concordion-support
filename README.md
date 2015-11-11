@@ -3,7 +3,6 @@
 This plugin provides support for [concordion](http://concordion.org/) framework.
 
 It can be installed from Intellij IDEA plugins (search for *Concordion support*) or downloaded 
-
 [here](https://plugins.jetbrains.com/plugin/7978)
 
 ![demo](http://plugins.jetbrains.com/files/7978/screenshot_15440.png)
