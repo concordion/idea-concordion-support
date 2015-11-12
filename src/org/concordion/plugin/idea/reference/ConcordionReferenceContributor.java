@@ -14,18 +14,12 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
 
         registrar.registerReferenceProvider(
-//                or(psiElement(ConcordionTypes.FIELD), psiElement(ConcordionTypes.METHOD)),
-                psiElement(ConcordionTypes.FIELD).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionMember.class).withLanguage(ConcordionLanguage.INSTANCE),
                 new MemberReferenceProvider()
         );
 
         registrar.registerReferenceProvider(
-                psiElement(ConcordionTypes.METHOD).withLanguage(ConcordionLanguage.INSTANCE),
-                new MemberReferenceProvider()
-        );
-
-        registrar.registerReferenceProvider(
-                psiElement(ConcordionTypes.VARIABLE).withLanguage(ConcordionLanguage.INSTANCE),
+                psiElement(ConcordionVariable.class).withLanguage(ConcordionLanguage.INSTANCE),
                 new VariableReferenceProvider()
         );
     }
@@ -34,9 +28,6 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            if (!(element instanceof ConcordionMember)) {
-                return PsiReference.EMPTY_ARRAY;
-            }
 
             return new PsiReference[] {
                     new ConcordionMemberReference((ConcordionMember) element)
@@ -48,17 +39,9 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            if (!(element instanceof ConcordionVariable)) {
-                return PsiReference.EMPTY_ARRAY;
-            }
-
-            ConcordionVariable concordionVariable = (ConcordionVariable) element;
-            if (concordionVariable.getName() == null) {
-                return PsiReference.EMPTY_ARRAY;
-            }
 
             return new PsiReference[] {
-                    new ConcordionVariableReference(concordionVariable)
+                    new ConcordionVariableReference((ConcordionVariable) element)
             };
         }
     }

@@ -1,12 +1,14 @@
 plugins {
     id 'org.jetbrains.intellij' version '0.0.27'
+    id 'net.saliman.cobertura' version '2.2.8'
 }
 
 apply plugin: 'java'
 apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'net.saliman.cobertura'
 
 group 'org.concordion.plugin.idea'
-version '0.3'
+version '0.4-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
