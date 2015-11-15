@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.autocomplete;
 
+import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -12,13 +13,11 @@ import java.util.List;
 
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
 
-    public static final List<String> ALL_COMMANDS = unmodifiableList(asList(
+    public static final List<String> ALL_COMMANDS = ImmutableList.of(
             "assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
@@ -31,7 +30,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
             "run",
             "example",
             "status"
-    ));
+    );
 
     public ConcordionCommandsCompletionContributor() {
         extend(

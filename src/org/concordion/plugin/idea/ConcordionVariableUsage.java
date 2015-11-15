@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.google.common.collect.ImmutableSet;
 import org.concordion.plugin.idea.lang.ConcordionFile;
 import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.PsiElement;
@@ -25,8 +26,8 @@ import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 public class ConcordionVariableUsage {
 
-    private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = setOf("set", "execute", "verifyRows", "verify-rows");
-    private static final Set<String> RESERVED_VARIABLES = setOf("TEXT", "HREF", "LEVEL");
+    private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = ImmutableSet.of("set", "execute", "verifyRows", "verify-rows");
+    private static final Set<String> RESERVED_VARIABLES = ImmutableSet.of("TEXT", "HREF", "LEVEL");
 
     @Nullable private XmlAttribute attribute;
     @Nullable private XmlAttributeValue attributeValue;

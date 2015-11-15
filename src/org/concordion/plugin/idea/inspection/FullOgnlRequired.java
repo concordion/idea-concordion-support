@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import com.google.common.collect.ImmutableSet;
 import org.concordion.internal.MultiPattern;
 import org.concordion.plugin.idea.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
@@ -16,13 +17,12 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.setOf;
 
 public class FullOgnlRequired extends LocalInspectionTool {
 
-    private static final Set<String> SET_COMMANDS = setOf("set");
-    private static final Set<String> VERIFY_ROW_COMMANDS = setOf("verifyRows", "verify-rows");
-    private static final Set<String> EVALUATE_COMMANDS = setOf("assertEquals", "assert-equals",
+    private static final Set<String> SET_COMMANDS = ImmutableSet.of("set");
+    private static final Set<String> VERIFY_ROW_COMMANDS = ImmutableSet.of("verifyRows", "verify-rows");
+    private static final Set<String> EVALUATE_COMMANDS = ImmutableSet.of("assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
             "echo",

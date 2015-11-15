@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.autocomplete;
 
+import com.google.common.collect.ImmutableSet;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -8,7 +9,6 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.setOf;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -17,17 +17,17 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
     public ConcordionNonExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("matchStrategy", "match-strategy")),
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("matchStrategy", "match-strategy")),
                 new ConcordionMatchStrategyProvider()
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("matchingRole", "matching-Role")),
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("matchingRole", "matching-Role")),
                 new ConcordionMatchingRoleProvider()
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(setOf("status")),
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("status")),
                 new ConcordionStatusProvider()
         );
     }

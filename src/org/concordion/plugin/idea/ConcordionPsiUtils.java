@@ -218,13 +218,4 @@ public final class ConcordionPsiUtils {
     public static <T> T firstNotNullIfPresent(@NotNull T... elements) {
         return stream(elements).filter(Objects::nonNull).findFirst().orElse(null);
     }
-
-    @NotNull
-    public static <T> Set<T> setOf(@NotNull T... elements) {
-        //should I use google guava just for this?
-        if (elements.length == 1) {
-            return singleton(elements[0]);
-        }
-        return new HashSet<>(asList(elements));
-    }
 }
