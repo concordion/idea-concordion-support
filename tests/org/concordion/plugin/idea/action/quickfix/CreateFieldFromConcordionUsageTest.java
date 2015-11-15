@@ -21,8 +21,6 @@ public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFix
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
-        assert myFixture.getAvailableIntentions().size() > 0;
-
         IntentionAction fix = myFixture.findSingleIntention("Create field from usage");
         assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
 

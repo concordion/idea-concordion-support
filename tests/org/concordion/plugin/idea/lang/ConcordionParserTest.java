@@ -30,6 +30,14 @@ public class ConcordionParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testOgnlList() {
+        doTest(true);
+    }
+
+    public void testOgnlMap() {
+        doTest(true);
+    }
+
     public void testOgnlMethod() {
         doTest(true);
     }

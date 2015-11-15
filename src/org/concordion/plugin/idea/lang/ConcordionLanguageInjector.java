@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.lang;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import org.concordion.plugin.idea.ConcordionElementPattern;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;

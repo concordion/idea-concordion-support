@@ -16,87 +16,71 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec1.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec1.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+        assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testFixtureMayHaveOptionalTestSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec2Test.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec2.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+        assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testSpecShouldNotHaveTestSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec3Test.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec3Test.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+        assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testFixtureMayHaveOptionalFixtureSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec4Fixture.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec4.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+        assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testSpecShouldNotHaveFixtureSuffix() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec5Fixture.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec5Fixture.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+        assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testNoMarkerIfNoConcordionPresent() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoConcordion.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoConcordion.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+        assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testNoConcordionRunnerAnnotation() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoRunnerAnnotation.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoRunnerAnnotation.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+        assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testNoConcordionNamespace() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoNamespace.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoNamespace.html");
 
-        myFixture.configureFromExistingVirtualFile(testFixture);
+        assertHasGutters(testFixture, htmlSpec);
+    }
+
+    private void assertHasGutters(VirtualFile fixture, VirtualFile spec) {
+        myFixture.configureFromExistingVirtualFile(fixture);
         assertThat(myFixture.findAllGutters()).hasConcordionGutter();
 
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.configureFromExistingVirtualFile(spec);
         assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+    }
+
+    private void assertHasNoGutters(VirtualFile fixture, VirtualFile spec) {
+        myFixture.configureFromExistingVirtualFile(fixture);
+        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
     }
 }

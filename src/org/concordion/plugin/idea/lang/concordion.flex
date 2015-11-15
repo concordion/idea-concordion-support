@@ -50,6 +50,8 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 ")"  { return ConcordionTypes.RPARENTH; }
 "["  { return ConcordionTypes.LBRACKET; }
 "]"  { return ConcordionTypes.RBRACKET; }
+"{"  { return ConcordionTypes.LBRACE; }
+"}"  { return ConcordionTypes.RBRACE; }
 
 "."  { return ConcordionTypes.DOT; }
 ","  { return ConcordionTypes.COMA; }

@@ -158,7 +158,6 @@ public class ConcordionVariableUsage {
 
     @Nullable
     public PsiType determineType() {
-        //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
         if (variable == null || variableParent == null) {
             return null;
         }

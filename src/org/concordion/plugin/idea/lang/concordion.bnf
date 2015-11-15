@@ -17,6 +17,8 @@
     RPARENTH=")"
     LBRACKET="["
     RBRACKET="]"
+    LBRACE="{"
+    RBRACE="}"
     DOT="."
     COMA=","
     HASH="#"
@@ -31,10 +33,8 @@ file ::= setExpression|iterateExpression|ognlExpressionStart;
 setExpression ::= variable '=' ognlExpressionStart
 iterateExpression ::= variable ':' ognlExpressionStart
 
-ognlExpressionStart ::= (literal|method|field|variable) index* ('.' ognlExpressionNext)?
+ognlExpressionStart ::= (literal|list|map|method|field|variable) index* ('.' ognlExpressionNext)?
 ognlExpressionNext ::= (method|field) index* ('.' ognlExpressionNext)*
-
-literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
 
 method ::= IDENTIFIER '(' arguments ')' {
   implements="org.concordion.plugin.idea.lang.psi.ConcordionMethodInternal"
@@ -48,6 +48,13 @@ variable ::= '#' IDENTIFIER {
   implements="org.concordion.plugin.idea.lang.psi.ConcordionVariableInternal"
   extends="org.concordion.plugin.idea.lang.psi.ConcordionVariableInternalImpl"
 }
+
+literal ::= (STRING_LITERAL|DOUBLE_LITERAL|INTEGER_LITERAL)
+
+list ::= '{' ognlExpressionStart? (',' ognlExpressionStart)* '}'
+
+map ::=  '#' '{' mapEntry? (',' mapEntry)* '}'
+mapEntry ::= ognlExpressionStart ':' ognlExpressionStart
 
 arguments ::= ognlExpressionStart? (',' ognlExpressionStart)*
 index ::= '[' ognlExpressionStart ']'

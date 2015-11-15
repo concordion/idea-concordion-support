@@ -35,8 +35,20 @@ public class ConcordionOgnlExpressionStartImpl extends ASTWrapperPsiElement impl
 
   @Override
   @Nullable
+  public ConcordionList getList() {
+    return findChildByClass(ConcordionList.class);
+  }
+
+  @Override
+  @Nullable
   public ConcordionLiteral getLiteral() {
     return findChildByClass(ConcordionLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public ConcordionMap getMap() {
+    return findChildByClass(ConcordionMap.class);
   }
 
   @Override

@@ -23,7 +23,19 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitList(@NotNull ConcordionList o) {
+    visitPsiElement(o);
+  }
+
   public void visitLiteral(@NotNull ConcordionLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMap(@NotNull ConcordionMap o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMapEntry(@NotNull ConcordionMapEntry o) {
     visitPsiElement(o);
   }
 

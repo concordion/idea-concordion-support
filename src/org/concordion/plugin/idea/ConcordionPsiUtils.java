@@ -15,8 +15,9 @@ import java.util.*;
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findList;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findMap;
 
 public final class ConcordionPsiUtils {
 
@@ -40,8 +41,13 @@ public final class ConcordionPsiUtils {
                 return typedElement.getType();
             }
             if (start.getLiteral() != null) {
-                //PsiType.NULL means resolved, but can be dynamically typed to Integer/Double/String
-                return ConcordionPsiUtils.DYNAMIC;
+                return DYNAMIC;
+            }
+            if (start.getList() != null) {
+                return findList(start.getProject());
+            }
+            if (start.getMap() != null) {
+                return findMap(start.getProject());
             }
             return null;
         }

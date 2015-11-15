@@ -14,7 +14,13 @@ public interface ConcordionOgnlExpressionStart extends PsiElement {
   List<ConcordionIndex> getIndexList();
 
   @Nullable
+  ConcordionList getList();
+
+  @Nullable
   ConcordionLiteral getLiteral();
+
+  @Nullable
+  ConcordionMap getMap();
 
   @Nullable
   ConcordionMethod getMethod();

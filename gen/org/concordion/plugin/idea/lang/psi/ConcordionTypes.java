@@ -13,7 +13,10 @@ public interface ConcordionTypes {
   IElementType FIELD = new ConcordionElementType("FIELD");
   IElementType INDEX = new ConcordionElementType("INDEX");
   IElementType ITERATE_EXPRESSION = new ConcordionElementType("ITERATE_EXPRESSION");
+  IElementType LIST = new ConcordionElementType("LIST");
   IElementType LITERAL = new ConcordionElementType("LITERAL");
+  IElementType MAP = new ConcordionElementType("MAP");
+  IElementType MAP_ENTRY = new ConcordionElementType("MAP_ENTRY");
   IElementType METHOD = new ConcordionElementType("METHOD");
   IElementType OGNL_EXPRESSION_NEXT = new ConcordionElementType("OGNL_EXPRESSION_NEXT");
   IElementType OGNL_EXPRESSION_START = new ConcordionElementType("OGNL_EXPRESSION_START");
@@ -28,8 +31,10 @@ public interface ConcordionTypes {
   IElementType HASH = new ConcordionTokenType("#");
   IElementType IDENTIFIER = new ConcordionTokenType("IDENTIFIER");
   IElementType INTEGER_LITERAL = new ConcordionTokenType("INTEGER_LITERAL");
+  IElementType LBRACE = new ConcordionTokenType("{");
   IElementType LBRACKET = new ConcordionTokenType("[");
   IElementType LPARENTH = new ConcordionTokenType("(");
+  IElementType RBRACE = new ConcordionTokenType("}");
   IElementType RBRACKET = new ConcordionTokenType("]");
   IElementType RPARENTH = new ConcordionTokenType(")");
   IElementType SEMICOLON = new ConcordionTokenType(";");
@@ -50,8 +55,17 @@ public interface ConcordionTypes {
       else if (type == ITERATE_EXPRESSION) {
         return new ConcordionIterateExpressionImpl(node);
       }
+      else if (type == LIST) {
+        return new ConcordionListImpl(node);
+      }
       else if (type == LITERAL) {
         return new ConcordionLiteralImpl(node);
+      }
+      else if (type == MAP) {
+        return new ConcordionMapImpl(node);
+      }
+      else if (type == MAP_ENTRY) {
+        return new ConcordionMapEntryImpl(node);
       }
       else if (type == METHOD) {
         return new ConcordionMethodImpl(node);
