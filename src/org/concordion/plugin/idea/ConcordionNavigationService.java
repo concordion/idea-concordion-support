@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -18,6 +19,11 @@ public class ConcordionNavigationService {
     public static ConcordionNavigationService getInstance(Project project) {
         return ServiceManager.getService(project, ConcordionNavigationService.class);
     }
+
+    private static final String OPTIONAL_TEST_SUFFIX = "Test";
+    private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
+    private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
+    private static final String HTML_EXTENSION = HtmlFileType.DOT_DEFAULT_EXTENSION;
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -47,9 +53,6 @@ public class ConcordionNavigationService {
                 : correspondingJavaFile(file);
     }
 
-    private  final String OPTIONAL_TEST_SUFFIX = "Test";
-    private  final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
-
     @Nullable
     private PsiFile correspondingJavaFile(@Nullable PsiFile htmlFile) {
         if (!canBeNavigated(htmlFile)) {
@@ -64,9 +67,9 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(htmlFile), () -> findCorrespondingSpecFile(
                 htmlFile.getContainingDirectory(),
-                specName + ".java",
-                specName + OPTIONAL_TEST_SUFFIX + ".java",
-                specName + OPTIONAL_FIXTURE_SUFFIX + ".java"
+                specName + JAVA_EXTENSION,
+                specName + OPTIONAL_TEST_SUFFIX + JAVA_EXTENSION,
+                specName + OPTIONAL_FIXTURE_SUFFIX + JAVA_EXTENSION
         ));
     }
 
@@ -80,7 +83,7 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(javaFile), () -> findCorrespondingSpecFile(
                 javaFile.getContainingDirectory(),
-                specName + ".html"
+                specName + HTML_EXTENSION
         ));
     }
 
@@ -106,7 +109,9 @@ public class ConcordionNavigationService {
     }
 
     private boolean canBeNavigated(@Nullable PsiFile file) {
-        return file != null && file.getContainingDirectory() != null;
+        return file != null
+                && file.getContainingDirectory() != null
+                && file.getName().lastIndexOf('.') != -1;
     }
 
     private boolean isConcordionSpecAndFixture(@Nullable PsiFile spec, @Nullable PsiClass fixture) {
@@ -116,7 +121,7 @@ public class ConcordionNavigationService {
 
     @NotNull
     private  String removeExtension(@NotNull String fileName) {
-        return fileName.substring(0, fileName.indexOf('.'));
+        return fileName.substring(0, fileName.lastIndexOf('.'));
     }
 
     @NotNull
