@@ -3,18 +3,17 @@ package org.concordion.plugin.idea;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
-import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.html.HtmlFileImpl;
-import com.intellij.psi.xml.XmlTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findList;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findMap;
@@ -146,27 +145,31 @@ public final class ConcordionPsiUtils {
         return null;
     }
 
-    @Nullable
-    public static String runnerQualifiedNameFromRunWithAnnotation(@NotNull PsiAnnotation runWith) {
-        PsiJavaCodeReferenceElement runner = findChildOfType(runWith.getParameterList(), PsiJavaCodeReferenceElement.class);
-        if (runner == null) {
-            return null;
-        }
-        return runner.getQualifiedName();
-    }
-
     public static final String CONCORDION_FULL_OGNL = "org.concordion.api.FullOGNL";
     public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
     public static final String CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
+    public static final String CONCORDION_EXTENSIONS_ANNOTATION = "org.concordion.api.extension.Extensions";
 
-
-    public static boolean isConcordionFixture(@NotNull PsiClass psiClass) {
-        PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(psiClass, JUNIT_RUN_WITH_ANNOTATION);
+    public static boolean isConcordionFixture(@NotNull PsiClass testFixture) {
+        PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, JUNIT_RUN_WITH_ANNOTATION);
         if (runWithAnnotation == null) {
             return false;
         }
-        String runnerQualifiedName = runnerQualifiedNameFromRunWithAnnotation(runWithAnnotation);
-        return CONCORDION_RUNNER.equals(runnerQualifiedName);
+        PsiJavaCodeReferenceElement runner = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
+        if (runner == null) {
+            return false;
+        }
+        return CONCORDION_RUNNER.equals(runner.getQualifiedName());
+    }
+
+    public static Collection<String> configuredExtensions(@NotNull PsiClass testFixture) {
+        PsiAnnotation extensionsAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
+        if (extensionsAnnotation == null) {
+            return emptyList();
+        }
+        return findChildrenOfType(extensionsAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class).stream()
+                .map(PsiJavaCodeReferenceElement::getQualifiedName)
+                .collect(Collectors.toList());
     }
 
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {
@@ -186,33 +189,6 @@ public final class ConcordionPsiUtils {
         return member.getContainingClass() != null
                 ? member.getContainingClass().getQualifiedName() + ':' + member.getName()
                 : member.getName();
-    }
-
-    private static final String CONCORDION_NAMESPACE = "http://www.concordion.org/2007/concordion";
-
-    public static boolean isConcordionHtmlSpec(@NotNull PsiFile psiFile) {
-        return concordionSchemaPrefixOf(psiFile) != null;
-    }
-
-    public static boolean isConcordionNamespace(@Nullable String namespace) {
-        return CONCORDION_NAMESPACE.equalsIgnoreCase(namespace);
-    }
-
-    @Nullable
-    public static String concordionSchemaPrefixOf(@NotNull PsiFile psiFile) {
-        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
-            return null;
-        }
-        XmlTag rootTag = ((HtmlFileImpl) psiFile).getRootTag();
-        if (rootTag == null) {
-            return null;
-        }
-        for (Map.Entry<String, String> declaration : rootTag.getLocalNamespaceDeclarations().entrySet()) {
-            if (CONCORDION_NAMESPACE.equalsIgnoreCase(declaration.getValue())) {
-                return declaration.getKey();
-            }
-        }
-        return null;
     }
 
     @NotNull

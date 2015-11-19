@@ -1,21 +1,39 @@
 package org.concordion.plugin.idea.completion;
 
+import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
-import org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
+
+    private static final Iterable<String> DEFAULT_COMMANDS_WITH_C_PREFIX = ImmutableList.of(
+            "c:assertEquals", "c:assert-equals",
+            "c:assertTrue", "c:assert-true",
+            "c:assertFalse", "c:assert-false",
+            "c:execute",
+            "c:set",
+            "c:echo",
+            "c:verifyRows", "c:verify-rows",
+            "c:matchStrategy", "c:match-strategy",
+            "c:matchingRole", "c:matching-role",
+            "c:run",
+            "c:example",
+            "c:status"
+    );
+
+    private static final Iterable<String> EXTENSION_COMMANDS_WITH_EXT_PREFIX = ImmutableList.of(
+            "ext:screenshot",
+            "ext:embed",
+            "ext:executeOnlyIf"
+    );
 
     @Override
     protected String getTestDataPath() {
@@ -30,11 +48,26 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(commandsWithSchemaPrefix("c", ConcordionCommandsCompletionContributor.ALL_COMMANDS));
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(DEFAULT_COMMANDS_WITH_C_PREFIX)
+                .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
 
         completeWithExecuteCommand();
 
         myFixture.checkResultByFile("CommandsCompleted.html");
+    }
+
+    public void testCompleteExtensionsCommandsInHtmlTags() {
+
+        copyJavaRunnerToConcordionProject("ExtensionsCommands.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ExtensionsCommands.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(DEFAULT_COMMANDS_WITH_C_PREFIX)
+                .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
 
     public void testDoesNotDuplicateConcordionPrefixForStartedHalfTypedCommand() {
@@ -48,10 +81,6 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
         completeWithExecuteCommand();
 
         myFixture.checkResultByFile("CommandStartedCompleted.html");
-    }
-
-    private List<String> commandsWithSchemaPrefix(String schemaPrefix, List<String> commands) {
-        return commands.stream().map(c -> schemaPrefix + ':' + c).collect(toList());
     }
 
     private void completeWithExecuteCommand() {

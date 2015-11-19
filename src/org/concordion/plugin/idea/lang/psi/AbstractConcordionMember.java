@@ -14,8 +14,6 @@ import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
-    //TODO use PsiCachedValuesFactory?
-    //TODO use PsiClassType not to lose generics
     protected PsiElementCache<PsiClass> containingClass = new PsiElementCache<>(PsiClass::getQualifiedName);
     protected PsiElementCache<PsiMember> containingMember = new PsiElementCache<>(ConcordionPsiUtils::memberIdentity);
 

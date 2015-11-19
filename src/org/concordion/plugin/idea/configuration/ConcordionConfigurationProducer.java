@@ -10,9 +10,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.Namespaces;
 import org.jetbrains.annotations.Nullable;
-
-import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
 public class ConcordionConfigurationProducer extends TestClassConfigurationProducer {
 
@@ -46,7 +45,7 @@ public class ConcordionConfigurationProducer extends TestClassConfigurationProdu
             return null;
         }
         PsiFile file = location.getContainingFile();
-        if (file == null || !isConcordionHtmlSpec(file)) {
+        if (file == null || !Namespaces.CONCORDION.configuredInFile(file)) {
             return null;
         }
         return ConcordionNavigationService.getInstance(context.getProject()).correspondingJavaRunner(file);
