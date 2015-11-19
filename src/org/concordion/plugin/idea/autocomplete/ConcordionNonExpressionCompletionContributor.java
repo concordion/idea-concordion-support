@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.autocomplete;
 
-import com.google.common.collect.ImmutableSet;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -17,44 +16,43 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
     public ConcordionNonExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("matchStrategy", "match-strategy")),
-                new ConcordionMatchStrategyProvider()
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("matchStrategy", "match-strategy"),
+                fixedValues("Default", "BestMatch", "KeyMatch")
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("matchingRole", "matching-Role")),
-                new ConcordionMatchingRoleProvider()
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("matchingRole", "matching-Role"),
+                fixedValues("key")
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand(ImmutableSet.of("status")),
-                new ConcordionStatusProvider()
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("status"),
+                fixedValues("Unimplemented", "ExpectedToFail", "ExpectedToPass")
+        );
+        extend(
+                CompletionType.BASIC,
+                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("screenshot"),
+                fixedValues("linked")
         );
     }
 
-    private static final class ConcordionMatchStrategyProvider extends CompletionProvider<CompletionParameters> {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            result.addAllElements(fromStrings("Default", "BestMatch", "KeyMatch"));
-            //TODO contribute by classes extending RowsMatchStrategy
-        }
+    private static ConcordionFixedAttributeValuesProvider fixedValues(@NotNull String... values) {
+        return new ConcordionFixedAttributeValuesProvider(
+                stream(values).map(LookupElementBuilder::create).collect(toList())
+        );
     }
 
-    private static final class ConcordionMatchingRoleProvider extends CompletionProvider<CompletionParameters> {
+    private static final class ConcordionFixedAttributeValuesProvider extends CompletionProvider<CompletionParameters> {
+
+        private final Iterable<LookupElement> values;
+
+        public ConcordionFixedAttributeValuesProvider(Iterable<LookupElement> values) {
+            this.values = values;
+        }
+
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            result.addAllElements(fromStrings("key"));
+            result.addAllElements(values);
         }
-    }
-
-    private static final class ConcordionStatusProvider extends CompletionProvider<CompletionParameters> {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            result.addAllElements(fromStrings("Unimplemented", "ExpectedToFail", "ExpectedToPass"));
-        }
-    }
-
-    private static Iterable<LookupElement> fromStrings(String... strings) {
-        return stream(strings).map(LookupElementBuilder::create).collect(toList());
     }
 }

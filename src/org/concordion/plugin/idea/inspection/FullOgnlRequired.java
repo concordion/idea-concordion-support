@@ -35,7 +35,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
                     .withConcordionHtmlSpec()
                     .withFoundTestFixture()
                     .withFullOgnl(false)
-                    .withConcordionSchemaAttribute()
+                    .withConcordionAttribute()
                     .andOr(
                             concordionElement(XmlAttributeValue.class)
                                     .withConcordionCommand(SET_COMMANDS)

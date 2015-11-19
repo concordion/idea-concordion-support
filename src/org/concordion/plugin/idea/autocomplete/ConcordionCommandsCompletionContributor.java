@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
@@ -69,7 +70,10 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
 
             result.addAllElements(forCommands(
                     context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS_SCHEMA_PREFIX),
-                    context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS).stream().map(EXTENSION_COMMANDS::get).collect(Collectors.toList())
+                    context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS).stream()
+                            .map(EXTENSION_COMMANDS::get)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList())
             ));
         }
     }

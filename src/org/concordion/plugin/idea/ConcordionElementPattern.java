@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.google.common.collect.ImmutableSet;
 import com.intellij.openapi.util.Key;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
@@ -116,14 +117,18 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withConcordionSchemaAttribute() {
-        return with(new PatternCondition<T>("withConcordionShemaAttribute") {
+    public Self withConcordionAttribute() {
+        return with(new PatternCondition<T>("withConcordionAttribute") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
-                return attribute != null && Namespaces.CONCORDION.sameNamespace(attribute.getNamespace());
+                return attribute != null && Namespaces.knownNamespace(attribute.getNamespace());
             }
         });
+    }
+
+    public Self withConcordionCommand(String... commands) {
+        return withConcordionCommand(ImmutableSet.copyOf(commands));
     }
 
     public Self withConcordionCommand(Set<String> commands) {

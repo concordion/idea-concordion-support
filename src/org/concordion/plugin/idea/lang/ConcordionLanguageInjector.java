@@ -19,18 +19,22 @@ import static java.util.Collections.singletonList;
 public class ConcordionLanguageInjector implements MultiHostInjector {
 
     private static final Set<String> CONCORDION_TAGS_FOR_EXPRESSION_INJECTION = ImmutableSet.of(
+            /* build in */
             "assertEquals", "assert-equals",
             "assertTrue", "assert-true",
             "assertFalse", "assert-false",
             "echo",
             "execute",
             "set",
-            "verifyRows", "verify-rows"
+            "verifyRows", "verify-rows",
+            /* extensions */
+            "embed",
+            "executeOnlyIf"
     );
 
     private static final ConcordionElementPattern.Capture<XmlAttributeValue> TAGS_TO_INJECT = concordionElement(XmlAttributeValue.class)
             .withConcordionHtmlSpec()
-            .withConcordionSchemaAttribute()
+            .withConcordionAttribute()
             .withConcordionCommand(CONCORDION_TAGS_FOR_EXPRESSION_INJECTION)
             .withFoundTestFixture();
 

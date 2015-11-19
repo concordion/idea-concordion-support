@@ -17,9 +17,13 @@ public class Namespaces {
     @NotNull private final String namespace;
     @NotNull private final String defaultPrefix;
 
-    public Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
+    private Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
         this.namespace = namespace;
         this.defaultPrefix = defaultPrefix;
+    }
+
+    public static boolean knownNamespace(@NotNull String namespace) {
+        return CONCORDION.sameNamespace(namespace) || CONCORDION_EXTENSIONS.sameNamespace(namespace);
     }
 
     public String defaultPrefix() {
