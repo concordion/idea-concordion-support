@@ -115,8 +115,9 @@ public class ConcordionNavigationService {
     }
 
     private boolean isConcordionSpecAndFixture(@Nullable PsiFile spec, @Nullable PsiClass fixture) {
-        return (spec != null && Namespaces.CONCORDION.configuredInFile(spec))
-                || (fixture != null && isConcordionFixture(fixture));
+        return spec != null
+                && fixture != null
+                && (Namespaces.CONCORDION.configuredInFile(spec) || isConcordionFixture(fixture));
     }
 
     @NotNull
