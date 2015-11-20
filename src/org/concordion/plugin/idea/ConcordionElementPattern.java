@@ -112,7 +112,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, prefix);
                 context.put(CONCORDION_EXTENSIONS, extensions);
 
-                return prefix != null && !extensions.isEmpty();
+                return !extensions.isEmpty();
             }
         });
     }

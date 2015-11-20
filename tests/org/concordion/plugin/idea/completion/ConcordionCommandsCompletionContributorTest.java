@@ -52,7 +52,7 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
                 .containsAll(DEFAULT_COMMANDS_WITH_C_PREFIX)
                 .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
 
-        completeWithExecuteCommand();
+        completeWithConcordionCommand("c:execute");
 
         myFixture.checkResultByFile("CommandsCompleted.html");
     }
@@ -78,21 +78,47 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        completeWithExecuteCommand();
+        completeWithConcordionCommand("c:execute");
 
         myFixture.checkResultByFile("CommandStartedCompleted.html");
     }
 
-    private void completeWithExecuteCommand() {
+    public void testInsertConcordionSchemaIfAbsentWhileCompletion() {
+
+        copyJavaRunnerToConcordionProject("CommandsNoSchema.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("CommandsNoSchema.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        completeWithConcordionCommand("c:execute");
+
+        myFixture.checkResultByFile("CommandsNoSchemaCompleted.html");
+    }
+
+    public void testInsertConcordionExtensionSchemaIfAbsentWhileCompletion() {
+
+        copyJavaRunnerToConcordionProject("ExtensionsCommandsNoSchema.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ExtensionsCommandsNoSchema.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        completeWithConcordionCommand("ext:executeOnlyIf");
+
+        myFixture.checkResultByFile("ExtensionsCommandsNoSchemaCompleted.html");
+    }
+
+    private void completeWithConcordionCommand(String command) {
         LookupImpl lookup = (LookupImpl) LookupManager.getActiveLookup(myFixture.getEditor());
         for (LookupElement element : lookup.getItems()) {
-            if (element.getLookupString().contains("execute")) {
+            if (element.getLookupString().equals(command)) {
                 lookup.setCurrentItem(element);
                 lookup.finishLookup('\t');
                 return;
             }
         }
-        fail("Expected to exit before with command completion");
+        fail(command + " is not found in completion");
     }
 
     @Override

@@ -14,8 +14,8 @@ public class Namespaces {
     public static final Namespaces CONCORDION = new Namespaces("http://www.concordion.org/2007/concordion", "c");
     public static final Namespaces CONCORDION_EXTENSIONS = new Namespaces("urn:concordion-extensions:2010", "ext");
 
-    @NotNull private final String namespace;
-    @NotNull private final String defaultPrefix;
+    @NotNull public final String namespace;
+    @NotNull public final String defaultPrefix;
 
     private Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
         this.namespace = namespace;
@@ -26,14 +26,11 @@ public class Namespaces {
         return CONCORDION.sameNamespace(namespace) || CONCORDION_EXTENSIONS.sameNamespace(namespace);
     }
 
-    public String defaultPrefix() {
-        return defaultPrefix;
-    }
-
     public boolean sameNamespace(@Nullable String namespace) {
         return this.namespace.equalsIgnoreCase(namespace);
     }
 
+    @Nullable
     public String prefixInFile(@NotNull PsiFile psiFile) {
         if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
             return null;

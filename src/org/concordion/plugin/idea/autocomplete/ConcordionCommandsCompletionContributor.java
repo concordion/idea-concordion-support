@@ -8,6 +8,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.Namespaces;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -43,12 +44,15 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
     public ConcordionCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttribute.class).withConcordionHtmlSpec(),
+                concordionElement().withParent(XmlAttribute.class).andOr(
+                        concordionElement().withConcordionHtmlSpec(),
+                        concordionElement().withFoundTestFixture()
+                ),
                 new ConcordionCommandCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttribute.class).withConcordionHtmlSpec().withFoundTestFixture().withConfiguredExtensions(),
+                concordionElement().withParent(XmlAttribute.class).withFoundTestFixture().withConfiguredExtensions(),
                 new ConcordionExtensionCommandCompletionProvider()
         );
     }
@@ -58,6 +62,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
             result.addAllElements(forCommands(
+                    Namespaces.CONCORDION,
                     context.get(ConcordionElementPattern.CONCORDION_SCHEMA_PREFIX),
                     DEFAULT_COMMANDS
             ));
@@ -69,6 +74,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
             result.addAllElements(forCommands(
+                    Namespaces.CONCORDION_EXTENSIONS,
                     context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS_SCHEMA_PREFIX),
                     context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS).stream()
                             .map(EXTENSION_COMMANDS::get)
@@ -78,10 +84,19 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
         }
     }
 
-    private static Iterable<LookupElement> forCommands(String prefix, Collection<String> commands) {
+    private static Iterable<LookupElement> forCommands(Namespaces namespace, String precomputedPrefix, Collection<String> commands) {
+
+        String prefix = precomputedPrefix != null ?
+                precomputedPrefix :
+                namespace.defaultPrefix;
+
+        ConcordionCommandInsertionHandler handler = precomputedPrefix != null ?
+                ConcordionCommandInsertionHandler.INSTANCE :
+                new ConcordionCommandInsertionHandler(namespace);
+
         return commands.stream()
                 .map(c -> prefix + ':' + c)
-                .map(c -> LookupElementBuilder.create(c).withInsertHandler(ConcordionCommandInsertionHandler.INSTANCE))
+                .map(c -> LookupElementBuilder.create(c).withInsertHandler(handler))
                 .collect(toList());
     }
 }
