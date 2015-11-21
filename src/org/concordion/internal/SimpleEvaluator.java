@@ -1,6 +1,6 @@
 package org.concordion.internal;
 
-//This class is copied from concordion library so that I do not need to make 1mb dependency on it
+//This class is copied from concordion library so that I do not need to make 1mb dependency on concordion for it
 public class SimpleEvaluator {
 
     private static final String METHOD_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";

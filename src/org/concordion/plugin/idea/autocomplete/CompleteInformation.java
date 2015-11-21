@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea;
+package org.concordion.plugin.idea.autocomplete;
 
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
@@ -7,6 +7,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.*;
+import org.concordion.plugin.idea.ConcordionPsiUtils;
+import org.concordion.plugin.idea.ConcordionVariableUsage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

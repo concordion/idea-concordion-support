@@ -9,6 +9,7 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionElementPattern;
 import org.concordion.plugin.idea.Namespaces;
+import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -96,7 +97,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
 
         return commands.stream()
                 .map(c -> prefix + ':' + c)
-                .map(c -> LookupElementBuilder.create(c).withInsertHandler(handler))
+                .map(c -> LookupElementBuilder.create(c).withInsertHandler(handler).withIcon(ConcordionIcons.ICON))
                 .collect(toList());
     }
 }

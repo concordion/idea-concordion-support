@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+//This class is copied from concordion library so that I do not need to make 1mb dependency on concordion for it
 public class MultiPattern {
 
     private final List<Pattern> patterns;

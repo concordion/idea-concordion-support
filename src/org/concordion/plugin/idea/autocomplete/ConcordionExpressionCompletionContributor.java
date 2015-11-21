@@ -10,7 +10,7 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.*;
-import static org.concordion.plugin.idea.CompleteInformation.*;
+import static org.concordion.plugin.idea.autocomplete.CompleteInformation.*;
 import static org.concordion.plugin.idea.ConcordionElementPattern.*;
 
 public class ConcordionExpressionCompletionContributor extends CompletionContributor {
