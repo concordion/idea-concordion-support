@@ -17,6 +17,12 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.4<br/>
+    <ul>
+        <li>Support for extensions (screenshot, executeifonly, embed)</li>
+        <li>OGNL map and list syntax support</li>
+        <li>Minor issues fixed</li>
+    </ul>
     Version 0.3<br/>
     <ul>
         <li>Number of issues fixed (detection of concordion spec and fixture #7, extra namespace added #6, caching issue)</li>
