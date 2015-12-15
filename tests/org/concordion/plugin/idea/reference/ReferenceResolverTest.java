@@ -159,6 +159,21 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(concordionMethod.getParametersCount()).isEqualTo(3);
     }
 
+    public void testResolveOverloadedMethodsWithDifferentArgumentsType2() {
+        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsNumber2.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsNumber2.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod javaMethod = resolveReferences(concordionMethod);
+
+        assertThat(javaMethod).isNotNull();
+        assertThat(javaMethod.getName()).isEqualTo("methodToResolve");
+        assertThat(javaMethod.getParameterList().getParameters()).hasSize(2);
+        assertThat(concordionMethod.getParametersCount()).isEqualTo(2);
+    }
+
     public void testResolveInheritedMethodReferences() {
 
         copyJavaRunnerToConcordionProject("Parent.java");
