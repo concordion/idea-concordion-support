@@ -13,10 +13,8 @@ import com.intellij.psi.TokenType;
 %type IElementType
 %{
   public ConcordionLexer(){
-    this((java.io.Reader)null);
+    this(null);
   }
-
-  int braceCount;
 %}
 
 ALPHA=[:letter:]

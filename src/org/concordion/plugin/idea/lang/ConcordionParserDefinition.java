@@ -15,6 +15,8 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.lang.ConcordionLexerFactory.createConcordionLexer;
+
 public class ConcordionParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(TokenType.DUMMY_HOLDER);
@@ -23,7 +25,7 @@ public class ConcordionParserDefinition implements ParserDefinition {
 
     @NotNull
     public Lexer createLexer(Project project) {
-        return new ConcordionLexerAdapter();
+        return createConcordionLexer();
     }
 
     @NotNull

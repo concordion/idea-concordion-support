@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.formatter;
 
-import org.concordion.plugin.idea.lang.ConcordionLexerAdapter;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -8,6 +7,8 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
+
+import static org.concordion.plugin.idea.lang.ConcordionLexerFactory.createConcordionLexer;
 
 public class ConcordionSyntaxHighlighter extends SyntaxHighlighterBase {
 
@@ -22,7 +23,7 @@ public class ConcordionSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new ConcordionLexerAdapter();
+        return createConcordionLexer();
     }
 
     @NotNull

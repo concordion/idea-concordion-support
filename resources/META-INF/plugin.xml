@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.5</version>
+  <version>0.6-SNAPSHOT</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -55,13 +55,13 @@
 </p>
     ]]></change-notes>
 
-  <idea-version since-build="143.1"/>
+  <idea-version since-build="141.1" until-build="143.9999"/>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="org.concordion.plugin.idea.lang.ConcordionParserDefinition"/>
     <multiHostInjector implementation="org.concordion.plugin.idea.lang.ConcordionLanguageInjector"/>
-    <lang.syntaxHighlighterFactory key="Concordion" implementationClass="org.concordion.plugin.idea.formatter.ConcordionSyntaxHighlighterFactory"/>
+    <lang.syntaxHighlighterFactory language="Concordion" implementationClass="org.concordion.plugin.idea.formatter.ConcordionSyntaxHighlighterFactory"/>
 
     <psi.referenceContributor language="Concordion" implementation="org.concordion.plugin.idea.reference.ConcordionReferenceContributor"/>
 
