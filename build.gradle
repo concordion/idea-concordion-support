@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.0.27'
+    id 'org.jetbrains.intellij' version '0.0.40'
     id 'net.saliman.cobertura' version '2.2.8'
 }
 
@@ -26,7 +26,7 @@ intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
     downloadSources false
-    version '15.0'
+    version '15.0.3'
 }
 
 dependencies {
