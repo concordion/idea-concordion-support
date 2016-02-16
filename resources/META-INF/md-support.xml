@@ -1,6 +1,6 @@
 <idea-plugin url="https://www.jetbrains.com/idea">
   <extensions defaultExtensionNs="com.intellij">
-
+    <multiHostInjector implementation="org.concordion.plugin.idea.injection.ConcordionToMdInjector"/>
     <codeInsight.lineMarkerProvider language="Markdown" implementationClass="org.concordion.plugin.idea.marker.MdSpecLineMarkerProvider"/>
   </extensions>
 </idea-plugin>
