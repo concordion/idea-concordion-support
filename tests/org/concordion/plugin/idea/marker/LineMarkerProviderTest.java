@@ -47,7 +47,7 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
-    public void testNoMarkerIfNoConcordionPresent() {
+    public void testNoMarkerInHtmlIfNoConcordionPresent() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoConcordion.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoConcordion.html");
 

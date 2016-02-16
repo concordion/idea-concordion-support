@@ -24,7 +24,7 @@ public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
             concordionElement(PsiIdentifier.class)
                     .withParent(PsiClass.class)
                     .withSuperParent(PARENT_OF_THE_PARENT, PsiFile.class)
-                    .withFoundHtmlSpec();
+                    .withFoundSpecOfAnyType();
 
     @Nullable
     @Override
@@ -33,7 +33,7 @@ public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
         ProcessingContext context = new ProcessingContext();
         if (CLASS_NAME.accepts(element, context)) {
 
-            PsiFile htmlSpec = context.get(HTML_SPEC);
+            PsiFile htmlSpec = context.get(SPEC);
             PsiClass testFixture = context.get(TEST_FIXTURE);
 
             return infoFor(testFixture, withNavigationTo(htmlSpec));

@@ -48,6 +48,6 @@ public class ConcordionConfigurationProducer extends TestClassConfigurationProdu
         if (file == null || !Namespaces.CONCORDION.configuredInFile(file)) {
             return null;
         }
-        return ConcordionNavigationService.getInstance(context.getProject()).correspondingJavaRunner(file);
+        return ConcordionNavigationService.getInstance(context.getProject()).correspondingTestFixture(file);
     }
 }

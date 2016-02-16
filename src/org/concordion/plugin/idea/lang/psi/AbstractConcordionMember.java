@@ -35,7 +35,7 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     protected PsiClass determineContainingClass() {
         if (getParent() instanceof ConcordionOgnlExpressionStart) {
             PsiFile htmlRunner = getTopLevelFile(this);
-            return ConcordionNavigationService.getInstance(getProject()).correspondingJavaRunner(htmlRunner);
+            return ConcordionNavigationService.getInstance(getProject()).correspondingTestFixture(htmlRunner);
         } else {
             ConcordionPsiElement parent = getConcordionParent();
             if (parent == null) {

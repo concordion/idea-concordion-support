@@ -26,7 +26,7 @@ public class NavigateBetweenConcordionSpecFiles extends EditorAction {
                 return;
             }
             PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(virtualFile);
-            PsiFile correspondingFile = ConcordionNavigationService.getInstance(editor.getProject()).correspondingSpecFile(file);
+            PsiFile correspondingFile = ConcordionNavigationService.getInstance(editor.getProject()).correspondingPairedFile(file);
             if (correspondingFile != null) {
                 correspondingFile.navigate(true);
             }

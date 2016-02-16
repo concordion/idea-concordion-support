@@ -17,15 +17,56 @@ import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
 
-    public static final Key<PsiFile> HTML_SPEC = new Key<>("CONCORDION_HTML_SPEC");
     public static final Key<PsiClass> TEST_FIXTURE = new Key<>("CONCORDION_TEST_FIXTURE");
+    public static final Key<PsiFile> SPEC = new Key<>("CONCORDION_HTML_SPEC");
+
     public static final Key<String> CONCORDION_SCHEMA_PREFIX = new Key<>("CONCORDION_SCHEMA_PREFIX");
     public static final Key<String> CONCORDION_EXTENSIONS_SCHEMA_PREFIX = new Key<>("CONCORDION_EXTENSIONS_SCHEMA_PREFIX");
     public static final Key<Collection<String>> CONCORDION_EXTENSIONS = new Key<>("CONCORDION_EXTENSIONS");
+
     public static final int PARENT_OF_THE_PARENT = 2;
 
     public ConcordionElementPattern(final Class<T> aClass) {
         super(aClass);
+    }
+
+    public Self withFoundTestFixture() {
+        return with(new PatternCondition<T>("withFoundTestFixture") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                PsiFile spec = element.getContainingFile();
+                if (spec == null || spec.getParent() == null) {
+                    spec = ConcordionInjectionUtils.getTopLevelFile(element);
+                }
+                if (spec == null) {
+                    return false;
+                }
+                PsiClass testFixture = ConcordionNavigationService.getInstance(spec.getProject()).correspondingTestFixture(spec);
+
+                context.put(SPEC, spec);
+                context.put(TEST_FIXTURE, testFixture);
+
+                return testFixture != null;
+            }
+        });
+    }
+
+    public Self withFoundSpecOfAnyType() {
+        return with(new PatternCondition<T>("withFoundSpecOfAnyType") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                PsiClass testFixture = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+                if (testFixture == null) {
+                    return false;
+                }
+                PsiFile spec = ConcordionNavigationService.getInstance(testFixture.getProject()).correspondingSpec(testFixture);
+
+                context.put(SPEC, spec);
+                context.put(TEST_FIXTURE, testFixture);
+
+                return spec != null;
+            }
+        });
     }
 
     public Self withConcordionHtmlSpec() {
@@ -39,43 +80,8 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withFoundTestFixture() {
-        return with(new PatternCondition<T>("withFoundTestFixture") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                PsiFile htmlSpec = element.getContainingFile();
-                if (htmlSpec == null || htmlSpec.getParent() == null) {
-                    htmlSpec = ConcordionInjectionUtils.getTopLevelFile(element);
-                }
-                if (htmlSpec == null) {
-                    return false;
-                }
-                PsiClass testFixture = ConcordionNavigationService.getInstance(htmlSpec.getProject()).correspondingJavaRunner(htmlSpec);
-
-                context.put(HTML_SPEC, htmlSpec);
-                context.put(TEST_FIXTURE, testFixture);
-
-                return testFixture != null;
-            }
-        });
-    }
-
-    public Self withFoundHtmlSpec() {
-        return with(new PatternCondition<T>("withFoundHtmlSpec") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                PsiClass testFixture = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-                if (testFixture == null) {
-                    return false;
-                }
-                PsiFile htmlSpec = ConcordionNavigationService.getInstance(testFixture.getProject()).correspondingHtmlSpec(testFixture);
-
-                context.put(HTML_SPEC, htmlSpec);
-                context.put(TEST_FIXTURE, testFixture);
-
-                return htmlSpec != null;
-            }
-        });
+    public Self withConcordionMdSpec() {
+        throw new UnsupportedOperationException("Unimplemented yet");
     }
 
     public Self withFullOgnl(boolean isUsingFullOgnl) {

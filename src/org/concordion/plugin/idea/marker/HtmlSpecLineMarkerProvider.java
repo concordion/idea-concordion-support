@@ -37,7 +37,7 @@ public class HtmlSpecLineMarkerProvider implements LineMarkerProvider {
         ProcessingContext context = new ProcessingContext();
         if (HTML_TAG.accepts(element, context)) {
 
-            PsiFile htmlSpec = context.get(HTML_SPEC);
+            PsiFile htmlSpec = context.get(SPEC);
             PsiClass testFixture = context.get(TEST_FIXTURE);
 
             return infoFor(htmlSpec, withNavigationTo(testFixture));

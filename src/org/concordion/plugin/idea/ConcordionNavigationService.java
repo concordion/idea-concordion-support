@@ -22,51 +22,52 @@ public class ConcordionNavigationService {
 
     private static final String OPTIONAL_TEST_SUFFIX = "Test";
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
+
     private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
     private static final String HTML_EXTENSION = HtmlFileType.DOT_DEFAULT_EXTENSION;
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
     @Nullable
-    public  PsiClass correspondingJavaRunner(@Nullable PsiFile htmlSpec) {
-        PsiClass testFixture = PsiTreeUtil.getChildOfType(correspondingJavaFile(htmlSpec), PsiClass.class);
-        return isConcordionSpecAndFixture(htmlSpec, testFixture) ? testFixture : null;
+    public  PsiClass correspondingTestFixture(@Nullable PsiFile spec) {
+        PsiClass testFixture = PsiTreeUtil.getChildOfType(correspondingJavaFile(spec), PsiClass.class);
+        return isConcordionSpecAndFixture(spec, testFixture) ? testFixture : null;
     }
 
     @Nullable
-    public  PsiFile correspondingHtmlSpec(@Nullable PsiClass testFixture) {
+    public  PsiFile correspondingSpec(@Nullable PsiClass testFixture) {
         if (testFixture == null) {
             return null;
         }
-        PsiFile htmlSpec = correspondingHtmlFile(testFixture.getContainingFile());
-        return isConcordionSpecAndFixture(htmlSpec, testFixture) ? htmlSpec : null;
+        PsiFile spec = correspondingSpecFile(testFixture.getContainingFile());
+        return isConcordionSpecAndFixture(spec, testFixture) ? spec : null;
     }
 
     @Nullable
-    public  PsiFile correspondingSpecFile(@Nullable PsiFile file) {
+    public  PsiFile correspondingPairedFile(@Nullable PsiFile file) {
         if (file == null) {
             return null;
         }
 
         return JavaFileType.INSTANCE.equals(file.getFileType())
-                ? correspondingHtmlFile(file)
+                ? correspondingSpecFile(file)
                 : correspondingJavaFile(file);
     }
 
     @Nullable
-    private PsiFile correspondingJavaFile(@Nullable PsiFile htmlFile) {
-        if (!canBeNavigated(htmlFile)) {
+    private PsiFile correspondingJavaFile(@Nullable PsiFile specFile) {
+        if (!canBeNavigated(specFile)) {
             return null;
         }
 
-        String specName = removeExtension(htmlFile.getName());
+        String specName = removeExtension(specFile.getName());
 
         if (!specName.equals(removeOptionalSuffix(specName))) {
             return null;
         }
 
-        return cache.getOrCompute(getIdentityKey(htmlFile), () -> findCorrespondingSpecFile(
-                htmlFile.getContainingDirectory(),
+        return cache.getOrCompute(getIdentityKey(specFile), () -> findCorrespondingSpecFile(
+                specFile.getContainingDirectory(),
                 specName + JAVA_EXTENSION,
                 specName + OPTIONAL_TEST_SUFFIX + JAVA_EXTENSION,
                 specName + OPTIONAL_FIXTURE_SUFFIX + JAVA_EXTENSION
@@ -74,7 +75,7 @@ public class ConcordionNavigationService {
     }
 
     @Nullable
-    private PsiFile correspondingHtmlFile(@Nullable PsiFile javaFile) {
+    private PsiFile correspondingSpecFile(@Nullable PsiFile javaFile) {
         if (!canBeNavigated(javaFile)) {
             return null;
         }
