@@ -14,8 +14,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteConcordionExpressionWithFixtureProperties() {
 
-        copyJavaRunnerToConcordionProject("Fields.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Fields.html");
+        copyTestFixtureToConcordionProject("Fields.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Fields.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -28,8 +28,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteConcordionExpressionWithFixtureMethods() {
 
-        copyJavaRunnerToConcordionProject("Methods.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Methods.html");
+        copyTestFixtureToConcordionProject("Methods.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -42,8 +42,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithVariablesOfCurrentScope() {
 
-        copyJavaRunnerToConcordionProject("Variables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Variables.html");
+        copyTestFixtureToConcordionProject("Variables.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Variables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -56,8 +56,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithVariablesOfCurrentScopeIfHashCharAlreadyPresent() {
 
-        copyJavaRunnerToConcordionProject("VariablesAfterHashChar.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariablesAfterHashChar.html");
+        copyTestFixtureToConcordionProject("VariablesAfterHashChar.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariablesAfterHashChar.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -70,8 +70,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testDoesNotCompleteChainWithVariables() {
 
-        copyJavaRunnerToConcordionProject("ChainFromVariable.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainFromVariable.html");
+        copyTestFixtureToConcordionProject("ChainFromVariable.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ChainFromVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -84,8 +84,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithNestedMembersOfField() {
 
-        copyJavaRunnerToConcordionProject("NestedMembersOfField.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfField.html");
+        copyTestFixtureToConcordionProject("NestedMembersOfField.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NestedMembersOfField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -97,8 +97,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithNestedMembersOfMethods() {
 
-        copyJavaRunnerToConcordionProject("NestedMembersOfMethod.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfMethod.html");
+        copyTestFixtureToConcordionProject("NestedMembersOfMethod.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NestedMembersOfMethod.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -110,8 +110,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithNestedMembersOfVariables() {
 
-        copyJavaRunnerToConcordionProject("NestedMembersOfVariable.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVariable.html");
+        copyTestFixtureToConcordionProject("NestedMembersOfVariable.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NestedMembersOfVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -123,8 +123,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testCompleteWithLengthPropertyForArrays() {
 
-        copyJavaRunnerToConcordionProject("LengthOfArray.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("LengthOfArray.html");
+        copyTestFixtureToConcordionProject("LengthOfArray.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("LengthOfArray.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -139,8 +139,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
      */
     public void ignoredTestCompleteWithMembersOfVerifyRowsLoopVariable() {
         //type of variable produced by verifyRows command is determined by generic parameter of the iterable
-        copyJavaRunnerToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.html");
+        copyTestFixtureToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -151,8 +151,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
     public void testNoDuplicatedMembersInCompletion() {
         //PsiClass#getFields() and PsiClass#getMethods() return declared field and member in class and each of its parents.
-        copyJavaRunnerToConcordionProject("NoDuplicatedMemebrsInCompletion.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoDuplicatedMemebrsInCompletion.html");
+        copyTestFixtureToConcordionProject("NoDuplicatedMemebrsInCompletion.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoDuplicatedMemebrsInCompletion.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();

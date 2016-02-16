@@ -11,8 +11,8 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testShouldRenamePropertyInRunnerAfterRenamingInSpec() {
-        copyJavaRunnerToConcordionProject("RenamePropertyFromSpec.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("RenamePropertyFromSpec.html");
+        copyTestFixtureToConcordionProject("RenamePropertyFromSpec.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("RenamePropertyFromSpec.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.renameElementAtCaret("afterRename");
@@ -22,8 +22,8 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testShouldRenamePropertyInSpecAfterRenamingInRunner() {
-        VirtualFile javaRunner = copyJavaRunnerToConcordionProject("RenamePropertyFromRunner.java");
-        copyHtmlSpecToConcordionProject("RenamePropertyFromRunner.html");
+        VirtualFile javaRunner = copyTestFixtureToConcordionProject("RenamePropertyFromRunner.java");
+        copySpecToConcordionProject("RenamePropertyFromRunner.html");
 
         myFixture.configureFromExistingVirtualFile(javaRunner);
         myFixture.renameElementAtCaret("afterRename");
@@ -33,8 +33,8 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testShouldRenameMethodInRunnerAfterRenamingInSpec() {
-        copyJavaRunnerToConcordionProject("RenameMethodFromSpec.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("RenameMethodFromSpec.html");
+        copyTestFixtureToConcordionProject("RenameMethodFromSpec.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("RenameMethodFromSpec.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.renameElementAtCaret("afterRename");
@@ -44,8 +44,8 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testShouldRenameMethodInSpecAfterRenamingInRunner() {
-        VirtualFile javaRunner = copyJavaRunnerToConcordionProject("RenameMethodFromRunner.java");
-        copyHtmlSpecToConcordionProject("RenameMethodFromRunner.html");
+        VirtualFile javaRunner = copyTestFixtureToConcordionProject("RenameMethodFromRunner.java");
+        copySpecToConcordionProject("RenameMethodFromRunner.html");
 
         myFixture.configureFromExistingVirtualFile(javaRunner);
         myFixture.renameElementAtCaret("afterRename");

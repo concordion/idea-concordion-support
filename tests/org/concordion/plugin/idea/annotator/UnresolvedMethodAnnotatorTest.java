@@ -15,8 +15,8 @@ public class UnresolvedMethodAnnotatorTest extends ConcordionCodeInsightFixtureT
 
     public void testErrorOutUnresolvedMethods() {
 
-        copyJavaRunnerToConcordionProject("ResolvingMethods.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingMethods.html");
+        copyTestFixtureToConcordionProject("ResolvingMethods.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingMethods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -28,8 +28,8 @@ public class UnresolvedMethodAnnotatorTest extends ConcordionCodeInsightFixtureT
 
     public void testDoesNotErrorOutResolvedMethods() {
 
-        copyJavaRunnerToConcordionProject("ResolvingMethods.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingMethods.html");
+        copyTestFixtureToConcordionProject("ResolvingMethods.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingMethods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

@@ -16,8 +16,8 @@ public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFix
 
     public void testCreateFieldFromUsage() throws InterruptedException {
 
-        copyJavaRunnerToConcordionProject("CreateFieldFromUsage.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("CreateFieldFromUsage.html");
+        copyTestFixtureToConcordionProject("CreateFieldFromUsage.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CreateFieldFromUsage.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

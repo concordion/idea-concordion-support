@@ -15,8 +15,8 @@ public class UnresolvedFieldAnnotatorTest extends ConcordionCodeInsightFixtureTe
 
     public void testErrorOutUnresolvedFields() {
 
-        copyJavaRunnerToConcordionProject("ResolvingFields.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingFields.html");
+        copyTestFixtureToConcordionProject("ResolvingFields.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingFields.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -26,8 +26,8 @@ public class UnresolvedFieldAnnotatorTest extends ConcordionCodeInsightFixtureTe
 
     public void testDoesNotErrorOutResolvedFields() {
 
-        copyJavaRunnerToConcordionProject("ResolvingFields.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingFields.html");
+        copyTestFixtureToConcordionProject("ResolvingFields.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingFields.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -37,8 +37,8 @@ public class UnresolvedFieldAnnotatorTest extends ConcordionCodeInsightFixtureTe
 
     public void testDoesNotErrorOutArraysLengthProperty() {
 
-        copyJavaRunnerToConcordionProject("LengthOfArray.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("LengthOfArray.html");
+        copyTestFixtureToConcordionProject("LengthOfArray.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("LengthOfArray.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

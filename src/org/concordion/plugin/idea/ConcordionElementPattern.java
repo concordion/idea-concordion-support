@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Key;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
@@ -82,6 +83,15 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
 
     public Self withConcordionMdSpec() {
         throw new UnsupportedOperationException("Unimplemented yet");
+    }
+
+    public Self withFileOfType(@NotNull  FileType type) {
+        return with(new PatternCondition<T>("withFileOfType") {
+            @Override
+            public boolean accepts(@NotNull T t, ProcessingContext processingContext) {
+                return type.equals(t.getContainingFile().getFileType());
+            }
+        });
     }
 
     public Self withFullOgnl(boolean isUsingFullOgnl) {

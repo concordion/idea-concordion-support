@@ -17,8 +17,8 @@ public class CreateMethodFromConcordionUsageTest extends ConcordionCodeInsightFi
 
     public void testCreateMethodFromUsage() throws InterruptedException {
 
-        copyJavaRunnerToConcordionProject("CreateMethodFromUsage.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("CreateMethodFromUsage.html");
+        copyTestFixtureToConcordionProject("CreateMethodFromUsage.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CreateMethodFromUsage.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

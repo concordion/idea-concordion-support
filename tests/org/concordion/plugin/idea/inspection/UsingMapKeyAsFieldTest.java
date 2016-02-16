@@ -19,8 +19,8 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
 
         myFixture.enableInspections(UsingMapKeyAsField.class);
 
-        copyJavaRunnerToConcordionProject("UsingMapKeyAsField.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("UsingMapKeyAsField.html");
+        copyTestFixtureToConcordionProject("UsingMapKeyAsField.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("UsingMapKeyAsField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
     }

@@ -19,8 +19,8 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
 
         myFixture.enableInspections(UsingUndeclaredVariable.class);
 
-        copyJavaRunnerToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ResolvingVariables.html");
+        copyTestFixtureToConcordionProject("ResolvingVariables.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingVariables.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
     }

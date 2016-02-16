@@ -20,8 +20,8 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testErrorOutComplexOgnlExpression() {
-        copyJavaRunnerToConcordionProject("SimpleExpressions.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("SimpleExpressions.html");
+        copyTestFixtureToConcordionProject("SimpleExpressions.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("SimpleExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -30,8 +30,8 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testDoesNotErrorOutSimpleOgnlExpression() {
-        copyJavaRunnerToConcordionProject("SimpleExpressions.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("SimpleExpressions.html");
+        copyTestFixtureToConcordionProject("SimpleExpressions.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("SimpleExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -40,8 +40,8 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
     }
 
     public void testDoesNotErrorOutComplexExpressionWithFullOgnlTestFixture() {
-        copyJavaRunnerToConcordionProject("ComplexExpressions.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ComplexExpressions.html");
+        copyTestFixtureToConcordionProject("ComplexExpressions.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ComplexExpressions.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -51,9 +51,9 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
 
     public void testDoesNotErrorOutComplexExpressionWithFullOgnlParentOfTestFixture() {
 
-        copyJavaRunnerToConcordionProject("AnnotatedParent.java");
-        copyJavaRunnerToConcordionProject("InheritedAnnotation.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedAnnotation.html");
+        copyTestFixtureToConcordionProject("AnnotatedParent.java");
+        copyTestFixtureToConcordionProject("InheritedAnnotation.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("InheritedAnnotation.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

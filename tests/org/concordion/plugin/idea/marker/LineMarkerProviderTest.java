@@ -13,71 +13,71 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
     }
 
     public void testSecAndFixtureHaveSameName() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec1.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec1.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec1.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec1.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testFixtureMayHaveOptionalTestSuffix() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec2Test.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec2.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec2Test.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec2.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testSpecShouldNotHaveTestSuffix() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec3Test.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec3Test.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec3Test.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec3Test.html");
 
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testFixtureMayHaveOptionalFixtureSuffix() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec4Fixture.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec4.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec4Fixture.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec4.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testSpecShouldNotHaveFixtureSuffix() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Spec5Fixture.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Spec5Fixture.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec5Fixture.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec5Fixture.html");
 
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testNoMarkerInHtmlIfNoConcordionPresent() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoConcordion.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoConcordion.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("NoConcordion.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoConcordion.html");
 
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testNoMarkerIfNoConcordionPresentForMarkDown() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoConcordion.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoConcordion.md");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("NoConcordion.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoConcordion.md");
 
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
     public void testNoConcordionRunnerAnnotation() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoRunnerAnnotation.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoRunnerAnnotation.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("NoRunnerAnnotation.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoRunnerAnnotation.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }
 
     public void testNoConcordionNamespace() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoNamespace.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoNamespace.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("NoNamespace.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoNamespace.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }
 
     public void ignoredTestCanUseMarkdownSpec() {
-        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Markdown.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Markdown.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Markdown.md");
 
         assertHasGutters(testFixture, htmlSpec);
     }

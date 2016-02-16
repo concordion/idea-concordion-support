@@ -14,8 +14,8 @@ public class LanguageInjectionTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testInjectLangInHtmlSpecWithTestFixture() {
 
-        copyJavaRunnerToConcordionProject("Paired.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Paired.html");
+        copyTestFixtureToConcordionProject("Paired.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Paired.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -26,7 +26,7 @@ public class LanguageInjectionTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testNotInjectLangInHtmlSpecWithoutTestFixture() {
 
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Unpaired.html");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Unpaired.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -36,8 +36,8 @@ public class LanguageInjectionTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testDoesNotInjectLangInNotExpressionTags() {
 
-        copyJavaRunnerToConcordionProject("NoExpressionInjection.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoExpressionInjection.html");
+        copyTestFixtureToConcordionProject("NoExpressionInjection.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("NoExpressionInjection.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

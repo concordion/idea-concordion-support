@@ -15,8 +15,8 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
 
     public void testCompleteMatchStrategyWithPredefinedStrategies() {
 
-        copyJavaRunnerToConcordionProject("MatchStrategy.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchStrategy.html");
+        copyTestFixtureToConcordionProject("MatchStrategy.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MatchStrategy.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -26,8 +26,8 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
 
     public void testCompleteMatchingRoleWithKeyRole() {
 
-        copyJavaRunnerToConcordionProject("MatchingRole.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MatchingRole.html");
+        copyTestFixtureToConcordionProject("MatchingRole.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MatchingRole.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -36,8 +36,8 @@ public class ConcordionNonExpressionCompletionContributorTest extends Concordion
     }
     
     public void testCompleteStatus() {
-        copyJavaRunnerToConcordionProject("Status.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Status.html");
+        copyTestFixtureToConcordionProject("Status.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Status.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();

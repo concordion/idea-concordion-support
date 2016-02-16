@@ -19,8 +19,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveField() {
 
-        copyJavaRunnerToConcordionProject("FieldReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("FieldReference.html");
+        copyTestFixtureToConcordionProject("FieldReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("FieldReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -33,9 +33,9 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveInheritedField() {
 
-        copyJavaRunnerToConcordionProject("Parent.java");
-        copyJavaRunnerToConcordionProject("InheritedFieldReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedFieldReference.html");
+        copyTestFixtureToConcordionProject("Parent.java");
+        copyTestFixtureToConcordionProject("InheritedFieldReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("InheritedFieldReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -48,8 +48,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveGetterAsAFieldIfPresent() {
 
-        copyJavaRunnerToConcordionProject("GetterAsAField.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("GetterAsAField.html");
+        copyTestFixtureToConcordionProject("GetterAsAField.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("GetterAsAField.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -62,8 +62,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveMethod() {
 
-        copyJavaRunnerToConcordionProject("MethodReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodReference.html");
+        copyTestFixtureToConcordionProject("MethodReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MethodReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -76,8 +76,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveMethodWithArguments() {
 
-        copyJavaRunnerToConcordionProject("MethodWithArgumentsReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithArgumentsReference.html");
+        copyTestFixtureToConcordionProject("MethodWithArgumentsReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MethodWithArgumentsReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -92,8 +92,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveMethodWithVarArgs() {
 
-        copyJavaRunnerToConcordionProject("MethodWithVarArg.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithVarArg.html");
+        copyTestFixtureToConcordionProject("MethodWithVarArg.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MethodWithVarArg.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -108,8 +108,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveMethodWithVarArgsWithExplicitArray() {
 
-        copyJavaRunnerToConcordionProject("MethodWithVarArgArray.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("MethodWithVarArgArray.html");
+        copyTestFixtureToConcordionProject("MethodWithVarArgArray.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("MethodWithVarArgArray.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -124,8 +124,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveOverloadedMethodsWithDifferentArgumentsNumber() {
 
-        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsNumber.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsNumber.html");
+        copyTestFixtureToConcordionProject("OverloadedMethodArgumentsNumber.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("OverloadedMethodArgumentsNumber.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -140,8 +140,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveOverloadedMethodsWithDifferentArgumentsType() {
 
-        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsType.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsType.html");
+        copyTestFixtureToConcordionProject("OverloadedMethodArgumentsType.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("OverloadedMethodArgumentsType.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -160,8 +160,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
     }
 
     public void testResolveOverloadedMethodsWithDifferentArgumentsType2() {
-        copyJavaRunnerToConcordionProject("OverloadedMethodArgumentsNumber2.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("OverloadedMethodArgumentsNumber2.html");
+        copyTestFixtureToConcordionProject("OverloadedMethodArgumentsNumber2.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("OverloadedMethodArgumentsNumber2.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -176,9 +176,9 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveInheritedMethodReferences() {
 
-        copyJavaRunnerToConcordionProject("Parent.java");
-        copyJavaRunnerToConcordionProject("InheritedMethodReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("InheritedMethodReference.html");
+        copyTestFixtureToConcordionProject("Parent.java");
+        copyTestFixtureToConcordionProject("InheritedMethodReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("InheritedMethodReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -191,8 +191,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveChains() {
 
-        copyJavaRunnerToConcordionProject("ChainReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainReference.html");
+        copyTestFixtureToConcordionProject("ChainReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ChainReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -210,8 +210,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveChainsWithArrays() {
 
-        copyJavaRunnerToConcordionProject("ChainReferenceWithArray.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ChainReferenceWithArray.html");
+        copyTestFixtureToConcordionProject("ChainReferenceWithArray.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ChainReferenceWithArray.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -229,8 +229,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveVariable() {
 
-        copyJavaRunnerToConcordionProject("VariableReference.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableReference.html");
+        copyTestFixtureToConcordionProject("VariableReference.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariableReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -244,8 +244,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveVariableReferenceFromNestedScope() {
 
-        copyJavaRunnerToConcordionProject("VariableReferenceFromNestedScope.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableReferenceFromNestedScope.html");
+        copyTestFixtureToConcordionProject("VariableReferenceFromNestedScope.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariableReferenceFromNestedScope.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -259,8 +259,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveVariableFromExecuteCommand() {
 
-        copyJavaRunnerToConcordionProject("VariableDefinedInExecute.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInExecute.html");
+        copyTestFixtureToConcordionProject("VariableDefinedInExecute.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariableDefinedInExecute.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -274,8 +274,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveVariableFromVerifyRowsCommand() {
 
-        copyJavaRunnerToConcordionProject("VariableDefinedInVerifyRows.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("VariableDefinedInVerifyRows.html");
+        copyTestFixtureToConcordionProject("VariableDefinedInVerifyRows.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariableDefinedInVerifyRows.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -289,8 +289,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveReservedVariable() {
 
-        copyJavaRunnerToConcordionProject("ReservedVariable.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReservedVariable.html");
+        copyTestFixtureToConcordionProject("ReservedVariable.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ReservedVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -304,8 +304,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testResolveLastAssignmentInCaseOfVariableReuse() {
         // resolve inner var set as it executed last before method run
-        copyJavaRunnerToConcordionProject("ReuseVariable.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ReuseVariable.html");
+        copyTestFixtureToConcordionProject("ReuseVariable.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ReuseVariable.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
@@ -322,8 +322,8 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
 
     public void testVariableDeclarationIsResolvedOnlyByFullNameMatch() {
         //first simple implementation resolved #thevar or #variable as declaration for #var :D
-        copyJavaRunnerToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.html");
+        copyTestFixtureToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("DoNotResolveVariableDeclarationByPartialNameMatch.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 

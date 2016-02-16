@@ -42,8 +42,8 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
 
     public void testCompleteConcordionCommandsInHtmlTags() {
 
-        copyJavaRunnerToConcordionProject("Commands.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Commands.html");
+        copyTestFixtureToConcordionProject("Commands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Commands.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -59,8 +59,8 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
 
     public void testCompleteExtensionsCommandsInHtmlTags() {
 
-        copyJavaRunnerToConcordionProject("ExtensionsCommands.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ExtensionsCommands.html");
+        copyTestFixtureToConcordionProject("ExtensionsCommands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ExtensionsCommands.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -72,8 +72,8 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
 
     public void testDoesNotDuplicateConcordionPrefixForStartedHalfTypedCommand() {
 
-        copyJavaRunnerToConcordionProject("CommandStarted.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("CommandStarted.html");
+        copyTestFixtureToConcordionProject("CommandStarted.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CommandStarted.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -85,8 +85,8 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
 
     public void testInsertConcordionSchemaIfAbsentWhileCompletion() {
 
-        copyJavaRunnerToConcordionProject("CommandsNoSchema.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("CommandsNoSchema.html");
+        copyTestFixtureToConcordionProject("CommandsNoSchema.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CommandsNoSchema.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
@@ -98,8 +98,8 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
 
     public void testInsertConcordionExtensionSchemaIfAbsentWhileCompletion() {
 
-        copyJavaRunnerToConcordionProject("ExtensionsCommandsNoSchema.java");
-        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("ExtensionsCommandsNoSchema.html");
+        copyTestFixtureToConcordionProject("ExtensionsCommandsNoSchema.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ExtensionsCommandsNoSchema.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();

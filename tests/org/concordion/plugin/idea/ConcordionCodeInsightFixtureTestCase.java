@@ -11,11 +11,11 @@ import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
-    protected VirtualFile copyJavaRunnerToConcordionProject(String javaRunner) {
+    protected VirtualFile copyTestFixtureToConcordionProject(String javaRunner) {
         return  myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner);
     }
 
-    protected VirtualFile copyHtmlSpecToConcordionProject(String htmlSpec) {
+    protected VirtualFile copySpecToConcordionProject(String htmlSpec) {
         return  myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
     }
 
