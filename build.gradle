@@ -38,7 +38,7 @@ intellij {
 }
 
 dependencies {
-    provided fileTree(dir: 'libs', include: '*.jar')
+    provided files('libs/markdown.jar')
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
 }

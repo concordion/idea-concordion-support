@@ -54,6 +54,13 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertHasNoGutters(testFixture, htmlSpec);
     }
 
+    public void testNoMarkerIfNoConcordionPresentForMarkDown() {
+        VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoConcordion.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoConcordion.md");
+
+        assertHasNoGutters(testFixture, htmlSpec);
+    }
+
     public void testNoConcordionRunnerAnnotation() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoRunnerAnnotation.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoRunnerAnnotation.html");
@@ -64,6 +71,13 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
     public void testNoConcordionNamespace() {
         VirtualFile testFixture = copyJavaRunnerToConcordionProject("NoNamespace.java");
         VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("NoNamespace.html");
+
+        assertHasGutters(testFixture, htmlSpec);
+    }
+
+    public void ignoredTestCanUseMarkdownSpec() {
+        VirtualFile testFixture = copyJavaRunnerToConcordionProject("Markdown.java");
+        VirtualFile htmlSpec = copyHtmlSpecToConcordionProject("Markdown.html");
 
         assertHasGutters(testFixture, htmlSpec);
     }

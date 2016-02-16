@@ -25,6 +25,7 @@ public class ConcordionNavigationService {
 
     private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
     private static final String HTML_EXTENSION = HtmlFileType.DOT_DEFAULT_EXTENSION;
+    private static final String MD_EXTENSION = ".md";
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -84,7 +85,8 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(javaFile), () -> findCorrespondingSpecFile(
                 javaFile.getContainingDirectory(),
-                specName + HTML_EXTENSION
+                specName + HTML_EXTENSION,
+                specName + MD_EXTENSION
         ));
     }
 
