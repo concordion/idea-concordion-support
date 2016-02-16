@@ -82,14 +82,19 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
     }
 
     public Self withConcordionMdSpec() {
-        throw new UnsupportedOperationException("Unimplemented yet");
+        return with(new PatternCondition<T>("withConcordionMdSpec") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext processingContext) {
+                return element.getContainingFile().getFileType().getDefaultExtension().equals("md");
+            }
+        });
     }
 
-    public Self withFileOfType(@NotNull  FileType type) {
+    public Self withFileOfType(@NotNull FileType type) {
         return with(new PatternCondition<T>("withFileOfType") {
             @Override
-            public boolean accepts(@NotNull T t, ProcessingContext processingContext) {
-                return type.equals(t.getContainingFile().getFileType());
+            public boolean accepts(@NotNull T element, ProcessingContext processingContext) {
+                return type.equals(element.getContainingFile().getFileType());
             }
         });
     }

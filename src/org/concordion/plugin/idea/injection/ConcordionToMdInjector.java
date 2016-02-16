@@ -1,13 +1,11 @@
 package org.concordion.plugin.idea.injection;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
+import org.concordion.plugin.idea.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.intellij.plugins.markdown.lang.MarkdownElementTypes;
 import org.jetbrains.annotations.NotNull;
@@ -15,20 +13,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
+import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+
 public class ConcordionToMdInjector implements MultiHostInjector {
 
-    private static final Set<IElementType> MD_INJECTION_PLACES = ImmutableSet.of(
-            MarkdownElementTypes.LINK_DESTINATION,
-            MarkdownElementTypes.LINK_DEFINITION,
-            MarkdownElementTypes.LINK_TITLE
-    );
+    private static final ConcordionElementPattern.Capture<PsiElement> LINKS_TITLES_TO_INJECT = concordionElement(PsiElement.class)
+            .withConcordionMdSpec()
+            .withElementType(MarkdownElementTypes.LINK_TITLE)
+            .withFoundTestFixture();
 
     @Override
-    public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
-        ASTWrapperPsiElement host = (ASTWrapperPsiElement) context;
-        IElementType hostType = host.getNode().getElementType();
+    public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement host) {
 
-        if (!MD_INJECTION_PLACES.contains(hostType)) {
+        if (!LINKS_TITLES_TO_INJECT.accepts(host)) {
             return;
         }
 
@@ -44,7 +41,7 @@ public class ConcordionToMdInjector implements MultiHostInjector {
                 .doneInjecting();
     }
 
-    private TextRange rangeInHost(ASTWrapperPsiElement host) {
+    private TextRange rangeInHost(PsiElement host) {
         String text = host.getText();
 
         int eq = text.indexOf('=');
@@ -63,6 +60,6 @@ public class ConcordionToMdInjector implements MultiHostInjector {
     @NotNull
     @Override
     public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
-        return ImmutableList.of(ASTWrapperPsiElement.class);
+        return ImmutableList.of(PsiElement.class);
     }
 }
