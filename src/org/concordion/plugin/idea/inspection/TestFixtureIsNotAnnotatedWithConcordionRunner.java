@@ -15,7 +15,8 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunner extends LocalInspecti
             concordionElement(PsiIdentifier.class)
                     .withParent(PsiClass.class)
                     .withSuperParent(PARENT_OF_THE_PARENT, PsiFile.class)
-                    .withFoundSpecOfAnyType().withTestFixtureConfigured(false);
+                    .withFoundSpecOfAnyType()
+                    .withTestFixtureConfigured(false);
 
     @NotNull
     @Override

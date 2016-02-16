@@ -45,9 +45,23 @@ public class ConcordionConfigurationProducer extends TestClassConfigurationProdu
             return null;
         }
         PsiFile file = location.getContainingFile();
-        if (file == null || !Namespaces.CONCORDION.configuredInFile(file)) {
+        if (!fileCanBeUsedWithConcordion(file)) {
             return null;
         }
         return ConcordionNavigationService.getInstance(context.getProject()).correspondingTestFixture(file);
+    }
+
+    private boolean fileCanBeUsedWithConcordion(@Nullable PsiFile file) {
+        if (file == null) {
+            return false;
+        }
+        switch (file.getFileType().getDefaultExtension()) {
+            case "html":
+                return Namespaces.CONCORDION.configuredInFile(file);
+            case "md":
+                return true;
+            default:
+                return false;
+        }
     }
 }
