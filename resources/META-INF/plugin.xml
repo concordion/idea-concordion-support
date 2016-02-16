@@ -6,6 +6,7 @@
 
   <depends>com.intellij.modules.java</depends>
   <depends>JUnit</depends>
+  <depends optional="true" config-file="md-support.xml">org.intellij.plugins.markdown</depends>
 
   <description><![CDATA[
 <p>
