@@ -75,7 +75,7 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertHasGutters(testFixture, htmlSpec);
     }
 
-    public void ignoredTestCanUseMarkdownSpec() {
+    public void testCanUseMarkdownSpec() {
         VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("Markdown.md");
 

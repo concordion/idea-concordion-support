@@ -13,15 +13,8 @@ version '0.6-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-configurations {
-    provided
-}
-sourceSets {
-    main { compileClasspath += configurations.provided }
-}
-
 wrapper {
-    gradleVersion = '2.7'
+    gradleVersion = '2.10'
 }
 
 repositories {
@@ -33,12 +26,27 @@ intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
     version '15.0.3'
-    downloadSources false
+    sandboxDirectory "$projectDir/idea-sandbox"
+    downloadSources true
     updateSinceUntilBuild false
 }
 
+configurations {
+    provided
+}
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
 dependencies {
-    provided files('libs/markdown.jar')
+    provided files(
+            "${projectDir}/markdown/lib/markdown.jar",
+            "${projectDir}/markdown/lib/markdown-javafx-preview.jar",
+            "${projectDir}/markdown/lib/intellij-markdown.jar",
+            "${projectDir}/markdown/lib/Loboevolution.jar"
+    )
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
 }
@@ -58,4 +66,3 @@ sourceSets {
         }
     }
 }
-
