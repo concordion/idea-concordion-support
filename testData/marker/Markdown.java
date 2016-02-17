@@ -1,4 +1,4 @@
-package marker;
+package com.test;
 
 import org.junit.runner.RunWith;
 

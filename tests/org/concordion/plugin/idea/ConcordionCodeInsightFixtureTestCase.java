@@ -9,14 +9,29 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
     protected VirtualFile copyTestFixtureToConcordionProject(String javaRunner) {
-        return  myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner);
+        return assertInTestPackage(myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner));
     }
 
     protected VirtualFile copySpecToConcordionProject(String htmlSpec) {
         return  myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
+    }
+
+    private VirtualFile assertInTestPackage(VirtualFile javaFile) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(javaFile.getInputStream()))) {
+            assertThat(reader.readLine()).isEqualTo("package com.test;");
+            return javaFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

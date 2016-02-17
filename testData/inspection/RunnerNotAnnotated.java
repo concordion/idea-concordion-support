@@ -1,4 +1,4 @@
-package inspection;
+package com.test;
 
 public class RunnerNotAnnotated {
 

@@ -1,4 +1,4 @@
-package action;
+package com.test;
 
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ public class CreateMethodFromUsage {
         return null;
     }
 
-    public java.lang.Object createMe(java.lang.Object param0, action.CreateMethodFromUsage.A param1, action.CreateMethodFromUsage.A param2, java.lang.Object param3, java.lang.Object param4, java.lang.Object param5) {
+    public java.lang.Object createMe(java.lang.Object param0, A param1, A param2, java.lang.Object param3, java.lang.Object param4, java.lang.Object param5) {
         return null;
     }
 

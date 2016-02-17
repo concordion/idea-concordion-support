@@ -152,9 +152,9 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaMethod.getName()).isEqualTo("methodToResolve");
         assertThat(javaMethod.getParameterList().getParameters()).hasSize(3);
 
-        assertThat(methodParameterType(javaMethod, 0)).isEqualTo("reference.OverloadedMethodArgumentsType.B");
+        assertThat(methodParameterType(javaMethod, 0)).isEqualTo("com.test.OverloadedMethodArgumentsType.B");
         assertThat(methodParameterType(javaMethod, 1)).isEqualTo("int");
-        assertThat(methodParameterType(javaMethod, 2)).isEqualTo("reference.OverloadedMethodArgumentsType.A");
+        assertThat(methodParameterType(javaMethod, 2)).isEqualTo("com.test.OverloadedMethodArgumentsType.A");
 
         assertThat(concordionMethod.getParametersCount()).isEqualTo(3);
     }
