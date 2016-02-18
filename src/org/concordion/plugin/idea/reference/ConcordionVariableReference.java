@@ -1,13 +1,13 @@
 package org.concordion.plugin.idea.reference;
 
-import org.concordion.plugin.idea.ConcordionVariableUsage;
+import org.concordion.plugin.idea.variables.ConcordionVariableUsage;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionVariableUsage.findDeclaration;
+import static org.concordion.plugin.idea.variables.ConcordionVariableUsageSearcher.findDeclaration;
 
 public class ConcordionVariableReference extends AbstractConcordionReference<ConcordionVariable> {
 

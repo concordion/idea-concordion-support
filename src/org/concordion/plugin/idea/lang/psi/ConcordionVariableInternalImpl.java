@@ -1,12 +1,12 @@
 package org.concordion.plugin.idea.lang.psi;
 
-import org.concordion.plugin.idea.ConcordionVariableUsage;
+import org.concordion.plugin.idea.variables.ConcordionVariableUsage;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionVariableUsage.findDeclaration;
+import static org.concordion.plugin.idea.variables.ConcordionVariableUsageSearcher.findDeclaration;
 
 public abstract class ConcordionVariableInternalImpl extends AbstractConcordionPsiElement implements ConcordionVariableInternal {
 

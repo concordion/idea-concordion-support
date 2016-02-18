@@ -8,7 +8,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.*;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
-import org.concordion.plugin.idea.ConcordionVariableUsage;
+import org.concordion.plugin.idea.variables.ConcordionVariableUsage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.nullToEmpty;
-import static org.concordion.plugin.idea.ConcordionVariableUsage.findAllDeclarationsFrom;
+import static org.concordion.plugin.idea.variables.ConcordionVariableUsageSearcher.findAllDeclarationsFrom;
 
 public class CompleteInformation {
 
