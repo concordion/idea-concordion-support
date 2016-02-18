@@ -10,7 +10,7 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
         return "testData/renaming";
     }
 
-    public void testShouldRenamePropertyInRunnerAfterRenamingInSpec() {
+    public void testRenamePropertyInRunnerAfterRenamingInSpec() {
         copyTestFixtureToConcordionProject("RenamePropertyFromSpec.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("RenamePropertyFromSpec.html");
 
@@ -21,7 +21,7 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("/resources/com/test/RenamePropertyFromSpec.html", "after/RenamePropertyFromSpec.html", false);
     }
 
-    public void testShouldRenamePropertyInSpecAfterRenamingInRunner() {
+    public void testRenamePropertyInSpecAfterRenamingInRunner() {
         VirtualFile javaRunner = copyTestFixtureToConcordionProject("RenamePropertyFromRunner.java");
         copySpecToConcordionProject("RenamePropertyFromRunner.html");
 
@@ -32,7 +32,7 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("/resources/com/test/RenamePropertyFromRunner.html", "after/RenamePropertyFromRunner.html", false);
     }
 
-    public void testShouldRenameMethodInRunnerAfterRenamingInSpec() {
+    public void testRenameMethodInRunnerAfterRenamingInSpec() {
         copyTestFixtureToConcordionProject("RenameMethodFromSpec.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("RenameMethodFromSpec.html");
 
@@ -43,7 +43,7 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("/resources/com/test/RenameMethodFromSpec.html", "after/RenameMethodFromSpec.html", false);
     }
 
-    public void testShouldRenameMethodInSpecAfterRenamingInRunner() {
+    public void testRenameMethodInSpecAfterRenamingInRunner() {
         VirtualFile javaRunner = copyTestFixtureToConcordionProject("RenameMethodFromRunner.java");
         copySpecToConcordionProject("RenameMethodFromRunner.html");
 
@@ -54,4 +54,14 @@ public class RenamingTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("/resources/com/test/RenameMethodFromRunner.html", "after/RenameMethodFromRunner.html", false);
     }
 
+    public void testRenameVariableInSpec() {
+        copyTestFixtureToConcordionProject("RenameVariable.java");
+        VirtualFile spec = copySpecToConcordionProject("RenameVariable.html");
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        myFixture.renameElementAtCaret("afterRename");
+
+        myFixture.checkResultByFile("/src/com/test/RenameVariable.java", "after/RenameVariable.java", false);
+        myFixture.checkResultByFile("/resources/com/test/RenameVariable.html", "after/RenameVariable.html", false);
+    }
 }

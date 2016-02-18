@@ -4,9 +4,5 @@ import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
 
 @RunWith(ConcordionRunner.class)
-public class ChainFromVariable {
-
-    public String data() {
-        return "hello";
-    }
+public class VariablesOnTheStartOfExpression {
 }

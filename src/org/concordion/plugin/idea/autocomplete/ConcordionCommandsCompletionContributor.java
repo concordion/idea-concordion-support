@@ -1,7 +1,5 @@
 package org.concordion.plugin.idea.autocomplete;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -13,34 +11,12 @@ import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
+import static org.concordion.plugin.idea.ConcordionCommands.*;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 import static java.util.stream.Collectors.toList;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
-
-    private static final Collection<String> DEFAULT_COMMANDS = ImmutableList.of(
-            "assertEquals", "assert-equals",
-            "assertTrue", "assert-true",
-            "assertFalse", "assert-false",
-            "execute",
-            "set",
-            "echo",
-            "verifyRows", "verify-rows",
-            "matchStrategy", "match-strategy",
-            "matchingRole", "matching-role",
-            "run",
-            "example",
-            "status"
-    );
-
-    public static final Map<String, String> EXTENSION_COMMANDS = ImmutableMap.of(
-            "org.concordion.ext.EmbedExtension", "embed",
-            "org.concordion.ext.ExecuteOnlyIfExtension", "executeOnlyIf",
-            "org.concordion.ext.ScreenshotExtension", "screenshot");
 
     public ConcordionCommandsCompletionContributor() {
         extend(
@@ -77,26 +53,22 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
             result.addAllElements(forCommands(
                     Namespaces.CONCORDION_EXTENSIONS,
                     context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS_SCHEMA_PREFIX),
-                    context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS).stream()
-                            .map(EXTENSION_COMMANDS::get)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList())
+                    extensionCommands(context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS))
             ));
         }
     }
 
     private static Iterable<LookupElement> forCommands(Namespaces namespace, String precomputedPrefix, Collection<String> commands) {
 
-        String prefix = precomputedPrefix != null ?
-                precomputedPrefix :
-                namespace.defaultPrefix;
+        String prefix = precomputedPrefix != null
+                ? precomputedPrefix
+                : namespace.defaultPrefix;
 
-        ConcordionCommandInsertionHandler handler = precomputedPrefix != null ?
-                ConcordionCommandInsertionHandler.INSTANCE :
-                new ConcordionCommandInsertionHandler(namespace);
+        ConcordionCommandInsertionHandler handler = precomputedPrefix != null
+                ? ConcordionCommandInsertionHandler.INSTANCE
+                : new ConcordionCommandInsertionHandler(namespace);
 
-        return commands.stream()
-                .map(c -> prefix + ':' + c)
+        return commandsWithPrefix(commands, prefix).stream()
                 .map(c -> LookupElementBuilder.create(c).withInsertHandler(handler).withIcon(ConcordionIcons.ICON))
                 .collect(toList());
     }

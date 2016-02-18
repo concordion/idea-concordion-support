@@ -31,6 +31,20 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("propertyToResolve");
     }
 
+    public void testResolveFieldInMd() {
+
+        copyTestFixtureToConcordionProject("FieldReference.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("FieldReference.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+
+        ConcordionField concordionField = elementUnderCaret();
+        PsiField javaField = resolveReferences(concordionField);
+
+        assertThat(javaField).isNotNull();
+        assertThat(javaField.getName()).isEqualTo("propertyToResolve");
+    }
+
     public void testResolveInheritedField() {
 
         copyTestFixtureToConcordionProject("Parent.java");
@@ -66,6 +80,20 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         VirtualFile htmlSpec = copySpecToConcordionProject("MethodReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionMethod concordionMethod = elementUnderCaret();
+        PsiMethod method = resolveReferences(concordionMethod);
+
+        assertThat(method).isNotNull();
+        assertThat(method.getName()).isEqualTo("methodToResolve");
+    }
+
+    public void testResolveMethodInMd() {
+
+        copyTestFixtureToConcordionProject("MethodReference.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("MethodReference.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
 
         ConcordionMethod concordionMethod = elementUnderCaret();
         PsiMethod method = resolveReferences(concordionMethod);
@@ -233,6 +261,21 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         VirtualFile htmlSpec = copySpecToConcordionProject("VariableReference.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("var");
+        assertThat(declaration).isNotEqualTo(variable);
+    }
+
+    public void testResolveVariableInMd() {
+
+        copyTestFixtureToConcordionProject("VariableReference.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("VariableReference.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
 
         ConcordionVariable variable = elementUnderCaret();
         ConcordionVariable declaration = resolveReferences(variable);

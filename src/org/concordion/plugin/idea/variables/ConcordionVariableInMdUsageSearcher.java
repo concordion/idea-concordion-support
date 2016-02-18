@@ -7,6 +7,7 @@ import org.concordion.plugin.idea.injection.ConcordionInjection;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.ConcordionCommands.*;
 import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVALID;
 
 public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsageSearcher {
@@ -17,12 +18,36 @@ public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsage
         if (injectionHost == null) {
             return -1;
         }
-        return injectionHost.getTextOffset();
+        return injectionHost.getTextRange().getEndOffset();
     }
 
     @NotNull
     @Override
     protected ConcordionVariableUsage createUsage(@NotNull OwnerAndPosition ownerAndPosition) {
-        return INVALID;
+        PsiElement owner = findHost(ownerAndPosition.owner);
+
+        PsiElement injected = InjectedLanguageUtil.findElementInInjected(new ConcordionInjection(owner), ownerAndPosition.position);
+        if (injected == null || !(injected.getParent() instanceof ConcordionVariable)) {
+            return INVALID;
+        }
+        return new ConcordionVariableUsage(extractCommand(owner.getText()), (ConcordionVariable) injected.getParent());
+    }
+
+    @NotNull
+    private String extractCommand(@NotNull String text) {
+        for (String command : MD_COMMANDS) {
+            if (text.startsWith("\"" + command)) {
+                return removePrefixIfPresent(command);
+            }
+        }
+        return "set";
+    }
+
+    @NotNull
+    private PsiElement findHost(@NotNull PsiElement owner) {
+        if ("Markdown:Markdown:TEXT".equals(owner.getNode().getElementType().toString())) {
+            return owner.getParent();
+        }
+        return owner;
     }
 }

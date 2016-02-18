@@ -21,6 +21,11 @@ public class HighlightingAssert extends AbstractAssert<HighlightingAssert, List<
         return has(anInfo().withSeverity(INJECTED).withText(fragment));
     }
 
+    public HighlightingAssert hasInjectedFragments(String fragment, long count) {
+
+        return has(anInfo().withSeverity(INJECTED).withText(fragment), count);
+    }
+
     public HighlightingAssert hasNoInjectedFragments() {
 
         return hasNo(anInfo().withSeverity(INJECTED));

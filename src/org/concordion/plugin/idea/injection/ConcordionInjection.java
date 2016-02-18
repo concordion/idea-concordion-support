@@ -2,6 +2,9 @@ package org.concordion.plugin.idea.injection;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
@@ -17,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class ConcordionInjection implements PsiLanguageInjectionHost {
+public class ConcordionInjection implements PsiLanguageInjectionHost, NavigationItem {
 
     private final PsiElement delegate;
 
@@ -261,7 +264,7 @@ public class ConcordionInjection implements PsiLanguageInjectionHost {
 
     @Override
     public PsiElement copy() {
-        return delegate.copy();
+        return new ConcordionInjection(delegate.copy());
     }
 
     @Override
@@ -386,7 +389,7 @@ public class ConcordionInjection implements PsiLanguageInjectionHost {
         pure = true
     )
     public boolean isPhysical() {
-        return delegate.isPhysical();
+        return !ApplicationManager.getApplication().isUnitTestMode() && delegate.isPhysical();
     }
 
     @Override
@@ -439,9 +442,36 @@ public class ConcordionInjection implements PsiLanguageInjectionHost {
         return delegate.getIcon(i);
     }
 
+    @Nullable
+    @Override
+    public String getName() {
+        return ((NavigationItem) delegate).getName();
+    }
+
+    @Nullable
+    @Override
+    public ItemPresentation getPresentation() {
+        return ((NavigationItem) delegate).getPresentation();
+    }
+
+    @Override
+    public void navigate(boolean b) {
+        ((NavigationItem) delegate).navigate(b);
+    }
+
+    @Override
+    public boolean canNavigate() {
+        return ((NavigationItem) delegate).canNavigate();
+    }
+
+    @Override
+    public boolean canNavigateToSource() {
+        return ((NavigationItem) delegate).canNavigateToSource();
+    }
+
     @Override
     public boolean equals(Object obj) {
-        return delegate.equals(obj);
+        return this == obj || delegate.equals(obj);
     }
 
     @Override

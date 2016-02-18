@@ -11,8 +11,8 @@ import org.intellij.plugins.markdown.lang.MarkdownElementTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Set;
 
+import static org.concordion.plugin.idea.ConcordionCommands.MD_COMMANDS;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 
 public class ConcordionToMdInjector implements MultiHostInjector {
@@ -29,9 +29,14 @@ public class ConcordionToMdInjector implements MultiHostInjector {
             return;
         }
 
-        TextRange range = rangeInHost(host);
+        String text = host.getText();
 
-        if (range == null) {
+        TextRange range = new TextRange(
+                concordionExpressionStartPosition(text),
+                text.length() - 1
+        );
+
+        if (range.isEmpty()) {
             return;
         }
 
@@ -41,20 +46,13 @@ public class ConcordionToMdInjector implements MultiHostInjector {
                 .doneInjecting();
     }
 
-    private TextRange rangeInHost(PsiElement host) {
-        String text = host.getText();
-
-        int eq = text.indexOf('=');
-        int quote = text.indexOf('"');
-
-        if (eq == -1 && quote == -1) {
-            return null;
+    private int concordionExpressionStartPosition(@NotNull String text) {
+        for (String command : MD_COMMANDS) {
+            if (text.startsWith("\"" + command)) {
+                return command.length() + 2;
+            }
         }
-
-        return new TextRange(
-                (eq != -1 ? eq : quote) + 1,
-                text.length() - 1
-        );
+        return 1;
     }
 
     @NotNull

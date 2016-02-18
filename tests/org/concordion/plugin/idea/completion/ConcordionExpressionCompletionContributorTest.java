@@ -26,12 +26,40 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("staticProperty");
     }
 
+    public void testCompleteConcordionExpressionWithFixturePropertiesInMd() {
+
+        copyTestFixtureToConcordionProject("Fields.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Fields.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("publicProperty")
+                .doesNotContain("privateProperty")
+                .doesNotContain("staticProperty");
+    }
+
     public void testCompleteConcordionExpressionWithFixtureMethods() {
 
         copyTestFixtureToConcordionProject("Methods.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("publicMethod")
+                .contains("staticMethod")
+                .doesNotContain("privateMethod");
+    }
+
+    public void testCompleteConcordionExpressionWithFixtureMethodsInMd() {
+
+        copyTestFixtureToConcordionProject("Methods.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Methods.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
         myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
@@ -54,6 +82,19 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("#after");
     }
 
+    public void testCompleteWithVariablesOfCurrentScopeInMd() {
+
+        copyTestFixtureToConcordionProject("Variables.java");
+        VirtualFile md = copySpecToConcordionProject("Variables.md");
+
+        myFixture.configureFromExistingVirtualFile(md);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
+                .doesNotContain("#after");
+    }
+
     public void testCompleteWithVariablesOfCurrentScopeIfHashCharAlreadyPresent() {
 
         copyTestFixtureToConcordionProject("VariablesAfterHashChar.java");
@@ -65,6 +106,47 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         assertThat(myFixture.getLookupElementStrings())
                 .contains("#before")
                 .contains("#nested")
+                .doesNotContain("#after");
+    }
+
+    //TODO fix
+    public void ignoredTestCompleteWithVariablesOfCurrentScopeIfHashCharAlreadyPresentInMd() {
+
+        copyTestFixtureToConcordionProject("VariablesAfterHashChar.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("VariablesAfterHashChar.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
+                .doesNotContain("#after");
+    }
+
+    public void testCompleteWithVariablesInTheStartOfExpression() {
+
+        copyTestFixtureToConcordionProject("VariablesOnTheStartOfExpression.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("VariablesOnTheStartOfExpression.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
+                .doesNotContain("#after");
+    }
+
+    //TODO fix
+    public void ignoredCompleteWithVariablesInTheStartOfExpressionInMd() {
+
+        copyTestFixtureToConcordionProject("VariablesOnTheStartOfExpression.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("VariablesOnTheStartOfExpression.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("#before")
                 .doesNotContain("#after");
     }
 

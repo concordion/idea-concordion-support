@@ -11,23 +11,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.concordion.plugin.idea.ConcordionCommands.DEFAULT_COMMANDS_WITH_C_PREFIX;
 
 public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
-
-    private static final Iterable<String> DEFAULT_COMMANDS_WITH_C_PREFIX = ImmutableList.of(
-            "c:assertEquals", "c:assert-equals",
-            "c:assertTrue", "c:assert-true",
-            "c:assertFalse", "c:assert-false",
-            "c:execute",
-            "c:set",
-            "c:echo",
-            "c:verifyRows", "c:verify-rows",
-            "c:matchStrategy", "c:match-strategy",
-            "c:matchingRole", "c:matching-role",
-            "c:run",
-            "c:example",
-            "c:status"
-    );
 
     private static final Iterable<String> EXTENSION_COMMANDS_WITH_EXT_PREFIX = ImmutableList.of(
             "ext:screenshot",
