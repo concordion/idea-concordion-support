@@ -31,19 +31,27 @@ public class ConcordionToMdInjector implements MultiHostInjector {
 
         String text = host.getText();
 
-        TextRange range = new TextRange(
-                concordionExpressionStartPosition(text),
-                text.length() - 1
-        );
+        int startOffset = concordionExpressionStartPosition(text);
+        int endOffset = text.length() - 1;
 
-        if (range.isEmpty()) {
+        if (!validInjection(startOffset, endOffset)) {
             return;
         }
 
         registrar
                 .startInjecting(ConcordionLanguage.INSTANCE)
-                .addPlace(null, null, new ConcordionInjection(host), range)
+                .addPlace(null, null, new ConcordionInjection(host), new TextRange(startOffset, endOffset))
                 .doneInjecting();
+    }
+
+    @NotNull
+    @Override
+    public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
+        return ImmutableList.of(PsiElement.class);
+    }
+
+    private boolean validInjection(int startOffset, int endOffset) {
+        return startOffset >= 0 && startOffset < endOffset;
     }
 
     private int concordionExpressionStartPosition(@NotNull String text) {
@@ -53,11 +61,5 @@ public class ConcordionToMdInjector implements MultiHostInjector {
             }
         }
         return 1;
-    }
-
-    @NotNull
-    @Override
-    public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
-        return ImmutableList.of(PsiElement.class);
     }
 }
