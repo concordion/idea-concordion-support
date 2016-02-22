@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableSet;
-import com.intellij.openapi.util.Key;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
@@ -14,15 +13,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
-
-    public static final Key<PsiClass> TEST_FIXTURE = new Key<>("CONCORDION_TEST_FIXTURE");
-    public static final Key<PsiFile> SPEC = new Key<>("CONCORDION_HTML_SPEC");
-
-    public static final Key<String> CONCORDION_SCHEMA_PREFIX = new Key<>("CONCORDION_SCHEMA_PREFIX");
-    public static final Key<String> CONCORDION_EXTENSIONS_SCHEMA_PREFIX = new Key<>("CONCORDION_EXTENSIONS_SCHEMA_PREFIX");
-    public static final Key<Collection<String>> CONCORDION_EXTENSIONS = new Key<>("CONCORDION_EXTENSIONS");
 
     public static final int PARENT_OF_THE_PARENT = 2;
 
@@ -69,31 +62,20 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withConcordionHtmlSpec() {
-        return with(new PatternCondition<T>("withConcordionHtmlSpec") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                String prefix = Namespaces.CONCORDION.prefixInFile(element.getContainingFile());
-                context.put(CONCORDION_SCHEMA_PREFIX, prefix);
-                return prefix != null;
-            }
-        });
-    }
-
-    public Self withConcordionMdSpec() {
-        return with(new PatternCondition<T>("withConcordionMdSpec") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return element.getContainingFile().getFileType().getDefaultExtension().equals("md");
-            }
-        });
-    }
-
     public Self withSpecOfType(@NotNull ConcordionSpecType type) {
         return with(new PatternCondition<T>("withSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return type.canBeIn(element.getContainingFile());
+            }
+        });
+    }
+
+    public Self withConfiguredSpecOfType(@NotNull ConcordionSpecType type) {
+        return with(new PatternCondition<T>("withConfiguredSpecOfType") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return type.configuredIn(element.getContainingFile(), context);
             }
         });
     }
@@ -126,19 +108,18 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withConfiguredExtensions") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                String prefix = Namespaces.CONCORDION_EXTENSIONS.prefixInFile(element.getContainingFile());
+                ConcordionSpecType type = ConcordionSpecType.inFile(element.getContainingFile());
+                boolean extensionsConfigured = type != null && type.extensionsConfiguredIn(element.getContainingFile(), context);
+
                 Collection<String> extensions = configuredExtensions(context.get(TEST_FIXTURE));
-
-                context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, prefix);
                 context.put(CONCORDION_EXTENSIONS, extensions);
-
-                return !extensions.isEmpty();
+                return extensionsConfigured || !extensions.isEmpty();
             }
         });
     }
 
-    public Self withConcordionAttribute() {
-        return with(new PatternCondition<T>("withConcordionAttribute") {
+    public Self withConcordionXmlAttribute() {
+        return with(new PatternCondition<T>("withConcordionXmlAttribute") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);

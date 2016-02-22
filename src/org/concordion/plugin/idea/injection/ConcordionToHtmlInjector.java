@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class ConcordionToHtmlInjector implements MultiHostInjector {
 
@@ -34,8 +35,8 @@ public class ConcordionToHtmlInjector implements MultiHostInjector {
     );
 
     private static final ConcordionElementPattern.Capture<XmlAttributeValue> TAGS_TO_INJECT = concordionElement(XmlAttributeValue.class)
-            .withConcordionHtmlSpec()
-            .withConcordionAttribute()
+            .withConfiguredSpecOfType(HTML)
+            .withConcordionXmlAttribute()
             .withConcordionCommand(CONCORDION_TAGS_FOR_EXPRESSION_INJECTION)
             .withFoundTestFixture();
 

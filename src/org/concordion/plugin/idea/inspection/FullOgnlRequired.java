@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class FullOgnlRequired extends LocalInspectionTool {
 
@@ -32,10 +33,10 @@ public class FullOgnlRequired extends LocalInspectionTool {
     private static final ConcordionElementPattern.Capture<XmlAttributeValue> TOO_COMPLEX_CONCORDION_EXPRESSION =
             concordionElement(XmlAttributeValue.class)
                     .withParent(XmlAttribute.class)
-                    .withConcordionHtmlSpec()
+                    .withConfiguredSpecOfType(HTML)
                     .withFoundTestFixture()
                     .withFullOgnl(false)
-                    .withConcordionAttribute()
+                    .withConcordionXmlAttribute()
                     .andOr(
                             concordionElement(XmlAttributeValue.class)
                                     .withConcordionCommand(SET_COMMANDS)

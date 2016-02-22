@@ -5,7 +5,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
-import org.concordion.plugin.idea.ConcordionElementPattern;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,9 @@ import java.util.Collection;
 
 import static org.concordion.plugin.idea.ConcordionCommands.*;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static java.util.stream.Collectors.toList;
+import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
 public class ConcordionCommandsCompletionContributor extends CompletionContributor {
 
@@ -22,7 +23,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).andOr(
-                        concordionElement().withConcordionHtmlSpec(),
+                        concordionElement().withConfiguredSpecOfType(HTML),
                         concordionElement().withFoundTestFixture()
                 ),
                 new ConcordionCommandCompletionProvider()
@@ -40,7 +41,7 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
 
             result.addAllElements(forCommands(
                     Namespaces.CONCORDION,
-                    context.get(ConcordionElementPattern.CONCORDION_SCHEMA_PREFIX),
+                    context.get(CONCORDION_SCHEMA_PREFIX),
                     DEFAULT_COMMANDS
             ));
         }
@@ -52,8 +53,8 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
 
             result.addAllElements(forCommands(
                     Namespaces.CONCORDION_EXTENSIONS,
-                    context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS_SCHEMA_PREFIX),
-                    extensionCommands(context.get(ConcordionElementPattern.CONCORDION_EXTENSIONS))
+                    context.get(CONCORDION_EXTENSIONS_SCHEMA_PREFIX),
+                    extensionCommands(context.get(CONCORDION_EXTENSIONS))
             ));
         }
     }

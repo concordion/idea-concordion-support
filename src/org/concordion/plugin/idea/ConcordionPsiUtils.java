@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
@@ -174,7 +173,7 @@ public final class ConcordionPsiUtils {
         }
         return findChildrenOfType(extensionsAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class).stream()
                 .map(PsiJavaCodeReferenceElement::getQualifiedName)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {

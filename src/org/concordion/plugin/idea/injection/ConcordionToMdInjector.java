@@ -14,11 +14,12 @@ import java.util.List;
 
 import static org.concordion.plugin.idea.ConcordionCommands.MD_COMMANDS;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionToMdInjector implements MultiHostInjector {
 
     private static final ConcordionElementPattern.Capture<PsiElement> LINKS_TITLES_TO_INJECT = concordionElement(PsiElement.class)
-            .withConcordionMdSpec()
+            .withConfiguredSpecOfType(MD)
             .withElementType(MarkdownElementTypes.LINK_TITLE)
             .withFoundTestFixture();
 

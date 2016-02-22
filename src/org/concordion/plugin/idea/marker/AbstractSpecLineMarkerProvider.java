@@ -14,11 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionElementPattern.SPEC;
-import static org.concordion.plugin.idea.ConcordionElementPattern.TEST_FIXTURE;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.LineMarker.infoFor;
 import static org.concordion.plugin.idea.LineMarker.withNavigationTo;
+import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public abstract class AbstractSpecLineMarkerProvider implements LineMarkerProvider {
 

@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static org.concordion.plugin.idea.ConcordionElementPattern.TEST_FIXTURE;
+import static org.concordion.plugin.idea.ConcordionContextKeys.TEST_FIXTURE;
 import static org.concordion.plugin.idea.ConcordionExpressionPatterns.concordionExpressionElement;
 
 public abstract class UnresolvedMemberAnnotator<T extends ConcordionMember> implements Annotator {
