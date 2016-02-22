@@ -90,11 +90,11 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withFileOfType(@NotNull FileType type) {
-        return with(new PatternCondition<T>("withFileOfType") {
+    public Self withSpecOfType(@NotNull ConcordionSpecType type) {
+        return with(new PatternCondition<T>("withSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext processingContext) {
-                return type.equals(element.getContainingFile().getFileType());
+                return type.canBeIn(element.getContainingFile());
             }
         });
     }

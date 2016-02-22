@@ -1,8 +1,9 @@
 package org.concordion.plugin.idea;
 
 import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,10 +33,11 @@ public class Namespaces {
 
     @Nullable
     public String prefixInFile(@NotNull PsiFile psiFile) {
-        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
+        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())
+                && !XHtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
             return null;
         }
-        XmlTag rootTag = ((HtmlFileImpl) psiFile).getRootTag();
+        XmlTag rootTag = ((XmlFile) psiFile).getRootTag();
         if (rootTag == null) {
             return null;
         }

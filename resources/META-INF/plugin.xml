@@ -71,6 +71,8 @@
 
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>
+    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
+    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionExpressionCompletionContributor"/>
 
     <localInspection language="JAVA"
@@ -81,7 +83,14 @@
                      level="ERROR"
                      implementationClass="org.concordion.plugin.idea.inspection.TestFixtureIsNotAnnotatedWithConcordionRunner"/>
     <localInspection language="HTML"
-                     id="usingFullOgnlExpression"
+                     id="usingFullOgnlExpressioninHtml"
+                     groupName="Concordion"
+                     displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
+                     enabledByDefault="true"
+                     level="ERROR"
+                     implementationClass="org.concordion.plugin.idea.inspection.FullOgnlRequired"/>
+    <localInspection language="XHTML"
+                     id="usingFullOgnlExpressioninXhtml"
                      groupName="Concordion"
                      displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
                      enabledByDefault="true"
@@ -103,6 +112,7 @@
                      implementationClass="org.concordion.plugin.idea.inspection.UsingUndeclaredVariable"/>
 
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="XHTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaRunnerLineMarkerProvider"/>
 
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"

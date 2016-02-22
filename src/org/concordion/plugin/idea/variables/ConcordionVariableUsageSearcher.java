@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.variables;
 
 import com.google.common.collect.ImmutableMap;
+import org.concordion.plugin.idea.ConcordionSpecType;
 import org.concordion.plugin.idea.TextReverseSearcher;
 import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.PsiElement;
@@ -72,10 +73,7 @@ public abstract class ConcordionVariableUsageSearcher {
         return SEARCHERS.get(spec.getFileType().getDefaultExtension());
     }
 
-    private static final Map<String, ConcordionVariableUsageSearcher> SEARCHERS = ImmutableMap.of(
-            "html", new ConcordionVariableInHtmlUsageSearcher(),
-            "md", new ConcordionVariableInMdUsageSearcher()
-    );
+    private static final Map<String, ConcordionVariableUsageSearcher> SEARCHERS = initSearchers();
 
     @Nullable
     private static OwnerAndPosition ownerAndPosition(@NotNull PsiFile htmlSpec, int position) {
@@ -91,5 +89,17 @@ public abstract class ConcordionVariableUsageSearcher {
             this.owner = owner;
             this.position = position;
         }
+    }
+
+    @NotNull
+    private static Map<String, ConcordionVariableUsageSearcher> initSearchers() {
+        ImmutableMap.Builder<String, ConcordionVariableUsageSearcher> searchers = ImmutableMap.builder();
+        for (String extension : ConcordionSpecType.HTML.extensions) {
+            searchers.put(extension, new ConcordionVariableInHtmlUsageSearcher());
+        }
+        for (String extension : ConcordionSpecType.MD.extensions) {
+            searchers.put(extension, new ConcordionVariableInMdUsageSearcher());
+        }
+        return searchers.build();
     }
 }

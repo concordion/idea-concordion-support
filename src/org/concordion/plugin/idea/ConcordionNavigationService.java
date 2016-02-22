@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.google.common.collect.ImmutableSet;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Set;
 
 import static java.util.Arrays.stream;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
@@ -23,6 +25,7 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
+    private static final Set<String> POSSIBLE_SPEC_EXTENSIONS = initPossibleSpecExtensions();
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -82,11 +85,17 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(javaFile), () -> findCorrespondingSpecFile(
                 javaFile.getContainingDirectory(),
-                specName + ".html",
-                specName + ".md",
-                specName + ".markdown"
+                possibleSpecs(specName)
         ));
     }
+
+    @NotNull
+    private String[] possibleSpecs(String specName) {
+        return POSSIBLE_SPEC_EXTENSIONS.stream()
+                .map(ext -> specName + '.' + ext)
+                .toArray(String[]::new);
+    }
+
 
     @Nullable
     private PsiFile findCorrespondingSpecFile(@NotNull PsiDirectory oneOfPackageDirs, @NotNull String... names) {
@@ -122,7 +131,7 @@ public class ConcordionNavigationService {
     }
 
     @NotNull
-    private  String removeExtension(@NotNull String fileName) {
+    private String removeExtension(@NotNull String fileName) {
         return fileName.substring(0, fileName.lastIndexOf('.'));
     }
 
@@ -145,5 +154,14 @@ public class ConcordionNavigationService {
     @NotNull
     private static String getIdentityKey(@NotNull PsiFile file) {
         return file.getVirtualFile().getPath();
+    }
+
+    @NotNull
+    private static Set<String> initPossibleSpecExtensions() {
+        ImmutableSet.Builder<String> extensions = ImmutableSet.builder();
+        for (ConcordionSpecType type : ConcordionSpecType.values()) {
+            extensions.addAll(type.extensions);
+        }
+        return extensions.build();
     }
 }

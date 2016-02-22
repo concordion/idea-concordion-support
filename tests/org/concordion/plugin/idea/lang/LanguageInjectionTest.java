@@ -24,6 +24,18 @@ public class LanguageInjectionTest extends ConcordionCodeInsightFixtureTestCase 
                 .hasInjectedFragment("method()");
     }
 
+    public void testInjectLangInXhtmlSpecWithTestFixture() {
+
+        copyTestFixtureToConcordionProject("Paired.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Paired.xhtml");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        assertThat(myFixture.doHighlighting())
+                .hasInjectedFragment("field")
+                .hasInjectedFragment("method()");
+    }
+
     public void testInjectLangInMdSpecWithTestFixture() {
 
         copyTestFixtureToConcordionProject("Paired.java");

@@ -89,6 +89,13 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertHasGutters(testFixture, mdSpec);
     }
 
+    public void testUseXhtml() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Xhtml.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Xhtml.xhtml");
+
+        assertHasGutters(testFixture, htmlSpec);
+    }
+
     private void assertHasGutters(VirtualFile fixture, VirtualFile spec) {
         myFixture.configureFromExistingVirtualFile(fixture);
         assertThat(myFixture.findAllGutters()).hasConcordionGutter();
