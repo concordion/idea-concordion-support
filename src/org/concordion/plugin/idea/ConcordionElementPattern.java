@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableSet;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Key;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
@@ -84,7 +83,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
     public Self withConcordionMdSpec() {
         return with(new PatternCondition<T>("withConcordionMdSpec") {
             @Override
-            public boolean accepts(@NotNull T element, ProcessingContext processingContext) {
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return element.getContainingFile().getFileType().getDefaultExtension().equals("md");
             }
         });
@@ -93,7 +92,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
     public Self withSpecOfType(@NotNull ConcordionSpecType type) {
         return with(new PatternCondition<T>("withSpecOfType") {
             @Override
-            public boolean accepts(@NotNull T element, ProcessingContext processingContext) {
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return type.canBeIn(element.getContainingFile());
             }
         });

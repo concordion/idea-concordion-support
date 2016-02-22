@@ -164,10 +164,7 @@ public final class ConcordionPsiUtils {
             return false;
         }
         PsiJavaCodeReferenceElement runner = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
-        if (runner == null) {
-            return false;
-        }
-        return CONCORDION_RUNNER.equals(runner.getQualifiedName());
+        return runner != null && CONCORDION_RUNNER.equals(runner.getQualifiedName());
     }
 
     public static Collection<String> configuredExtensions(@NotNull PsiClass testFixture) {

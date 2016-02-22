@@ -1,7 +1,5 @@
 package org.concordion.plugin.idea;
 
-import com.intellij.ide.highlighter.HtmlFileType;
-import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
@@ -10,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class Namespaces {
+public enum Namespaces {
 
-    public static final Namespaces CONCORDION = new Namespaces("http://www.concordion.org/2007/concordion", "c");
-    public static final Namespaces CONCORDION_EXTENSIONS = new Namespaces("urn:concordion-extensions:2010", "ext");
+    CONCORDION("http://www.concordion.org/2007/concordion", "c"),
+    CONCORDION_EXTENSIONS("urn:concordion-extensions:2010", "ext");
 
     @NotNull public final String namespace;
     @NotNull public final String defaultPrefix;
 
-    private Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
+    Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
         this.namespace = namespace;
         this.defaultPrefix = defaultPrefix;
     }
@@ -33,8 +31,7 @@ public class Namespaces {
 
     @Nullable
     public String prefixInFile(@NotNull PsiFile psiFile) {
-        if (!HtmlFileType.INSTANCE.equals(psiFile.getFileType())
-                && !XHtmlFileType.INSTANCE.equals(psiFile.getFileType())) {
+        if (!(psiFile instanceof XmlFile)) {
             return null;
         }
         XmlTag rootTag = ((XmlFile) psiFile).getRootTag();
@@ -47,10 +44,5 @@ public class Namespaces {
             }
         }
         return null;
-    }
-
-
-    public boolean configuredInFile(@NotNull PsiFile psiFile) {
-        return prefixInFile(psiFile) != null;
     }
 }

@@ -10,8 +10,10 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionNavigationService;
-import org.concordion.plugin.idea.Namespaces;
 import org.jetbrains.annotations.Nullable;
+
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
 
 public class ConcordionConfigurationProducer extends TestClassConfigurationProducer {
 
@@ -45,23 +47,15 @@ public class ConcordionConfigurationProducer extends TestClassConfigurationProdu
             return null;
         }
         PsiFile file = location.getContainingFile();
-        if (!fileCanBeUsedWithConcordion(file)) {
+        if (file == null || !specConfiguredInFile(file)) {
             return null;
         }
-        return ConcordionNavigationService.getInstance(context.getProject()).correspondingTestFixture(file);
-    }
 
-    private boolean fileCanBeUsedWithConcordion(@Nullable PsiFile file) {
-        if (file == null) {
-            return false;
+        PsiClass psiClass = ConcordionNavigationService.getInstance(context.getProject()).correspondingTestFixture(file);
+        if (psiClass ==null || !isConcordionFixture(psiClass)) {
+            return null;
         }
-        switch (file.getFileType().getDefaultExtension()) {
-            case "html":
-                return Namespaces.CONCORDION.configuredInFile(file);
-            case "md":
-                return true;
-            default:
-                return false;
-        }
+
+        return psiClass;
     }
 }

@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static java.util.Arrays.stream;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
 
 public class ConcordionNavigationService {
 
@@ -127,7 +128,7 @@ public class ConcordionNavigationService {
     private boolean isConcordionSpecAndFixture(@Nullable PsiFile spec, @Nullable PsiClass fixture) {
         return spec != null
                 && fixture != null
-                && (Namespaces.CONCORDION.configuredInFile(spec) || isConcordionFixture(fixture));
+                && (specConfiguredInFile(spec) || isConcordionFixture(fixture));
     }
 
     @NotNull
