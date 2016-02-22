@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -51,5 +52,12 @@ public class ConcordionCommands {
     public static String removePrefixIfPresent(@NotNull String command) {
         int separator = command.indexOf(':');
         return separator != -1 ? command.substring(separator + 1) : command;
+    }
+
+    @Nullable
+    public static String findCommandInMdInjection(@NotNull String text) {
+        return MD_COMMANDS.stream()
+                .filter(command -> text.startsWith("\"" + command))
+                .findFirst().orElse(null);
     }
 }

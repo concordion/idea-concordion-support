@@ -35,12 +35,8 @@ public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsage
 
     @NotNull
     private String extractCommand(@NotNull String text) {
-        for (String command : MD_COMMANDS) {
-            if (text.startsWith("\"" + command)) {
-                return removePrefixIfPresent(command);
-            }
-        }
-        return "set";
+        String command = findCommandInMdInjection(text);
+        return command != null ? removePrefixIfPresent(command) : "set";
     }
 
     @NotNull

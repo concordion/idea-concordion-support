@@ -69,10 +69,10 @@
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedFieldAnnotator"/>
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedMethodAnnotator"/>
 
-    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
-    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>
-    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsCompletionContributor"/>
-    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionCompletionContributor"/>
+    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsInHtmlCompletionContributor"/>
+    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionInHtmlCompletionContributor"/>
+    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionCommandsInHtmlCompletionContributor"/>
+    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionInHtmlCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionExpressionCompletionContributor"/>
 
     <localInspection language="JAVA"

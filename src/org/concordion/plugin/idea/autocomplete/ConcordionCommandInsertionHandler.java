@@ -10,6 +10,8 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.xml.XmlNamespaceHelper;
 import org.concordion.plugin.idea.Namespaces;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static java.util.Collections.singleton;
 
@@ -17,14 +19,15 @@ public class ConcordionCommandInsertionHandler extends XmlAttributeInsertHandler
 
     public static final ConcordionCommandInsertionHandler INSTANCE = new ConcordionCommandInsertionHandler(null);
 
+    @Nullable
     private final Namespaces namespaceToAdd;
 
-    public ConcordionCommandInsertionHandler(Namespaces namespaceToAdd) {
+    public ConcordionCommandInsertionHandler(@Nullable Namespaces namespaceToAdd) {
         this.namespaceToAdd = namespaceToAdd;
     }
 
     @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
+    public void handleInsert(@NotNull InsertionContext context, @Nullable LookupElement item) {
         super.handleInsert(context, item);
 
         PsiElement element = context.getFile().findElementAt(context.getStartOffset());
@@ -48,7 +51,7 @@ public class ConcordionCommandInsertionHandler extends XmlAttributeInsertHandler
         }
     }
 
-    private void commitDocumentFrom(InsertionContext context) {
+    private void commitDocumentFrom(@NotNull InsertionContext context) {
         PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getDocument());
     }
 }

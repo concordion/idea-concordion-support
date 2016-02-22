@@ -8,6 +8,7 @@ import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -17,9 +18,9 @@ import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
-public class ConcordionCommandsCompletionContributor extends CompletionContributor {
+public class ConcordionCommandsInHtmlCompletionContributor extends CompletionContributor {
 
-    public ConcordionCommandsCompletionContributor() {
+    public ConcordionCommandsInHtmlCompletionContributor() {
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).andOr(
@@ -59,7 +60,12 @@ public class ConcordionCommandsCompletionContributor extends CompletionContribut
         }
     }
 
-    private static Iterable<LookupElement> forCommands(Namespaces namespace, String precomputedPrefix, Collection<String> commands) {
+    @NotNull
+    private static Iterable<LookupElement> forCommands(
+            @NotNull Namespaces namespace,
+            @Nullable String precomputedPrefix,
+            @NotNull Collection<String> commands
+    ) {
 
         String prefix = precomputedPrefix != null
                 ? precomputedPrefix

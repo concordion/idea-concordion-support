@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionCommands.MD_COMMANDS;
+import static org.concordion.plugin.idea.ConcordionCommands.findCommandInMdInjection;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
@@ -32,7 +32,8 @@ public class ConcordionToMdInjector implements MultiHostInjector {
 
         String text = host.getText();
 
-        int startOffset = concordionExpressionStartPosition(text);
+        String command = findCommandInMdInjection(text);
+        int startOffset = command != null ? command.length() + 2 : 1;
         int endOffset = text.length() - 1;
 
         if (!validInjection(startOffset, endOffset)) {
@@ -52,15 +53,6 @@ public class ConcordionToMdInjector implements MultiHostInjector {
     }
 
     private boolean validInjection(int startOffset, int endOffset) {
-        return startOffset >= 0 && startOffset < endOffset;
-    }
-
-    private int concordionExpressionStartPosition(@NotNull String text) {
-        for (String command : MD_COMMANDS) {
-            if (text.startsWith("\"" + command)) {
-                return command.length() + 2;
-            }
-        }
-        return 1;
+        return startOffset >= 0 && startOffset <= endOffset;
     }
 }

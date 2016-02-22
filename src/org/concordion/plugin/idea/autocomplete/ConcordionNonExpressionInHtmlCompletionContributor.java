@@ -11,9 +11,9 @@ import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
-public class ConcordionNonExpressionCompletionContributor extends CompletionContributor {
+public class ConcordionNonExpressionInHtmlCompletionContributor extends CompletionContributor {
 
-    public ConcordionNonExpressionCompletionContributor() {
+    public ConcordionNonExpressionInHtmlCompletionContributor() {
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("matchStrategy", "match-strategy"),
@@ -36,6 +36,7 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
         );
     }
 
+    @NotNull
     private static ConcordionFixedAttributeValuesProvider fixedValues(@NotNull String... values) {
         return new ConcordionFixedAttributeValuesProvider(
                 stream(values).map(LookupElementBuilder::create).collect(toList())
@@ -44,9 +45,10 @@ public class ConcordionNonExpressionCompletionContributor extends CompletionCont
 
     private static final class ConcordionFixedAttributeValuesProvider extends CompletionProvider<CompletionParameters> {
 
+        @NotNull
         private final Iterable<LookupElement> values;
 
-        public ConcordionFixedAttributeValuesProvider(Iterable<LookupElement> values) {
+        public ConcordionFixedAttributeValuesProvider(@NotNull Iterable<LookupElement> values) {
             this.values = values;
         }
 
