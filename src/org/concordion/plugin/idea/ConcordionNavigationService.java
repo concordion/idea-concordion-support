@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea;
 
-import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -24,8 +23,6 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
-    private static final String HTML_EXTENSION = HtmlFileType.DOT_DEFAULT_EXTENSION;
-    private static final String MD_EXTENSION = ".md";
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -85,8 +82,9 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(javaFile), () -> findCorrespondingSpecFile(
                 javaFile.getContainingDirectory(),
-                specName + HTML_EXTENSION,
-                specName + MD_EXTENSION
+                specName + ".html",
+                specName + ".md",
+                specName + ".markdown"
         ));
     }
 
