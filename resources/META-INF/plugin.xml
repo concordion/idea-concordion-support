@@ -62,7 +62,7 @@
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="org.concordion.plugin.idea.lang.ConcordionParserDefinition"/>
     <multiHostInjector implementation="org.concordion.plugin.idea.injection.ConcordionToHtmlInjector"/>
-    <lang.syntaxHighlighterFactory language="Concordion" implementationClass="org.concordion.plugin.idea.formatter.ConcordionSyntaxHighlighterFactory"/>
+    <lang.syntaxHighlighterFactory key="Concordion" language="Concordion" implementationClass="org.concordion.plugin.idea.formatter.ConcordionSyntaxHighlighterFactory"/>
 
     <psi.referenceContributor language="Concordion" implementation="org.concordion.plugin.idea.reference.ConcordionReferenceContributor"/>
 
