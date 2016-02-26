@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.0.40'
+    id 'org.jetbrains.intellij' version '0.0.42'
     id 'net.saliman.cobertura' version '2.2.8'
 }
 
@@ -25,7 +25,7 @@ repositories {
 intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
-    version '15.0.3'
+    version '15.0.4'
     sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources true
     updateSinceUntilBuild false
