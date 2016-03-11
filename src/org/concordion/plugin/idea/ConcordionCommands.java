@@ -57,7 +57,7 @@ public class ConcordionCommands {
     @Nullable
     public static String findCommandInMdInjection(@NotNull String text) {
         return MD_COMMANDS.stream()
-                .filter(command -> text.startsWith("\"" + command))
+                .filter(command -> text.startsWith(command, 1))
                 .findFirst().orElse(null);
     }
 }
