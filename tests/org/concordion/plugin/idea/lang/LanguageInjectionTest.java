@@ -44,8 +44,8 @@ public class LanguageInjectionTest extends ConcordionCodeInsightFixtureTestCase 
         myFixture.configureFromExistingVirtualFile(mdSpec);
 
         assertThat(myFixture.doHighlighting())
-                .hasInjectedFragments("field", 2)
-                .hasInjectedFragments("method()", 2);
+                .hasInjectedFragments("?=field", 2)
+                .hasInjectedFragments("?=method()", 2);
     }
 
     public void testNotInjectLangInHtmlSpecWithoutTestFixture() {

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionCommands.findCommandInMdInjection;
 import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
@@ -32,17 +31,13 @@ public class ConcordionToMdInjector implements MultiHostInjector {
 
         String text = host.getText();
 
-        String command = findCommandInMdInjection(text);
-        int startOffset = command != null ? command.length() + 2 : 1;
-        int endOffset = text.length() - 1;
-
-        if (!validInjection(startOffset, endOffset)) {
+        if (text.length() <= 2) {
             return;
         }
 
         registrar
                 .startInjecting(ConcordionLanguage.INSTANCE)
-                .addPlace(null, null, new ConcordionInjection(host), new TextRange(startOffset, endOffset))
+                .addPlace(null, null, new ConcordionInjection(host), new TextRange(1, text.length() - 1))
                 .doneInjecting();
     }
 
@@ -50,9 +45,5 @@ public class ConcordionToMdInjector implements MultiHostInjector {
     @Override
     public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
         return ImmutableList.of(PsiElement.class);
-    }
-
-    private boolean validInjection(int startOffset, int endOffset) {
-        return startOffset >= 0 && startOffset <= endOffset;
     }
 }

@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea.completion;
+package org.concordion.plugin.idea.autocomplete;
 
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;

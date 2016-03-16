@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea.completion;
+package org.concordion.plugin.idea.autocomplete;
 
 import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -8,14 +8,12 @@ import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.concordion.plugin.idea.ConcordionCommands;
 import org.jetbrains.annotations.NotNull;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.concordion.plugin.idea.ConcordionCommands.DEFAULT_COMMANDS_WITH_C_PREFIX;
 
-public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
+public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
     private static final Iterable<String> EXTENSION_COMMANDS_WITH_EXT_PREFIX = ImmutableList.of(
             "ext:screenshot",
@@ -97,18 +95,6 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
         myFixture.checkResultByFile("ExtensionsCommandsNoSchemaCompleted.html");
     }
 
-    public void testCompleteConcordionCommandsInMarkdownLinks() {
-
-        copyTestFixtureToConcordionProject("Commands.java");
-        VirtualFile htmlSpec = copySpecToConcordionProject("Commands.md");
-
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
-        myFixture.completeBasic();
-
-        assertThat(myFixture.getLookupElementStrings())
-                .containsAll(ConcordionCommands.MD_COMMANDS.stream().map(c -> c + '=').collect(toList()));
-    }
-
     private void completeWithConcordionCommand(String command) {
         LookupImpl lookup = (LookupImpl) LookupManager.getActiveLookup(myFixture.getEditor());
         for (LookupElement element : lookup.getItems()) {
@@ -126,7 +112,7 @@ public class ConcordionCommandsCompletionContributorTest extends ConcordionCodeI
         new WriteCommandAction(getProject()) {
             @Override
             protected void run(@NotNull Result result) throws Throwable {
-                ConcordionCommandsCompletionContributorTest.super.runTest();
+                ConcordionHtmlCommandsCompletionContributorTest.super.runTest();
             }
         }.execute();
     }

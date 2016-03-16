@@ -18,25 +18,25 @@ import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
-public class ConcordionCommandsInHtmlCompletionContributor extends CompletionContributor {
+public class ConcordionHtmlCommandsCompletionContributor extends CompletionContributor {
 
-    public ConcordionCommandsInHtmlCompletionContributor() {
+    public ConcordionHtmlCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).andOr(
                         concordionElement().withConfiguredSpecOfType(HTML),
                         concordionElement().withFoundTestFixture()
                 ),
-                new ConcordionCommandCompletionProvider()
+                new ConcordionHtmlCommandsCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).withFoundTestFixture().withConfiguredExtensions(),
-                new ConcordionExtensionCommandCompletionProvider()
+                new ConcordionHtmlExtensionCommandsCompletionProvider()
         );
     }
 
-    private static final class ConcordionCommandCompletionProvider extends CompletionProvider<CompletionParameters> {
+    private static final class ConcordionHtmlCommandsCompletionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
@@ -48,7 +48,7 @@ public class ConcordionCommandsInHtmlCompletionContributor extends CompletionCon
         }
     }
 
-    private static final class ConcordionExtensionCommandCompletionProvider extends CompletionProvider<CompletionParameters> {
+    private static final class ConcordionHtmlExtensionCommandsCompletionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 

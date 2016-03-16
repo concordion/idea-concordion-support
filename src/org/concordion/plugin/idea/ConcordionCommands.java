@@ -2,7 +2,6 @@ package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +30,7 @@ public class ConcordionCommands {
 
     public static final Collection<String> DEFAULT_COMMANDS_WITH_C_PREFIX = commandsWithPrefix(DEFAULT_COMMANDS, "c");
 
-    public static final Collection<String> MD_COMMANDS = ImmutableList.<String>builder().addAll(DEFAULT_COMMANDS_WITH_C_PREFIX).add("?").build();
+    public static final Collection<String> EMBEDDED_COMMANDS = ImmutableList.<String>builder().addAll(DEFAULT_COMMANDS_WITH_C_PREFIX).add("?").build();
 
     private static final Map<String, String> EXTENSION_COMMANDS = ImmutableMap.of(
             "org.concordion.ext.EmbedExtension", "embed",
@@ -56,7 +55,7 @@ public class ConcordionCommands {
 
     @Nullable
     public static String findCommandInMdInjection(@NotNull String text) {
-        return MD_COMMANDS.stream()
+        return EMBEDDED_COMMANDS.stream()
                 .filter(command -> text.startsWith(command, 1))
                 .findFirst().orElse(null);
     }
