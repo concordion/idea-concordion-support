@@ -33,31 +33,41 @@ intellij {
 
 ext {
     markdownSupportPlugin = files(
-            "${projectDir}/markdown/lib/markdown.jar",
-            "${projectDir}/markdown/lib/markdown-javafx-preview.jar",
-            "${projectDir}/markdown/lib/intellij-markdown.jar",
-            "${projectDir}/markdown/lib/Loboevolution.jar"
+            "${projectDir}/markdownSupport/lib/markdown.jar",
+            "${projectDir}/markdownSupport/lib/markdown-javafx-preview.jar",
+            "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
+            "${projectDir}/markdownSupport/lib/Loboevolution.jar"
+    )
+    markdownPlugin = files(
+            "${projectDir}/markdown/lib/asm-4.1.jar",
+            "${projectDir}/markdown/lib/asm-analysis-4.1.jar",
+            "${projectDir}/markdown/lib/asm-tree-4.1.jar",
+            "${projectDir}/markdown/lib/asm-util-4.1.jar",
+            "${projectDir}/markdown/lib/idea-markdown.jar",
+            "${projectDir}/markdown/lib/parboiled-core-1.1.6.jar",
+            "${projectDir}/markdown/lib/parboiled-java-1.1.6.jar",
+            "${projectDir}/markdown/lib/pegdown-1.4.2.jar"
     )
 }
 
 configurations {
     compileWith
 }
+
 sourceSets {
     main.compileClasspath += configurations.compileWith
-    test.compileClasspath += configurations.compileWith
 
     main.java.srcDirs = ['gen', 'src']
     main.resources.srcDirs = ['resources']
     test.java.srcDirs = ['tests']
 
     testMd.java.srcDirs = ['tests', 'testsMd']
-    testMd.compileClasspath += sourceSets.main.compileClasspath
     testMd.compileClasspath += sourceSets.test.compileClasspath
 }
 
 dependencies {
     compileWith markdownSupportPlugin
+    compileWith markdownPlugin
 
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
@@ -70,4 +80,12 @@ task testMarkdownSupportIntegration(type: Test) {
     testClassesDir = sourceSets.testMd.output.classesDir
 }
 
+task testMarkdownIntegration(type: Test) {
+    classpath += markdownPlugin
+    classpath += sourceSets.testMd.compileClasspath
+    classpath += sourceSets.testMd.runtimeClasspath
+    testClassesDir = sourceSets.testMd.output.classesDir
+}
+
 check.dependsOn testMarkdownSupportIntegration
+//check.dependsOn testMarkdownIntegration TODO uncomment when integration is implemented
