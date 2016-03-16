@@ -3,8 +3,9 @@ package org.concordion.plugin.idea.autocomplete;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.PatternCondition;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import org.concordion.plugin.idea.lang.ConcordionFile;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,6 @@ import java.util.Collection;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionCommands.EMBEDDED_COMMANDS;
-import static org.concordion.plugin.idea.ConcordionElementPattern.PARENT_OF_THE_PARENT_OF_THE_PARENT;
 
 public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionContributor {
 
@@ -26,7 +26,12 @@ public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionC
         );
         extend(
                 CompletionType.BASIC,
-                psiElement(ConcordionTypes.IDENTIFIER).withSuperParent(PARENT_OF_THE_PARENT_OF_THE_PARENT, ConcordionFile.class),
+                psiElement(ConcordionTypes.IDENTIFIER).with(new PatternCondition<PsiElement>("startOfInjection") {
+                    @Override
+                    public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
+                        return element.getTextOffset() == 0;
+                    }
+                }),
                 new ConcordionEmbeddedCommandsCompletionProvider()
         );
     }
