@@ -1,0 +1,1 @@
+rule org.objectweb.asm.** org.concordion.test.org.objectweb.asm.@1

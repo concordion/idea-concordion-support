@@ -39,14 +39,14 @@ ext {
             "${projectDir}/markdownSupport/lib/Loboevolution.jar"
     )
     markdownPlugin = files(
-            "${projectDir}/markdown/lib/asm-4.1.jar",
-            "${projectDir}/markdown/lib/asm-analysis-4.1.jar",
-            "${projectDir}/markdown/lib/asm-tree-4.1.jar",
-            "${projectDir}/markdown/lib/asm-util-4.1.jar",
-            "${projectDir}/markdown/lib/idea-markdown.jar",
-            "${projectDir}/markdown/lib/parboiled-core-1.1.6.jar",
-            "${projectDir}/markdown/lib/parboiled-java-1.1.6.jar",
-            "${projectDir}/markdown/lib/pegdown-1.4.2.jar"
+            "${projectDir}/markdown/lib/asm-4.1-repacked.jar",
+            "${projectDir}/markdown/lib/asm-analysis-4.1-repacked.jar",
+            "${projectDir}/markdown/lib/asm-tree-4.1-repacked.jar",
+            "${projectDir}/markdown/lib/asm-util-4.1-repacked.jar",
+            "${projectDir}/markdown/lib/idea-markdown-repacked.jar",
+            "${projectDir}/markdown/lib/parboiled-core-1.1.6-repacked.jar",
+            "${projectDir}/markdown/lib/parboiled-java-1.1.6-repacked.jar",
+            "${projectDir}/markdown/lib/pegdown-1.4.2-repacked.jar"
     )
 }
 
