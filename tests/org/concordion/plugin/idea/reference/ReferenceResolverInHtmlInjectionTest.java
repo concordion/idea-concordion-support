@@ -10,7 +10,7 @@ import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase {
+public class ReferenceResolverInHtmlInjectionTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -31,19 +31,6 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(javaField.getName()).isEqualTo("propertyToResolve");
     }
 
-    public void testResolveFieldInMd() {
-
-        copyTestFixtureToConcordionProject("FieldReference.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("FieldReference.md");
-
-        myFixture.configureFromExistingVirtualFile(mdSpec);
-
-        ConcordionField concordionField = elementUnderCaret();
-        PsiField javaField = resolveReferences(concordionField);
-
-        assertThat(javaField).isNotNull();
-        assertThat(javaField.getName()).isEqualTo("propertyToResolve");
-    }
 
     public void testResolveInheritedField() {
 
@@ -88,19 +75,6 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(method.getName()).isEqualTo("methodToResolve");
     }
 
-    public void testResolveMethodInMd() {
-
-        copyTestFixtureToConcordionProject("MethodReference.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("MethodReference.md");
-
-        myFixture.configureFromExistingVirtualFile(mdSpec);
-
-        ConcordionMethod concordionMethod = elementUnderCaret();
-        PsiMethod method = resolveReferences(concordionMethod);
-
-        assertThat(method).isNotNull();
-        assertThat(method.getName()).isEqualTo("methodToResolve");
-    }
 
     public void testResolveMethodWithArguments() {
 
@@ -270,21 +244,6 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testResolveVariableInMd() {
-
-        copyTestFixtureToConcordionProject("VariableReference.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("VariableReference.md");
-
-        myFixture.configureFromExistingVirtualFile(mdSpec);
-
-        ConcordionVariable variable = elementUnderCaret();
-        ConcordionVariable declaration = resolveReferences(variable);
-
-        assertThat(declaration).isNotNull();
-        assertThat(declaration.getName()).isEqualTo("var");
-        assertThat(declaration).isNotEqualTo(variable);
-    }
-
     public void testResolveVariableReferenceFromNestedScope() {
 
         copyTestFixtureToConcordionProject("VariableReferenceFromNestedScope.java");
@@ -374,16 +333,6 @@ public class ReferenceResolverTest extends ConcordionCodeInsightFixtureTestCase 
         ConcordionVariable declaration = resolveReferences(variable);
 
         assertThat(declaration).isNull();
-    }
-
-    private <T extends PsiElement> T elementUnderCaret() {
-        return (T) myFixture.getFile().findElementAt(myFixture.getCaretOffset() - 1).getParent();
-    }
-
-    private <T extends PsiElement> T resolveReferences(PsiElement e) {
-        PsiReference[] references = e.getReferences();
-        assertThat(references).hasSize(1);
-        return (T) references[0].resolve();
     }
 
     private String methodParameterType(PsiMethod method, int parameter) {

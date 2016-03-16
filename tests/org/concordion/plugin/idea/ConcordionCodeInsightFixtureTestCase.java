@@ -4,6 +4,8 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
@@ -66,5 +68,31 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-executeonlyif-extension-0.2.1.jar");
             PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-screenshot-extension-1.1.2.jar");
         }
+    }
+
+    protected final void assertHasGutters(VirtualFile fixture, VirtualFile spec) {
+        myFixture.configureFromExistingVirtualFile(fixture);
+        GuttersAssert.assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        GuttersAssert.assertThat(myFixture.findAllGutters()).hasConcordionGutter();
+    }
+
+    protected final void assertHasNoGutters(VirtualFile fixture, VirtualFile spec) {
+        myFixture.configureFromExistingVirtualFile(fixture);
+        GuttersAssert.assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        GuttersAssert.assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+    }
+
+    protected final <T extends PsiElement> T elementUnderCaret() {
+        return (T) myFixture.getFile().findElementAt(myFixture.getCaretOffset() - 1).getParent();
+    }
+
+    protected final <T extends PsiElement> T resolveReferences(PsiElement e) {
+        PsiReference[] references = e.getReferences();
+        assertThat(references).hasSize(1);
+        return (T) references[0].resolve();
     }
 }

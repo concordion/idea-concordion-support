@@ -31,38 +31,43 @@ intellij {
     updateSinceUntilBuild false
 }
 
-configurations {
-    provided
-}
-sourceSets {
-    main.compileClasspath += configurations.provided
-    test.compileClasspath += configurations.provided
-    test.runtimeClasspath += configurations.provided
-}
-
-dependencies {
-    provided files(
+ext {
+    markdownSupportPlugin = files(
             "${projectDir}/markdown/lib/markdown.jar",
             "${projectDir}/markdown/lib/markdown-javafx-preview.jar",
             "${projectDir}/markdown/lib/intellij-markdown.jar",
             "${projectDir}/markdown/lib/Loboevolution.jar"
     )
+}
+
+configurations {
+    compileWith
+}
+sourceSets {
+    main.compileClasspath += configurations.compileWith
+    test.compileClasspath += configurations.compileWith
+
+    main.java.srcDirs = ['gen', 'src']
+    main.resources.srcDirs = ['resources']
+    test.java.srcDirs = ['tests']
+
+    testMd.java.srcDirs = ['tests', 'testsMd']
+    testMd.compileClasspath += sourceSets.main.compileClasspath
+    testMd.compileClasspath += sourceSets.test.compileClasspath
+}
+
+dependencies {
+    compileWith markdownSupportPlugin
+
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['gen', 'src']
-        }
-        resources {
-            srcDir 'resources'
-        }
-    }
-    test {
-        java {
-            srcDir 'tests'
-        }
-    }
+task testMarkdownSupportIntegration(type: Test) {
+    classpath += markdownSupportPlugin
+    classpath += sourceSets.testMd.compileClasspath
+    classpath += sourceSets.testMd.runtimeClasspath
+    testClassesDir = sourceSets.testMd.output.classesDir
 }
+
+check.dependsOn testMarkdownSupportIntegration

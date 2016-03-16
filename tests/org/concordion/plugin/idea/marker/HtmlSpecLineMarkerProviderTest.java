@@ -5,7 +5,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import static org.concordion.plugin.idea.GuttersAssert.assertThat;
 
-public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase {
+public class HtmlSpecLineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -68,47 +68,10 @@ public class LineMarkerProviderTest extends ConcordionCodeInsightFixtureTestCase
         assertHasGutters(testFixture, htmlSpec);
     }
 
-    public void testNoConcordionRunnerAnnotationForMd() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("NoConcordion.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("NoConcordion.md");
-
-        assertHasGutters(testFixture, mdSpec);
-    }
-
-    public void testUseMarkdownSpec() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("Markdown.md");
-
-        assertHasGutters(testFixture, mdSpec);
-    }
-
-    public void testUseMarkdownSpecWithLongExtension() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("Markdown.markdown");
-
-        assertHasGutters(testFixture, mdSpec);
-    }
-
     public void testUseXhtml() {
         VirtualFile testFixture = copyTestFixtureToConcordionProject("Xhtml.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("Xhtml.xhtml");
 
         assertHasGutters(testFixture, htmlSpec);
-    }
-
-    private void assertHasGutters(VirtualFile fixture, VirtualFile spec) {
-        myFixture.configureFromExistingVirtualFile(fixture);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(spec);
-        assertThat(myFixture.findAllGutters()).hasConcordionGutter();
-    }
-
-    private void assertHasNoGutters(VirtualFile fixture, VirtualFile spec) {
-        myFixture.configureFromExistingVirtualFile(fixture);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
-
-        myFixture.configureFromExistingVirtualFile(spec);
-        assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
     }
 }
