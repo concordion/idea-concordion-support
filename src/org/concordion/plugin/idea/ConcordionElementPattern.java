@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
+import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
@@ -30,7 +31,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiFile spec = element.getContainingFile();
                 if (spec == null || spec.getParent() == null) {
-                    spec = ConcordionInjectionUtils.getTopLevelFile(element);
+                    spec = getTopLevelFile(element);
                 }
                 if (spec == null) {
                     return false;
@@ -67,7 +68,8 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return type.canBeIn(element.getContainingFile());
+                PsiFile file = getContainingFile(element);
+                return file != null && type.canBeIn(file);
             }
         });
     }
@@ -76,7 +78,8 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withConfiguredSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return type.configuredIn(element.getContainingFile(), context);
+                PsiFile file = getContainingFile(element);
+                return file != null && type.configuredIn(file, context);
             }
         });
     }

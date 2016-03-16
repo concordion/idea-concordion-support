@@ -6,12 +6,21 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.testFramework.LightVirtualFileBase;
+import org.concordion.plugin.idea.lang.ConcordionFileType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class ConcordionInjectionUtils {
 
     private ConcordionInjectionUtils() {
+    }
+
+    @Nullable
+    public static PsiFile getContainingFile(@NotNull PsiElement element) {
+        PsiFile file = element.getContainingFile();
+        return ConcordionFileType.INSTANCE.equals(file.getFileType())
+                ? getTopLevelFile(element)
+                : file;
     }
 
     @Nullable
@@ -29,7 +38,6 @@ public final class ConcordionInjectionUtils {
         }
         return PsiManager.getInstance(element.getProject()).findFile(original);
     }
-
 
     @Nullable
     private static VirtualFile getOriginalVirtualFile(@Nullable VirtualFile virtualFile) {
