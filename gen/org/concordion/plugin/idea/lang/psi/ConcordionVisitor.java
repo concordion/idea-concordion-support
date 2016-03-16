@@ -11,6 +11,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEmbeddedCommand(@NotNull ConcordionEmbeddedCommand o) {
+    visitPsiElement(o);
+  }
+
   public void visitField(@NotNull ConcordionField o) {
     visitFieldInternal(o);
   }

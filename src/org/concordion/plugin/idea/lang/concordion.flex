@@ -34,6 +34,11 @@ EXPONENT_PART=[Ee]["+""-"]?({DIGIT})*
 STRING_LITERAL="'"([^\\\'\r\n]|{ESCAPE_SEQUENCE})*("'"|\\)?
 ESCAPE_SEQUENCE=\\[^\r\n]
 
+COMMAND_PREFIX=[:jletterdigit:]+
+COMMAND_NAME=([:jletterdigit:]|\-)+
+SHORT_COMMAND=\?
+COMMAND=({COMMAND_PREFIX}":"{COMMAND_NAME})|{SHORT_COMMAND}
+
 %%
 
 {WHITE_SPACE_CHAR}+   { return TokenType.WHITE_SPACE; }
@@ -41,6 +46,8 @@ ESCAPE_SEQUENCE=\\[^\r\n]
 {INTEGER_LITERAL}     { return ConcordionTypes.INTEGER_LITERAL; }
 {DOUBLE_LITERAL}      { return ConcordionTypes.DOUBLE_LITERAL; }
 {STRING_LITERAL}      { return ConcordionTypes.STRING_LITERAL; }
+
+{COMMAND} { return ConcordionTypes.COMMAND; }
 
 {IDENTIFIER} { return ConcordionTypes.IDENTIFIER; }
 

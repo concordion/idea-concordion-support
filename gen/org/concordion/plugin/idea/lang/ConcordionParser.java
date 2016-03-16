@@ -26,6 +26,9 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     if (t == ARGUMENTS) {
       r = arguments(b, 0);
     }
+    else if (t == EMBEDDED_COMMAND) {
+      r = embeddedCommand(b, 0);
+    }
     else if (t == FIELD) {
       r = field(b, 0);
     }
@@ -115,6 +118,19 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // COMMAND '='
+  public static boolean embeddedCommand(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "embeddedCommand")) return false;
+    if (!nextTokenIs(b, COMMAND)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMAND);
+    r = r && consumeToken(b, EQ);
+    exit_section_(b, m, EMBEDDED_COMMAND, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IDENTIFIER
   public static boolean field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "field")) return false;
@@ -127,9 +143,27 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // setExpression|iterateExpression|ognlExpressionStart
+  // embeddedCommand? (setExpression|iterateExpression|ognlExpressionStart)
   static boolean file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = file_0(b, l + 1);
+    r = r && file_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // embeddedCommand?
+  private static boolean file_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0")) return false;
+    embeddedCommand(b, l + 1);
+    return true;
+  }
+
+  // setExpression|iterateExpression|ognlExpressionStart
+  private static boolean file_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = setExpression(b, l + 1);

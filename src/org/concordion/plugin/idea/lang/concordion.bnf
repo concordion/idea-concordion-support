@@ -28,7 +28,9 @@
   ]
 }
 
-file ::= setExpression|iterateExpression|ognlExpressionStart;
+file ::= embeddedCommand? (setExpression|iterateExpression|ognlExpressionStart);
+
+embeddedCommand ::= COMMAND '='
 
 setExpression ::= variable '=' ognlExpressionStart
 iterateExpression ::= variable ':' ognlExpressionStart

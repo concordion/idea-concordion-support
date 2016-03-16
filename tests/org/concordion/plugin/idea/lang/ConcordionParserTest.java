@@ -65,4 +65,12 @@ public class ConcordionParserTest extends ParsingTestCase {
     public void testSetExpression() {
         doTest(true);
     }
+
+    public void testEmbeddedCommand() {
+        doTest(true);
+    }
+
+    public void testShortEmbeddedCommand() {
+        doTest(true);
+    }
 }

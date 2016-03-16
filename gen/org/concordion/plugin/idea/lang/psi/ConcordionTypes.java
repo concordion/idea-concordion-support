@@ -10,6 +10,7 @@ import org.concordion.plugin.idea.lang.ConcordionTokenType;
 public interface ConcordionTypes {
 
   IElementType ARGUMENTS = new ConcordionElementType("ARGUMENTS");
+  IElementType EMBEDDED_COMMAND = new ConcordionElementType("EMBEDDED_COMMAND");
   IElementType FIELD = new ConcordionElementType("FIELD");
   IElementType INDEX = new ConcordionElementType("INDEX");
   IElementType ITERATE_EXPRESSION = new ConcordionElementType("ITERATE_EXPRESSION");
@@ -25,6 +26,7 @@ public interface ConcordionTypes {
 
   IElementType COLON = new ConcordionTokenType(":");
   IElementType COMA = new ConcordionTokenType(",");
+  IElementType COMMAND = new ConcordionTokenType("COMMAND");
   IElementType DOT = new ConcordionTokenType(".");
   IElementType DOUBLE_LITERAL = new ConcordionTokenType("DOUBLE_LITERAL");
   IElementType EQ = new ConcordionTokenType("=");
@@ -45,6 +47,9 @@ public interface ConcordionTypes {
       IElementType type = node.getElementType();
        if (type == ARGUMENTS) {
         return new ConcordionArgumentsImpl(node);
+      }
+      else if (type == EMBEDDED_COMMAND) {
+        return new ConcordionEmbeddedCommandImpl(node);
       }
       else if (type == FIELD) {
         return new ConcordionFieldImpl(node);
