@@ -88,4 +88,4 @@ task testMarkdownIntegration(type: Test) {
 }
 
 check.dependsOn testMarkdownSupportIntegration
-//check.dependsOn testMarkdownIntegration TODO uncomment when integration is implemented
+check.dependsOn testMarkdownIntegration
