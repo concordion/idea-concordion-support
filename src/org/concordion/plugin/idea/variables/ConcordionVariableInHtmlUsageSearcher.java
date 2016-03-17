@@ -34,16 +34,16 @@ public class ConcordionVariableInHtmlUsageSearcher extends ConcordionVariableUsa
 
     @NotNull
     @Override
-    protected ConcordionVariableUsage createUsage(@NotNull OwnerAndPosition ownerAndPosition) {
-        if (!(ownerAndPosition.owner.getParent() instanceof XmlAttributeValue)) {
+    protected ConcordionVariableUsage createUsage(@NotNull UsageInfo info) {
+        if (!(info.owner.getParent() instanceof XmlAttributeValue)) {
             return INVALID;
         }
-        XmlAttributeValue attributeValue = (XmlAttributeValue) ownerAndPosition.owner.getParent();
+        XmlAttributeValue attributeValue = (XmlAttributeValue) info.owner.getParent();
         if (!(attributeValue.getParent() instanceof XmlAttribute)) {
             return INVALID;
         }
         XmlAttribute attribute = (XmlAttribute) attributeValue.getParent();
-        PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) attributeValue, ownerAndPosition.position);
+        PsiElement injected = InjectedLanguageUtil.findElementInInjected((PsiLanguageInjectionHost) attributeValue, info.position);
         if (injected == null || !(injected.getParent() instanceof ConcordionVariable)) {
             return INVALID;
         }

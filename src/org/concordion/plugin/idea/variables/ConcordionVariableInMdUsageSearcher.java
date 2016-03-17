@@ -1,13 +1,18 @@
 package org.concordion.plugin.idea.variables;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import org.concordion.plugin.idea.injection.ConcordionInjection;
+import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionCommands.*;
+import static com.intellij.psi.util.PsiTreeUtil.*;
+import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVALID;
 
 public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsageSearcher {
@@ -23,20 +28,21 @@ public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsage
 
     @NotNull
     @Override
-    protected ConcordionVariableUsage createUsage(@NotNull OwnerAndPosition ownerAndPosition) {
-        PsiElement owner = findHost(ownerAndPosition.owner);
+    protected ConcordionVariableUsage createUsage(@NotNull UsageInfo info) {
+        PsiElement owner = findHost(info.owner);
 
-        PsiElement injected = InjectedLanguageUtil.findElementInInjected(new ConcordionInjection(owner), ownerAndPosition.position);
+        PsiElement injected = findElementInHostWithManyInjections(new ConcordionInjection(owner), info.position);
         if (injected == null || !(injected.getParent() instanceof ConcordionVariable)) {
             return INVALID;
         }
-        return new ConcordionVariableUsage(extractCommand(owner.getText()), (ConcordionVariable) injected.getParent());
+        return new ConcordionVariableUsage(embeddedCommandIn(injected), (ConcordionVariable) injected.getParent());
     }
 
-    @NotNull
-    private String extractCommand(@NotNull String text) {
-        String command = findCommandInMdInjection(text);
-        return command != null ? removePrefixIfPresent(command) : "set";
+    @Nullable
+    private String embeddedCommandIn(@NotNull PsiElement injected) {
+        PsiFile file = getParentOfType(injected, PsiFile.class);
+        ConcordionEmbeddedCommand command = findChildOfType(file, ConcordionEmbeddedCommand.class);
+        return commandText(command);
     }
 
     @NotNull

@@ -56,6 +56,21 @@ public class ReferenceResolverInMdInjectionTest extends ConcordionCodeInsightFix
         ConcordionVariable declaration = resolveReferences(variable);
 
         assertThat(declaration).isNotNull();
+        assertThat(declaration.getName()).isEqualTo("var2");
+        assertThat(declaration).isNotEqualTo(variable);
+    }
+
+    public void testResolveVariableInReferences() {
+
+        copyTestFixtureToConcordionProject("VariableReferenceInReferencesSection.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("VariableReferenceInReferencesSection.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+
+        ConcordionVariable variable = elementUnderCaret();
+        ConcordionVariable declaration = resolveReferences(variable);
+
+        assertThat(declaration).isNotNull();
         assertThat(declaration.getName()).isEqualTo("var");
         assertThat(declaration).isNotEqualTo(variable);
     }

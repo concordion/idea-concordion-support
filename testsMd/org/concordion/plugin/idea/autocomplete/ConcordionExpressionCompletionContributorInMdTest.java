@@ -49,8 +49,8 @@ public class ConcordionExpressionCompletionContributorInMdTest extends Concordio
         myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
-                .contains("#before")
-                .doesNotContain("#after");
+                .contains("#before");
+        //May go forward for references table in the end of the file and find #after
     }
 
     //TODO fix

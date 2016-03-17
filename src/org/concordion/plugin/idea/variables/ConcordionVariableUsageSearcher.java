@@ -32,7 +32,7 @@ public abstract class ConcordionVariableUsageSearcher {
         }
 
         return new TextReverseSearcher(spec.getText(), "#", searcher.findEndOfScopePosition(injection)).stream()
-                .map(pos -> ownerAndPosition(spec, pos))
+                .map(pos -> usageInfo(spec, pos))
                 .filter(Objects::nonNull)
                 .map(searcher::createUsage)
                 .filter(ConcordionVariableUsage::isDeclaration)
@@ -55,7 +55,7 @@ public abstract class ConcordionVariableUsageSearcher {
         }
 
         return new TextReverseSearcher(spec.getText(), varName, searcher.findEndOfScopePosition(variable)).stream()
-                .map(pos -> ownerAndPosition(spec, pos))
+                .map(pos -> usageInfo(spec, pos))
                 .filter(Objects::nonNull)
                 .map(searcher::createUsage)
                 .filter(usage -> usage.isUsageOf(varName))
@@ -66,7 +66,7 @@ public abstract class ConcordionVariableUsageSearcher {
     protected abstract int findEndOfScopePosition(@NotNull PsiElement injection);
 
     @NotNull
-    protected abstract ConcordionVariableUsage createUsage(@NotNull OwnerAndPosition ownerAndPosition);
+    protected abstract ConcordionVariableUsage createUsage(@NotNull UsageInfo usageInfo);
 
     @Nullable
     private static ConcordionVariableUsageSearcher searcherFor(@NotNull PsiFile spec) {
@@ -76,16 +76,16 @@ public abstract class ConcordionVariableUsageSearcher {
     private static final Map<String, ConcordionVariableUsageSearcher> SEARCHERS = initSearchers();
 
     @Nullable
-    private static OwnerAndPosition ownerAndPosition(@NotNull PsiFile htmlSpec, int position) {
+    private static UsageInfo usageInfo(@NotNull PsiFile htmlSpec, int position) {
         PsiElement owner = htmlSpec.findElementAt(position);
-        return owner != null ? new OwnerAndPosition(owner, position) : null;
+        return owner != null ? new UsageInfo(owner, position) : null;
     }
 
-    protected static final class OwnerAndPosition {
+    protected static final class UsageInfo {
         @NotNull protected final PsiElement owner;
         protected final int position;
 
-        public OwnerAndPosition(@NotNull PsiElement owner, int position) {
+        public UsageInfo(@NotNull PsiElement owner, int position) {
             this.owner = owner;
             this.position = position;
         }

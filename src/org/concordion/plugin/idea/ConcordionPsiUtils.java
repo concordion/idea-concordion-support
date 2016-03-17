@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
@@ -49,6 +50,20 @@ public final class ConcordionPsiUtils {
             }
             return null;
         }
+    }
+
+    @NotNull
+    public static String commandText(@Nullable ConcordionEmbeddedCommand command) {
+        if (command == null) {
+            return "set";
+        }
+        String text = command.getText();
+        if ("?=".equals(text)) {
+            return "assertEquals";
+        }
+        int prefix = text.indexOf(':');
+        int assignment = text.indexOf('=');
+        return text.substring(prefix+1, assignment);
     }
 
     @Nullable
