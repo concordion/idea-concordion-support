@@ -19,7 +19,7 @@ public enum ConcordionSpecType {
             if (context != null) {
                 context.put(CONCORDION_SCHEMA_PREFIX, prefix);
             }
-            return prefix != null;
+            return canBeIn(file) && prefix != null;
         }
 
         @Override
@@ -28,7 +28,7 @@ public enum ConcordionSpecType {
             if (context != null) {
                 context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, prefix);
             }
-            return prefix != null;
+            return canBeIn(file) && prefix != null;
         }
     },
     MD("md", "markdown") {
@@ -37,7 +37,7 @@ public enum ConcordionSpecType {
             if (context != null) {
                 context.put(CONCORDION_SCHEMA_PREFIX, "c");
             }
-            return true;
+            return canBeIn(file);
         }
 
         @Override

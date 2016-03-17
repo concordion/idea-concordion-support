@@ -6,7 +6,8 @@
 
   <depends>com.intellij.modules.java</depends>
   <depends>JUnit</depends>
-  <depends optional="true" config-file="md-support.xml">org.intellij.plugins.markdown</depends>
+  <depends optional="true" config-file="markdown-support-integration.xml">org.intellij.plugins.markdown</depends>
+  <depends optional="true" config-file="markdown-integration.xml">net.nicoulaj.idea.markdown</depends>
 
   <description><![CDATA[
 <p>

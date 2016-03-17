@@ -12,7 +12,7 @@ public class ConcordionToMdInjectorTest extends ConcordionCodeInsightFixtureTest
         return "testData/injection";
     }
 
-    public void testInjectLangInMdSpecWithTestFixture() {
+    public void testInjectLangSpecWithTestFixture() {
 
         copyTestFixtureToConcordionProject("Paired.java");
         VirtualFile mdSpec = copySpecToConcordionProject("Paired.md");
@@ -24,7 +24,19 @@ public class ConcordionToMdInjectorTest extends ConcordionCodeInsightFixtureTest
                 .hasInjectedFragments("?=method()", 2);
     }
 
-    public void testNotInjectLangInMdSpecWithoutTestFixture() {
+    public void testInjectLangSpecWithTestFixtureUsingSingleQuotes() {
+
+        copyTestFixtureToConcordionProject("PairedSingleQuotes.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("PairedSingleQuotes.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+
+        assertThat(myFixture.doHighlighting())
+                .hasInjectedFragments("?=field", 2)
+                .hasInjectedFragments("?=method()", 2);
+    }
+
+    public void testNotInjectLangSpecWithoutTestFixture() {
 
         VirtualFile mdSpec = copySpecToConcordionProject("Unpaired.md");
 

@@ -1,0 +1,5 @@
+<idea-plugin url="https://www.jetbrains.com/idea">
+  <extensions defaultExtensionNs="com.intellij">
+    <multiHostInjector implementation="org.concordion.plugin.idea.injection.ConcordionToMarkdownInjector"/>
+  </extensions>
+</idea-plugin>
