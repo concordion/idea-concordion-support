@@ -10,8 +10,11 @@ import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.concordion.plugin.idea.ConcordionCommands.DEFAULT_COMMANDS_WITH_C_PREFIX;
+import static org.concordion.plugin.idea.ConcordionCommands.*;
 
 public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
@@ -20,6 +23,9 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
             "ext:embed",
             "ext:executeOnlyIf"
     );
+
+    private static final Iterable<String> MD_COMMANDS_WITH_EQUALS = EMBEDDED_COMMANDS.stream()
+            .map(c -> c + '=').collect(toList());
 
     @Override
     protected String getTestDataPath() {
@@ -41,6 +47,24 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
         completeWithConcordionCommand("c:execute");
 
         myFixture.checkResultByFile("CommandsCompleted.html");
+    }
+
+    public void testDoNotCompleteWithEmbeddedConcordionCommandsInHtmlTags() {
+
+        copyTestFixtureToConcordionProject("EmbeddedCommands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("EmbeddedCommands.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+
+        System.out.println("--->" + lookupElementStrings);
+
+        assertThat(lookupElementStrings)
+                .doesNotContainAnyElementsOf(MD_COMMANDS_WITH_EQUALS)
+                .doesNotContainAnyElementsOf(DEFAULT_COMMANDS_WITH_C_PREFIX)
+                .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
 
     public void testCompleteExtensionsCommandsInHtmlTags() {

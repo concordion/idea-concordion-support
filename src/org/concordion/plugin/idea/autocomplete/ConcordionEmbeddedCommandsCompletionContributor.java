@@ -12,21 +12,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionCommands.EMBEDDED_COMMANDS;
+import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionContributor {
 
     public ConcordionEmbeddedCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                psiElement(ConcordionTypes.COMMAND),
+                concordionElement(ConcordionTypes.COMMAND).withSpecOfType(MD),
                 new ConcordionEmbeddedCommandsCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
-                psiElement(ConcordionTypes.IDENTIFIER).with(new PatternCondition<PsiElement>("startOfInjection") {
+                concordionElement(ConcordionTypes.IDENTIFIER).withSpecOfType(MD).with(new PatternCondition<PsiElement>("startOfInjection") {
                     @Override
                     public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
                         return element.getTextOffset() == 0;

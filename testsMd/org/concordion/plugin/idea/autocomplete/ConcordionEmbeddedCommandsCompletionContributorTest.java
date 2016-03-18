@@ -21,8 +21,8 @@ public class ConcordionEmbeddedCommandsCompletionContributorTest extends Concord
 
     public void testCompleteConcordionCommandsInMarkdownLinks() {
 
-        copyTestFixtureToConcordionProject("Commands.java");
-        VirtualFile htmlSpec = copySpecToConcordionProject("Commands.md");
+        copyTestFixtureToConcordionProject("EmbeddedCommands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("EmbeddedCommands.md");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
