@@ -1,12 +1,11 @@
 package org.concordion.plugin.idea.reference;
 
-import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionReferenceContributor extends PsiReferenceContributor {
 
@@ -14,12 +13,12 @@ public class ConcordionReferenceContributor extends PsiReferenceContributor {
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
 
         registrar.registerReferenceProvider(
-                psiElement(ConcordionMember.class).withLanguage(ConcordionLanguage.INSTANCE),
+                concordionElement(ConcordionMember.class),
                 new MemberReferenceProvider()
         );
 
         registrar.registerReferenceProvider(
-                psiElement(ConcordionVariable.class).withLanguage(ConcordionLanguage.INSTANCE),
+                concordionElement(ConcordionVariable.class),
                 new VariableReferenceProvider()
         );
     }

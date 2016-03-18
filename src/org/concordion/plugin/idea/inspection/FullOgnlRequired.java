@@ -2,7 +2,7 @@ package org.concordion.plugin.idea.inspection;
 
 import com.google.common.collect.ImmutableSet;
 import org.concordion.internal.MultiPattern;
-import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PatternCondition;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 import java.util.function.Function;
 
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class FullOgnlRequired extends LocalInspectionTool {

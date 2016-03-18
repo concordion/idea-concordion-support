@@ -3,7 +3,6 @@ package org.concordion.plugin.idea;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -45,18 +44,5 @@ public class ConcordionCommands {
     @NotNull
     public static Collection<String> extensionCommands(@NotNull Collection<String> extensions) {
         return extensions.stream().map(EXTENSION_COMMANDS::get).filter(Objects::nonNull).collect(toList());
-    }
-
-    @NotNull
-    public static String removePrefixIfPresent(@NotNull String command) {
-        int separator = command.indexOf(':');
-        return separator != -1 ? command.substring(separator + 1) : command;
-    }
-
-    @Nullable
-    public static String findCommandInMdInjection(@NotNull String text) {
-        return EMBEDDED_COMMANDS.stream()
-                .filter(command -> text.startsWith(command, 1))
-                .findFirst().orElse(null);
     }
 }

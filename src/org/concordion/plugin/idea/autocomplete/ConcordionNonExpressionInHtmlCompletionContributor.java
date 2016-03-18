@@ -7,7 +7,7 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 

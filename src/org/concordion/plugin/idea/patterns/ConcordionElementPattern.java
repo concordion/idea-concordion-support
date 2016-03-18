@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea;
+package org.concordion.plugin.idea.patterns;
 
 import com.google.common.collect.ImmutableSet;
 import com.intellij.patterns.PatternCondition;
@@ -7,6 +7,10 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
+import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.ConcordionSpecType;
+import org.concordion.plugin.idea.Namespaces;
+import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -141,6 +145,24 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
                 return attribute != null && commands.contains(attribute.getLocalName());
+            }
+        });
+    }
+
+    public Self withStartOfInjection() {
+        return with(new PatternCondition<PsiElement>("withStartOfInjection") {
+            @Override
+            public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
+                return element.getTextOffset() == 0;
+            }
+        });
+    }
+
+    public Self withResolved(boolean resolved) {
+        return with(new PatternCondition<T>("withResolved") {
+            @Override
+            public boolean accepts(@NotNull T t, ProcessingContext context) {
+                return ((ConcordionPsiElement) t).isResolvable() == resolved;
             }
         });
     }

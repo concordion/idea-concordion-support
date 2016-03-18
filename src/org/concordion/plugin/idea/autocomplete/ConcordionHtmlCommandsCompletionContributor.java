@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 import static org.concordion.plugin.idea.ConcordionCommands.*;
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;

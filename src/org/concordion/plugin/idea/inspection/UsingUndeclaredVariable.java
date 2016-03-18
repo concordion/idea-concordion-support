@@ -1,18 +1,18 @@
 package org.concordion.plugin.idea.inspection;
 
-import org.concordion.plugin.idea.ConcordionExpressionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
-import static org.concordion.plugin.idea.ConcordionExpressionPatterns.*;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
 
 public class UsingUndeclaredVariable extends LocalInspectionTool {
 
-    private static final ConcordionExpressionElementPattern.Capture<ConcordionVariable> UNDECLARED_VARIABLE =
-            concordionExpressionElement(ConcordionVariable.class).withResolved(false);
+    private static final ConcordionElementPattern.Capture<ConcordionVariable> UNDECLARED_VARIABLE =
+            concordionElement(ConcordionVariable.class).withResolved(false);
 
     @NotNull
     @Override

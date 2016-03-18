@@ -5,14 +5,14 @@ import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.intellij.plugins.markdown.lang.MarkdownElementTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionToMarkdownSupportInjector implements MultiHostInjector {

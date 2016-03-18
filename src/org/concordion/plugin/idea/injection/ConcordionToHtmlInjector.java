@@ -2,7 +2,7 @@ package org.concordion.plugin.idea.injection;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class ConcordionToHtmlInjector implements MultiHostInjector {

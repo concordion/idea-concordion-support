@@ -1,13 +1,13 @@
 package org.concordion.plugin.idea.inspection;
 
-import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import static org.concordion.plugin.idea.ConcordionElementPattern.*;
-import static org.concordion.plugin.idea.ConcordionPatterns.*;
+import static org.concordion.plugin.idea.patterns.ConcordionElementPattern.*;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
 
 public class TestFixtureIsNotAnnotatedWithConcordionRunner extends LocalInspectionTool {
 

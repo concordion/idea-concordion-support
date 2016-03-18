@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea;
+package org.concordion.plugin.idea.patterns;
 
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;

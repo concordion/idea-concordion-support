@@ -6,7 +6,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
-import org.concordion.plugin.idea.ConcordionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.ConcordionSpecType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static org.concordion.plugin.idea.LineMarker.infoFor;
 import static org.concordion.plugin.idea.LineMarker.withNavigationTo;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;

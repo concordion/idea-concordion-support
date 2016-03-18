@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.autocomplete;
 
 import com.intellij.psi.PsiFile;
-import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.lang.psi.ConcordionMember;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
@@ -9,25 +8,21 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.patterns.PlatformPatterns.*;
 import static org.concordion.plugin.idea.autocomplete.CompleteInformation.*;
-import static org.concordion.plugin.idea.ConcordionElementPattern.*;
+import static org.concordion.plugin.idea.patterns.ConcordionElementPattern.*;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionExpressionCompletionContributor extends CompletionContributor {
 
     public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                psiElement(ConcordionTypes.IDENTIFIER)
-                        .withParent(ConcordionMember.class)
-                        .withLanguage(ConcordionLanguage.INSTANCE),
+                concordionElement(ConcordionTypes.IDENTIFIER).withParent(ConcordionMember.class),
                 new MembersCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
-                psiElement(ConcordionTypes.IDENTIFIER)
-                        .withSuperParent(PARENT_OF_THE_PARENT, ConcordionOgnlExpressionStart.class)
-                        .withLanguage(ConcordionLanguage.INSTANCE),
+                concordionElement(ConcordionTypes.IDENTIFIER).withSuperParent(PARENT_OF_THE_PARENT, ConcordionOgnlExpressionStart.class),
                 new VariablesCompletionProvider()
         );
     }

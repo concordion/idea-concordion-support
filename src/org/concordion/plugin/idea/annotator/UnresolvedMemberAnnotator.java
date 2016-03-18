@@ -1,6 +1,6 @@
 package org.concordion.plugin.idea.annotator;
 
-import org.concordion.plugin.idea.ConcordionExpressionElementPattern;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.action.quickfix.CreateFromConcordionUsage;
 import org.concordion.plugin.idea.lang.psi.ConcordionMember;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -11,14 +11,14 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static org.concordion.plugin.idea.ConcordionContextKeys.TEST_FIXTURE;
-import static org.concordion.plugin.idea.ConcordionExpressionPatterns.concordionExpressionElement;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
 
 public abstract class UnresolvedMemberAnnotator<T extends ConcordionMember> implements Annotator {
 
-    private final ConcordionExpressionElementPattern.Capture<T> unresolvedMember;
+    private final ConcordionElementPattern.Capture<T> unresolvedMember;
 
     public UnresolvedMemberAnnotator(Class<T> member) {
-        this.unresolvedMember = concordionExpressionElement(member).withFoundTestFixture().withResolved(false);;
+        this.unresolvedMember = concordionElement(member).withFoundTestFixture().withResolved(false);;
     }
 
     @Override
