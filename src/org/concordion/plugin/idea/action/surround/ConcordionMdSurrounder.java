@@ -1,0 +1,16 @@
+package org.concordion.plugin.idea.action.surround;
+
+import org.jetbrains.annotations.NotNull;
+
+public class ConcordionMdSurrounder implements ConcordionSurrounder {
+    @NotNull
+    @Override
+    public String surround(@NotNull String selection) {
+        return "[" + selection + "](- \"\")";
+    }
+
+    @Override
+    public int caretOffsetInSurroundedText(@NotNull String surroundedText) {
+        return surroundedText.length() - 2;
+    }
+}

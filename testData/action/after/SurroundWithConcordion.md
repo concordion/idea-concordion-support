@@ -1,0 +1,3 @@
+### Test spec
+
+[hello](- "<caret>")

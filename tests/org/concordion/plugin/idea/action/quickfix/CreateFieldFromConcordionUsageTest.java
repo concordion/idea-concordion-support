@@ -1,7 +1,9 @@
 package org.concordion.plugin.idea.action.quickfix;
 
 import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;

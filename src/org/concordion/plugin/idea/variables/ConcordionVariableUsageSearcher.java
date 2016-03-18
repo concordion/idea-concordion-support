@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.variables;
 
-import com.google.common.collect.ImmutableMap;
-import org.concordion.plugin.idea.ConcordionSpecType;
+import org.concordion.plugin.idea.ConcordionSpecTypeStrategy;
 import org.concordion.plugin.idea.TextReverseSearcher;
 import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.PsiElement;
@@ -14,8 +13,12 @@ import java.util.*;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
+import static org.concordion.plugin.idea.ConcordionSpecTypeStrategy.create;
 
 public abstract class ConcordionVariableUsageSearcher {
+
+    private static final ConcordionSpecTypeStrategy<ConcordionVariableUsageSearcher> SEARCHERS =
+            create(new ConcordionVariableInHtmlUsageSearcher(), new ConcordionVariableInMdUsageSearcher());
 
     @NotNull
     public static List<ConcordionVariableUsage> findAllDeclarationsFrom(@Nullable PsiFile injection) {
@@ -26,7 +29,7 @@ public abstract class ConcordionVariableUsageSearcher {
         if (spec == null) {
             return emptyList();
         }
-        ConcordionVariableUsageSearcher searcher = searcherFor(spec);
+        ConcordionVariableUsageSearcher searcher = SEARCHERS.forSpecIn(spec);
         if (searcher == null) {
             return emptyList();
         }
@@ -49,7 +52,7 @@ public abstract class ConcordionVariableUsageSearcher {
         if (varName == null) {
             return null;
         }
-        ConcordionVariableUsageSearcher searcher = searcherFor(spec);
+        ConcordionVariableUsageSearcher searcher = SEARCHERS.forSpecIn(spec);
         if (searcher == null) {
             return null;
         }
@@ -69,13 +72,6 @@ public abstract class ConcordionVariableUsageSearcher {
     protected abstract ConcordionVariableUsage createUsage(@NotNull UsageInfo usageInfo);
 
     @Nullable
-    private static ConcordionVariableUsageSearcher searcherFor(@NotNull PsiFile spec) {
-        return SEARCHERS.get(spec.getFileType().getDefaultExtension());
-    }
-
-    private static final Map<String, ConcordionVariableUsageSearcher> SEARCHERS = initSearchers();
-
-    @Nullable
     private static UsageInfo usageInfo(@NotNull PsiFile htmlSpec, int position) {
         PsiElement owner = htmlSpec.findElementAt(position);
         return owner != null ? new UsageInfo(owner, position) : null;
@@ -89,17 +85,5 @@ public abstract class ConcordionVariableUsageSearcher {
             this.owner = owner;
             this.position = position;
         }
-    }
-
-    @NotNull
-    private static Map<String, ConcordionVariableUsageSearcher> initSearchers() {
-        ImmutableMap.Builder<String, ConcordionVariableUsageSearcher> searchers = ImmutableMap.builder();
-        for (String extension : ConcordionSpecType.HTML.extensions) {
-            searchers.put(extension, new ConcordionVariableInHtmlUsageSearcher());
-        }
-        for (String extension : ConcordionSpecType.MD.extensions) {
-            searchers.put(extension, new ConcordionVariableInMdUsageSearcher());
-        }
-        return searchers.build();
     }
 }

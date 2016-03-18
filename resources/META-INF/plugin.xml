@@ -135,11 +135,19 @@
   </project-components>
 
   <actions>
-    <action id="concordionSpecFilesNavigation"
+    <action id="navigateBetweenConcordionSpecFiles"
             text="Navigate between concordion spec and fixture"
             description="Navigate between concordion spec and fixture"
             class="org.concordion.plugin.idea.action.NavigateBetweenConcordionSpecFiles">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
     </action>
+
+    <action id="surroundWithConcordionAction"
+            text="Surround selected text with concordion expression"
+            description="Surround selected text with concordion expression"
+            class="org.concordion.plugin.idea.action.SurroundWithConcordionAction">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt W"/>
+    </action>
+
   </actions>
 </idea-plugin>
