@@ -17,7 +17,7 @@ import java.util.List;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static org.concordion.plugin.idea.patterns.ConcordionElementPattern.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
-import static org.concordion.plugin.idea.LineMarker.*;
+import static org.concordion.plugin.idea.marker.LineMarker.*;
 
 public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
 
@@ -34,10 +34,7 @@ public class JavaRunnerLineMarkerProvider implements LineMarkerProvider {
         ProcessingContext context = new ProcessingContext();
         if (CLASS_NAME.accepts(element, context)) {
 
-            PsiFile htmlSpec = context.get(SPEC);
-            PsiClass testFixture = context.get(TEST_FIXTURE);
-
-            return infoFor(testFixture, withNavigationTo(htmlSpec));
+            return infoFor(context.get(TEST_FIXTURE));
         }
 
         return null;

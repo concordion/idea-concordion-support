@@ -2,6 +2,7 @@ package org.concordion.plugin.idea;
 
 import com.intellij.codeInsight.daemon.GutterMark;
 import org.assertj.core.api.AbstractAssert;
+import org.concordion.plugin.idea.marker.LineMarker;
 
 import java.util.Collection;
 

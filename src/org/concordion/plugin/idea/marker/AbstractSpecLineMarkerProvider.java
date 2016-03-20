@@ -2,7 +2,6 @@ package org.concordion.plugin.idea.marker;
 
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
@@ -14,9 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+import static org.concordion.plugin.idea.marker.LineMarker.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.LineMarker.infoFor;
-import static org.concordion.plugin.idea.LineMarker.withNavigationTo;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public abstract class AbstractSpecLineMarkerProvider implements LineMarkerProvider {
@@ -36,10 +34,7 @@ public abstract class AbstractSpecLineMarkerProvider implements LineMarkerProvid
         ProcessingContext context = new ProcessingContext();
         if (file.accepts(element, context)) {
 
-            PsiFile spec = context.get(SPEC);
-            PsiClass testFixture = context.get(TEST_FIXTURE);
-
-            return infoFor(spec, withNavigationTo(testFixture));
+            return infoFor(context.get(SPEC));
         }
 
         return null;
