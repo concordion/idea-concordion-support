@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.marker;
 
-import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import com.intellij.codeHighlighting.Pass;
@@ -33,9 +32,6 @@ public class LineMarker {
     }
 
     private static void navigateToPairedFile(@NotNull MouseEvent event, @NotNull PsiElement element) {
-        PsiFile pairedFile = ConcordionNavigationService.getInstance(element.getProject()).correspondingPairedFile(element.getContainingFile());
-        if (pairedFile != null && pairedFile.canNavigate()) {
-            pairedFile.navigate(true);
-        }
+        ConcordionNavigationService.getInstance(element.getProject()).navigateToPairedFile(element.getContainingFile());
     }
 }

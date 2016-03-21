@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea;
 
-import com.google.common.collect.ImmutableSet;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 import static java.util.Arrays.stream;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
+import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
 public class ConcordionNavigationService {
 
@@ -26,7 +25,7 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
-    private static final Set<String> POSSIBLE_SPEC_EXTENSIONS = initPossibleSpecExtensions();
+    private static final Set<String> POSSIBLE_SPEC_EXTENSIONS = allPossibleSpecExtensions();
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -45,12 +44,21 @@ public class ConcordionNavigationService {
         return isConcordionSpecAndFixture(spec, testFixture) ? spec : null;
     }
 
-    @Nullable
-    public  PsiFile correspondingPairedFile(@Nullable PsiFile file) {
+    public void navigateToPairedFile(@Nullable PsiFile file) {
         if (file == null) {
-            return null;
+            return;
         }
 
+        PsiFile paired = pairedFile(file);
+        if (paired == null || !paired.canNavigate()) {
+            return;
+        }
+
+        paired.navigate(true);
+    }
+
+    @Nullable
+    public PsiFile pairedFile(@NotNull PsiFile file) {
         return JavaFileType.INSTANCE.equals(file.getFileType())
                 ? correspondingSpecFile(file)
                 : correspondingJavaFile(file);
@@ -155,14 +163,5 @@ public class ConcordionNavigationService {
     @NotNull
     private static String getIdentityKey(@NotNull PsiFile file) {
         return file.getVirtualFile().getPath();
-    }
-
-    @NotNull
-    private static Set<String> initPossibleSpecExtensions() {
-        ImmutableSet.Builder<String> extensions = ImmutableSet.builder();
-        for (ConcordionSpecType type : ConcordionSpecType.values()) {
-            extensions.addAll(type.extensions);
-        }
-        return extensions.build();
     }
 }

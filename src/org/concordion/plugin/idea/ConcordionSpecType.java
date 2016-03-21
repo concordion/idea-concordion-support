@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public enum ConcordionSpecType {
@@ -84,5 +86,12 @@ public enum ConcordionSpecType {
     public static boolean specConfiguredInFile(@NotNull PsiFile file) {
         ConcordionSpecType type = inFile(file);
         return type != null && type.configuredIn(file);
+    }
+
+    @NotNull
+    public static Set<String> allPossibleSpecExtensions() {
+        return stream(values())
+                .flatMap(type -> type.extensions.stream())
+                .collect(toSet());
     }
 }
