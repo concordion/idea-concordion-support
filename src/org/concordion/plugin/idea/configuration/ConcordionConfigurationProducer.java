@@ -52,7 +52,7 @@ public class ConcordionConfigurationProducer extends TestClassConfigurationProdu
         }
 
         PsiClass psiClass = ConcordionNavigationService.getInstance(context.getProject()).correspondingTestFixture(file);
-        if (psiClass ==null || !isConcordionFixture(psiClass)) {
+        if (psiClass == null || !isConcordionFixture(psiClass)) {
             return null;
         }
 

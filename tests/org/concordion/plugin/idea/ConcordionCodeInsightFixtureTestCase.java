@@ -1,13 +1,24 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.execution.Location;
+import com.intellij.execution.PsiLocation;
+import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.actions.ConfigurationFromContext;
+import com.intellij.execution.actions.RunConfigurationProducer;
+import com.intellij.execution.junit.JUnitConfiguration;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.testFramework.MapDataContext;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
+import org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
@@ -94,5 +105,25 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
         PsiReference[] references = e.getReferences();
         assertThat(references).hasSize(1);
         return (T) references[0].resolve();
+    }
+
+    @NotNull
+    private ConfigurationContext createRunConfigurationContext() {
+        MapDataContext dataContext = new MapDataContext();
+        dataContext.put(CommonDataKeys.PROJECT, myFixture.getProject());
+        dataContext.put(LangDataKeys.MODULE, myFixture.getModule());
+        dataContext.put(Location.DATA_KEY, PsiLocation.fromPsiElement(myFixture.getFile()));
+
+        return ConfigurationContext.getFromContext(dataContext);
+    }
+
+    protected final ConfigurationFromContext createRunConfiguration() {
+        return RunConfigurationProducer.getInstance(ConcordionConfigurationProducer.class)
+                .createConfigurationFromContext(createRunConfigurationContext());
+    }
+
+    protected final boolean canReuseRunConfigurationWhileReRunningFromSameContext(@NotNull ConfigurationFromContext configuration) {
+        return RunConfigurationProducer.getInstance(ConcordionConfigurationProducer.class)
+                .isConfigurationFromContext((JUnitConfiguration) configuration.getConfiguration(), createRunConfigurationContext());
     }
 }
