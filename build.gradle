@@ -25,7 +25,7 @@ repositories {
 intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
-    version '15.0.4'
+    version '2016.1'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false
