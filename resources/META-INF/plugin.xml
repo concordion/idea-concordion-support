@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.5.1</version>
+  <version>0.6</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -19,6 +19,11 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.6<br/>
+    <ul>
+        <li>Beta support for markdown specs with Markdown plugin</li>
+        <li>Supported by idea 2016</li>
+    </ul>
     Version 0.5.1<br/>
     <ul>
         <li>Beta support for markdown specs with Markdown support plugin</li>
@@ -62,7 +67,7 @@
 </p>
     ]]></change-notes>
 
-  <idea-version since-build="141.1" until-build="143.9999"/>
+  <idea-version since-build="141.1"/>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
