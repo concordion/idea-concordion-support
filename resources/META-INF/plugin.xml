@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.6</version>
+  <version>0.7</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -19,6 +19,11 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.7<br/>
+    <ul>
+        <li>Updated icons to fit concordion 2.0</li>
+        <li>Minor issues fixed</li>
+    </ul>
     Version 0.6<br/>
     <ul>
         <li>Beta support for markdown specs with Markdown plugin</li>
