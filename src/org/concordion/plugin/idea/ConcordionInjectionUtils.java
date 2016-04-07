@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea;
 
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.Segment;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -22,7 +23,8 @@ public final class ConcordionInjectionUtils {
     public static PsiElement findElementInHostWithManyInjections(@NotNull PsiLanguageInjectionHost host, int offset) {
         final Ref<PsiElement> ref = Ref.create();
         InjectedLanguageUtil.enumerate(host, (injected, places) -> {
-            if (TextRange.create(places.get(0).getHostRangeMarker()).contains(offset)) {
+            Segment segment = places.get(0).getHostRangeMarker();
+            if (segment != null && TextRange.create(segment).contains(offset)) {
                 ref.set(injected.findElementAt(offset - InjectedLanguageUtil.getInjectedStart(places)));
             }
         });
