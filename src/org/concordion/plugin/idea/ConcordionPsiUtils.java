@@ -52,6 +52,12 @@ public final class ConcordionPsiUtils {
         }
     }
 
+    @Nullable
+    public static String nameInExpression(@NotNull ConcordionOgnlExpressionStart start) {
+        ConcordionPsiElement namedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+        return namedElement != null ? namedElement.getName() : null;
+    }
+
     @NotNull
     public static String commandText(@Nullable ConcordionEmbeddedCommand command) {
         if (command == null) {

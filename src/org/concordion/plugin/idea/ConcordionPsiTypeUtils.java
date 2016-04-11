@@ -18,13 +18,13 @@ public final class ConcordionPsiTypeUtils {
     private ConcordionPsiTypeUtils() {
     }
 
-    public static final String OBJECT = java.lang.Object.class.getName();
+    public static final String STRING = java.lang.String.class.getName();
     public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
     public static final String LIST = java.util.List.class.getName();
     public static final String MAP = java.util.Map.class.getName();
 
-    public static PsiType findObject(@NotNull Project project) {
-        return findType(OBJECT, project);
+    public static PsiType findString(@NotNull Project project) {
+        return findType(STRING, project);
     }
 
     @NotNull
@@ -39,10 +39,6 @@ public final class ConcordionPsiTypeUtils {
     @NotNull
     public static PsiType findList(@NotNull Project project) {
         return findType(LIST, project);
-    }
-
-    public static boolean isList(@NotNull PsiType type, @NotNull Project project) {
-        return findList(project).isAssignableFrom(type);
     }
 
     @NotNull

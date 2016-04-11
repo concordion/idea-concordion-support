@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.psi.PsiModifier.PUBLIC;
-import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findObject;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findString;
 
 public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<ConcordionField> {
 
@@ -17,7 +17,7 @@ public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<Co
 
     @Override
     protected PsiMember createdMember(Project project, PsiElementFactory factory) {
-        PsiType defaultFieldType = findObject(project);
+        PsiType defaultFieldType = findString(project);
 
         PsiField createdField = factory.createField(source.getName(), defaultFieldType);
         createdField.getModifierList().setModifierProperty(PUBLIC, true);
