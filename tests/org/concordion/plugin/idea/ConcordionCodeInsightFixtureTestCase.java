@@ -8,9 +8,11 @@ import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -57,13 +59,10 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             Ref<VirtualFile> src = new Ref<>();
             Ref<VirtualFile> resources = new Ref<>();
 
-            ApplicationManager.getApplication().runWriteAction(() -> {
-                try {
-                    src.set(root.createChildDirectory(this, "src"));
-                    resources.set(root.createChildDirectory(this, "resources"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+            writeAction(() -> {
+                src.set(root.createChildDirectory(this, "src"));
+                resources.set(root.createChildDirectory(this, "resources"));
+                return null;
             });
 
             PsiTestUtil.removeSourceRoot(myModule, root);
@@ -125,5 +124,14 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
     protected final boolean canReuseRunConfigurationWhileReRunningFromSameContext(@NotNull ConfigurationFromContext configuration) {
         return RunConfigurationProducer.getInstance(ConcordionConfigurationProducer.class)
                 .isConfigurationFromContext((JUnitConfiguration) configuration.getConfiguration(), createRunConfigurationContext());
+    }
+
+    protected final void writeAction(@NotNull ThrowableComputable<Void, Throwable> action) {
+        new WriteCommandAction(myFixture.getProject()){
+            @Override
+            protected void run(@NotNull final Result result) throws Throwable {
+                action.compute();
+            }
+        }.execute();
     }
 }

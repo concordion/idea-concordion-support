@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
-public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFixtureTestCase {
+public class CreateFieldFromConcordionUsageInMdTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -14,9 +14,9 @@ public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFix
     public void testCreateFieldFromUsage() throws InterruptedException {
 
         copyTestFixtureToConcordionProject("CreateFieldFromUsage.java");
-        VirtualFile htmlSpec = copySpecToConcordionProject("CreateFieldFromUsage.html");
+        VirtualFile mdSpec = copySpecToConcordionProject("CreateFieldFromUsage.md");
 
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.configureFromExistingVirtualFile(mdSpec);
 
         IntentionAction fix = myFixture.findSingleIntention("Create field from usage");
         assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
