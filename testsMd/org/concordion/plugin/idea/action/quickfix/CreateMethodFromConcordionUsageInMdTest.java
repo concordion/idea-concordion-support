@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
-public class CreateMethodFromConcordionUsageTest extends ConcordionCodeInsightFixtureTestCase {
+public class CreateMethodFromConcordionUsageInMdTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -14,9 +14,9 @@ public class CreateMethodFromConcordionUsageTest extends ConcordionCodeInsightFi
     public void testCreateMethodFromUsage() throws InterruptedException {
 
         copyTestFixtureToConcordionProject("CreateMethodFromUsage.java");
-        VirtualFile htmlSpec = copySpecToConcordionProject("CreateMethodFromUsage.html");
+        VirtualFile mdSpec = copySpecToConcordionProject("CreateMethodFromUsage.md");
 
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.configureFromExistingVirtualFile(mdSpec);
 
         IntentionAction fix = myFixture.findSingleIntention("Create method from usage");
         assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
