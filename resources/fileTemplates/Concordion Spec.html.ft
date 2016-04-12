@@ -1,13 +1,14 @@
 <html xmlns:c="http://www.concordion.org/2007/concordion">
 <head>
     <title>${NAME}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
     <h1>${NAME}</h1>
     <p>
         Description
     </p>
-    <div class="example">
+    <div c:example="name-of-example">
         <h3>Examples</h3>
 
     </div>
