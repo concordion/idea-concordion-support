@@ -10,7 +10,7 @@ public class SurroundWithConcordionIntentionActionTest extends ConcordionCodeIns
         return "testData/action";
     }
 
-    public void testSurroundHtmlTextWithConcordion() throws InterruptedException {
+    public void testSurroundSelectedTextInHtmlWithConcordion() {
 
         copyTestFixtureToConcordionProject("SurroundWithConcordion.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("SurroundWithConcordion.html");
@@ -20,5 +20,17 @@ public class SurroundWithConcordionIntentionActionTest extends ConcordionCodeIns
         executeIntention("Surround with Concordion expression");
 
         myFixture.checkResultByFile("/resources/com/test/SurroundWithConcordion.html", "after/SurroundWithConcordion.html", false);
+    }
+
+    public void testSurroundWordUnderCaretInHtmlWithConcordion() {
+
+        copyTestFixtureToConcordionProject("SurroundWordWithConcordion.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("SurroundWordWithConcordion.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        executeIntention("Surround with Concordion expression");
+
+        myFixture.checkResultByFile("/resources/com/test/SurroundWordWithConcordion.html", "after/SurroundWordWithConcordion.html", false);
     }
 }

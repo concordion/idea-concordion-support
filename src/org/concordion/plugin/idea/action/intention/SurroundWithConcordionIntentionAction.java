@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.action.intention;
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
+import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -44,7 +45,7 @@ public class SurroundWithConcordionIntentionAction extends BaseIntentionAction {
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         editor.getCaretModel().runForEachCaret(caret -> {
             ConcordionSurrounder surrounder = SURROUNDERS.forSpecIn(file);
-            TextRange selection = new TextRange(caret.getSelectionStart(), caret.getSelectionEnd());
+            TextRange selection = calculateRangeToSurround(caret);
 
             if (surrounder == null
                     || selection.isEmpty()) {
@@ -59,5 +60,13 @@ public class SurroundWithConcordionIntentionAction extends BaseIntentionAction {
 
             caret.getCaretModel().moveToOffset(selection.getStartOffset() + surrounder.caretOffsetInSurroundedText(surroundedText));
         });
+    }
+
+    @NotNull
+    private TextRange calculateRangeToSurround(Caret caret) {
+        if (!caret.hasSelection()) {
+            caret.selectWordAtCaret(false);
+        }
+        return new TextRange(caret.getSelectionStart(), caret.getSelectionEnd());
     }
 }
