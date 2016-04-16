@@ -73,11 +73,11 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             //Concordion dependencies
             PsiTestUtil.addLibrary(myModule, "testData/lib/junit-4.12.jar");
             //Concordion itself
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-2.0.0-SNAPSHOT.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-2.0.0.jar");
             //Concordion extensions
             PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-embed-extension-1.1.2.jar");
             PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-executeonlyif-extension-0.2.1.jar");
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-screenshot-extension-1.1.2.jar");
+            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-screenshot-extension-1.2.0.jar");
         }
     }
 
