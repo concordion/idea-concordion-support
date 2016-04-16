@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.execution.actions.ConfigurationContext;
@@ -133,5 +134,15 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
                 action.compute();
             }
         }.execute();
+    }
+
+    protected final void executeIntention(@NotNull String name) {
+        IntentionAction fix = myFixture.findSingleIntention(name);
+        assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
+
+        writeAction(() -> {
+            fix.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile());
+            return null;
+        });
     }
 }

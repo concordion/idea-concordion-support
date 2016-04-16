@@ -1,10 +1,10 @@
-package org.concordion.plugin.idea.action;
+package org.concordion.plugin.idea.action.intention;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.EditorTestUtil;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
-public class SurroundWithConcordionActionInMdTest extends ConcordionCodeInsightFixtureTestCase {
+public class SurroundWithConcordionIntentionInMdActionTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -18,7 +18,7 @@ public class SurroundWithConcordionActionInMdTest extends ConcordionCodeInsightF
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
-        EditorTestUtil.executeAction(myFixture.getEditor(), "surroundWithConcordionAction");
+        executeIntention("Surround with Concordion expression");
 
         myFixture.checkResultByFile("/resources/com/test/SurroundWithConcordion.md", "after/SurroundWithConcordion.md", false);
     }

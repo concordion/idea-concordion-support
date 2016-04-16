@@ -1,4 +1,4 @@
-package org.concordion.plugin.idea.action.surround;
+package org.concordion.plugin.idea.action.intention.surround;
 
 import org.jetbrains.annotations.NotNull;
 

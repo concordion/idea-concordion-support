@@ -18,13 +18,7 @@ public class CreateMethodFromConcordionUsageTest extends ConcordionCodeInsightFi
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
-        IntentionAction fix = myFixture.findSingleIntention("Create method from usage");
-        assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
-
-        writeAction(() -> {
-            fix.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile());
-            return null;
-        });
+        executeIntention("Create method from usage");
 
         myFixture.checkResultByFile("/src/com/test/CreateMethodFromUsage.java", "after/CreateMethodFromUsage.java", false);
     }

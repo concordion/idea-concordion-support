@@ -136,6 +136,11 @@
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
 
     <runConfigurationProducer implementation="org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer"/>
+
+    <intentionAction>
+      <className>org.concordion.plugin.idea.action.intention.SurroundWithConcordionIntentionAction</className>
+      <category>Concordion</category>
+    </intentionAction>
   </extensions>
 
   <application-components>
@@ -151,13 +156,5 @@
             class="org.concordion.plugin.idea.action.NavigateBetweenConcordionSpecFiles">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
     </action>
-
-    <action id="surroundWithConcordionAction"
-            text="Surround selected text with concordion expression"
-            description="Surround selected text with concordion expression"
-            class="org.concordion.plugin.idea.action.SurroundWithConcordionAction">
-      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt W"/>
-    </action>
-
   </actions>
 </idea-plugin>
