@@ -10,8 +10,8 @@ import javax.swing.*;
 
 public class ConcordionConfigurable implements SearchableConfigurable {
 
-    @NotNull
-    private final ConcordionSettingsForm settingsForm = new ConcordionSettingsForm();
+    @Nullable
+    private ConcordionSettingsForm settingsForm;
 
     @NotNull
     @Override
@@ -40,26 +40,34 @@ public class ConcordionConfigurable implements SearchableConfigurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        return settingsForm.settingsPanel();
+        return getSettingsForm().settingsPanel();
     }
 
     @Override
     public boolean isModified() {
-        return false;
+        return !ConcordionSettings.getInstance().currentState().equals(getSettingsForm().createSettings());
     }
 
     @Override
     public void apply() throws ConfigurationException {
-
+        ConcordionSettings.getInstance().updateState(getSettingsForm().createSettings());
     }
 
     @Override
     public void reset() {
-
+        getSettingsForm().setSettings(ConcordionSettings.getInstance().currentState());
     }
 
     @Override
     public void disposeUIResources() {
+        settingsForm = null;
+    }
 
+    @NotNull
+    private ConcordionSettingsForm getSettingsForm() {
+        if (settingsForm == null) {
+            settingsForm = new ConcordionSettingsForm();
+        }
+        return settingsForm;
     }
 }
