@@ -141,6 +141,11 @@
       <className>org.concordion.plugin.idea.action.intention.SurroundWithConcordionIntentionAction</className>
       <category>Concordion</category>
     </intentionAction>
+
+    <applicationConfigurable groupId="language" instance="org.concordion.plugin.idea.settings.ConcordionConfigurable"/>
+
+    <applicationService serviceInterface="org.concordion.plugin.idea.settings.ConcordionSettings"
+                        serviceImplementation="org.concordion.plugin.idea.settings.ConcordionSettings"/>
   </extensions>
 
   <application-components>
