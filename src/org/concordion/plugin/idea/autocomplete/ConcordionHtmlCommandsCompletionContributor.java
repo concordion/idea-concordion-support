@@ -7,6 +7,7 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +44,7 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
             result.addAllElements(forCommands(
                     Namespaces.CONCORDION,
                     context.get(CONCORDION_SCHEMA_PREFIX),
-                    DEFAULT_COMMANDS
+                    commands(ConcordionSettings.getInstance().currentState().commandsCaseType)
             ));
         }
     }

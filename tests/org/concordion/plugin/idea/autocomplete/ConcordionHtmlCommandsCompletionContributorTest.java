@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.concordion.plugin.idea.ConcordionCommands.*;
+import static org.concordion.plugin.idea.settings.ConcordionCommandsCaseType.*;
 
 public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
@@ -24,15 +23,45 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
             "ext:executeOnlyIf"
     );
 
-    private static final Iterable<String> MD_COMMANDS_WITH_EQUALS = EMBEDDED_COMMANDS.stream()
-            .map(c -> c + '=').collect(toList());
+    private static final Iterable<String> CAMEL_CASE_COMMANDS = ImmutableList.of(
+            "c:assertEquals",
+            "c:assertTrue",
+            "c:assertFalse",
+            "c:verifyRows",
+            "c:matchStrategy",
+            "c:matchingRole"
+    );
+
+    private static final Iterable<String> SPINAL_CASE_COMMANDS = ImmutableList.of(
+            "c:assert-equals",
+            "c:assert-true",
+            "c:assert-false",
+            "c:verify-rows",
+            "c:match-strategy",
+            "c:matching-role"
+    );
+
+    private static final Iterable<String> SINGLE_WORD_COMMANDS = ImmutableList.of(
+            "c:execute",
+            "c:set",
+            "c:echo",
+            "c:run",
+            "c:example",
+            "c:status"
+    );
+
+    private static final Iterable<String> EMBEDDED_SPECIFIC_COMMANDS = ImmutableList.of(
+            "?="
+    );
 
     @Override
     protected String getTestDataPath() {
         return "testData/completion";
     }
 
-    public void testCompleteConcordionCommandsInHtmlTags() {
+    public void testCompleteConcordionCommandsInHtmlTagsWithBothCases() {
+
+        useCommandsCase(BOTH);
 
         copyTestFixtureToConcordionProject("Commands.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("Commands.html");
@@ -41,12 +70,51 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
         myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
-                .containsAll(DEFAULT_COMMANDS_WITH_C_PREFIX)
+                .containsAll(SINGLE_WORD_COMMANDS)
+                .containsAll(CAMEL_CASE_COMMANDS)
+                .containsAll(SPINAL_CASE_COMMANDS)
+                .doesNotContainAnyElementsOf(EMBEDDED_SPECIFIC_COMMANDS)
                 .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
 
         completeWithConcordionCommand("c:execute");
 
         myFixture.checkResultByFile("CommandsCompleted.html");
+    }
+
+    public void testCompleteConcordionCommandsInHtmlTagsWithCamelCaseOnly() {
+
+        useCommandsCase(CAMEL_CASE);
+
+        copyTestFixtureToConcordionProject("Commands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Commands.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(SINGLE_WORD_COMMANDS)
+                .containsAll(CAMEL_CASE_COMMANDS)
+                .doesNotContainAnyElementsOf(SPINAL_CASE_COMMANDS)
+                .doesNotContainAnyElementsOf(EMBEDDED_SPECIFIC_COMMANDS)
+                .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
+    }
+
+    public void testCompleteConcordionCommandsInHtmlTagsWithSpinalCaseOnly() {
+
+        useCommandsCase(SPINAL_CASE);
+
+        copyTestFixtureToConcordionProject("Commands.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Commands.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(SINGLE_WORD_COMMANDS)
+                .containsAll(SPINAL_CASE_COMMANDS)
+                .doesNotContainAnyElementsOf(CAMEL_CASE_COMMANDS)
+                .doesNotContainAnyElementsOf(EMBEDDED_SPECIFIC_COMMANDS)
+                .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
 
     public void testDoNotCompleteWithEmbeddedConcordionCommandsInHtmlTags() {
@@ -59,12 +127,8 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
 
         List<String> lookupElementStrings = myFixture.getLookupElementStrings();
 
-        System.out.println("--->" + lookupElementStrings);
-
         assertThat(lookupElementStrings)
-                .doesNotContainAnyElementsOf(MD_COMMANDS_WITH_EQUALS)
-                .doesNotContainAnyElementsOf(DEFAULT_COMMANDS_WITH_C_PREFIX)
-                .doesNotContainAnyElementsOf(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
+                .doesNotContainAnyElementsOf(EMBEDDED_SPECIFIC_COMMANDS);
     }
 
     public void testCompleteExtensionsCommandsInHtmlTags() {
@@ -76,7 +140,6 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
         myFixture.completeBasic();
 
         assertThat(myFixture.getLookupElementStrings())
-                .containsAll(DEFAULT_COMMANDS_WITH_C_PREFIX)
                 .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
 

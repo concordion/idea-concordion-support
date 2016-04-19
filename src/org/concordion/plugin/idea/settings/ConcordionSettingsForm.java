@@ -10,7 +10,7 @@ public class ConcordionSettingsForm {
 
     @NotNull private JPanel settingsPanel;
     @NotNull private JComboBox concordionCommandsCompletionType;
-    @NotNull private EnumComboBoxModel<ConcordionCommandsCompletionType> concordionCommandsCompletionTypeModel;
+    @NotNull private EnumComboBoxModel<ConcordionCommandsCaseType> concordionCommandsCompletionTypeModel;
 
     @NotNull
     public JComponent settingsPanel() {
@@ -18,18 +18,18 @@ public class ConcordionSettingsForm {
     }
 
     private void createUIComponents() {
-        concordionCommandsCompletionTypeModel = new EnumComboBoxModel<>(ConcordionCommandsCompletionType.class);
+        concordionCommandsCompletionTypeModel = new EnumComboBoxModel<>(ConcordionCommandsCaseType.class);
         concordionCommandsCompletionType = new ComboBox(concordionCommandsCompletionTypeModel);
     }
 
     public void setSettings(@NotNull ConcordionSettings.State settings) {
-        concordionCommandsCompletionTypeModel.setSelectedItem(settings.completionType);
+        concordionCommandsCompletionTypeModel.setSelectedItem(settings.commandsCaseType);
     }
 
     @NotNull
     public ConcordionSettings.State createSettings() {
         ConcordionSettings.State settings = new ConcordionSettings.State();
-        settings.completionType = concordionCommandsCompletionTypeModel.getSelectedItem();
+        settings.commandsCaseType = concordionCommandsCompletionTypeModel.getSelectedItem();
         return settings;
     }
 }

@@ -21,6 +21,8 @@ import com.intellij.testFramework.MapDataContext;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer;
+import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
@@ -144,5 +146,11 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             fix.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile());
             return null;
         });
+    }
+
+    protected final void useCommandsCase(ConcordionCommandsCaseType type) {
+        ConcordionSettings.State settings = new ConcordionSettings.State();
+        settings.commandsCaseType = type;
+        ConcordionSettings.getInstance().updateState(settings);
     }
 }

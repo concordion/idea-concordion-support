@@ -44,7 +44,7 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     public static final class State {
 
         @NotNull
-        public ConcordionCommandsCompletionType completionType = ConcordionCommandsCompletionType.BOTH;
+        public ConcordionCommandsCaseType commandsCaseType = ConcordionCommandsCaseType.BOTH;
 
         @Override
         public boolean equals(Object o) {
@@ -54,12 +54,12 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            return completionType == ((State) o).completionType;
+            return commandsCaseType == ((State) o).commandsCaseType;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(completionType);
+            return Objects.hashCode(commandsCaseType);
         }
     }
 }

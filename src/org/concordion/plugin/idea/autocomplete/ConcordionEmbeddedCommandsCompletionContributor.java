@@ -6,12 +6,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;
-import static org.concordion.plugin.idea.ConcordionCommands.EMBEDDED_COMMANDS;
+import static org.concordion.plugin.idea.ConcordionCommands.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
@@ -33,7 +34,7 @@ public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionC
     private static final class ConcordionEmbeddedCommandsCompletionProvider extends CompletionProvider<CompletionParameters> {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-            result.addAllElements(forCommands(EMBEDDED_COMMANDS));
+            result.addAllElements(forCommands(embeddedCommands(ConcordionSettings.getInstance().currentState().commandsCaseType)));
         }
     }
 
