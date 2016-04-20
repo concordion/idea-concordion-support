@@ -31,7 +31,7 @@ public class ConcordionCommands {
 
     public static final Collection<String> EMBEDDED_COMMANDS = ImmutableList.<String>builder().addAll(DEFAULT_COMMANDS_WITH_C_PREFIX).add("?").build();
 
-    private static final Map<String, String> EXTENSION_COMMANDS = ImmutableMap.of(
+    public static final Map<String, String> EXTENSION_COMMANDS = ImmutableMap.of(
             "org.concordion.ext.EmbedExtension", "embed",
             "org.concordion.ext.ExecuteOnlyIfExtension", "executeOnlyIf",
             "org.concordion.ext.ScreenshotExtension", "screenshot");

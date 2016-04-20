@@ -137,6 +137,9 @@
 
     <runConfigurationProducer implementation="org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer"/>
 
+    <standardResourceProvider implementation="org.concordion.plugin.idea.schema.ConcordionResourceProvider"/>
+    <xml.attributeDescriptorsProvider implementation="org.concordion.plugin.idea.schema.ConcordionHtmlAttributeDescriptorProvider"/>
+
     <intentionAction>
       <className>org.concordion.plugin.idea.action.intention.SurroundWithConcordionIntentionAction</className>
       <category>Concordion</category>
