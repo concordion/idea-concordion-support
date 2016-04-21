@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
@@ -38,7 +39,7 @@ public final class ConcordionPsiUtils {
         if (start.getOgnlExpressionNext() != null) {
             return typeOfChain(start.getOgnlExpressionNext());
         } else {
-            ConcordionPsiElement typedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+            ConcordionPsiElement typedElement = firstNotNull(start::getMethod, start::getField, start::getVariable);
             if (typedElement != null) {
                 return typedElement.getType();
             }
@@ -61,7 +62,7 @@ public final class ConcordionPsiUtils {
         if (following.hasNext()) {
             return typeOfChain(following.next());
         } else {
-            ConcordionPsiElement typedElement = firstNotNullIfPresent(next.getMethod(), next.getField());
+            ConcordionPsiElement typedElement = firstNotNull(next::getMethod, next::getField);
             if (typedElement != null) {
                 return typedElement.getType();
             }
@@ -71,7 +72,7 @@ public final class ConcordionPsiUtils {
 
     @Nullable
     public static String nameInExpression(@NotNull ConcordionOgnlExpressionStart start) {
-        ConcordionPsiElement namedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+        ConcordionPsiElement namedElement = firstNotNull(start::getMethod, start::getField, start::getVariable);
         return namedElement != null ? namedElement.getName() : null;
     }
 
@@ -111,8 +112,10 @@ public final class ConcordionPsiUtils {
 
     @Nullable
     public static String commandOf(@NotNull PsiElement injected) {
-        String embedded = embeddedCommandOf(injected);
-        return embedded != null ? embedded : attributeCommandOf(injected);
+        return firstNotNull(
+                () -> embeddedCommandOf(injected),
+                () -> attributeCommandOf(injected)
+        );
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {
@@ -251,7 +254,10 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static <T> T firstNotNullIfPresent(@NotNull T... elements) {
-        return stream(elements).filter(Objects::nonNull).findFirst().orElse(null);
+    public static <T> T firstNotNull(@NotNull Supplier<T>... suppliers) {
+        return stream(suppliers)
+                .map(Supplier::get)
+                .filter(Objects::nonNull)
+                .findFirst().orElse(null);
     }
 }

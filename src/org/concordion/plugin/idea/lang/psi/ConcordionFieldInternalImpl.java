@@ -47,9 +47,9 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         if (name == null) {
             return null;
         }
-        return firstNotNullIfPresent(
-                findMethodInClass(containingClass, correspondingGetterName(name), emptyList()),
-                findFieldInClass(containingClass, name)
+        return firstNotNull(
+                () -> findMethodInClass(containingClass, correspondingGetterName(name), emptyList()),
+                () -> findFieldInClass(containingClass, name)
         );
     }
 
