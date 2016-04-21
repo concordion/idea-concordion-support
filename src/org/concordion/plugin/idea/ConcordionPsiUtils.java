@@ -1,5 +1,8 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
@@ -53,26 +56,6 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String nameInExpression(@NotNull ConcordionOgnlExpressionStart start) {
-        ConcordionPsiElement namedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
-        return namedElement != null ? namedElement.getName() : null;
-    }
-
-    @NotNull
-    public static String commandText(@Nullable ConcordionEmbeddedCommand command) {
-        if (command == null) {
-            return "set";
-        }
-        String text = command.getText();
-        if ("?=".equals(text)) {
-            return "assertEquals";
-        }
-        int prefix = text.indexOf(':');
-        int assignment = text.indexOf('=');
-        return text.substring(prefix+1, assignment);
-    }
-
-    @Nullable
     private static PsiType typeOfChain(@NotNull ConcordionOgnlExpressionNext next) {
         Iterator<ConcordionOgnlExpressionNext> following = next.getOgnlExpressionNextList().iterator();
         if (following.hasNext()) {
@@ -84,6 +67,52 @@ public final class ConcordionPsiUtils {
             }
             return null;
         }
+    }
+
+    @Nullable
+    public static String nameInExpression(@NotNull ConcordionOgnlExpressionStart start) {
+        ConcordionPsiElement namedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+        return namedElement != null ? namedElement.getName() : null;
+    }
+
+    @Nullable
+    public static String commandText(@Nullable ConcordionEmbeddedCommand command) {
+        if (command == null) {
+            return null;
+        }
+        String text = command.getText();
+        if ("?=".equals(text)) {
+            return "assertEquals";
+        }
+        int prefix = text.indexOf(':');
+        int assignment = text.indexOf('=');
+        return text.substring(prefix + 1, assignment);
+    }
+
+    @Nullable
+    public static String embeddedCommandOf(@NotNull PsiElement injected) {
+        return commandText(
+                findChildOfType(
+                        getParentOfType(injected, PsiFile.class),
+                        ConcordionEmbeddedCommand.class
+                )
+        );
+    }
+
+    @Nullable
+    public static String attributeCommandOf(@NotNull PsiElement injected) {
+        PsiLanguageInjectionHost host = InjectedLanguageUtil.findInjectionHost(injected);
+        XmlAttribute attribute = PsiTreeUtil.getParentOfType(host, XmlAttribute.class);
+        if (attribute == null) {
+            return null;
+        }
+        return attribute.getLocalName();
+    }
+
+    @Nullable
+    public static String commandOf(@NotNull PsiElement injected) {
+        String embedded = embeddedCommandOf(injected);
+        return embedded != null ? embedded : attributeCommandOf(injected);
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {

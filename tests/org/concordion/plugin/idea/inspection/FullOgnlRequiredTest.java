@@ -26,7 +26,10 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
-                .has(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
+                .has(fullOgnlRequired().withText("makeItComplex().data()"))
+                .has(fullOgnlRequired().withText("assignHere()"))
+                .has(fullOgnlRequired().withText("#var = makeItComplex().data()"), 2)
+                .has(fullOgnlRequired().withText("makeItComplex().rows()"));
     }
 
     public void testDoesNotErrorOutSimpleOgnlExpression() {
@@ -36,7 +39,10 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
+                .hasNo(fullOgnlRequired().withText("data()"))
+                .hasNo(fullOgnlRequired().withText("#var"))
+                .hasNo(fullOgnlRequired().withText("#var = data()"))
+                .hasNo(fullOgnlRequired().withText("rows()"));
     }
 
     public void testDoesNotErrorOutComplexExpressionWithFullOgnlTestFixture() {
@@ -46,7 +52,10 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
+                .hasNo(fullOgnlRequired().withText("makeItComplex().data()"))
+                .hasNo(fullOgnlRequired().withText("assignHere()"))
+                .hasNo(fullOgnlRequired().withText("#var = makeItComplex().data()"))
+                .hasNo(fullOgnlRequired().withText("makeItComplex().rows()"));
     }
 
     public void testDoesNotErrorOutComplexExpressionWithFullOgnlParentOfTestFixture() {
@@ -58,6 +67,13 @@ public class FullOgnlRequiredTest extends ConcordionCodeInsightFixtureTestCase {
         myFixture.configureFromExistingVirtualFile(htmlSpec);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(anInfo().withSeverity(ERROR).withText("\"buildString().toString()\"").withDescription("Complex expression with fixture not annotated with @FullOGNL"));
+                .hasNo(fullOgnlRequired().withText("makeItComplex().data()"))
+                .hasNo(fullOgnlRequired().withText("assignHere()"))
+                .hasNo(fullOgnlRequired().withText("#var = makeItComplex().data()"))
+                .hasNo(fullOgnlRequired().withText("makeItComplex().rows()"));
+    }
+
+    private Info fullOgnlRequired() {
+        return anInfo().withSeverity(ERROR).withDescription("Too complex expression");
     }
 }

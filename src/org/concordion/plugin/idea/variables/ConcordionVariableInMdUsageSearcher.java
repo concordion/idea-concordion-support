@@ -1,16 +1,12 @@
 package org.concordion.plugin.idea.variables;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import org.concordion.plugin.idea.injection.ConcordionInjection;
-import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.psi.util.PsiTreeUtil.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVALID;
@@ -35,14 +31,11 @@ public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsage
         if (injected == null || !(injected.getParent() instanceof ConcordionVariable)) {
             return INVALID;
         }
-        return new ConcordionVariableUsage(embeddedCommandIn(injected), (ConcordionVariable) injected.getParent());
-    }
-
-    @Nullable
-    private String embeddedCommandIn(@NotNull PsiElement injected) {
-        PsiFile file = getParentOfType(injected, PsiFile.class);
-        ConcordionEmbeddedCommand command = findChildOfType(file, ConcordionEmbeddedCommand.class);
-        return commandText(command);
+        String command = embeddedCommandOf(injected);
+        if (command == null) {
+            command = "set";
+        }
+        return new ConcordionVariableUsage(command, (ConcordionVariable) injected.getParent());
     }
 
     @NotNull
