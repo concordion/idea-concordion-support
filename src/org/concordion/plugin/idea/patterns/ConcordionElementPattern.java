@@ -7,6 +7,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
+import org.concordion.internal.MultiPattern;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.ConcordionSpecType;
 import org.concordion.plugin.idea.Namespaces;
@@ -161,8 +162,26 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
     public Self withResolved(boolean resolved) {
         return with(new PatternCondition<T>("withResolved") {
             @Override
-            public boolean accepts(@NotNull T t, ProcessingContext context) {
-                return ((ConcordionPsiElement) t).isResolvable() == resolved;
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return ((ConcordionPsiElement) element).isResolvable() == resolved;
+            }
+        });
+    }
+
+    public Self withCommand(@NotNull String command) {
+        return with(new PatternCondition<T>("withExtractedCommand") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return command.equals(commandOf(element));
+            }
+        });
+    }
+
+    public Self withTextNotMatching(@NotNull MultiPattern pattern) {
+        return with(new PatternCondition<T>("withTextMatches") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return !pattern.matches(element.getText());
             }
         });
     }

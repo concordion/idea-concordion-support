@@ -1,5 +1,8 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
@@ -9,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
@@ -35,7 +39,7 @@ public final class ConcordionPsiUtils {
         if (start.getOgnlExpressionNext() != null) {
             return typeOfChain(start.getOgnlExpressionNext());
         } else {
-            ConcordionPsiElement typedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+            ConcordionPsiElement typedElement = firstNotNull(start::getMethod, start::getField, start::getVariable);
             if (typedElement != null) {
                 return typedElement.getType();
             }
@@ -53,15 +57,29 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
+    private static PsiType typeOfChain(@NotNull ConcordionOgnlExpressionNext next) {
+        Iterator<ConcordionOgnlExpressionNext> following = next.getOgnlExpressionNextList().iterator();
+        if (following.hasNext()) {
+            return typeOfChain(following.next());
+        } else {
+            ConcordionPsiElement typedElement = firstNotNull(next::getMethod, next::getField);
+            if (typedElement != null) {
+                return typedElement.getType();
+            }
+            return null;
+        }
+    }
+
+    @Nullable
     public static String nameInExpression(@NotNull ConcordionOgnlExpressionStart start) {
-        ConcordionPsiElement namedElement = firstNotNullIfPresent(start.getMethod(), start.getField(), start.getVariable());
+        ConcordionPsiElement namedElement = firstNotNull(start::getMethod, start::getField, start::getVariable);
         return namedElement != null ? namedElement.getName() : null;
     }
 
-    @NotNull
+    @Nullable
     public static String commandText(@Nullable ConcordionEmbeddedCommand command) {
         if (command == null) {
-            return "set";
+            return null;
         }
         String text = command.getText();
         if ("?=".equals(text)) {
@@ -69,21 +87,35 @@ public final class ConcordionPsiUtils {
         }
         int prefix = text.indexOf(':');
         int assignment = text.indexOf('=');
-        return text.substring(prefix+1, assignment);
+        return text.substring(prefix + 1, assignment);
     }
 
     @Nullable
-    private static PsiType typeOfChain(@NotNull ConcordionOgnlExpressionNext next) {
-        Iterator<ConcordionOgnlExpressionNext> following = next.getOgnlExpressionNextList().iterator();
-        if (following.hasNext()) {
-            return typeOfChain(following.next());
-        } else {
-            ConcordionPsiElement typedElement = firstNotNullIfPresent(next.getMethod(), next.getField());
-            if (typedElement != null) {
-                return typedElement.getType();
-            }
+    public static String embeddedCommandOf(@NotNull PsiElement injected) {
+        return commandText(
+                findChildOfType(
+                        getParentOfType(injected, PsiFile.class),
+                        ConcordionEmbeddedCommand.class
+                )
+        );
+    }
+
+    @Nullable
+    public static String attributeCommandOf(@NotNull PsiElement injected) {
+        PsiLanguageInjectionHost host = InjectedLanguageUtil.findInjectionHost(injected);
+        XmlAttribute attribute = PsiTreeUtil.getParentOfType(host, XmlAttribute.class);
+        if (attribute == null) {
             return null;
         }
+        return attribute.getLocalName();
+    }
+
+    @Nullable
+    public static String commandOf(@NotNull PsiElement injected) {
+        return firstNotNull(
+                () -> embeddedCommandOf(injected),
+                () -> attributeCommandOf(injected)
+        );
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {
@@ -222,7 +254,10 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static <T> T firstNotNullIfPresent(@NotNull T... elements) {
-        return stream(elements).filter(Objects::nonNull).findFirst().orElse(null);
+    public static <T> T firstNotNull(@NotNull Supplier<T>... suppliers) {
+        return stream(suppliers)
+                .map(Supplier::get)
+                .filter(Objects::nonNull)
+                .findFirst().orElse(null);
     }
 }

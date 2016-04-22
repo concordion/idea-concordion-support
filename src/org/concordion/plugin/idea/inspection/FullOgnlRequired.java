@@ -1,60 +1,44 @@
 package org.concordion.plugin.idea.inspection;
 
-import com.google.common.collect.ImmutableSet;
-import org.concordion.internal.MultiPattern;
+import org.concordion.plugin.idea.lang.psi.ConcordionIterateExpression;
+import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
+import org.concordion.plugin.idea.lang.psi.ConcordionSetExpression;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.patterns.PatternCondition;
 import com.intellij.psi.*;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.util.ProcessingContext;
 import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-import java.util.function.Function;
-
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class FullOgnlRequired extends LocalInspectionTool {
 
-    private static final Set<String> SET_COMMANDS = ImmutableSet.of("set");
-    private static final Set<String> VERIFY_ROW_COMMANDS = ImmutableSet.of("verifyRows", "verify-rows");
-    private static final Set<String> EVALUATE_COMMANDS = ImmutableSet.of("assertEquals", "assert-equals",
-            "assertTrue", "assert-true",
-            "assertFalse", "assert-false",
-            "echo",
-            "execute");
+    private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_EVALUATION =
+            concordionElement(ConcordionOgnlExpressionStart.class)
+                    .withParent(PsiFile.class)
+                    .withTextNotMatching(SimpleEvaluator.EVALUATION_PATTERNS);
 
+    private static final ConcordionElementPattern.Capture<ConcordionSetExpression> COMPLEX_SET =
+            concordionElement(ConcordionSetExpression.class)
+                    .withTextNotMatching(SimpleEvaluator.SET_VARIABLE_PATTERNS);
 
-    private static final ConcordionElementPattern.Capture<XmlAttributeValue> TOO_COMPLEX_CONCORDION_EXPRESSION =
-            concordionElement(XmlAttributeValue.class)
-                    .withParent(XmlAttribute.class)
-                    .withConfiguredSpecOfType(HTML)
+    private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_SET_VIA_COMMAND =
+            concordionElement(ConcordionOgnlExpressionStart.class)
+                    .withParent(PsiFile.class)
+                    .withCommand("set")
+                    .withTextNotMatching(SimpleEvaluator.SET_VARIABLE_PATTERNS);
+
+    private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_ITERATE =
+            concordionElement(ConcordionOgnlExpressionStart.class)
+                    .withParent(ConcordionIterateExpression.class)
+                    .withTextNotMatching(SimpleEvaluator.EVALUATION_PATTERNS);
+
+    private static final ConcordionElementPattern.Capture<PsiElement> TOO_COMPLEX_CONCORDION_EXPRESSION =
+            concordionElement()
                     .withFoundTestFixture()
                     .withFullOgnl(false)
-                    .withConcordionXmlAttribute()
-                    .andOr(
-                            concordionElement(XmlAttributeValue.class)
-                                    .withConcordionCommand(SET_COMMANDS)
-                                    .with(new ComplicatedExpression(
-                                            SimpleEvaluator.SET_VARIABLE_PATTERNS
-                                    )),
-                            concordionElement(XmlAttributeValue.class)
-                                    .withConcordionCommand(EVALUATE_COMMANDS)
-                                    .with(new ComplicatedExpression(
-                                            SimpleEvaluator.EVALUATION_PATTERNS
-                                    )),
-                            concordionElement(XmlAttributeValue.class)
-                                    .withConcordionCommand(VERIFY_ROW_COMMANDS)
-                                    .with(new ComplicatedExpression(
-                                            SimpleEvaluator.EVALUATION_PATTERNS,
-                                            FullOgnlRequired::extractEvaluationExpressionFromVerifyRows
-                                    ))
-                    );
+                    .andOr(COMPLEX_EVALUATION, COMPLEX_SET, COMPLEX_SET_VIA_COMMAND, COMPLEX_ITERATE);
 
     @NotNull
     @Override
@@ -62,38 +46,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
         return new ConcordionInspectionVisitor<>(
                 TOO_COMPLEX_CONCORDION_EXPRESSION,
                 holder,
-                "Complex expression with fixture not annotated with @FullOGNL"
+                "Too complex expression"
         );
-    }
-
-    private static String extractEvaluationExpressionFromVerifyRows(String evaluateRowsExpression) {
-        int delimiterPosition = evaluateRowsExpression.indexOf(':');
-
-        if (delimiterPosition == -1) {
-            return "";
-        }
-
-        return evaluateRowsExpression.substring(delimiterPosition + 1).trim();
-    }
-
-    public static final class ComplicatedExpression extends PatternCondition<XmlAttributeValue> {
-
-        private final MultiPattern multiPattern;
-        private final Function<String, String> transformer;
-
-        public ComplicatedExpression(MultiPattern multiPattern) {
-            this(multiPattern, Function.<String>identity());
-        }
-
-        public ComplicatedExpression(MultiPattern multiPattern, Function<String, String> transformer) {
-            super("ComplicatedExpression");
-            this.multiPattern = multiPattern;
-            this.transformer = transformer;
-        }
-
-        @Override
-        public boolean accepts(@NotNull XmlAttributeValue attributeValue, ProcessingContext context) {
-            return !multiPattern.matches(transformer.apply(attributeValue.getValue()));
-        }
     }
 }

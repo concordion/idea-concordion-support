@@ -23,6 +23,9 @@ public class ConcordionCommands {
             "execute", "set", "echo", "run", "example", "status"
     );
 
+    public static final Collection<String> ALL_COMMANDS = ImmutableList.<String>builder()
+            .addAll(CAMEL_CASE_COMMANDS).addAll(SPINAL_CASE_COMMANDS).addAll(SINGLE_WORD_COMMANDS).build();
+
     public static final String EQUALS_EMBEDDED_FORM = "?";
 
     public static final String DEFAULT_PREFIX = "c";

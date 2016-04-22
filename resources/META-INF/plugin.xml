@@ -99,17 +99,10 @@
                      enabledByDefault="true"
                      level="ERROR"
                      implementationClass="org.concordion.plugin.idea.inspection.TestFixtureIsNotAnnotatedWithConcordionRunner"/>
-    <localInspection language="HTML"
-                     id="usingFullOgnlExpressioninHtml"
+    <localInspection language="Concordion"
+                     id="usingFullOgnlExpression"
                      groupName="Concordion"
-                     displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
-                     enabledByDefault="true"
-                     level="ERROR"
-                     implementationClass="org.concordion.plugin.idea.inspection.FullOgnlRequired"/>
-    <localInspection language="XHTML"
-                     id="usingFullOgnlExpressioninXhtml"
-                     groupName="Concordion"
-                     displayName="Using FullOGNL expression while test fixture is not annotated with @FullOGNL"
+                     displayName="Too complex expression"
                      enabledByDefault="true"
                      level="ERROR"
                      implementationClass="org.concordion.plugin.idea.inspection.FullOgnlRequired"/>
@@ -136,6 +129,9 @@
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
 
     <runConfigurationProducer implementation="org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer"/>
+
+    <standardResourceProvider implementation="org.concordion.plugin.idea.schema.ConcordionResourceProvider"/>
+    <xml.attributeDescriptorsProvider implementation="org.concordion.plugin.idea.schema.ConcordionHtmlAttributeDescriptorProvider"/>
 
     <intentionAction>
       <className>org.concordion.plugin.idea.action.intention.SurroundWithConcordionIntentionAction</className>

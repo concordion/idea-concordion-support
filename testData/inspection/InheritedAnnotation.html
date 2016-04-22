@@ -4,7 +4,34 @@
 </head>
 <body>
 
-<span c:execute="buildString()"></span>
-<span c:execute="buildString().toString()"></span>
+    <div c:assert-equals="data()">simple</div>
+    <div c:assert-equals="makeItComplex().data()">complex</div>
+
+    <div c:set="#var">simple</div>
+    <div c:set="assignHere()">invalid</div>
+
+    <div c:set="#var = data()">simple</div>
+    <div c:set="#var = makeItComplex().data()">complex</div>
+
+    <div c:execute="#var = data()">simple</div>
+    <div c:execute="#var = makeItComplex().data()">complex</div>
+
+    <table c:verify-rows="#row : rows()">
+        <tr>
+            <th c:assert-quals="#row">value</th>
+        </tr>
+        <tr>
+            <td>simple</td>
+        </tr>
+    </table>
+
+    <table c:verify-rows="#row : makeItComplex().rows()">
+        <tr>
+            <th c:assert-quals="#row">value</th>
+        </tr>
+        <tr>
+            <td>complex</td>
+        </tr>
+    </table>
 </body>
 </html>
