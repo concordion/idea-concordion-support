@@ -1,8 +1,12 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.ide.highlighter.XHtmlFileType;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
+import org.concordion.plugin.idea.lang.ConcordionFileType;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
@@ -101,9 +105,8 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String attributeCommandOf(@NotNull PsiElement injected) {
-        PsiLanguageInjectionHost host = InjectedLanguageUtil.findInjectionHost(injected);
-        XmlAttribute attribute = PsiTreeUtil.getParentOfType(host, XmlAttribute.class);
+    public static String attributeCommandOf(@Nullable PsiElement concordionXmlFragment) {
+        XmlAttribute attribute = PsiTreeUtil.getParentOfType(concordionXmlFragment, XmlAttribute.class, false);
         if (attribute == null) {
             return null;
         }
@@ -111,11 +114,18 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String commandOf(@NotNull PsiElement injected) {
-        return firstNotNull(
-                () -> embeddedCommandOf(injected),
-                () -> attributeCommandOf(injected)
-        );
+    public static String commandOf(@NotNull PsiElement element) {
+        FileType fileType = element.getContainingFile().getFileType();
+        if (ConcordionFileType.INSTANCE.equals(fileType)) {
+            return firstNotNull(
+                    () -> embeddedCommandOf(element),
+                    () -> attributeCommandOf(InjectedLanguageUtil.findInjectionHost(element))
+            );
+        } else if (HtmlFileType.INSTANCE.equals(fileType) || XHtmlFileType.INSTANCE.equals(fileType)) {
+            return attributeCommandOf(element);
+        } else {
+            return null;
+        }
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {

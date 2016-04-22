@@ -136,20 +136,6 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withConcordionCommand(String... commands) {
-        return withConcordionCommand(ImmutableSet.copyOf(commands));
-    }
-
-    public Self withConcordionCommand(Set<String> commands) {
-        return with(new PatternCondition<T>("withConcordionCommand") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
-                return attribute != null && commands.contains(attribute.getLocalName());
-            }
-        });
-    }
-
     public Self withStartOfInjection() {
         return with(new PatternCondition<PsiElement>("withStartOfInjection") {
             @Override
@@ -184,6 +170,19 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 return !pattern.matches(element.getText());
             }
         });
+    }
+
+    public Self withCommandIn(@NotNull Set<String> commands) {
+        return with(new PatternCondition<T>("withCommandIn") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return commands.contains(commandOf(element));
+            }
+        });
+    }
+
+    public Self withCommandIn(@NotNull String... commands) {
+        return withCommandIn(ImmutableSet.copyOf(commands));
     }
 
     public static class Capture<T extends PsiElement> extends ConcordionElementPattern<T, Capture<T>> {

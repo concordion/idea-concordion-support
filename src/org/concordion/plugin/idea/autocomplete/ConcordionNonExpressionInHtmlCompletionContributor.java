@@ -3,10 +3,13 @@ package org.concordion.plugin.idea.autocomplete;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
+import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -16,24 +19,33 @@ public class ConcordionNonExpressionInHtmlCompletionContributor extends Completi
     public ConcordionNonExpressionInHtmlCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("matchStrategy", "match-strategy"),
+                defaultInjectionPattern().withCommandIn("matchStrategy", "match-strategy"),
                 fixedValues("Default", "BestMatch", "KeyMatch")
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("matchingRole", "matching-Role"),
+                defaultInjectionPattern().withCommandIn("matchingRole", "matching-role"),
                 fixedValues("key")
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("status"),
+                defaultInjectionPattern().withCommand("status"),
                 fixedValues("Unimplemented", "ExpectedToFail", "ExpectedToPass")
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttributeValue.class).withConcordionCommand("screenshot"),
+                defaultInjectionPattern().withCommand("screenshot"),
                 fixedValues("linked")
         );
+    }
+
+    @NotNull
+    private static ConcordionElementPattern.Capture<PsiElement> defaultInjectionPattern() {
+        return concordionElement()
+                .withConfiguredSpecOfType(HTML)
+                .withFoundTestFixture()
+                .withParent(XmlAttributeValue.class)
+                .withConcordionXmlAttribute();
     }
 
     @NotNull
