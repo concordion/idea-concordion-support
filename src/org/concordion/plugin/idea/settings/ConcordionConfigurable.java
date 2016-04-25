@@ -45,7 +45,7 @@ public class ConcordionConfigurable implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !ConcordionSettings.getInstance().currentState().equals(getSettingsForm().createSettings());
+        return !ConcordionSettings.getInstance().getState().equals(getSettingsForm().createSettings());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ConcordionConfigurable implements SearchableConfigurable {
 
     @Override
     public void reset() {
-        getSettingsForm().setSettings(ConcordionSettings.getInstance().currentState());
+        getSettingsForm().setSettings(ConcordionSettings.getInstance().getState());
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
+import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
@@ -149,8 +150,8 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
     }
 
     protected final void useCommandsCase(ConcordionCommandsCaseType type) {
-        ConcordionSettings.State settings = new ConcordionSettings.State();
-        settings.commandsCaseType = type;
+        ConcordionSettingsState settings = new ConcordionSettingsState();
+        settings.setCommandsCaseType(type);
         ConcordionSettings.getInstance().updateState(settings);
     }
 }

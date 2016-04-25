@@ -22,14 +22,14 @@ public class ConcordionSettingsForm {
         concordionCommandsCompletionType = new ComboBox(concordionCommandsCompletionTypeModel);
     }
 
-    public void setSettings(@NotNull ConcordionSettings.State settings) {
-        concordionCommandsCompletionTypeModel.setSelectedItem(settings.commandsCaseType);
+    public void setSettings(@NotNull ConcordionSettingsState settings) {
+        concordionCommandsCompletionTypeModel.setSelectedItem(settings.getCommandsCaseType());
     }
 
     @NotNull
-    public ConcordionSettings.State createSettings() {
-        ConcordionSettings.State settings = new ConcordionSettings.State();
-        settings.commandsCaseType = concordionCommandsCompletionTypeModel.getSelectedItem();
+    public ConcordionSettingsState createSettings() {
+        ConcordionSettingsState settings = new ConcordionSettingsState();
+        settings.setCommandsCaseType(concordionCommandsCompletionTypeModel.getSelectedItem());
         return settings;
     }
 }

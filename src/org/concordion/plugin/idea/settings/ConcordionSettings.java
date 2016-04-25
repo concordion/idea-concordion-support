@@ -1,65 +1,58 @@
 package org.concordion.plugin.idea.settings;
 
-import com.google.common.base.Objects;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @State(
         name = "ConcordionSettings",
         storages = @Storage(file = "concordion_settings.xml")
 )
-public class ConcordionSettings implements PersistentStateComponent<ConcordionSettings.State> {
+public class ConcordionSettings implements PersistentStateComponent<ConcordionSettingsState> {
 
     public static ConcordionSettings getInstance() {
         return ServiceManager.getService(ConcordionSettings.class);
     }
 
     @NotNull
-    private State state = new State();
+    private final Collection<WeakReference<ConcordionSettingsListener>> listeners = new ArrayList<>();
 
     @NotNull
-    public State currentState() {
+    private ConcordionSettingsState state = new ConcordionSettingsState();
+
+    public void updateState(@NotNull ConcordionSettingsState state) {
+        this.state = state;
+        notifyListeners();
+
+    }
+
+    public void addListener(@NotNull ConcordionSettingsListener listener) {
+        listeners.add(new WeakReference<>(listener));
+    }
+
+    @NotNull
+    @Override
+    public ConcordionSettingsState getState() {
         return state;
     }
 
-    public void updateState(@NotNull ConcordionSettings.State state) {
+    @Override
+    public void loadState(ConcordionSettingsState state) {
         this.state = state;
     }
 
-    @Nullable
-    @Override
-    public ConcordionSettings.State getState() {
-        return state;
-    }
-
-    @Override
-    public void loadState(ConcordionSettings.State state) {
-        this.state = state;
-    }
-
-    public static final class State {
-
-        @NotNull
-        public ConcordionCommandsCaseType commandsCaseType = ConcordionCommandsCaseType.BOTH;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
+    private void notifyListeners() {
+        for (WeakReference<ConcordionSettingsListener> listener : listeners) {
+            ConcordionSettingsListener listenerRef = listener.get();
+            if (listenerRef != null) {
+                listenerRef.settingsChanged(state);
             }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            return commandsCaseType == ((State) o).commandsCaseType;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(commandsCaseType);
         }
     }
 }

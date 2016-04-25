@@ -7,7 +7,10 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
+import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
+import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
+import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,15 +40,27 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
         );
     }
 
-    private static final class ConcordionHtmlCommandsCompletionProvider extends CompletionProvider<CompletionParameters> {
+    private static final class ConcordionHtmlCommandsCompletionProvider extends CompletionProvider<CompletionParameters> implements ConcordionSettingsListener {
+
+        private ConcordionCommandsCaseType caseType = ConcordionCommandsCaseType.BOTH;
+
+        public ConcordionHtmlCommandsCompletionProvider() {
+            ConcordionSettings.getInstance().addListener(this);
+        }
+
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
             result.addAllElements(forCommands(
                     Namespaces.CONCORDION,
                     context.get(CONCORDION_SCHEMA_PREFIX),
-                    commands(ConcordionSettings.getInstance().currentState().commandsCaseType)
+                    commands(caseType)
             ));
+        }
+
+        @Override
+        public void settingsChanged(@NotNull ConcordionSettingsState newSettings) {
+            caseType = newSettings.getCommandsCaseType();
         }
     }
 
