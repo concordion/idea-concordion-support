@@ -10,6 +10,7 @@ import com.intellij.psi.*;
 import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.ConcordionCommand.SET;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class FullOgnlRequired extends LocalInspectionTool {
@@ -26,7 +27,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_SET_VIA_COMMAND =
             concordionElement(ConcordionOgnlExpressionStart.class)
                     .withParent(PsiFile.class)
-                    .withCommand("set")
+                    .withCommandText(SET.text())
                     .withTextNotMatching(SimpleEvaluator.SET_VARIABLE_PATTERNS);
 
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_ITERATE =

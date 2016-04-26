@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.google.common.collect.ImmutableSet;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.openapi.fileTypes.FileType;
@@ -21,7 +22,6 @@ import java.util.function.Supplier;
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findList;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findMap;
@@ -95,7 +95,7 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String embeddedCommandOf(@NotNull PsiElement injected) {
+    public static String embeddedCommandTextOf(@NotNull PsiElement injected) {
         return commandText(
                 findChildOfType(
                         getParentOfType(injected, PsiFile.class),
@@ -105,7 +105,7 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String attributeCommandOf(@Nullable PsiElement concordionXmlFragment) {
+    public static String attributeCommandTextOf(@Nullable PsiElement concordionXmlFragment) {
         XmlAttribute attribute = PsiTreeUtil.getParentOfType(concordionXmlFragment, XmlAttribute.class, false);
         if (attribute == null) {
             return null;
@@ -114,15 +114,15 @@ public final class ConcordionPsiUtils {
     }
 
     @Nullable
-    public static String commandOf(@NotNull PsiElement element) {
+    public static String commandTextOf(@NotNull PsiElement element) {
         FileType fileType = element.getContainingFile().getFileType();
         if (ConcordionFileType.INSTANCE.equals(fileType)) {
             return firstNotNull(
-                    () -> embeddedCommandOf(element),
-                    () -> attributeCommandOf(InjectedLanguageUtil.findInjectionHost(element))
+                    () -> embeddedCommandTextOf(element),
+                    () -> attributeCommandTextOf(InjectedLanguageUtil.findInjectionHost(element))
             );
         } else if (HtmlFileType.INSTANCE.equals(fileType) || XHtmlFileType.INSTANCE.equals(fileType)) {
-            return attributeCommandOf(element);
+            return attributeCommandTextOf(element);
         } else {
             return null;
         }
@@ -229,14 +229,15 @@ public final class ConcordionPsiUtils {
         return runner != null && CONCORDION_RUNNER.equals(runner.getQualifiedName());
     }
 
-    public static Collection<String> configuredExtensions(@NotNull PsiClass testFixture) {
+    @NotNull
+    public static Set<String> configuredExtensions(@NotNull PsiClass testFixture) {
         PsiAnnotation extensionsAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
         if (extensionsAnnotation == null) {
-            return emptyList();
+            return ImmutableSet.of();
         }
         return findChildrenOfType(extensionsAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class).stream()
                 .map(PsiJavaCodeReferenceElement::getQualifiedName)
-                .collect(toList());
+                .collect(toSet());
     }
 
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {

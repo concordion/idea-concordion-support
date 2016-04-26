@@ -29,11 +29,11 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     public void updateState(@NotNull ConcordionSettingsState state) {
         this.state = state;
         notifyListeners();
-
     }
 
     public void addListener(@NotNull ConcordionSettingsListener listener) {
         listeners.add(new WeakReference<>(listener));
+        listener.settingsChanged(state);
     }
 
     @NotNull
@@ -45,6 +45,7 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     @Override
     public void loadState(ConcordionSettingsState state) {
         this.state = state;
+        notifyListeners();
     }
 
     private void notifyListeners() {

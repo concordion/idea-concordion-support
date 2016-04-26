@@ -3,6 +3,7 @@ package org.concordion.plugin.idea.variables;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiType;
+import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
 import org.concordion.plugin.idea.lang.ConcordionFile;
 import org.concordion.plugin.idea.lang.psi.ConcordionIterateExpression;
@@ -13,17 +14,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
+import static java.util.stream.Collectors.toSet;
+import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.iterableParameterType;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.nullToEmpty;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.typeOfExpression;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
 public class ConcordionVariableUsage {
 
     public static final ConcordionVariableUsage INVALID = new ConcordionVariableUsage(null, null);
 
-    private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = ImmutableSet.of("set", "execute", "verifyRows", "verify-rows");
+    private static final Set<String> COMMANDS_THAT_CAN_SET_VARIABLE = Stream.of(SET, EXECUTE, VERIFY_ROWS_CAMEL, VERIFY_ROWS_SPINAL).map(ConcordionCommand::text).collect(toSet());
+
     private static final Set<String> RESERVED_VARIABLES = ImmutableSet.of("TEXT", "HREF", "LEVEL");
 
     @Nullable private final String command;
@@ -58,7 +62,7 @@ public class ConcordionVariableUsage {
         }
         if (variableParent instanceof ConcordionOgnlExpressionStart
                 && variableParent.getParent() instanceof ConcordionFile
-                && "set".equals(command)) {
+                && SET.text().equals(command)) {
             return true;
         }
         if (variableParent instanceof ConcordionIterateExpression) {

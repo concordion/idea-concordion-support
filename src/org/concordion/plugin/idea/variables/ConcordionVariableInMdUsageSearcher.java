@@ -7,6 +7,7 @@ import org.concordion.plugin.idea.injection.ConcordionInjection;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVALID;
@@ -31,9 +32,9 @@ public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsage
         if (injected == null || !(injected.getParent() instanceof ConcordionVariable)) {
             return INVALID;
         }
-        String command = embeddedCommandOf(injected);
+        String command = embeddedCommandTextOf(injected);
         if (command == null) {
-            command = "set";
+            command = SET.text();
         }
         return new ConcordionVariableUsage(command, (ConcordionVariable) injected.getParent());
     }

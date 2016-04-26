@@ -6,37 +6,31 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
+import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+import static org.concordion.plugin.idea.ConcordionCommand.commands;
 import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class ConcordionNonExpressionInHtmlCompletionContributor extends CompletionContributor {
 
     public ConcordionNonExpressionInHtmlCompletionContributor() {
-        extend(
-                CompletionType.BASIC,
-                defaultInjectionPattern().withCommandIn("matchStrategy", "match-strategy"),
-                fixedValues("Default", "BestMatch", "KeyMatch")
-        );
-        extend(
-                CompletionType.BASIC,
-                defaultInjectionPattern().withCommandIn("matchingRole", "matching-role"),
-                fixedValues("key")
-        );
-        extend(
-                CompletionType.BASIC,
-                defaultInjectionPattern().withCommand("status"),
-                fixedValues("Unimplemented", "ExpectedToFail", "ExpectedToPass")
-        );
-        extend(
-                CompletionType.BASIC,
-                defaultInjectionPattern().withCommand("screenshot"),
-                fixedValues("linked")
-        );
+
+        commands()
+                .filter(command -> command.fitsSpecType(HTML))
+                .filter(ConcordionCommand::nonExpression)
+                .forEach(
+                        command -> extend(
+                                CompletionType.BASIC,
+                                defaultInjectionPattern().withCommandText(command.text()),
+                                fixedValues(command.nonExpressionValues())
+                        )
+                );
     }
 
     @NotNull
@@ -49,9 +43,9 @@ public class ConcordionNonExpressionInHtmlCompletionContributor extends Completi
     }
 
     @NotNull
-    private static ConcordionFixedAttributeValuesProvider fixedValues(@NotNull String... values) {
+    private static ConcordionFixedAttributeValuesProvider fixedValues(@NotNull List<String> values) {
         return new ConcordionFixedAttributeValuesProvider(
-                stream(values).map(LookupElementBuilder::create).collect(toList())
+                values.stream().map(LookupElementBuilder::create).collect(toList())
         );
     }
 

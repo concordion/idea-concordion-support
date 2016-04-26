@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.patterns;
 
-import com.google.common.collect.ImmutableSet;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
@@ -154,11 +153,11 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withCommand(@NotNull String command) {
-        return with(new PatternCondition<T>("withExtractedCommand") {
+    public Self withCommandText(@NotNull String command) {
+        return with(new PatternCondition<T>("withCommandText") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return command.equals(commandOf(element));
+                return command.equals(commandTextOf(element));
             }
         });
     }
@@ -172,17 +171,13 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withCommandIn(@NotNull Set<String> commands) {
-        return with(new PatternCondition<T>("withCommandIn") {
+    public Self withCommandTextIn(@NotNull Set<String> commands) {
+        return with(new PatternCondition<T>("withCommandTextIn") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return commands.contains(commandOf(element));
+                return commands.contains(commandTextOf(element));
             }
         });
-    }
-
-    public Self withCommandIn(@NotNull String... commands) {
-        return withCommandIn(ImmutableSet.copyOf(commands));
     }
 
     public static class Capture<T extends PsiElement> extends ConcordionElementPattern<T, Capture<T>> {
