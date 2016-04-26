@@ -19,6 +19,7 @@ import java.util.Set;
 
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
@@ -93,11 +94,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiClass testFixture = context.get(TEST_FIXTURE);
-                return testFixture != null && isUsingFullOgnl(testFixture) == isUsingFullOgnl;
-            }
-
-            private boolean isUsingFullOgnl(@NotNull PsiClass runnerClass) {
-                return findAnnotationInClassHierarchy(runnerClass, CONCORDION_FULL_OGNL) != null;
+                return testFixture != null && fullOgnlEnabled(testFixture) == isUsingFullOgnl;
             }
         });
     }

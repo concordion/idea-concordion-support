@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findList;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findMap;
@@ -188,45 +187,6 @@ public final class ConcordionPsiUtils {
                 .filter(f -> f.getName().equals(name))
                 .filter(ConcordionPsiUtils::concordionVisibleField)
                 .findFirst().orElse(null);
-    }
-
-    @Nullable
-    public static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
-        for (PsiClass current = psiClass; current != null ; current = current.getSuperClass()) {
-            PsiModifierList modifiers = current.getModifierList();
-            if (modifiers == null) {
-                continue;
-            }
-            PsiAnnotation annotation = modifiers.findAnnotation(qualifiedName);
-            if (annotation != null) {
-                return annotation;
-            }
-        }
-        return null;
-    }
-
-    public static final String CONCORDION_FULL_OGNL = "org.concordion.api.FullOGNL";
-    public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
-    public static final String CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
-    public static final String CONCORDION_EXTENSIONS_ANNOTATION = "org.concordion.api.extension.Extensions";
-
-    public static boolean isConcordionFixture(@NotNull PsiClass testFixture) {
-        PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, JUNIT_RUN_WITH_ANNOTATION);
-        if (runWithAnnotation == null) {
-            return false;
-        }
-        PsiJavaCodeReferenceElement runner = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
-        return runner != null && CONCORDION_RUNNER.equals(runner.getQualifiedName());
-    }
-
-    public static Collection<String> configuredExtensions(@NotNull PsiClass testFixture) {
-        PsiAnnotation extensionsAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
-        if (extensionsAnnotation == null) {
-            return emptyList();
-        }
-        return findChildrenOfType(extensionsAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class).stream()
-                .map(PsiJavaCodeReferenceElement::getQualifiedName)
-                .collect(toList());
     }
 
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {
