@@ -12,7 +12,7 @@ import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
 
 public class ConcordionConfigurationProducer extends TestClassConfigurationProducer {

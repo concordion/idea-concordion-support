@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static java.util.Arrays.stream;
-import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
+import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
 public class ConcordionNavigationService {

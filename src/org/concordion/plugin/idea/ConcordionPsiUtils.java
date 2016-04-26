@@ -200,46 +200,6 @@ public final class ConcordionPsiUtils {
                 .findFirst().orElse(null);
     }
 
-    @Nullable
-    public static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
-        for (PsiClass current = psiClass; current != null ; current = current.getSuperClass()) {
-            PsiModifierList modifiers = current.getModifierList();
-            if (modifiers == null) {
-                continue;
-            }
-            PsiAnnotation annotation = modifiers.findAnnotation(qualifiedName);
-            if (annotation != null) {
-                return annotation;
-            }
-        }
-        return null;
-    }
-
-    public static final String CONCORDION_FULL_OGNL = "org.concordion.api.FullOGNL";
-    public static final String JUNIT_RUN_WITH_ANNOTATION = "org.junit.runner.RunWith";
-    public static final String CONCORDION_RUNNER = "org.concordion.integration.junit4.ConcordionRunner";
-    public static final String CONCORDION_EXTENSIONS_ANNOTATION = "org.concordion.api.extension.Extensions";
-
-    public static boolean isConcordionFixture(@NotNull PsiClass testFixture) {
-        PsiAnnotation runWithAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, JUNIT_RUN_WITH_ANNOTATION);
-        if (runWithAnnotation == null) {
-            return false;
-        }
-        PsiJavaCodeReferenceElement runner = findChildOfType(runWithAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class);
-        return runner != null && CONCORDION_RUNNER.equals(runner.getQualifiedName());
-    }
-
-    @NotNull
-    public static Set<String> configuredExtensions(@NotNull PsiClass testFixture) {
-        PsiAnnotation extensionsAnnotation = ConcordionPsiUtils.findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
-        if (extensionsAnnotation == null) {
-            return ImmutableSet.of();
-        }
-        return findChildrenOfType(extensionsAnnotation.getParameterList(), PsiJavaCodeReferenceElement.class).stream()
-                .map(PsiJavaCodeReferenceElement::getQualifiedName)
-                .collect(toSet());
-    }
-
     public static boolean concordionVisibleField(@NotNull PsiField psiField) {
         PsiModifierList modifiers = psiField.getModifierList();
         return modifiers != null
