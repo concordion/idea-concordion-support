@@ -26,8 +26,12 @@ public class ConcordionInspectionVisitor<T> extends PsiElementVisitor {
     public void visitElement(PsiElement element) {
         super.visitElement(element);
 
-        if (problemPattern.accepts(element)) {
+        if (problematic(element)) {
             problemsHolder.registerProblem(element, problemDescription);
         }
+    }
+
+    protected boolean problematic(PsiElement element) {
+        return problemPattern.accepts(element);
     }
 }

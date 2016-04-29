@@ -120,6 +120,12 @@
                      enabledByDefault="true"
                      level="WARNING"
                      implementationClass="org.concordion.plugin.idea.inspection.UsingUndeclaredVariable"/>
+    <localInspection id="commandIsUsedInWrongCase"
+                     groupName="Concordion"
+                     displayName="Command is used in wrong case"
+                     enabledByDefault="true"
+                     level="WARNING"
+                     implementationClass="org.concordion.plugin.idea.inspection.WrongCommandCaseUsed"/>
 
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XHTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>

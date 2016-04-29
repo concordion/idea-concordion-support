@@ -26,7 +26,8 @@ intellij {
     pluginName 'IdeaConcordionSupport'
     plugins 'junit'
     version '2016.1'
-//    sandboxDirectory "$projectDir/idea-sandbox"
+//    sandboxDirectory "$projectDir/idea-sandbox-markdown"
+//    sandboxDirectory "$projectDir/idea-sandbox-markdown-support"
     downloadSources false
     updateSinceUntilBuild false
 }
