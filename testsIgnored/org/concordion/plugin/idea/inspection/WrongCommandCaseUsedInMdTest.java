@@ -7,6 +7,7 @@ import static com.intellij.lang.annotation.HighlightSeverity.WARNING;
 import static org.concordion.plugin.idea.HighlightingAssert.*;
 import static org.concordion.plugin.idea.settings.ConcordionCommandsCaseType.*;
 
+//TODO unstable because of "java.lang.AssertionError: Cannot restore"
 public class WrongCommandCaseUsedInMdTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override

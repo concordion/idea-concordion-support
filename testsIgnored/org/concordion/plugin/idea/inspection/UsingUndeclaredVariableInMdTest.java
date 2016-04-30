@@ -1,12 +1,13 @@
 package org.concordion.plugin.idea.inspection;
 
-import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
+import static com.intellij.lang.annotation.HighlightSeverity.WARNING;
 import static org.concordion.plugin.idea.HighlightingAssert.*;
-import static com.intellij.lang.annotation.HighlightSeverity.*;
 
-public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTestCase {
+//TODO unstable because of "java.lang.AssertionError: Cannot restore"
+public class UsingUndeclaredVariableInMdTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -20,9 +21,9 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
         myFixture.enableInspections(UsingUndeclaredVariable.class);
 
         copyTestFixtureToConcordionProject("ResolvingVariables.java");
-        VirtualFile htmlSpec = copySpecToConcordionProject("ResolvingVariables.html");
+        VirtualFile mdSpec = copySpecToConcordionProject("ResolvingVariables.md");
 
-        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.configureFromExistingVirtualFile(mdSpec);
     }
 
     public void testWarnUndeclaredVariableUsage() {
@@ -31,8 +32,9 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
                 .has(usingUndeclaredVariable().withText("#undefined"));
     }
 
-    public void testWarnUsingBeforeDeclaring() {
+    public void ignoredTestWarnUsingBeforeDeclaring() {
 
+        //May go forward for references table in the end of the file and find #definedToLate
         assertThat(myFixture.doHighlighting())
                 .has(usingUndeclaredVariable().withText("#definedToLate"));
     }
@@ -43,21 +45,13 @@ public class UsingUndeclaredVariableTest extends ConcordionCodeInsightFixtureTes
                 .hasNo(usingUndeclaredVariable().withText("#definedBeforehand"));
     }
 
-    public void testDoNotWarnUsageOfNestedDeclaration() {
-
-        assertThat(myFixture.doHighlighting())
-                .hasNo(usingUndeclaredVariable().withText("#definedInside"));
-    }
-
     public void testDoNotWarnUsageOfReservedVariableWithoutDeclaration() {
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(usingUndeclaredVariable());
+                .hasNo(usingUndeclaredVariable().withText("#TEXT"));
     }
 
     private Info usingUndeclaredVariable() {
         return anInfo().withSeverity(WARNING).withText("#TEXT").withDescription("Using undeclared variable");
     }
-
-    //TODO @improvement warn overwriting reserved variables
 }

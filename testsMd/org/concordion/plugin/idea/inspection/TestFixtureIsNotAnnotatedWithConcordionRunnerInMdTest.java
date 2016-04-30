@@ -1,12 +1,12 @@
 package org.concordion.plugin.idea.inspection;
 
-import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
+import static com.intellij.lang.annotation.HighlightSeverity.ERROR;
 import static org.concordion.plugin.idea.HighlightingAssert.*;
-import static com.intellij.lang.annotation.HighlightSeverity.*;
 
-public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends ConcordionCodeInsightFixtureTestCase {
+public class TestFixtureIsNotAnnotatedWithConcordionRunnerInMdTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -19,18 +19,9 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.enableInspections(TestFixtureIsNotAnnotatedWithConcordionRunner.class);
     }
 
-    public void testDoesNotErrorOutRegularClassWithoutHtmlSpec() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("RegularClass.java");
-
-        myFixture.configureFromExistingVirtualFile(testFixture);
-
-        assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
-    }
-
     public void testDoesNotErrorOutAnnotatedTestFixture() {
 
-        copySpecToConcordionProject("SimpleExpressions.html");
+        copySpecToConcordionProject("SimpleExpressions.md");
         VirtualFile testFixture = copyTestFixtureToConcordionProject("SimpleExpressions.java");
 
         myFixture.configureFromExistingVirtualFile(testFixture);
@@ -41,7 +32,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
 
     public void testErrorOutNotAnnotatedTestFixture() {
 
-        copySpecToConcordionProject("RunnerNotAnnotated.html");
+        copySpecToConcordionProject("RunnerNotAnnotated.md");
         VirtualFile testFixture = copyTestFixtureToConcordionProject("RunnerNotAnnotated.java");
 
         myFixture.configureFromExistingVirtualFile(testFixture);
@@ -52,7 +43,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
 
     public void testErrorOutTestFixtureAnnotatedWithDifferentRunner() {
 
-        copySpecToConcordionProject("RunnerWrongAnnotated.html");
+        copySpecToConcordionProject("RunnerWrongAnnotated.md");
         VirtualFile testFixture = copyTestFixtureToConcordionProject("RunnerWrongAnnotated.java");
 
         myFixture.configureFromExistingVirtualFile(testFixture);
@@ -64,7 +55,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
 
     public void testDoesNotErrorOutTestFixtureWithInheritedAnnotation() {
 
-        copySpecToConcordionProject("InheritedAnnotation.html");
+        copySpecToConcordionProject("InheritedAnnotation.md");
         copyTestFixtureToConcordionProject("AnnotatedParent.java");
         VirtualFile testFixture = copyTestFixtureToConcordionProject("InheritedAnnotation.java");
 
