@@ -9,7 +9,6 @@ import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
-import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +46,7 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
         private List<ConcordionCommand> commands = ImmutableList.of();
 
         public ConcordionHtmlCommandsCompletionProvider() {
-            ConcordionSettings.getInstance().addListener(this);
+            registerListener();
         }
 
         @Override
@@ -75,7 +74,7 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
         private List<ConcordionCommand> commands = ImmutableList.of();
 
         public ConcordionHtmlExtensionCommandsCompletionProvider() {
-            ConcordionSettings.getInstance().addListener(this);
+            registerListener();
         }
 
         @Override

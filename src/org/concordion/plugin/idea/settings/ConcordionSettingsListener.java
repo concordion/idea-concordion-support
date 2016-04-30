@@ -7,4 +7,8 @@ import java.util.EventListener;
 public interface ConcordionSettingsListener extends EventListener {
 
     void settingsChanged(@NotNull ConcordionSettingsState newSettings);
+
+    default void registerListener() {
+        ConcordionSettings.getInstance().addListener(this);
+    }
 }

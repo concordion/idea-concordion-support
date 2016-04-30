@@ -8,7 +8,6 @@ import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
-import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +39,7 @@ public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionC
         private List<LookupElement> commands = ImmutableList.of();
 
         public ConcordionEmbeddedCommandsCompletionProvider() {
-            ConcordionSettings.getInstance().addListener(this);
+            registerListener();
         }
 
         @Override
