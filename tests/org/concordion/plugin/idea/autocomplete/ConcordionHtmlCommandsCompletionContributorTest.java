@@ -78,7 +78,7 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
 
         completeWithConcordionCommand("c:execute");
 
-        myFixture.checkResultByFile("CommandsCompleted.html");
+        myFixture.checkResultByFile("after/Commands.html");
     }
 
     public void testCompleteConcordionCommandsInHtmlTagsWithCamelCaseOnly() {
@@ -153,7 +153,7 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
 
         completeWithConcordionCommand("c:execute");
 
-        myFixture.checkResultByFile("CommandStartedCompleted.html");
+        myFixture.checkResultByFile("after/CommandStarted.html");
     }
 
     public void testInsertConcordionSchemaIfAbsentWhileCompletion() {
@@ -166,7 +166,7 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
 
         completeWithConcordionCommand("c:execute");
 
-        myFixture.checkResultByFile("CommandsNoSchemaCompleted.html");
+        myFixture.checkResultByFile("after/CommandsNoSchema.html");
     }
 
     public void testInsertConcordionExtensionSchemaIfAbsentWhileCompletion() {
@@ -179,7 +179,7 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
 
         completeWithConcordionCommand("ext:executeOnlyIf");
 
-        myFixture.checkResultByFile("ExtensionsCommandsNoSchemaCompleted.html");
+        myFixture.checkResultByFile("after/ExtensionsCommandsNoSchema.html");
     }
 
     private void completeWithConcordionCommand(String command) {
