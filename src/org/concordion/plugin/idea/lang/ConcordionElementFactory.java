@@ -17,4 +17,11 @@ public final class ConcordionElementFactory {
         //file -> ognlExpressionStart -> field -> identifier
         return dummy.getFirstChild().getFirstChild().getFirstChild();
     }
+
+    @NotNull
+    public static PsiElement createEmbeddedCommand(@NotNull Project project, @NotNull String text) {
+        PsiFile dummy = PsiFileFactory.getInstance(project).createFileFromText("dummy", ConcordionFileType.INSTANCE, text + '=');
+        //file -> command
+        return dummy.getFirstChild();
+    }
 }

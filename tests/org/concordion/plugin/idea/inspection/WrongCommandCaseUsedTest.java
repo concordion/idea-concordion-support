@@ -31,16 +31,28 @@ public class WrongCommandCaseUsedTest extends ConcordionCodeInsightFixtureTestCa
 
         useCommandsCase(CAMEL_CASE);
 
+        Info inspection = wrongCommandCaseUsed().withText("c:assert-equals");
+
         assertThat(myFixture.doHighlighting())
-                .has(wrongCommandCaseUsed().withText("c:assert-equals"));
+                .has(inspection);
+
+        executeQuickFix(inspection);
+
+        myFixture.checkResultByFile("after/WrongCaseCommandCamelCase.html");
     }
 
     public void testWarnUsingCamelCaseIfSpinalCaseConfigured() {
 
         useCommandsCase(SPINAL_CASE);
 
+        Info inspection = wrongCommandCaseUsed().withText("c:assertEquals");
+
         assertThat(myFixture.doHighlighting())
-                .has(wrongCommandCaseUsed().withText("c:assertEquals"));
+                .has(inspection);
+
+        executeQuickFix(inspection);
+
+        myFixture.checkResultByFile("after/WrongCaseCommandSpinalCase.html");
     }
 
     public void testNotWarnsIfBothCasesConfigured() {

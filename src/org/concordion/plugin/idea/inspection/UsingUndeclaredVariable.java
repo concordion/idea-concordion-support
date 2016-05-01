@@ -20,7 +20,8 @@ public class UsingUndeclaredVariable extends LocalInspectionTool {
         return new ConcordionInspectionVisitor<>(
                 UNDECLARED_VARIABLE,
                 holder,
-                "Using undeclared variable"
+                "Using undeclared variable",
+                null
         );
     }
 }

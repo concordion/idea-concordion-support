@@ -139,14 +139,25 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
         }.execute();
     }
 
-    protected final void executeIntention(@NotNull String name) {
-        IntentionAction fix = myFixture.findSingleIntention(name);
-        assertTrue(fix.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
+    protected final void execute(@NotNull IntentionAction action) {
+        assertTrue(action.isAvailable(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile()));
 
         writeAction(() -> {
-            fix.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile());
+            action.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile());
             return null;
         });
+    }
+
+    protected final void executeIntention(@NotNull String name) {
+        execute(myFixture.findSingleIntention(name));
+    }
+
+    protected final void executeQuickFix(@NotNull HighlightingAssert.Info info) {
+        execute(myFixture.doHighlighting().stream()
+                .filter(info::match)
+                .flatMap(highlight -> highlight.quickFixActionRanges.stream())
+                .map(highlight -> highlight.getFirst().getAction())
+                .findFirst().orElseThrow(() -> new AssertionError("Expects single fix")));
     }
 
     protected final void useCommandsCase(ConcordionCommandsCaseType type) {

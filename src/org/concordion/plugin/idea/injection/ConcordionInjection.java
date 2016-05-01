@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
@@ -35,8 +36,27 @@ public class ConcordionInjection implements PsiLanguageInjectionHost, Navigation
 
     @Override
     public PsiLanguageInjectionHost updateText(@NotNull String text) {
-
+        ASTNode node = delegate.getNode();
+        if (node instanceof LeafElement) {
+            ((LeafElement) node).replaceWithText(text);
+        }
+        PsiElement newDelegate = rebuildMarkdownInjectionHolder(text);
+        if (newDelegate != null) {
+            delegate.replace(newDelegate);
+        }
         return this;
+    }
+
+    @Nullable
+    private PsiElement rebuildMarkdownInjectionHolder(@NotNull String newText) {
+        String dummyLinkText = "[dummy](- " + newText + ")";
+
+        PsiFile dummyFile = PsiFileFactory.getInstance(delegate.getProject())
+                .createFileFromText("dummy", delegate.getContainingFile().getFileType(), dummyLinkText);
+
+        PsiElement injection = dummyFile.getFirstChild().findElementAt(dummyLinkText.indexOf(newText) + 1);
+
+        return injection != null ? injection.getParent() : null;
     }
 
     @NotNull

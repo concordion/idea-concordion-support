@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea;
 
-import com.google.common.collect.ImmutableSet;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.openapi.fileTypes.FileType;
@@ -23,8 +22,8 @@ import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
 import static java.util.stream.Collectors.*;
-import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findList;
-import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findMap;
+import static org.concordion.plugin.idea.ConcordionCommand.*;
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 
 public final class ConcordionPsiUtils {
 
@@ -87,7 +86,7 @@ public final class ConcordionPsiUtils {
         }
         String text = command.getText();
         if ("?=".equals(text)) {
-            return "assertEquals";
+            return ASSERT_EQUALS_SPINAL.text();
         }
         int prefix = text.indexOf(':');
         int assignment = text.indexOf('=');

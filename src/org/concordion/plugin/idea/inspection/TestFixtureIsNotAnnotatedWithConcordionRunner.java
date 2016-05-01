@@ -24,7 +24,8 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunner extends LocalInspecti
         return new ConcordionInspectionVisitor<>(
                 MISCONFIGURED_TEST_FIXTURE,
                 holder,
-                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
+                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)",
+                null
         );
     }
 }

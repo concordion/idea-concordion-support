@@ -47,7 +47,8 @@ public class FullOgnlRequired extends LocalInspectionTool {
         return new ConcordionInspectionVisitor<>(
                 TOO_COMPLEX_CONCORDION_EXPRESSION,
                 holder,
-                "Too complex expression"
+                "Too complex expression",
+                null
         );
     }
 }
