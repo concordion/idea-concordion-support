@@ -10,6 +10,7 @@ import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.lang.ConcordionElementFactory;
@@ -28,6 +29,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
+import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
@@ -120,7 +122,12 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
         @Override
         public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
             PsiElement element = problemDescriptor.getPsiElement();
-            String prefix = prefixInFile(element.getContainingFile());
+            PsiFile containingFile = getContainingFile(element);
+            if (containingFile == null) {
+                return;
+            }
+
+            String prefix = prefixInFile(containingFile);
             String text = commandTextOf(element);
             String newText = CASE_FIXER.get(text).prefixedText(nullToEmpty(prefix));
 
