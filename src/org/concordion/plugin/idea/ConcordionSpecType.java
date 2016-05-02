@@ -2,56 +2,48 @@ package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toSet;
-import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 
 public enum ConcordionSpecType {
 
     HTML("html", "xhtml") {
+        @Nullable
         @Override
-        public boolean configuredIn(@NotNull PsiFile file, @Nullable ProcessingContext context) {
-            String prefix = Namespaces.CONCORDION.prefixInFile(file);
-            if (context != null) {
-                context.put(CONCORDION_SCHEMA_PREFIX, prefix);
-            }
-            return canBeIn(file) && prefix != null;
+        public String prefix(@NotNull PsiFile spec) {
+            return Namespaces.CONCORDION.prefixInFile(spec);
         }
 
+        @Nullable
         @Override
-        public boolean extensionsConfiguredIn(@NotNull PsiFile file, @Nullable ProcessingContext context) {
-            String prefix = Namespaces.CONCORDION_EXTENSIONS.prefixInFile(file);
-            if (context != null) {
-                context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, prefix);
-            }
-            return canBeIn(file) && prefix != null;
+        public String extensionPrefix(@NotNull PsiFile spec) {
+            return Namespaces.CONCORDION_EXTENSIONS.prefixInFile(spec);
         }
     },
     MD("md", "markdown") {
+        @Nullable
         @Override
-        public boolean configuredIn(@NotNull PsiFile file, @Nullable ProcessingContext context) {
-            if (context != null) {
-                context.put(CONCORDION_SCHEMA_PREFIX, "c");
-            }
-            return canBeIn(file);
+        public String prefix(@NotNull PsiFile spec) {
+            return "c";
         }
 
+        @Nullable
         @Override
-        public boolean extensionsConfiguredIn(@NotNull PsiFile file, @Nullable ProcessingContext context) {
-            return false;
+        public String extensionPrefix(@NotNull PsiFile spec) {
+            return null;
         }
     };
 
     @NotNull
     public final Set<String> extensions;
 
-    ConcordionSpecType(String... extensions) {
+    ConcordionSpecType(@NotNull String... extensions) {
         this.extensions = ImmutableSet.copyOf(extensions);
     }
 
@@ -59,33 +51,31 @@ public enum ConcordionSpecType {
         return extensions.contains(file.getFileType().getDefaultExtension());
     }
 
-    public boolean configuredIn(@NotNull PsiFile file) {
-        return configuredIn(file, null);
-    }
-
-    /**
-     * Must specify CONCORDION_SCHEMA_PREFIX in context
-     */
-    public abstract boolean configuredIn(@NotNull PsiFile file, @Nullable ProcessingContext context);
-
-    /**
-     * Must specify CONCORDION_EXTENSIONS_SCHEMA_PREFIX in context
-     */
-    public abstract boolean extensionsConfiguredIn(@NotNull PsiFile file, @Nullable ProcessingContext context);
+    @Nullable
+    public abstract String prefix(@NotNull PsiFile file);
 
     @Nullable
-    public static ConcordionSpecType inFile(@NotNull PsiFile file) {
-        for (ConcordionSpecType type : values()) {
-            if (type.extensions.contains(file.getFileType().getDefaultExtension())) {
-                return type;
-            }
-        }
-        return null;
+    public abstract String extensionPrefix(@NotNull PsiFile file);
+
+    @NotNull
+    private static Optional<ConcordionSpecType> typeInFile(@NotNull PsiFile file) {
+        return stream(values())
+                .filter(type -> type.canBeIn(file))
+                .findFirst();
+    }
+
+    @Nullable
+    public static String prefixInFile(@NotNull PsiFile file) {
+        return typeInFile(file).map(type -> type.prefix(file)).orElse(null);
+    }
+
+    @Nullable
+    public static String extensionPrefixInFile(@NotNull PsiFile file) {
+        return typeInFile(file).map(type -> type.extensionPrefix(file)).orElse(null);
     }
 
     public static boolean specConfiguredInFile(@NotNull PsiFile file) {
-        ConcordionSpecType type = inFile(file);
-        return type != null && type.configuredIn(file);
+        return prefixInFile(file) != null;
     }
 
     @NotNull

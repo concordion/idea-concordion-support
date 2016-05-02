@@ -29,7 +29,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
+import static org.concordion.plugin.idea.ConcordionSpecType.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class WrongCommandCaseUsed extends LocalInspectionTool implements ConcordionSettingsListener {
@@ -119,15 +119,16 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
 
         @Override
         public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor problemDescriptor) {
-            PsiElement psiElement = problemDescriptor.getPsiElement();
-            String text = commandTextOf(psiElement);
-            String newText = CASE_FIXER.get(text).prefixedText("c");//TODO compute used prefix
+            PsiElement element = problemDescriptor.getPsiElement();
+            String prefix = prefixInFile(element.getContainingFile());
+            String text = commandTextOf(element);
+            String newText = CASE_FIXER.get(text).prefixedText(nullToEmpty(prefix));
 
-            if (psiElement.getParent() instanceof XmlAttribute) {
-                ((XmlAttribute) psiElement.getParent()).setName(newText);
+            if (element.getParent() instanceof XmlAttribute) {
+                ((XmlAttribute) element.getParent()).setName(newText);
             }
-            if (psiElement.getParent() instanceof ConcordionEmbeddedCommand) {
-                ASTNode owner = psiElement.getParent().getNode();
+            if (element.getParent() instanceof ConcordionEmbeddedCommand) {
+                ASTNode owner = element.getParent().getNode();
                 owner.replaceChild(
                         owner.getFirstChildNode(),
                         ConcordionElementFactory.createEmbeddedCommand(project, newText).getNode()

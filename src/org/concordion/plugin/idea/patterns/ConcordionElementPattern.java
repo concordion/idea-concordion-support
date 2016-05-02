@@ -83,7 +83,12 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiFile file = getContainingFile(element);
-                return file != null && type.configuredIn(file, context);
+                if (file == null) {
+                    return false;
+                }
+                String prefix = type.prefix(file);
+                context.put(CONCORDION_SCHEMA_PREFIX, prefix);
+                return type.canBeIn(file) && prefix != null;
             }
         });
     }
@@ -112,12 +117,13 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withConfiguredExtensions") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                ConcordionSpecType type = ConcordionSpecType.inFile(element.getContainingFile());
-                boolean extensionsConfigured = type != null && type.extensionsConfiguredIn(element.getContainingFile(), context);
+                String extensionPrefix =  ConcordionSpecType.extensionPrefixInFile(element.getContainingFile());
+                context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, extensionPrefix);
 
                 Collection<String> extensions = configuredExtensions(context.get(TEST_FIXTURE));
                 context.put(CONCORDION_EXTENSIONS, extensions);
-                return extensionsConfigured || !extensions.isEmpty();
+
+                return extensionPrefix != null || !extensions.isEmpty();
             }
         });
     }
