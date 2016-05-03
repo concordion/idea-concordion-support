@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.7</version>
+  <version>0.8</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -19,6 +19,13 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.8<br/>
+    <ul>
+        <li>Configuring plugin to use only spinal-case or CamelCase commands</li>
+        <li>Surround with Concordion action</li>
+        <li>Better concordion icons with hd version for retina screens</li>
+        <li>Guess names and types while creating fields and methods from usage</li>
+    </ul>
     Version 0.7<br/>
     <ul>
         <li>Updated icons to fit concordion 2.0</li>
