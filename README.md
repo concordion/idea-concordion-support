@@ -19,12 +19,17 @@ It is built by gradle so it does not require to have intellij idea plugin sdk se
 
 # Supported features
 
-- Autocomplete with spec variables
-- Autocomplete with concordion commands
-- Autocomplete with members of the fixture
-- Autocomplete chains with members
-- Navigation between concordion html spec and test fixture using concordion icon and navigation action (ctrl + shift + s)
-- Ctrl+click navigation and usages search for concordion expressions
-- Quick fields and methods creation from usages
-- Renaming support
-- Run concordion spec from HTML file
+- Autocompletion
+  - concordion commands in HTML and MD specs
+  - test fixture members in concordion expressions
+  - spec variables
+- Navigation between spec and test fixture
+  - with *Navigate between concordion spec and fixture* (**Ctrl + Shift + s**)
+  - clicking concordion icon in test fixture and spec
+  - using *go to declaration* (**Ctrl + left click** on concordion expression)
+- Find usages (**Ctrl + F7**) list will include usages of methods and properties in concordion spec (for HTML specs only)
+- Renaming support (for HTML specs only)
+  - it is possible to rename method/field from its usage in spec
+  - after renaming method/field corresponding usage in spec will be renamed as well
+  - concordion variable will be renamed in spec along with all its usages
+- Run configuration (**Ctrl + Shift + F10**) from HTML or MD spec. JUnit for corresponding test fixture will be created and started
