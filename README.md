@@ -33,3 +33,13 @@ It is built by gradle so it does not require to have intellij idea plugin sdk se
   - after renaming method/field corresponding usage in spec will be renamed as well
   - concordion variable will be renamed in spec along with all its usages
 - Run configuration (**Ctrl + Shift + F10**) from HTML or MD spec. JUnit for corresponding test fixture will be created and started
+- Inspections
+  - error out using concordion without proper runner in @RunWith annotation
+  - error out using too complex expressions without @FullOGNL annotation
+  - warn using maps in specs
+  - warn using of undeclared concordion spec variable
+  - warn using commands in CamelCase if spinal-case configured (and vice versa, quick fix available)
+- Intentions/Quick fixes (**Alt + Enter**)
+  - use method/field in concordion spec and then create its declaration (field type/return type/arguments types will be inferred from context) (**Alt + Enter** over usage)
+  - surround word/selection with concordion expression (**Alt + Enter** any place in spec)
+  - fix misused concordion command case (CamelCase <-> spinal-case) (**Alt + Enter** over warned command)
