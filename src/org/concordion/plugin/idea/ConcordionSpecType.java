@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toSet;
+import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.extensionNamespace;
 
 public enum ConcordionSpecType {
 
@@ -36,7 +38,8 @@ public enum ConcordionSpecType {
         @Nullable
         @Override
         public String extensionPrefix(@NotNull PsiFile spec) {
-            return null;
+            PsiClass fixture = ConcordionNavigationService.getInstance(spec.getProject()).correspondingTestFixture(spec);
+            return fixture != null ? extensionNamespace(fixture) : null;
         }
     };
 

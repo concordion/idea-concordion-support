@@ -113,17 +113,18 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withConfiguredExtensions() {
+    public Self withConfiguredExtensions(boolean canGuessPrefix) {
         return with(new PatternCondition<T>("withConfiguredExtensions") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                String extensionPrefix =  ConcordionSpecType.extensionPrefixInFile(element.getContainingFile());
+                PsiFile spec = getContainingFile(element);
+                String extensionPrefix = spec != null ?ConcordionSpecType.extensionPrefixInFile(spec) : null;
                 context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, extensionPrefix);
 
                 Collection<String> extensions = configuredExtensions(context.get(TEST_FIXTURE));
                 context.put(CONCORDION_EXTENSIONS, extensions);
 
-                return extensionPrefix != null || !extensions.isEmpty();
+                return (canGuessPrefix || extensionPrefix != null) || !extensions.isEmpty();
             }
         });
     }

@@ -16,6 +16,8 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
+import static org.concordion.plugin.idea.ConcordionContextKeys.CONCORDION_EXTENSIONS;
+import static org.concordion.plugin.idea.ConcordionContextKeys.CONCORDION_EXTENSIONS_SCHEMA_PREFIX;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
@@ -24,13 +26,19 @@ public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionC
     public ConcordionEmbeddedCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement(ConcordionTypes.COMMAND).withSpecOfType(MD),
+                concordionElement().withSpecOfType(MD).andOr(
+                        concordionElement(ConcordionTypes.COMMAND),
+                        concordionElement(ConcordionTypes.IDENTIFIER).withStartOfInjection()
+                ),
                 new ConcordionEmbeddedCommandsCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement(ConcordionTypes.IDENTIFIER).withSpecOfType(MD).withStartOfInjection(),
-                new ConcordionEmbeddedCommandsCompletionProvider()
+                concordionElement().withSpecOfType(MD).withFoundTestFixture().withConfiguredExtensions(false).andOr(
+                        concordionElement(ConcordionTypes.COMMAND),
+                        concordionElement(ConcordionTypes.IDENTIFIER).withStartOfInjection()
+                ),
+                new ConcordionEmbeddedExtensionCommandsCompletionProvider()
         );
     }
 
@@ -55,6 +63,34 @@ public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionC
                     .filter(ConcordionCommand::buildIn)
                     .map(command -> command.prefixedText("c"))
                     .map(c -> LookupElementBuilder.create(c + '=').withIcon(ConcordionIcons.ICON))
+                    .collect(toList());
+        }
+    }
+
+    private static final class ConcordionEmbeddedExtensionCommandsCompletionProvider extends CompletionProvider<CompletionParameters> implements ConcordionSettingsListener {
+
+        private List<ConcordionCommand> commands = ImmutableList.of();
+
+        public ConcordionEmbeddedExtensionCommandsCompletionProvider() {
+            registerListener();
+        }
+
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            result.addAllElements(commands.stream()
+                    .filter(command -> command.enabledByExtensions(context.get(CONCORDION_EXTENSIONS)))
+                    .map(command -> command.prefixedText(context.get(CONCORDION_EXTENSIONS_SCHEMA_PREFIX)))
+                    .map(c -> LookupElementBuilder.create(c + '=').withIcon(ConcordionIcons.ICON))
+                    .collect(toList())
+            );
+        }
+
+        @Override
+        public void settingsChanged(@NotNull ConcordionSettingsState newSettings) {
+            commands = commands()
+                    .filter(command -> command.fitsForCaseType(newSettings.getCommandsCaseType()))
+                    .filter(command -> command.fitsSpecType(MD))
+                    .filter(ConcordionCommand::extension)
                     .collect(toList());
         }
     }

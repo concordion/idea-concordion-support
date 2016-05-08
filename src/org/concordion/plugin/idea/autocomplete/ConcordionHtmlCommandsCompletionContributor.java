@@ -36,7 +36,7 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withParent(XmlAttribute.class).withFoundTestFixture().withConfiguredExtensions(),
+                concordionElement().withParent(XmlAttribute.class).withFoundTestFixture().withConfiguredExtensions(true),
                 new ConcordionHtmlExtensionCommandsCompletionProvider()
         );
     }
