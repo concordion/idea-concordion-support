@@ -1,24 +1,30 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+import static org.concordion.plugin.idea.ConcordionContextKeys.*;
+
 public enum Namespaces {
 
-    CONCORDION("http://www.concordion.org/2007/concordion", "c"),
-    CONCORDION_EXTENSIONS("urn:concordion-extensions:2010", "ext");
+    CONCORDION("http://www.concordion.org/2007/concordion", "c", CONCORDION_SCHEMA_PREFIX),
+    CONCORDION_EXTENSIONS("urn:concordion-extensions:2010", "ext", CONCORDION_EXTENSIONS_SCHEMA_PREFIX);
 
     @NotNull public final String namespace;
     @NotNull public final String defaultPrefix;
+    @NotNull private final Key<String> namespaceKeyInContext;
 
-    Namespaces(@NotNull String namespace, @NotNull String defaultPrefix) {
+    Namespaces(@NotNull String namespace, @NotNull String defaultPrefix, @NotNull Key<String> namespaceKeyInContext) {
         this.namespace = namespace;
         this.defaultPrefix = defaultPrefix;
+        this.namespaceKeyInContext = namespaceKeyInContext;
     }
 
     public static boolean knownNamespace(@NotNull String namespace) {
@@ -44,5 +50,15 @@ public enum Namespaces {
             }
         }
         return null;
+    }
+
+    @NotNull
+    public String computePrefix(@NotNull ProcessingContext context) {
+        String prefix = context.get(namespaceKeyInContext);
+        return prefix != null ? prefix : defaultPrefix;
+    }
+
+    public boolean prefixPrecomputed(@NotNull ProcessingContext context) {
+        return context.get(namespaceKeyInContext) != null;
     }
 }

@@ -49,11 +49,11 @@ public class CompleteInformation {
     @NotNull
     public static CompleteInformation fromVariablesOf(@NotNull PsiFile injection) {
 
-        List<LookupElement> lookups = findAllDeclarationsFrom(injection).stream()
-                .map(CompleteInformation::toVariableLookup)
-                .collect(toList());
-
-        return new CompleteInformation(lookups);
+        return new CompleteInformation(
+                findAllDeclarationsFrom(injection).stream()
+                        .map(CompleteInformation::toVariableLookup)
+                        .collect(toList())
+        );
     }
 
     @NotNull
