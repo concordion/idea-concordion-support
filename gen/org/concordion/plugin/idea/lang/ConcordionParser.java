@@ -143,7 +143,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // embeddedCommand? (setExpression|iterateExpression|ognlExpressionStart)
+  // embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart)
   static boolean file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file")) return false;
     boolean r;
@@ -161,12 +161,13 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // setExpression|iterateExpression|ognlExpressionStart
+  // DICTIONARY|setExpression|iterateExpression|ognlExpressionStart
   private static boolean file_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = setExpression(b, l + 1);
+    r = consumeToken(b, DICTIONARY);
+    if (!r) r = setExpression(b, l + 1);
     if (!r) r = iterateExpression(b, l + 1);
     if (!r) r = ognlExpressionStart(b, l + 1);
     exit_section_(b, m, null, r);

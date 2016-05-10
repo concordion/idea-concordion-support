@@ -27,6 +27,7 @@ public interface ConcordionTypes {
   IElementType COLON = new ConcordionTokenType(":");
   IElementType COMA = new ConcordionTokenType(",");
   IElementType COMMAND = new ConcordionTokenType("COMMAND");
+  IElementType DICTIONARY = new ConcordionTokenType("DICTIONARY");
   IElementType DOT = new ConcordionTokenType(".");
   IElementType DOUBLE_LITERAL = new ConcordionTokenType("DOUBLE_LITERAL");
   IElementType EQ = new ConcordionTokenType("=");

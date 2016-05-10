@@ -73,4 +73,8 @@ public class ConcordionParserTest extends ParsingTestCase {
     public void testShortEmbeddedCommand() {
         doTest(true);
     }
+
+    public void testDictionaryValue() {
+        doTest(true);
+    }
 }

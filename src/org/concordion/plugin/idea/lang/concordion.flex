@@ -49,6 +49,15 @@ COMMAND=({COMMAND_PREFIX}":"{COMMAND_NAME})|{SHORT_COMMAND}
 
 {COMMAND} { return ConcordionTypes.COMMAND; }
 
+"ExpectedToPass" { return ConcordionTypes.DICTIONARY; }
+"ExpectedToFail" { return ConcordionTypes.DICTIONARY; }
+"Unimplemented"  { return ConcordionTypes.DICTIONARY; }
+"Default"        { return ConcordionTypes.DICTIONARY; }
+"BestMatch"      { return ConcordionTypes.DICTIONARY; }
+"KeyMatch"       { return ConcordionTypes.DICTIONARY; }
+"key"            { return ConcordionTypes.DICTIONARY; }
+"linked"         { return ConcordionTypes.DICTIONARY; }
+
 {IDENTIFIER} { return ConcordionTypes.IDENTIFIER; }
 
 "("  { return ConcordionTypes.LPARENTH; }
