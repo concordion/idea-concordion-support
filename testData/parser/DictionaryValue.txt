@@ -1,2 +1,0 @@
-FILE(0,14)
-  PsiElement(DICTIONARY)('ExpectedToPass')(0,14)
