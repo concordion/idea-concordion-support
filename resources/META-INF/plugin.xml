@@ -8,6 +8,7 @@
   <depends>JUnit</depends>
   <depends optional="true" config-file="markdown-support-integration.xml">org.intellij.plugins.markdown</depends>
   <depends optional="true" config-file="markdown-integration.xml">net.nicoulaj.idea.markdown</depends>
+  <depends optional="true" config-file="groovy-integration.xml">org.intellij.groovy</depends>
 
   <description><![CDATA[
 <p>
@@ -144,7 +145,7 @@
 
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XHTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaRunnerLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaTestFixtureLineMarkerProvider"/>
 
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>

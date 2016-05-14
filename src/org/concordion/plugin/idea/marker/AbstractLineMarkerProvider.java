@@ -2,29 +2,32 @@ package org.concordion.plugin.idea.marker;
 
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
-import org.concordion.plugin.idea.ConcordionSpecType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
-import static org.concordion.plugin.idea.marker.LineMarker.*;
-import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionContextKeys.*;
+import static org.concordion.plugin.idea.marker.LineMarker.infoFor;
 
-public abstract class AbstractSpecLineMarkerProvider implements LineMarkerProvider {
+public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
 
-    private final ConcordionElementPattern.Capture<PsiFile> file;
+    @NotNull
+    private final ConcordionElementPattern.Capture<?> pattern;
 
-    public AbstractSpecLineMarkerProvider(@NotNull ConcordionSpecType type) {
-        this.file = concordionElement(PsiFile.class)
-                .withSpecOfType(type)
-                .withFoundTestFixture();
+    @NotNull
+    private final Key<? extends PsiElement> key;
+
+    public AbstractLineMarkerProvider(
+            @NotNull ConcordionElementPattern.Capture<?> pattern,
+            @NotNull Key<? extends PsiElement> key
+    ) {
+        this.pattern = pattern;
+        this.key = key;
     }
 
     @Nullable
@@ -32,9 +35,9 @@ public abstract class AbstractSpecLineMarkerProvider implements LineMarkerProvid
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
 
         ProcessingContext context = new ProcessingContext();
-        if (file.accepts(element, context)) {
+        if (pattern.accepts(element, context)) {
 
-            return infoFor(context.get(SPEC));
+            return infoFor(context.get(key));
         }
 
         return null;

@@ -44,4 +44,11 @@ public class HtmlSpecLineMarkerProviderTest extends ConcordionCodeInsightFixture
 
         assertHasGutters(testFixture, htmlSpec);
     }
+
+    public void testMarksGroovy() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec.xhtml");
+
+        assertHasGutters(testFixture, htmlSpec);
+    }
 }

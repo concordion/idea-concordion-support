@@ -79,4 +79,12 @@ public class ConcordionNavigationServiceTest extends ConcordionCodeInsightFixtur
                 copySpecToConcordionProject("Spec.xhtml")
         );
     }
+
+    public void testNavigatesWithGroovyTestFixture() {
+
+        assertNavigateToEachOther(
+                copyTestFixtureToConcordionProject("Spec.groovy"),
+                copySpecToConcordionProject("Spec.html")
+        );
+    }
 }
