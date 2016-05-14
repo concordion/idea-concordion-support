@@ -81,6 +81,14 @@
 
   <idea-version since-build="141.1"/>
 
+  <extensionPoints>
+    <extensionPoint name="testFixture" interface="org.concordion.plugin.idea.fixtures.ConcordionTestFixture"/>
+  </extensionPoints>
+
+  <extensions defaultExtensionNs="org.concordion.plugin.idea.lang">
+    <testFixture implementation="org.concordion.plugin.idea.fixtures.ConcordionJavaTestFixture"/>
+  </extensions>
+
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="org.concordion.plugin.idea.lang.ConcordionParserDefinition"/>
@@ -156,12 +164,6 @@
     <applicationService serviceInterface="org.concordion.plugin.idea.settings.ConcordionSettings"
                         serviceImplementation="org.concordion.plugin.idea.settings.ConcordionSettings"/>
   </extensions>
-
-  <application-components>
-  </application-components>
-
-  <project-components>
-  </project-components>
 
   <actions>
     <action id="navigateBetweenConcordionSpecFiles"

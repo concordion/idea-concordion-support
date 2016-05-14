@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea;
 
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -8,12 +7,16 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixture.*;
 
 public class ConcordionNavigationService {
 
@@ -24,8 +27,8 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_TEST_SUFFIX = "Test";
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
-    private static final String JAVA_EXTENSION = JavaFileType.DOT_DEFAULT_EXTENSION;
     private static final Set<String> POSSIBLE_SPEC_EXTENSIONS = allPossibleSpecExtensions();
+    private final Collection<String> testFixtureExtensions = allPossibleFixtureExtensions();
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -59,7 +62,7 @@ public class ConcordionNavigationService {
 
     @Nullable
     public PsiFile pairedFile(@NotNull PsiFile file) {
-        return JavaFileType.INSTANCE.equals(file.getFileType())
+        return testFixtureExtensions.contains(file.getFileType().getDefaultExtension())
                 ? correspondingSpecFile(file)
                 : correspondingJavaFile(file);
     }
@@ -78,10 +81,19 @@ public class ConcordionNavigationService {
 
         return cache.getOrCompute(getIdentityKey(specFile), () -> findCorrespondingSpecFile(
                 specFile.getContainingDirectory(),
-                specName + JAVA_EXTENSION,
-                specName + OPTIONAL_TEST_SUFFIX + JAVA_EXTENSION,
-                specName + OPTIONAL_FIXTURE_SUFFIX + JAVA_EXTENSION
+                possibleFixtures(specName)
         ));
+    }
+
+    @NotNull
+    private Collection<String> possibleFixtures(@NotNull String specName) {
+        return testFixtureExtensions.stream()
+                .flatMap(ext -> Stream.of(
+                        specName + '.' + ext,
+                        specName + OPTIONAL_TEST_SUFFIX + '.' + ext,
+                        specName + OPTIONAL_FIXTURE_SUFFIX + '.' + ext
+                ))
+                .collect(toList());
     }
 
     @Nullable
@@ -99,15 +111,15 @@ public class ConcordionNavigationService {
     }
 
     @NotNull
-    private String[] possibleSpecs(String specName) {
+    private Collection<String> possibleSpecs(@NotNull String specName) {
         return POSSIBLE_SPEC_EXTENSIONS.stream()
                 .map(ext -> specName + '.' + ext)
-                .toArray(String[]::new);
+                .collect(toList());
     }
 
 
     @Nullable
-    private PsiFile findCorrespondingSpecFile(@NotNull PsiDirectory oneOfPackageDirs, @NotNull String... names) {
+    private PsiFile findCorrespondingSpecFile(@NotNull PsiDirectory oneOfPackageDirs, @NotNull Collection<String> names) {
         PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(oneOfPackageDirs);
         if (aPackage == null) {
             return null;
@@ -120,8 +132,8 @@ public class ConcordionNavigationService {
     }
 
     @Nullable
-    private PsiFile findFirstFile(@NotNull PsiDirectory directory, @NotNull String[] names) {
-        return stream(names)
+    private PsiFile findFirstFile(@NotNull PsiDirectory directory, @NotNull Collection<String> names) {
+        return names.stream()
                 .map(directory::findFile)
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);
