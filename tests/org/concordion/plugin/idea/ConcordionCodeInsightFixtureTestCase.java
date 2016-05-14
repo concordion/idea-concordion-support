@@ -16,6 +16,8 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.MapDataContext;
 import com.intellij.testFramework.PsiTestUtil;
@@ -36,21 +38,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
-    protected VirtualFile copyTestFixtureToConcordionProject(String javaRunner) {
+    protected VirtualFile copyTestFixtureToConcordionProject(@NotNull String javaRunner) {
         return assertInTestPackage(myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner));
     }
 
-    protected VirtualFile copySpecToConcordionProject(String htmlSpec) {
-        return  myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
-    }
-
-    private VirtualFile assertInTestPackage(VirtualFile javaFile) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(javaFile.getInputStream()))) {
-            assertThat(reader.readLine()).isEqualTo("package com.test;");
-            return javaFile;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    protected VirtualFile copySpecToConcordionProject(@NotNull String htmlSpec) {
+        return myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
     }
 
     @Override
@@ -84,6 +77,15 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
         }
     }
 
+    protected final VirtualFile assertInTestPackage(@NotNull VirtualFile javaFile) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(javaFile.getInputStream()))) {
+            assertThat(reader.readLine()).isEqualTo("package com.test;");
+            return javaFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected final void assertHasGutters(VirtualFile fixture, VirtualFile spec) {
         myFixture.configureFromExistingVirtualFile(fixture);
         GuttersAssert.assertThat(myFixture.findAllGutters()).hasConcordionGutter();
@@ -98,6 +100,26 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
 
         myFixture.configureFromExistingVirtualFile(spec);
         GuttersAssert.assertThat(myFixture.findAllGutters()).hasNoConcordionGutter();
+    }
+
+    protected final void assertNavigateToEachOther(VirtualFile testFixture, VirtualFile spec) {
+        ConcordionNavigationService navigation = ConcordionNavigationService.getInstance(getProject());
+
+        PsiFile testFixtureFile = PsiManager.getInstance(getProject()).findFile(testFixture);
+        PsiFile specFile = PsiManager.getInstance(getProject()).findFile(spec);
+
+        assertThat(navigation.pairedFile(testFixtureFile)).isNotNull().isEqualTo(specFile);
+        assertThat(navigation.pairedFile(specFile)).isNotNull().isEqualTo(testFixtureFile);
+
+    }
+
+    protected final void assertDoNotNavigate(VirtualFile... files) {
+        ConcordionNavigationService navigation = ConcordionNavigationService.getInstance(getProject());
+
+        for (VirtualFile file : files) {
+            assertThat(navigation.pairedFile(PsiManager.getInstance(getProject()).findFile(file))).isNull();
+
+        }
     }
 
     protected final <T extends PsiElement> T elementUnderCaret() {
