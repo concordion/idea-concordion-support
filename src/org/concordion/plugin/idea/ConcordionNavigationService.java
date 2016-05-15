@@ -3,6 +3,7 @@ package org.concordion.plugin.idea;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import org.concordion.plugin.idea.fixtures.ConcordionTestFixture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
+import static org.concordion.plugin.idea.ConcordionExtensionUtils.allRegisteredExtensions;
 import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionSpecType.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixture.*;
@@ -28,7 +30,7 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     private static final Set<String> POSSIBLE_SPEC_EXTENSIONS = allPossibleSpecExtensions();
-    private final Collection<String> testFixtureExtensions = allPossibleFixtureExtensions();
+    private final Collection<String> testFixtureExtensions = allRegisteredExtensions(ConcordionTestFixture.EP_NAME);
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 

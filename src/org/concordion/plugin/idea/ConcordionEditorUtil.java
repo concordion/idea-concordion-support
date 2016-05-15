@@ -8,7 +8,10 @@ import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConcordionEditorUtil {
+public final class ConcordionEditorUtil {
+
+    private ConcordionEditorUtil() {
+    }
 
     @Nullable
     public static PsiFile findFileFrom(@NotNull Editor editor) {

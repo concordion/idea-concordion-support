@@ -1,14 +1,15 @@
 package org.concordion.plugin.idea.fixtures;
 
-import org.jetbrains.plugins.groovy.GroovyFileType;
-import com.intellij.openapi.fileTypes.FileType;
+import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 
-public class ConcordionGroovyTestFixture extends ConcordionTestFixture {
+import java.util.Set;
+
+public class ConcordionGroovyTestFixture implements ConcordionTestFixture {
 
     @NotNull
     @Override
-    public FileType testFixtureFileType() {
-        return GroovyFileType.GROOVY_FILE_TYPE;
+    public Set<String> fileExtensions() {
+        return ImmutableSet.of("groovy");
     }
 }
