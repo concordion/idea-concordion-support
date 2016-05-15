@@ -8,9 +8,9 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.internal.MultiPattern;
 import org.concordion.plugin.idea.ConcordionNavigationService;
-import org.concordion.plugin.idea.ConcordionSpecType;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
+import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -20,6 +20,7 @@ import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
 
@@ -68,17 +69,17 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withSpecOfType(@NotNull ConcordionSpecType type) {
+    public Self withSpecOfType(@NotNull ConcordionSpecification type) {
         return with(new PatternCondition<T>("withSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiFile file = getContainingFile(element);
-                return file != null && type.canBeIn(file);
+                return file != null && type.usableWith(file);
             }
         });
     }
 
-    public Self withConfiguredSpecOfType(@NotNull ConcordionSpecType type) {
+    public Self withConfiguredSpecOfType(@NotNull ConcordionSpecification type) {
         return with(new PatternCondition<T>("withConfiguredSpecOfType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
@@ -88,7 +89,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 }
                 String prefix = type.prefix(file);
                 context.put(CONCORDION_SCHEMA_PREFIX, prefix);
-                return type.canBeIn(file) && prefix != null;
+                return type.usableWith(file) && prefix != null;
             }
         });
     }
@@ -118,7 +119,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 PsiFile spec = getContainingFile(element);
-                String extensionPrefix = spec != null ?ConcordionSpecType.extensionPrefixInFile(spec) : null;
+                String extensionPrefix = spec != null ? extensionPrefixInFile(spec) : null;
                 context.put(CONCORDION_EXTENSIONS_SCHEMA_PREFIX, extensionPrefix);
 
                 Collection<String> extensions = configuredExtensions(context.get(TEST_FIXTURE));

@@ -13,7 +13,7 @@ import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.jetbrains.annotations.Nullable;
 
 import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
-import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 
 public class ConcordionConfigurationProducer extends TestClassConfigurationProducer {
 

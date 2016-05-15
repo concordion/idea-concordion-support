@@ -20,6 +20,7 @@ import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
+import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +32,8 @@ import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static org.concordion.plugin.idea.ConcordionSpecType.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 
 public class WrongCommandCaseUsed extends LocalInspectionTool implements ConcordionSettingsListener {
 
@@ -75,7 +76,7 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
     private ConcordionElementPattern.Capture<PsiElement> newPattern(Set<String> wrongCaseExamples) {
         return concordionElement().andOr(
                 concordionElement().withLanguage(ConcordionLanguage.INSTANCE).withParent(ConcordionEmbeddedCommand.class),
-                concordionElement().withLanguage(XMLLanguage.INSTANCE).withParent(XmlAttribute.class).withConfiguredSpecOfType(HTML).withFoundTestFixture().withConcordionXmlAttribute()
+                concordionElement().withLanguage(XMLLanguage.INSTANCE).withParent(XmlAttribute.class).withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE).withFoundTestFixture().withConcordionXmlAttribute()
         ).withCommandTextIn(wrongCaseExamples);
     }
 

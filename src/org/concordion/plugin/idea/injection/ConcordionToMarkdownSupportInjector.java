@@ -7,18 +7,18 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
+import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 import org.intellij.plugins.markdown.lang.MarkdownElementTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionToMarkdownSupportInjector implements MultiHostInjector {
 
     private static final ConcordionElementPattern.Capture<PsiElement> LINKS_TITLES_TO_INJECT = concordionElement(PsiElement.class)
-            .withConfiguredSpecOfType(MD)
+            .withConfiguredSpecOfType(ConcordionMdSpecification.INSTANCE)
             .withElementType(MarkdownElementTypes.LINK_TITLE)
             .withFoundTestFixture();
 

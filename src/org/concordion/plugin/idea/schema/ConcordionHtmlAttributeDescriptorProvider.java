@@ -5,7 +5,7 @@ import com.intellij.xml.XmlAttributeDescriptor;
 import com.intellij.xml.XmlAttributeDescriptorsProvider;
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor;
 import org.concordion.plugin.idea.ConcordionCommand;
-import org.concordion.plugin.idea.ConcordionSpecType;
+import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import static org.concordion.plugin.idea.ConcordionCommand.commands;
 public class ConcordionHtmlAttributeDescriptorProvider implements XmlAttributeDescriptorsProvider {
 
     private final Set<String> allConcordionCommands = commands()
-            .filter(command -> command.fitsSpecType(ConcordionSpecType.HTML))
+            .filter(command -> command.fitsSpecType(ConcordionHtmlSpecification.INSTANCE))
             .map(ConcordionCommand::text)
             .collect(toSet());
 

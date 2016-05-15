@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
+import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -18,18 +19,17 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionCommand.commands;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 
 public class ConcordionToHtmlInjector implements MultiHostInjector {
 
     private static final Set<String> CONCORDION_TAGS_FOR_EXPRESSION_INJECTION = commands()
-            .filter(command -> command.fitsSpecType(HTML))
+            .filter(command -> command.fitsSpecType(ConcordionHtmlSpecification.INSTANCE))
             .filter(ConcordionCommand::expression)
             .map(ConcordionCommand::text)
             .collect(toSet());
 
     private static final ConcordionElementPattern.Capture<XmlAttributeValue> TAGS_TO_INJECT = concordionElement(XmlAttributeValue.class)
-            .withConfiguredSpecOfType(HTML)
+            .withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE)
             .withFoundTestFixture()
             .withConcordionXmlAttribute()
             .withCommandTextIn(CONCORDION_TAGS_FOR_EXPRESSION_INJECTION);

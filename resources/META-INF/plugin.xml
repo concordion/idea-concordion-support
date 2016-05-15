@@ -84,10 +84,12 @@
 
   <extensionPoints>
     <extensionPoint name="testFixture" interface="org.concordion.plugin.idea.fixtures.ConcordionTestFixture"/>
+    <extensionPoint name="specification" interface="org.concordion.plugin.idea.specifications.ConcordionSpecification"/>
   </extensionPoints>
 
   <extensions defaultExtensionNs="org.concordion.plugin.idea.lang">
     <testFixture implementation="org.concordion.plugin.idea.fixtures.ConcordionJavaTestFixture"/>
+    <specification implementation="org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">

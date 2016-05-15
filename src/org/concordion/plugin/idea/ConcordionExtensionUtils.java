@@ -5,6 +5,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.stream;
@@ -22,21 +23,21 @@ public final class ConcordionExtensionUtils {
                 .collect(toSet());
     }
 
-    @Nullable
-    public static <T extends ConcordionExtension> T extension(
+    @NotNull
+    public static <T extends ConcordionExtension> Optional<T> extension(
             @NotNull ExtensionPointName<T> extensionPoint,
             @NotNull String fileType
     ) {
         return stream(extensionPoint.getExtensions())
                 .filter(e -> e.usableWith(fileType))
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
-    @Nullable
-    public static <T extends ConcordionExtension> T extension(
+    @NotNull
+    public static <T extends ConcordionExtension> Optional<T> extension(
             @NotNull ExtensionPointName<T> extensionPoint,
-            @NotNull PsiFile fileType
+            @NotNull PsiFile file
     ) {
-        return extension(extensionPoint, fileType.getFileType().getDefaultExtension());
+        return extension(extensionPoint, file.getFileType().getDefaultExtension());
     }
 }

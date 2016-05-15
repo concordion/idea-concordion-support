@@ -7,13 +7,13 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
+import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
 import static org.concordion.plugin.idea.Namespaces.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionSpecType.*;
 
 public class ConcordionHtmlCommandsCompletionContributor extends CompletionContributor {
 
@@ -21,15 +21,15 @@ public class ConcordionHtmlCommandsCompletionContributor extends CompletionContr
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).andOr(
-                        concordionElement().withConfiguredSpecOfType(HTML),
+                        concordionElement().withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE),
                         concordionElement().withFoundTestFixture()
                 ),
-                new ConcordionCommandsCompletionProvider(CONCORDION, HTML, new HtmlLookupElementFactory())
+                new ConcordionCommandsCompletionProvider(CONCORDION, ConcordionHtmlSpecification.INSTANCE, new HtmlLookupElementFactory())
         );
         extend(
                 CompletionType.BASIC,
                 concordionElement().withParent(XmlAttribute.class).withFoundTestFixture().withConfiguredExtensions(true),
-                new ConcordionCommandsCompletionProvider(CONCORDION_EXTENSIONS, HTML, new HtmlLookupElementFactory())
+                new ConcordionCommandsCompletionProvider(CONCORDION_EXTENSIONS, ConcordionHtmlSpecification.INSTANCE, new HtmlLookupElementFactory())
         );
     }
 

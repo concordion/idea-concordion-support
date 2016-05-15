@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -17,5 +18,9 @@ public interface ConcordionExtension {
 
     default boolean usableWith(@NotNull String fileExtension) {
         return fileExtensions().contains(fileExtension);
+    }
+
+    default boolean usableWith(@NotNull PsiFile file) {
+        return fileExtensions().contains(file.getFileType().getDefaultExtension());
     }
 }

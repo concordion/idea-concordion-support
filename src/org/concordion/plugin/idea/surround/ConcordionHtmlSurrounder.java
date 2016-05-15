@@ -1,8 +1,11 @@
-package org.concordion.plugin.idea.action.intention.surround;
+package org.concordion.plugin.idea.surround;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ConcordionHtmlSurrounder implements ConcordionSurrounder {
+
+    @NotNull
+    public static final ConcordionSurrounder INSTANCE = new ConcordionHtmlSurrounder();
 
     @NotNull
     @Override

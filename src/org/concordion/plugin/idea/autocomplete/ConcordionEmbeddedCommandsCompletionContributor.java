@@ -7,32 +7,32 @@ import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
+import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
 import static org.concordion.plugin.idea.Namespaces.*;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
-import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionEmbeddedCommandsCompletionContributor extends CompletionContributor {
 
     public ConcordionEmbeddedCommandsCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement().withSpecOfType(MD).andOr(
+                concordionElement().withSpecOfType(ConcordionMdSpecification.INSTANCE).andOr(
                         concordionElement(ConcordionTypes.COMMAND),
                         concordionElement(ConcordionTypes.IDENTIFIER).withStartOfInjection()
                 ),
-                new ConcordionCommandsCompletionProvider(CONCORDION, MD, new MdLookupElementFactory())
+                new ConcordionCommandsCompletionProvider(CONCORDION, ConcordionMdSpecification.INSTANCE, new MdLookupElementFactory())
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement().withSpecOfType(MD).withFoundTestFixture().withConfiguredExtensions(false).andOr(
+                concordionElement().withSpecOfType(ConcordionMdSpecification.INSTANCE).withFoundTestFixture().withConfiguredExtensions(false).andOr(
                         concordionElement(ConcordionTypes.COMMAND),
                         concordionElement(ConcordionTypes.IDENTIFIER).withStartOfInjection()
                 ),
-                new ConcordionCommandsCompletionProvider(CONCORDION_EXTENSIONS, MD, new MdLookupElementFactory())
+                new ConcordionCommandsCompletionProvider(CONCORDION_EXTENSIONS, ConcordionMdSpecification.INSTANCE, new MdLookupElementFactory())
         );
     }
 
