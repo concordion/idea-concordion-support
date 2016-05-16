@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
-import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.extensionNamespace;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.extensionNamespace;
 
 public class ConcordionMdSpecification implements ConcordionSpecification {
 

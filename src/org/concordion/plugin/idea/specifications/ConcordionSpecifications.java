@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+import java.util.Optional;
+
 import static org.concordion.plugin.idea.ConcordionExtensionUtils.extension;
 
 
@@ -21,21 +23,26 @@ public final class ConcordionSpecifications {
 
     @Nullable
     public static String prefixInFile(@NotNull PsiFile file) {
-        return extension(ConcordionSpecification.EP_NAME, file).map(type -> type.prefix(file)).orElse(null);
+        return specExtension(file).map(spec -> spec.prefix(file)).orElse(null);
     }
 
     @Nullable
     public static String extensionPrefixInFile(@NotNull PsiFile file) {
-        return extension(ConcordionSpecification.EP_NAME, file).map(type -> type.extensionPrefix(file)).orElse(null);
+        return specExtension(file).map(spec -> spec.extensionPrefix(file)).orElse(null);
     }
 
     @Nullable
     public static ConcordionSurrounder surrounderFor(@NotNull PsiFile file) {
-        return extension(ConcordionSpecification.EP_NAME, file).map(ConcordionSpecification::surrounder).orElse(null);
+        return specExtension(file).map(ConcordionSpecification::surrounder).orElse(null);
     }
 
     @Nullable
     public static ConcordionVariableUsageSearcher variableUsageSearcherFor(@NotNull PsiFile file) {
-        return extension(ConcordionSpecification.EP_NAME, file).map(ConcordionSpecification::variablesUsageSearcher).orElse(null);
+        return specExtension(file).map(ConcordionSpecification::variablesUsageSearcher).orElse(null);
+    }
+
+    @NotNull
+    private static Optional<ConcordionSpecification> specExtension(@NotNull PsiFile file) {
+        return extension(ConcordionSpecification.EP_NAME, file);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
 import static org.concordion.plugin.idea.ConcordionContextKeys.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 

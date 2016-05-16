@@ -17,7 +17,7 @@ import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionExtensionUtils.*;
-import static org.concordion.plugin.idea.ConcordionTestFixtureUtil.*;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
 public class ConcordionNavigationService {
