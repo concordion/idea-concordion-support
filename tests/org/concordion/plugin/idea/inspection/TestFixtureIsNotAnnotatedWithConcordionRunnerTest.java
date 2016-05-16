@@ -17,9 +17,19 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
     protected void setUp() throws Exception {
         super.setUp();
         myFixture.enableInspections(TestFixtureIsNotAnnotatedWithConcordionRunner.class);
+        myFixture.enableInspections(GroovyTestFixtureIsNotAnnotatedWithConcordionRunner.class);
     }
 
     public void testDoesNotErrorOutRegularClassWithoutHtmlSpec() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("RegularClass.java");
+
+        myFixture.configureFromExistingVirtualFile(testFixture);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+    }
+
+    public void testDoesNotErrorOutRegularGeoovyClassWithoutHtmlSpec() {
         VirtualFile testFixture = copyTestFixtureToConcordionProject("RegularClass.java");
 
         myFixture.configureFromExistingVirtualFile(testFixture);
@@ -39,6 +49,17 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
                 .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
+    public void testDoesNotErrorOutAnnotatedGroovyTestFixture() {
+
+        copySpecToConcordionProject("SimpleExpressions.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("SimpleExpressions.groovy");
+
+        myFixture.configureFromExistingVirtualFile(testFixture);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+    }
+
     public void testErrorOutNotAnnotatedTestFixture() {
 
         copySpecToConcordionProject("RunnerNotAnnotated.html");
@@ -50,10 +71,33 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
                 .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
     }
 
+    public void testErrorOutNotAnnotatedGroovyTestFixture() {
+
+        copySpecToConcordionProject("RunnerNotAnnotated.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("RunnerNotAnnotated.groovy");
+
+        myFixture.configureFromExistingVirtualFile(testFixture);
+
+        assertThat(myFixture.doHighlighting())
+                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
+    }
+
     public void testErrorOutTestFixtureAnnotatedWithDifferentRunner() {
 
         copySpecToConcordionProject("RunnerWrongAnnotated.html");
         VirtualFile testFixture = copyTestFixtureToConcordionProject("RunnerWrongAnnotated.java");
+
+        myFixture.configureFromExistingVirtualFile(testFixture);
+
+        assertThat(myFixture.doHighlighting())
+                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
+
+    }
+
+    public void testErrorOutGroovyTestFixtureAnnotatedWithDifferentRunner() {
+
+        copySpecToConcordionProject("RunnerWrongAnnotated.html");
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("RunnerWrongAnnotated.groovy");
 
         myFixture.configureFromExistingVirtualFile(testFixture);
 

@@ -4,5 +4,12 @@
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.concordion.plugin.idea.marker.GroovyTestFixtureLineMarkerProvider"/>
+        <localInspection language="Groovy"
+                         id="groovyTestFixtureIsNotAnnotatedWithConcordionRunner"
+                         groupName="Concordion"
+                         displayName="Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.concordion.plugin.idea.inspection.GroovyTestFixtureIsNotAnnotatedWithConcordionRunner"/>
     </extensions>
 </idea-plugin>

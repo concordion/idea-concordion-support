@@ -69,7 +69,7 @@ public class ConcordionJavaTestFixture implements ConcordionTestFixture {
 
     @Nullable
     private static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
-        for (PsiClass current = psiClass; current != null ; current = current.getSuperClass()) {
+        for (PsiClass current = psiClass; current != null; current = current.getSuperClass()) {
             PsiModifierList modifiers = current.getModifierList();
             if (modifiers == null) {
                 continue;

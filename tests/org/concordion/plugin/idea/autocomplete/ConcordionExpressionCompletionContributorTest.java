@@ -26,9 +26,38 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("staticProperty");
     }
 
+    public void testCompleteConcordionExpressionWithGroovyFixtureProperties() {
+
+        copyTestFixtureToConcordionProject("Fields.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Fields.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        //groovy converts fields into accessors
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("getPublicProperty")
+                .contains("getStaticProperty")
+                .doesNotContain("getPrivateProperty");
+    }
+
     public void testCompleteConcordionExpressionWithFixtureMethods() {
 
         copyTestFixtureToConcordionProject("Methods.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("publicMethod")
+                .contains("staticMethod")
+                .doesNotContain("privateMethod");
+    }
+
+    public void testCompleteConcordionExpressionWithGroovyFixtureMethods() {
+
+        copyTestFixtureToConcordionProject("Methods.groovy");
         VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
 
         myFixture.configureFromExistingVirtualFile(htmlSpec);

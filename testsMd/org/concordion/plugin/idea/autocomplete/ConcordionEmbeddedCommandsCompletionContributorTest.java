@@ -113,9 +113,21 @@ public class ConcordionEmbeddedCommandsCompletionContributorTest extends Concord
                 .doesNotContainAnyElementsOf(CAMEL_CASE_COMMANDS);
     }
 
-    public void testCompleteExtensionsCommandsInHtmlTags() {
+    public void testCompleteExtensionsCommands() {
 
         copyTestFixtureToConcordionProject("EmbeddedCommandsWithExtensions.java");
+        VirtualFile spec = copySpecToConcordionProject("EmbeddedCommandsWithExtensions.md");
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
+    }
+
+    public void testCompleteExtensionsCommandsWithGroovySpec() {
+
+        copyTestFixtureToConcordionProject("EmbeddedCommandsWithExtensions.groovy");
         VirtualFile spec = copySpecToConcordionProject("EmbeddedCommandsWithExtensions.md");
 
         myFixture.configureFromExistingVirtualFile(spec);

@@ -143,6 +143,18 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
                 .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
 
+    public void testCompleteExtensionsCommandsWithGroovyInHtmlTags() {
+
+        copyTestFixtureToConcordionProject("ExtensionsCommands.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("ExtensionsCommands.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
+    }
+
     public void testDoesNotDuplicateConcordionPrefixForStartedHalfTypedCommand() {
 
         copyTestFixtureToConcordionProject("CommandStarted.java");
