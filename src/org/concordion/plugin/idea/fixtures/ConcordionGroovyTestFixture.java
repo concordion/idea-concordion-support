@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrReferenceExpression;
 
 import java.util.List;
@@ -66,6 +67,12 @@ public class ConcordionGroovyTestFixture implements ConcordionTestFixture {
         int namespaceIndex = literals.indexOf(CONCORDION_EXTENSIONS.namespace);
         int prefixIndex = namespaceIndex - 1;
         return prefixIndex >= 0 && prefixIndex < literals.size() ? literals.get(prefixIndex) : null;
+    }
+
+    @NotNull
+    @Override
+    public JVMElementFactory elementFactory(@NotNull PsiClass testFixture) {
+        return GroovyPsiElementFactory.getInstance(testFixture.getProject());
     }
 
     @Nullable

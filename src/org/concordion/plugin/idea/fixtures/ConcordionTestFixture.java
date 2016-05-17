@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.fixtures;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.psi.JVMElementFactory;
 import com.intellij.psi.PsiClass;
 import org.concordion.plugin.idea.ConcordionExtension;
 import org.jetbrains.annotations.NotNull;
@@ -37,4 +38,7 @@ public interface ConcordionTestFixture extends ConcordionExtension {
 
     @Nullable
     String extensionNamespace(@NotNull PsiClass testFixture);
+
+    @NotNull
+    JVMElementFactory elementFactory(@NotNull PsiClass testFixture);
 }

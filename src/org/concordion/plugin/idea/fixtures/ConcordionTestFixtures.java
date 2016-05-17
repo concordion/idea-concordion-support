@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.fixtures;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.psi.JVMElementFactory;
 import com.intellij.psi.PsiClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,11 @@ public final class ConcordionTestFixtures {
     @Nullable
     public static String extensionNamespace(@NotNull PsiClass testFixture) {
         return fixtureExtension(testFixture).map(fixture -> fixture.extensionNamespace(testFixture)).orElse(null);
+    }
+
+    @Nullable
+    public static JVMElementFactory elementFactory(@NotNull PsiClass testFixture) {
+        return fixtureExtension(testFixture).map(fixture -> fixture.elementFactory(testFixture)).orElse(null);
     }
 
     @NotNull

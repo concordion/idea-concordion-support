@@ -67,6 +67,12 @@ public class ConcordionJavaTestFixture implements ConcordionTestFixture {
         return prefixIndex >= 0 && prefixIndex < literals.size() ? literals.get(prefixIndex) : null;
     }
 
+    @NotNull
+    @Override
+    public JVMElementFactory elementFactory(@NotNull PsiClass testFixture) {
+        return JavaPsiFacade.getElementFactory(testFixture.getProject());
+    }
+
     @Nullable
     private static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
         for (PsiClass current = psiClass; current != null; current = current.getSuperClass()) {

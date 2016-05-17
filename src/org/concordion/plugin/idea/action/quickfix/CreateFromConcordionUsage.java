@@ -12,13 +12,15 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
+
 public abstract class CreateFromConcordionUsage<T extends PsiElement> extends BaseIntentionAction {
 
-    @Nullable protected final PsiClass javaRunner;
+    @Nullable protected final PsiClass fixture;
     @NotNull protected final T source;
 
-    public CreateFromConcordionUsage(@Nullable PsiClass javaRunner, @NotNull T source, String text) {
-        this.javaRunner = javaRunner;
+    public CreateFromConcordionUsage(@Nullable PsiClass fixture, @NotNull T source, String text) {
+        this.fixture = fixture;
         this.source = source;
         setText(text);
     }
@@ -32,13 +34,13 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return javaRunner != null && source.getParent() instanceof ConcordionOgnlExpressionStart;
+        return fixture != null && source.getParent() instanceof ConcordionOgnlExpressionStart;
     }
 
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
 
-        PsiElement created = createdMember(project, JavaPsiFacade.getElementFactory(project));
+        PsiElement created = createdMember(project, elementFactory(fixture));
 
         Navigatable descriptor = EditSourceUtil.getDescriptor(created);
         if (descriptor != null) {
@@ -46,5 +48,5 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
         }
     }
 
-    protected abstract PsiMember createdMember(Project project, PsiElementFactory factory);
+    protected abstract PsiMember createdMember(@NotNull Project project, @NotNull JVMElementFactory factory);
 }

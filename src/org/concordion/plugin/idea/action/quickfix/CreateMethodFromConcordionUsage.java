@@ -18,7 +18,8 @@ public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<C
     }
 
     @Override
-    protected PsiMember createdMember(Project project, PsiElementFactory factory) {
+    protected PsiMember createdMember(@NotNull Project project, @NotNull JVMElementFactory factory) {
+
         PsiType defaultType = findString(project);
 
         PsiMethod createdMethod = factory.createMethod(source.getName(), defaultType);
@@ -33,9 +34,11 @@ public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<C
             parameterIndex++;
         }
 
-        createdMethod.getBody().add(factory.createStatementFromText("return null;", null));
+        if (factory instanceof PsiElementFactory) {
+            createdMethod.getBody().add(((PsiElementFactory) factory).createStatementFromText("return null;", null));
+        }
 
-        return (PsiMethod) javaRunner.add(createdMethod);
+        return (PsiMethod) fixture.add(createdMethod);
     }
 
     @NotNull

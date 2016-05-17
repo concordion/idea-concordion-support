@@ -79,7 +79,7 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
 
     protected final VirtualFile assertInTestPackage(@NotNull VirtualFile javaFile) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(javaFile.getInputStream()))) {
-            assertThat(reader.readLine()).isEqualTo("package com.test;");
+            assertThat(reader.readLine()).startsWith("package com.test");
             return javaFile;
         } catch (IOException e) {
             throw new RuntimeException(e);
