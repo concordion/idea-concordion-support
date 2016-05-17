@@ -23,6 +23,8 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicProperty")
                 .doesNotContain("privateProperty")
+                .doesNotContain("protectedProperty")
+                .doesNotContain("packagePrivateProperty")
                 .doesNotContain("staticProperty");
     }
 
@@ -36,9 +38,11 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
         //groovy converts fields into accessors
         assertThat(myFixture.getLookupElementStrings())
-                .contains("getPublicProperty")
-                .contains("getStaticProperty")
-                .doesNotContain("getPrivateProperty");
+                .doesNotContain("privateByDefaultProperty").contains("getPrivateByDefaultProperty").contains("setPrivateByDefaultProperty")
+                .doesNotContain("privateProperty").doesNotContain("getPrivateProperty").doesNotContain("setPrivateProperty")
+                .doesNotContain("protectedProperty").doesNotContain("getProtectedProperty").doesNotContain("setProtectedProperty")
+                .contains("publicProperty").doesNotContain("getPublicProperty").doesNotContain("setPublicProperty")
+                .doesNotContain("staticProperty").doesNotContain("getStaticProperty").doesNotContain("setStaticProperty");
     }
 
     public void testCompleteConcordionExpressionWithFixtureMethods() {
@@ -52,7 +56,9 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicMethod")
                 .contains("staticMethod")
-                .doesNotContain("privateMethod");
+                .doesNotContain("privateMethod")
+                .doesNotContain("protectedMethod")
+                .doesNotContain("packagePrivateMethod");
     }
 
     public void testCompleteConcordionExpressionWithGroovyFixtureMethods() {
@@ -65,8 +71,10 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
 
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicMethod")
+                .contains("publicByDefaultMethod")
                 .contains("staticMethod")
-                .doesNotContain("privateMethod");
+                .doesNotContain("privateMethod")
+                .doesNotContain("protectedMethod");
     }
 
     public void testCompleteWithVariablesOfCurrentScope() {

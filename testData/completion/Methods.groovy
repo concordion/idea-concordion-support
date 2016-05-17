@@ -10,7 +10,15 @@ public class Methods {
         return 41;
     }
 
-    int publicMethod() {
+    protected int protectedMethod() {
+        return 41;
+    }
+
+    public int publicMethod() {
+        return 42;
+    }
+
+    int publicByDefaultMethod() {
         return 42;
     }
 
