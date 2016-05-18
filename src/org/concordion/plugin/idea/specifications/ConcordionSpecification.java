@@ -3,7 +3,7 @@ package org.concordion.plugin.idea.specifications;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionExtension;
-import org.concordion.plugin.idea.surround.ConcordionSurrounder;
+import org.concordion.plugin.idea.action.intention.surround.ConcordionSurrounder;
 import org.concordion.plugin.idea.variables.ConcordionVariableUsageSearcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.concordion.plugin.idea.surround.ConcordionSurrounder;
+import org.concordion.plugin.idea.action.intention.surround.ConcordionSurrounder;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
