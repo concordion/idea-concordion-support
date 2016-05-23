@@ -3,7 +3,6 @@ package org.concordion.plugin.idea.autocomplete;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConcordionDictionaryValuesCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
@@ -21,7 +20,9 @@ public class ConcordionDictionaryValuesCompletionContributorTest extends Concord
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(asList("Default", "BestMatch", "KeyMatch"));
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("Default", "BestMatch", "KeyMatch")
+                .doesNotContain("shouldNotBeInDictionaryCompletion");
     }
 
     public void testCompleteMatchingRoleWithKeyRole() {
@@ -32,7 +33,9 @@ public class ConcordionDictionaryValuesCompletionContributorTest extends Concord
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).contains("key");
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("key")
+                .doesNotContain("shouldNotBeInDictionaryCompletion");
     }
     
     public void testCompleteStatus() {
@@ -42,6 +45,8 @@ public class ConcordionDictionaryValuesCompletionContributorTest extends Concord
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(asList("ExpectedToPass", "ExpectedToFail", "Unimplemented"));
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("ExpectedToPass", "ExpectedToFail", "Unimplemented")
+                .doesNotContain("shouldNotBeInDictionaryCompletion");
     }
 }

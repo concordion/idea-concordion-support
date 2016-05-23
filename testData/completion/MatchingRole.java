@@ -9,4 +9,8 @@ public class MatchingRole {
     public List<Object> values() {
         return Collections.<Object>emptyList();
     }
+
+    public Object shouldNotBeInDictionaryCompletion() {
+        return null;
+    }
 }

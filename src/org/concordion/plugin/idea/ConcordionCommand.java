@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 public class ConcordionCommand {
 
     private static final Collection<ConcordionCommand> ALL = new ArrayList<>();
+    private static final Map<String, ConcordionCommand> ALL_BY_TEXT = new HashMap<>();
 
     public static final ConcordionCommand ASSERT_EQUALS_CAMEL = camelCaseCommand("assertEquals").register();
     public static final ConcordionCommand ASSERT_EQUALS_SPINAL = spinalCaseCommand("assert-equals").register();
@@ -27,7 +28,7 @@ public class ConcordionCommand {
     public static final ConcordionCommand SET = command("set").register();
     public static final ConcordionCommand ECHO = command("echo").register();
     public static final ConcordionCommand RUN = command("run").register();
-    public static final ConcordionCommand EXAMPLE = command("example").withDictionaryValues().register();
+    public static final ConcordionCommand EXAMPLE = command("example").withDictionaryValues("").register();
     public static final ConcordionCommand STATUS = command("status").withDictionaryValues("ExpectedToPass", "ExpectedToFail", "Unimplemented").register();
 
     public static final ConcordionCommand VERIFY_ROWS_CAMEL = camelCaseCommand("verifyRows").register();
@@ -59,9 +60,7 @@ public class ConcordionCommand {
 
     @Nullable
     public static ConcordionCommand findCommandByText(@NotNull String text) {
-        return commands()
-                .filter(command -> command.text.equals(text))
-                .findFirst().orElse(null);
+        return ALL_BY_TEXT.get(text);
     }
 
     @NotNull
@@ -155,6 +154,7 @@ public class ConcordionCommand {
     @NotNull
     protected final ConcordionCommand register() {
         ALL.add(this);
+        ALL_BY_TEXT.put(this.text, this);
         return this;
     }
 }

@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.*;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
@@ -123,6 +124,11 @@ public final class ConcordionPsiUtils {
         } else {
             return null;
         }
+    }
+
+    @NotNull
+    public static ConcordionCommand commandOf(@NotNull PsiElement element) {
+        return ofNullable(commandTextOf(element)).map(ConcordionCommand::findCommandByText).orElse(EXECUTE);
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {

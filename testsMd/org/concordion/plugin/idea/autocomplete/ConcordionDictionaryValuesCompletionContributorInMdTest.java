@@ -3,7 +3,6 @@ package org.concordion.plugin.idea.autocomplete;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConcordionDictionaryValuesCompletionContributorInMdTest extends ConcordionCodeInsightFixtureTestCase {
@@ -21,7 +20,9 @@ public class ConcordionDictionaryValuesCompletionContributorInMdTest extends Con
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(asList("Default", "BestMatch", "KeyMatch"));
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("Default", "BestMatch", "KeyMatch")
+                .doesNotContain("shouldNotBeInDictionaryCompletion");
     }
 
     public void testCompleteStatus() {
@@ -31,6 +32,8 @@ public class ConcordionDictionaryValuesCompletionContributorInMdTest extends Con
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         myFixture.completeBasic();
 
-        assertThat(myFixture.getLookupElementStrings()).containsAll(asList("ExpectedToPass", "ExpectedToFail", "Unimplemented"));
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("ExpectedToPass", "ExpectedToFail", "Unimplemented")
+                .doesNotContain("shouldNotBeInDictionaryCompletion");
     }
 }

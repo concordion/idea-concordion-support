@@ -161,15 +161,6 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         });
     }
 
-    public Self withCommandText(@NotNull String command) {
-        return with(new PatternCondition<T>("withCommandText") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return command.equals(commandTextOf(element));
-            }
-        });
-    }
-
     public Self withTextNotMatching(@NotNull MultiPattern pattern) {
         return with(new PatternCondition<T>("withTextMatches") {
             @Override
@@ -192,14 +183,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withCommand") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                String text = commandTextOf(element);
-                if (text == null) {
-                    return false;
-                }
-                ConcordionCommand command = findCommandByText(text);
-                if (command == null) {
-                    return false;
-                }
+                ConcordionCommand command = commandOf(element);
                 context.put(CONCORDION_COMMAND, command);
                 return predicate.test(command);
             }

@@ -12,4 +12,8 @@ public class MatchStrategy {
     public List<Object> values() {
         return Collections.<Object>emptyList();
     }
+
+    public Object shouldNotBeInDictionaryCompletion() {
+        return null;
+    }
 }

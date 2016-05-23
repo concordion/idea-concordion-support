@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.autocomplete;
 
 import com.intellij.psi.PsiFile;
+import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.lang.psi.ConcordionMember;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
@@ -17,12 +18,12 @@ public class ConcordionExpressionCompletionContributor extends CompletionContrib
     public ConcordionExpressionCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                concordionElement(ConcordionTypes.IDENTIFIER).withParent(ConcordionMember.class),
+                concordionElement(ConcordionTypes.IDENTIFIER).withParent(ConcordionMember.class).withCommand(ConcordionCommand::expression),
                 new MembersCompletionProvider()
         );
         extend(
                 CompletionType.BASIC,
-                concordionElement(ConcordionTypes.IDENTIFIER).withSuperParent(PARENT_OF_THE_PARENT, ConcordionOgnlExpressionStart.class),
+                concordionElement(ConcordionTypes.IDENTIFIER).withSuperParent(PARENT_OF_THE_PARENT, ConcordionOgnlExpressionStart.class).withCommand(ConcordionCommand::expression),
                 new VariablesCompletionProvider()
         );
     }

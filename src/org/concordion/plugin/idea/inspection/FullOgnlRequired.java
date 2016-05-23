@@ -11,6 +11,9 @@ import com.intellij.psi.*;
 import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Predicate;
+
+import static java.util.function.Predicate.isEqual;
 import static org.concordion.plugin.idea.ConcordionCommand.SET;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
@@ -28,7 +31,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_SET_VIA_COMMAND =
             concordionElement(ConcordionOgnlExpressionStart.class)
                     .withParent(ConcordionStatement.class)
-                    .withCommandText(SET.text())
+                    .withCommand(isEqual(SET))
                     .withTextNotMatching(SimpleEvaluator.SET_VARIABLE_PATTERNS);
 
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_ITERATE =
