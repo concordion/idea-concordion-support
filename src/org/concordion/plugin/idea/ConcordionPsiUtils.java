@@ -47,6 +47,7 @@ public final class ConcordionPsiUtils {
                 return typedElement.getType();
             }
             if (start.getLiteral() != null) {
+                //TODO type of literal: start.getLiteral().getNode().getChildren(null)[0].getElementType()
                 return DYNAMIC;
             }
             if (start.getList() != null) {

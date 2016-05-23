@@ -10,6 +10,14 @@ public class Methods {
         return 41;
     }
 
+    protected int protectedMethod() {
+        return 41;
+    }
+
+    int packagePrivateMethod() {
+        return 41;
+    }
+
     public int publicMethod() {
         return 42;
     }

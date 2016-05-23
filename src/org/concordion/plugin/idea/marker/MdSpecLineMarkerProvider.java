@@ -1,10 +1,19 @@
 package org.concordion.plugin.idea.marker;
 
-import static org.concordion.plugin.idea.ConcordionSpecType.MD;
+import com.intellij.psi.PsiFile;
+import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 
-public class MdSpecLineMarkerProvider extends AbstractSpecLineMarkerProvider {
+import static org.concordion.plugin.idea.ConcordionContextKeys.SPEC;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
+
+public class MdSpecLineMarkerProvider extends AbstractLineMarkerProvider {
 
     public MdSpecLineMarkerProvider() {
-        super(MD);
+        super(
+                concordionElement(PsiFile.class)
+                        .withSpecOfType(ConcordionMdSpecification.INSTANCE)
+                        .withFoundTestFixture(),
+                SPEC
+        );
     }
 }

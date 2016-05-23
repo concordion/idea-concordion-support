@@ -14,6 +14,9 @@ import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVAL
 
 public class ConcordionVariableInHtmlUsageSearcher extends ConcordionVariableUsageSearcher {
 
+    @NotNull
+    public static final ConcordionVariableUsageSearcher INSTANCE = new ConcordionVariableInHtmlUsageSearcher();
+
     @Override
     protected int findEndOfScopePosition(@NotNull PsiElement injection) {
         //xmlAttributeValue -> xmlAttribute -> xmlTag -> closingTag

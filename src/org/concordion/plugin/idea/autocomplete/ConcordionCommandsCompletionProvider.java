@@ -6,11 +6,11 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionCommand;
-import org.concordion.plugin.idea.ConcordionSpecType;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
+import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -23,11 +23,11 @@ import static org.concordion.plugin.idea.ConcordionContextKeys.CONCORDION_EXTENS
 public class ConcordionCommandsCompletionProvider extends CompletionProvider<CompletionParameters> implements ConcordionSettingsListener {
 
     @NotNull private final Namespaces namespace;
-    @NotNull private final ConcordionSpecType specType;
+    @NotNull private final ConcordionSpecification specType;
     @NotNull private final LookupElementFactory lookupElementFactory;
     @NotNull private ConcordionCommandsCaseType caseType = ConcordionCommandsCaseType.BOTH;
 
-    public ConcordionCommandsCompletionProvider(@NotNull Namespaces namespace, @NotNull ConcordionSpecType specType, @NotNull LookupElementFactory lookupElementFactory) {
+    public ConcordionCommandsCompletionProvider(@NotNull Namespaces namespace, @NotNull ConcordionSpecification specType, @NotNull LookupElementFactory lookupElementFactory) {
         this.namespace = namespace;
         this.specType = specType;
         this.lookupElementFactory = lookupElementFactory;
@@ -52,7 +52,7 @@ public class ConcordionCommandsCompletionProvider extends CompletionProvider<Com
             @NotNull ProcessingContext context,
             @NotNull Namespaces namespace,
             @NotNull ConcordionCommandsCaseType caseType,
-            @NotNull ConcordionSpecType specType,
+            @NotNull ConcordionSpecification specType,
             @NotNull Function<String, LookupElement> lookupElementCreator
     ) {
 

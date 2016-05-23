@@ -14,6 +14,9 @@ import static org.concordion.plugin.idea.variables.ConcordionVariableUsage.INVAL
 
 public class ConcordionVariableInMdUsageSearcher extends ConcordionVariableUsageSearcher {
 
+    @NotNull
+    public static final ConcordionVariableUsageSearcher INSTANCE = new ConcordionVariableInMdUsageSearcher();
+
     @Override
     protected int findEndOfScopePosition(@NotNull PsiElement injection) {
         PsiLanguageInjectionHost injectionHost = InjectedLanguageUtil.findInjectionHost(injection);

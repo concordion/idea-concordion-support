@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 public class Fields {
 
     private int privateProperty = 41;
-
+    protected int proptectedProperty = 41;
+    int packagePrivateProperty = 41;
     public int publicProperty = 42;
-
     public static int staticProperty = 43;
 }

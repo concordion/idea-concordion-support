@@ -8,22 +8,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.concordion.plugin.idea.ConcordionSpecTypeStrategy;
-import org.concordion.plugin.idea.action.intention.surround.ConcordionHtmlSurrounder;
-import org.concordion.plugin.idea.action.intention.surround.ConcordionMdSurrounder;
 import org.concordion.plugin.idea.action.intention.surround.ConcordionSurrounder;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-import static org.concordion.plugin.idea.ConcordionSpecType.specConfiguredInFile;
-import static org.concordion.plugin.idea.ConcordionSpecTypeStrategy.create;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 
 public class SurroundWithConcordionIntentionAction extends BaseIntentionAction {
 
     private static final String ACTION_NAME = "Surround with Concordion expression";
-
-    private static final ConcordionSpecTypeStrategy<ConcordionSurrounder> SURROUNDERS =
-            create(new ConcordionHtmlSurrounder(), new ConcordionMdSurrounder());
 
     public SurroundWithConcordionIntentionAction() {
         setText(ACTION_NAME);
@@ -44,7 +37,7 @@ public class SurroundWithConcordionIntentionAction extends BaseIntentionAction {
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         editor.getCaretModel().runForEachCaret(caret -> {
-            ConcordionSurrounder surrounder = SURROUNDERS.forSpecIn(file);
+            ConcordionSurrounder surrounder = surrounderFor(file);
             TextRange selection = calculateRangeToSurround(caret);
 
             if (surrounder == null

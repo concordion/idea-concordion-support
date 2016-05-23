@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.variables;
 
-import org.concordion.plugin.idea.ConcordionSpecTypeStrategy;
 import org.concordion.plugin.idea.TextReverseSearcher;
 import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.PsiElement;
@@ -13,12 +12,9 @@ import java.util.*;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
-import static org.concordion.plugin.idea.ConcordionSpecTypeStrategy.create;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.variableUsageSearcherFor;
 
 public abstract class ConcordionVariableUsageSearcher {
-
-    private static final ConcordionSpecTypeStrategy<ConcordionVariableUsageSearcher> SEARCHERS =
-            create(new ConcordionVariableInHtmlUsageSearcher(), new ConcordionVariableInMdUsageSearcher());
 
     @NotNull
     public static List<ConcordionVariableUsage> findAllDeclarationsFrom(@Nullable PsiFile injection) {
@@ -29,7 +25,7 @@ public abstract class ConcordionVariableUsageSearcher {
         if (spec == null) {
             return emptyList();
         }
-        ConcordionVariableUsageSearcher searcher = SEARCHERS.forSpecIn(spec);
+        ConcordionVariableUsageSearcher searcher = variableUsageSearcherFor(spec);
         if (searcher == null) {
             return emptyList();
         }
@@ -52,7 +48,7 @@ public abstract class ConcordionVariableUsageSearcher {
         if (varName == null) {
             return null;
         }
-        ConcordionVariableUsageSearcher searcher = SEARCHERS.forSpecIn(spec);
+        ConcordionVariableUsageSearcher searcher = variableUsageSearcherFor(spec);
         if (searcher == null) {
             return null;
         }

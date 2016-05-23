@@ -21,4 +21,16 @@ public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFix
 
         myFixture.checkResultByFile("/src/com/test/CreateFieldFromUsage.java", "after/CreateFieldFromUsage.java", false);
     }
+
+    public void testCreateFieldFromUsageInGroovy() throws InterruptedException {
+
+        copyTestFixtureToConcordionProject("CreateFieldFromUsage.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CreateFieldFromUsage.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        executeIntention("Create field from usage");
+
+        myFixture.checkResultByFile("/src/com/test/CreateFieldFromUsage.groovy", "after/CreateFieldFromUsage.groovy", false);
+    }
 }

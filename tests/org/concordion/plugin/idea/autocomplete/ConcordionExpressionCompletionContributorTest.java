@@ -23,7 +23,26 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicProperty")
                 .doesNotContain("privateProperty")
+                .doesNotContain("protectedProperty")
+                .doesNotContain("packagePrivateProperty")
                 .doesNotContain("staticProperty");
+    }
+
+    public void testCompleteConcordionExpressionWithGroovyFixtureProperties() {
+
+        copyTestFixtureToConcordionProject("Fields.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Fields.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        //groovy converts fields into accessors
+        assertThat(myFixture.getLookupElementStrings())
+                .doesNotContain("privateByDefaultProperty").contains("getPrivateByDefaultProperty").contains("setPrivateByDefaultProperty")
+                .doesNotContain("privateProperty").doesNotContain("getPrivateProperty").doesNotContain("setPrivateProperty")
+                .doesNotContain("protectedProperty").doesNotContain("getProtectedProperty").doesNotContain("setProtectedProperty")
+                .contains("publicProperty").doesNotContain("getPublicProperty").doesNotContain("setPublicProperty")
+                .doesNotContain("staticProperty").doesNotContain("getStaticProperty").doesNotContain("setStaticProperty");
     }
 
     public void testCompleteConcordionExpressionWithFixtureMethods() {
@@ -37,7 +56,25 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
         assertThat(myFixture.getLookupElementStrings())
                 .contains("publicMethod")
                 .contains("staticMethod")
-                .doesNotContain("privateMethod");
+                .doesNotContain("privateMethod")
+                .doesNotContain("protectedMethod")
+                .doesNotContain("packagePrivateMethod");
+    }
+
+    public void testCompleteConcordionExpressionWithGroovyFixtureMethods() {
+
+        copyTestFixtureToConcordionProject("Methods.groovy");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("publicMethod")
+                .contains("publicByDefaultMethod")
+                .contains("staticMethod")
+                .doesNotContain("privateMethod")
+                .doesNotContain("protectedMethod");
     }
 
     public void testCompleteWithVariablesOfCurrentScope() {

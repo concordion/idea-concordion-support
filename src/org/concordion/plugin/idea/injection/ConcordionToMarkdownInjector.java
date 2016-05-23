@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.TextReverseSearcher;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
+import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +18,11 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
-import static org.concordion.plugin.idea.ConcordionSpecType.MD;
 
 public class ConcordionToMarkdownInjector implements MultiHostInjector {
 
     private static final ConcordionElementPattern.Capture<PsiElement> FILES_TO_INJECT = concordionElement(PsiElement.class)
-            .withConfiguredSpecOfType(MD)
+            .withConfiguredSpecOfType(ConcordionMdSpecification.INSTANCE)
             .withFoundTestFixture();
 
     @Override

@@ -8,12 +8,12 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
+import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static org.concordion.plugin.idea.ConcordionCommand.commands;
-import static org.concordion.plugin.idea.ConcordionSpecType.HTML;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 import static java.util.stream.Collectors.toList;
 
@@ -22,7 +22,7 @@ public class ConcordionNonExpressionInHtmlCompletionContributor extends Completi
     public ConcordionNonExpressionInHtmlCompletionContributor() {
 
         commands()
-                .filter(command -> command.fitsSpecType(HTML))
+                .filter(command -> command.fitsSpecType(ConcordionHtmlSpecification.INSTANCE))
                 .filter(ConcordionCommand::nonExpression)
                 .forEach(
                         command -> extend(
@@ -36,7 +36,7 @@ public class ConcordionNonExpressionInHtmlCompletionContributor extends Completi
     @NotNull
     private static ConcordionElementPattern.Capture<PsiElement> defaultInjectionPattern() {
         return concordionElement()
-                .withConfiguredSpecOfType(HTML)
+                .withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE)
                 .withFoundTestFixture()
                 .withParent(XmlAttributeValue.class)
                 .withConcordionXmlAttribute();

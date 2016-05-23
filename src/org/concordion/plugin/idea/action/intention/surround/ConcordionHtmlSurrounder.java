@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 public class ConcordionHtmlSurrounder implements ConcordionSurrounder {
 
     @NotNull
+    public static final ConcordionSurrounder INSTANCE = new ConcordionHtmlSurrounder();
+
+    @NotNull
     @Override
     public String surround(@NotNull String selection) {
         return "<span c:>" + selection + "</span>";

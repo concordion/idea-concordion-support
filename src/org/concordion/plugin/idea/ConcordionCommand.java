@@ -2,6 +2,8 @@ package org.concordion.plugin.idea;
 
 import com.google.common.collect.ImmutableList;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
+import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
+import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +43,7 @@ public class ConcordionCommand {
     public static final ConcordionCommand EXECUTE_IF_ONLY = command("executeOnlyIf").withExtension("org.concordion.ext.ExecuteOnlyIfExtension").register();
     public static final ConcordionCommand SCREEN_SHOT = command("screenshot").withExtension("org.concordion.ext.ScreenshotExtension").withNonExpressionValues("linked").register();
 
-    public static final ConcordionCommand ASSERT_EQUALS_MD = new ConcordionCommand("?", ConcordionCommandsCaseType.BOTH, ImmutableList.of(), null, ConcordionSpecType.MD) {
+    public static final ConcordionCommand ASSERT_EQUALS_MD = new ConcordionCommand("?", ConcordionCommandsCaseType.BOTH, ImmutableList.of(), null, ConcordionMdSpecification.INSTANCE) {
         @NotNull
         @Override
         public String prefixedText(@NotNull String prefix) {
@@ -72,13 +74,13 @@ public class ConcordionCommand {
     @NotNull private final ConcordionCommandsCaseType caseType;
     @NotNull private final List<String> nonExpressionValues;
     @Nullable private final String extension;
-    @Nullable private final ConcordionSpecType specSpecific;
+    @Nullable private final ConcordionSpecification specSpecific;
 
     private ConcordionCommand(@NotNull String text, @NotNull ConcordionCommandsCaseType caseType) {
         this(text, caseType, ImmutableList.of(), null, null);
     }
 
-    private ConcordionCommand(@NotNull String text, @NotNull ConcordionCommandsCaseType caseType, @NotNull List<String> nonExpressionValues, @Nullable String extension, @Nullable ConcordionSpecType specSpecific) {
+    private ConcordionCommand(@NotNull String text, @NotNull ConcordionCommandsCaseType caseType, @NotNull List<String> nonExpressionValues, @Nullable String extension, @Nullable ConcordionSpecification specSpecific) {
         this.text = text;
         this.caseType = caseType;
         this.nonExpressionValues = nonExpressionValues;
@@ -102,8 +104,8 @@ public class ConcordionCommand {
                 || this.caseType == caseType;
     }
 
-    public boolean fitsSpecType(@NotNull ConcordionSpecType specType) {
-        return specSpecific == null || specSpecific == specType;
+    public boolean fitsSpecType(@NotNull ConcordionSpecification specType) {
+        return specSpecific == null || specSpecific.equals(specType);
     }
 
     public boolean buildIn() {

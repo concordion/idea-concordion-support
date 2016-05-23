@@ -8,6 +8,7 @@
   <depends>JUnit</depends>
   <depends optional="true" config-file="markdown-support-integration.xml">org.intellij.plugins.markdown</depends>
   <depends optional="true" config-file="markdown-integration.xml">net.nicoulaj.idea.markdown</depends>
+  <depends optional="true" config-file="groovy-integration.xml">org.intellij.groovy</depends>
 
   <description><![CDATA[
 <p>
@@ -81,6 +82,16 @@
 
   <idea-version since-build="141.1"/>
 
+  <extensionPoints>
+    <extensionPoint name="testFixture" interface="org.concordion.plugin.idea.fixtures.ConcordionTestFixture"/>
+    <extensionPoint name="specification" interface="org.concordion.plugin.idea.specifications.ConcordionSpecification"/>
+  </extensionPoints>
+
+  <extensions defaultExtensionNs="org.concordion.plugin.idea.lang">
+    <testFixture implementation="org.concordion.plugin.idea.fixtures.ConcordionJavaTestFixture"/>
+    <specification implementation="org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification"/>
+  </extensions>
+
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="org.concordion.plugin.idea.lang.ConcordionFileTypeFactory"/>
     <lang.parserDefinition language="Concordion" implementationClass="org.concordion.plugin.idea.lang.ConcordionParserDefinition"/>
@@ -136,7 +147,7 @@
 
     <codeInsight.lineMarkerProvider language="HTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XHTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaRunnerLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaTestFixtureLineMarkerProvider"/>
 
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
@@ -156,12 +167,6 @@
     <applicationService serviceInterface="org.concordion.plugin.idea.settings.ConcordionSettings"
                         serviceImplementation="org.concordion.plugin.idea.settings.ConcordionSettings"/>
   </extensions>
-
-  <application-components>
-  </application-components>
-
-  <project-components>
-  </project-components>
 
   <actions>
     <action id="navigateBetweenConcordionSpecFiles"

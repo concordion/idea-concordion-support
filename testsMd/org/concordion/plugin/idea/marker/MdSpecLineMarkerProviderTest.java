@@ -17,16 +17,16 @@ public class MdSpecLineMarkerProviderTest extends ConcordionCodeInsightFixtureTe
         assertHasGutters(testFixture, mdSpec);
     }
 
-    public void testUseMarkdownSpec() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("Markdown.md");
+    public void testMarksMd() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Spec.md");
 
         assertHasGutters(testFixture, mdSpec);
     }
 
-    public void testUseMarkdownSpecWithLongExtension() {
-        VirtualFile testFixture = copyTestFixtureToConcordionProject("Markdown.java");
-        VirtualFile mdSpec = copySpecToConcordionProject("Markdown.markdown");
+    public void testMarksMarkdown() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Spec.markdown");
 
         assertHasGutters(testFixture, mdSpec);
     }
