@@ -7,10 +7,7 @@ import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.lang.ConcordionFileType;
-import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
-import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionNext;
-import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
-import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
+import org.concordion.plugin.idea.lang.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +95,7 @@ public final class ConcordionPsiUtils {
     public static String embeddedCommandTextOf(@NotNull PsiElement injected) {
         return commandText(
                 findChildOfType(
-                        getParentOfType(injected, PsiFile.class),
+                        getParentOfType(injected, ConcordionStatement.class),
                         ConcordionEmbeddedCommand.class
                 )
         );

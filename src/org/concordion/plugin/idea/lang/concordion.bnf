@@ -28,7 +28,9 @@
   ]
 }
 
-file ::= (embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart))*;
+file ::= statement*
+
+statement ::= embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart)
 
 embeddedCommand ::= COMMAND '='
 

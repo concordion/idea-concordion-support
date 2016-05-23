@@ -7,6 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.internal.MultiPattern;
+import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.lang.psi.ConcordionPsiElement;
@@ -15,7 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Predicate;
 
+import static org.concordion.plugin.idea.ConcordionCommand.findCommandByText;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
@@ -181,6 +184,24 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return commands.contains(commandTextOf(element));
+            }
+        });
+    }
+
+    public Self withCommand(@NotNull Predicate<ConcordionCommand> predicate) {
+        return with(new PatternCondition<T>("withCommand") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                String text = commandTextOf(element);
+                if (text == null) {
+                    return false;
+                }
+                ConcordionCommand command = findCommandByText(text);
+                if (command == null) {
+                    return false;
+                }
+                context.put(CONCORDION_COMMAND, command);
+                return predicate.test(command);
             }
         });
     }

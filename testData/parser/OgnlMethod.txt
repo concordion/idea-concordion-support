@@ -1,8 +1,9 @@
 FILE(0,8)
-  ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,8)
-    ConcordionMethodImpl(METHOD)(0,8)
-      PsiElement(IDENTIFIER)('method')(0,6)
-      PsiElement(()('(')(6,7)
-      ConcordionArgumentsImpl(ARGUMENTS)(7,7)
-        <empty list>
-      PsiElement())(')')(7,8)
+  ConcordionStatementImpl(STATEMENT)(0,8)
+    ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,8)
+      ConcordionMethodImpl(METHOD)(0,8)
+        PsiElement(IDENTIFIER)('method')(0,6)
+        PsiElement(()('(')(6,7)
+        ConcordionArgumentsImpl(ARGUMENTS)(7,7)
+          <empty list>
+        PsiElement())(')')(7,8)

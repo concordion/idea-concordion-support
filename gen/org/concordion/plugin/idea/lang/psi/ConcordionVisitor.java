@@ -59,6 +59,10 @@ public class ConcordionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitStatement(@NotNull ConcordionStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitVariable(@NotNull ConcordionVariable o) {
     visitVariableInternal(o);
   }

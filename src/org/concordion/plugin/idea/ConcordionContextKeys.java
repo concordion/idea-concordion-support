@@ -17,4 +17,6 @@ public final class ConcordionContextKeys {
     public static final Key<String> CONCORDION_SCHEMA_PREFIX = new Key<>("CONCORDION_SCHEMA_PREFIX");
     public static final Key<String> CONCORDION_EXTENSIONS_SCHEMA_PREFIX = new Key<>("CONCORDION_EXTENSIONS_SCHEMA_PREFIX");
     public static final Key<Set<String>> CONCORDION_EXTENSIONS = new Key<>("CONCORDION_EXTENSIONS");
+
+    public static final Key<ConcordionCommand> CONCORDION_COMMAND = new Key<>("CONCORDION_COMMAND");
 }

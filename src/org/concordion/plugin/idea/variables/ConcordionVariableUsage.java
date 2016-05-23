@@ -5,11 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiType;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.ConcordionPsiUtils;
-import org.concordion.plugin.idea.lang.ConcordionFile;
-import org.concordion.plugin.idea.lang.psi.ConcordionIterateExpression;
-import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
-import org.concordion.plugin.idea.lang.psi.ConcordionSetExpression;
-import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
+import org.concordion.plugin.idea.lang.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +57,7 @@ public class ConcordionVariableUsage {
             return true;
         }
         if (variableParent instanceof ConcordionOgnlExpressionStart
-                && variableParent.getParent() instanceof ConcordionFile
+                && variableParent.getParent() instanceof ConcordionStatement
                 && SET.text().equals(command)) {
             return true;
         }

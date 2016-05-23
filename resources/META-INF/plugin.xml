@@ -105,10 +105,9 @@
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.EmbeddedConcordionCommandIsNotAllowedInHtml"/>
 
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionHtmlCommandsCompletionContributor"/>
-    <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionInHtmlCompletionContributor"/>
     <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionHtmlCommandsCompletionContributor"/>
-    <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionNonExpressionInHtmlCompletionContributor"/>
     <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionExpressionCompletionContributor"/>
+    <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionDictionaryValuesCompletionContributor"/>
 
     <localInspection language="JAVA"
                      id="testFixtureIsNotAnnotatedWithConcordionRunner"

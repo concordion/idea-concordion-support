@@ -3,6 +3,7 @@ package org.concordion.plugin.idea.inspection;
 import org.concordion.plugin.idea.lang.psi.ConcordionIterateExpression;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionSetExpression;
+import org.concordion.plugin.idea.lang.psi.ConcordionStatement;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -17,7 +18,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
 
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_EVALUATION =
             concordionElement(ConcordionOgnlExpressionStart.class)
-                    .withParent(PsiFile.class)
+                    .withParent(ConcordionStatement.class)
                     .withTextNotMatching(SimpleEvaluator.EVALUATION_PATTERNS);
 
     private static final ConcordionElementPattern.Capture<ConcordionSetExpression> COMPLEX_SET =
@@ -26,7 +27,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
 
     private static final ConcordionElementPattern.Capture<ConcordionOgnlExpressionStart> COMPLEX_SET_VIA_COMMAND =
             concordionElement(ConcordionOgnlExpressionStart.class)
-                    .withParent(PsiFile.class)
+                    .withParent(ConcordionStatement.class)
                     .withCommandText(SET.text())
                     .withTextNotMatching(SimpleEvaluator.SET_VARIABLE_PATTERNS);
 

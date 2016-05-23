@@ -1,4 +1,5 @@
 FILE(0,5)
-  ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,5)
-    ConcordionLiteralImpl(LITERAL)(0,5)
-      PsiElement(DOUBLE_LITERAL)('42.42')(0,5)
+  ConcordionStatementImpl(STATEMENT)(0,5)
+    ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,5)
+      ConcordionLiteralImpl(LITERAL)(0,5)
+        PsiElement(DOUBLE_LITERAL)('42.42')(0,5)

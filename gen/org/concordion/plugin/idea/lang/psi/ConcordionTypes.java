@@ -22,6 +22,7 @@ public interface ConcordionTypes {
   IElementType OGNL_EXPRESSION_NEXT = new ConcordionElementType("OGNL_EXPRESSION_NEXT");
   IElementType OGNL_EXPRESSION_START = new ConcordionElementType("OGNL_EXPRESSION_START");
   IElementType SET_EXPRESSION = new ConcordionElementType("SET_EXPRESSION");
+  IElementType STATEMENT = new ConcordionElementType("STATEMENT");
   IElementType VARIABLE = new ConcordionElementType("VARIABLE");
 
   IElementType COLON = new ConcordionTokenType(":");
@@ -84,6 +85,9 @@ public interface ConcordionTypes {
       }
       else if (type == SET_EXPRESSION) {
         return new ConcordionSetExpressionImpl(node);
+      }
+      else if (type == STATEMENT) {
+        return new ConcordionStatementImpl(node);
       }
       else if (type == VARIABLE) {
         return new ConcordionVariableImpl(node);

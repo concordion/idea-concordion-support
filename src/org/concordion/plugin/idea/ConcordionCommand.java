@@ -27,21 +27,21 @@ public class ConcordionCommand {
     public static final ConcordionCommand SET = command("set").register();
     public static final ConcordionCommand ECHO = command("echo").register();
     public static final ConcordionCommand RUN = command("run").register();
-    public static final ConcordionCommand EXAMPLE = command("example").register();
-    public static final ConcordionCommand STATUS = command("status").withNonExpressionValues("ExpectedToPass", "ExpectedToFail", "Unimplemented").register();
+    public static final ConcordionCommand EXAMPLE = command("example").withDictionaryValues().register();
+    public static final ConcordionCommand STATUS = command("status").withDictionaryValues("ExpectedToPass", "ExpectedToFail", "Unimplemented").register();
 
     public static final ConcordionCommand VERIFY_ROWS_CAMEL = camelCaseCommand("verifyRows").register();
     public static final ConcordionCommand VERIFY_ROWS_SPINAL = spinalCaseCommand("verify-rows").register();
 
-    public static final ConcordionCommand MATCH_STRATEGY_CAMEL = camelCaseCommand("matchStrategy").withNonExpressionValues("Default", "BestMatch", "KeyMatch").register();
-    public static final ConcordionCommand MATCH_STRATEGY_SPINAL = spinalCaseCommand("match-strategy").withNonExpressionValues("Default", "BestMatch", "KeyMatch").register();
+    public static final ConcordionCommand MATCH_STRATEGY_CAMEL = camelCaseCommand("matchStrategy").withDictionaryValues("Default", "BestMatch", "KeyMatch").register();
+    public static final ConcordionCommand MATCH_STRATEGY_SPINAL = spinalCaseCommand("match-strategy").withDictionaryValues("Default", "BestMatch", "KeyMatch").register();
 
-    public static final ConcordionCommand MATCHING_ROLE_CAMEL = camelCaseCommand("matchingRole").withNonExpressionValues("key").register();
-    public static final ConcordionCommand MATCHING_ROLE_SPINAL = spinalCaseCommand("matching-role").withNonExpressionValues("key").register();
+    public static final ConcordionCommand MATCHING_ROLE_CAMEL = camelCaseCommand("matchingRole").withDictionaryValues("key").register();
+    public static final ConcordionCommand MATCHING_ROLE_SPINAL = spinalCaseCommand("matching-role").withDictionaryValues("key").register();
 
     public static final ConcordionCommand EMBED = command("embed").withExtension("org.concordion.ext.EmbedExtension").register();
     public static final ConcordionCommand EXECUTE_IF_ONLY = command("executeOnlyIf").withExtension("org.concordion.ext.ExecuteOnlyIfExtension").register();
-    public static final ConcordionCommand SCREEN_SHOT = command("screenshot").withExtension("org.concordion.ext.ScreenshotExtension").withNonExpressionValues("linked").register();
+    public static final ConcordionCommand SCREEN_SHOT = command("screenshot").withExtension("org.concordion.ext.ScreenshotExtension").withDictionaryValues("linked").register();
 
     public static final ConcordionCommand ASSERT_EQUALS_MD = new ConcordionCommand("?", ConcordionCommandsCaseType.BOTH, ImmutableList.of(), null, ConcordionMdSpecification.INSTANCE) {
         @NotNull
@@ -51,8 +51,17 @@ public class ConcordionCommand {
         }
     }.register();
 
+    @NotNull
     public static Stream<ConcordionCommand> commands() {
         return ALL.stream();
+    }
+
+
+    @Nullable
+    public static ConcordionCommand findCommandByText(@NotNull String text) {
+        return commands()
+                .filter(command -> command.text.equals(text))
+                .findFirst().orElse(null);
     }
 
     @NotNull
@@ -72,7 +81,7 @@ public class ConcordionCommand {
 
     @NotNull private final String text;
     @NotNull private final ConcordionCommandsCaseType caseType;
-    @NotNull private final List<String> nonExpressionValues;
+    @NotNull private final List<String> dictionaryValues;
     @Nullable private final String extension;
     @Nullable private final ConcordionSpecification specSpecific;
 
@@ -80,10 +89,10 @@ public class ConcordionCommand {
         this(text, caseType, ImmutableList.of(), null, null);
     }
 
-    private ConcordionCommand(@NotNull String text, @NotNull ConcordionCommandsCaseType caseType, @NotNull List<String> nonExpressionValues, @Nullable String extension, @Nullable ConcordionSpecification specSpecific) {
+    private ConcordionCommand(@NotNull String text, @NotNull ConcordionCommandsCaseType caseType, @NotNull List<String> dictionaryValues, @Nullable String extension, @Nullable ConcordionSpecification specSpecific) {
         this.text = text;
         this.caseType = caseType;
-        this.nonExpressionValues = nonExpressionValues;
+        this.dictionaryValues = dictionaryValues;
         this.extension = extension;
         this.specSpecific = specSpecific;
     }
@@ -121,26 +130,26 @@ public class ConcordionCommand {
     }
 
     public boolean expression() {
-        return nonExpressionValues.isEmpty();
+        return dictionaryValues.isEmpty();
     }
 
-    public boolean nonExpression() {
-        return !expression();
+    public boolean dictionary() {
+        return !dictionaryValues.isEmpty();
     }
 
     @NotNull
-    public List<String> nonExpressionValues() {
-            return nonExpressionValues;
+    public List<String> dictionaryValues() {
+            return dictionaryValues;
         }
 
     @NotNull
-    private ConcordionCommand withNonExpressionValues(@NotNull String... values) {
+    private ConcordionCommand withDictionaryValues(@NotNull String... values) {
         return new ConcordionCommand(text, caseType, ImmutableList.copyOf(values), extension, specSpecific);
     }
 
     @NotNull
     private ConcordionCommand withExtension(@Nullable String extension) {
-        return new ConcordionCommand(text, caseType, nonExpressionValues, extension, specSpecific);
+        return new ConcordionCommand(text, caseType, dictionaryValues, extension, specSpecific);
     }
 
     @NotNull

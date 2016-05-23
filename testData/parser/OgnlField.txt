@@ -1,4 +1,5 @@
 FILE(0,5)
-  ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,5)
-    ConcordionFieldImpl(FIELD)(0,5)
-      PsiElement(IDENTIFIER)('field')(0,5)
+  ConcordionStatementImpl(STATEMENT)(0,5)
+    ConcordionOgnlExpressionStartImpl(OGNL_EXPRESSION_START)(0,5)
+      ConcordionFieldImpl(FIELD)(0,5)
+        PsiElement(IDENTIFIER)('field')(0,5)

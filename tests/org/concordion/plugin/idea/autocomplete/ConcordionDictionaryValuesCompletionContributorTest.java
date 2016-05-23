@@ -6,7 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConcordionNonExpressionCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
+public class ConcordionDictionaryValuesCompletionContributorTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
