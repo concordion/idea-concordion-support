@@ -103,6 +103,7 @@
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedFieldAnnotator"/>
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnresolvedMethodAnnotator"/>
     <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.EmbeddedConcordionCommandIsNotAllowedInHtml"/>
+    <annotator language="Concordion" implementationClass="org.concordion.plugin.idea.annotator.UnexpectedDictionaryValue"/>
 
     <completion.contributor language="HTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionHtmlCommandsCompletionContributor"/>
     <completion.contributor language="XHTML" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionHtmlCommandsCompletionContributor"/>
