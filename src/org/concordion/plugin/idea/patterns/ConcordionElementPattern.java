@@ -15,10 +15,8 @@ import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Predicate;
 
-import static org.concordion.plugin.idea.ConcordionCommand.findCommandByText;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
@@ -166,15 +164,6 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return !pattern.matches(element.getText());
-            }
-        });
-    }
-
-    public Self withCommandTextIn(@NotNull Set<String> commands) {
-        return with(new PatternCondition<T>("withCommandTextIn") {
-            @Override
-            public boolean accepts(@NotNull T element, ProcessingContext context) {
-                return commands.contains(commandTextOf(element));
             }
         });
     }

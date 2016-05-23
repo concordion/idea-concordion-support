@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Stream;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.variableUsageSearcherFor;
@@ -17,48 +17,21 @@ import static org.concordion.plugin.idea.specifications.ConcordionSpecifications
 public abstract class ConcordionVariableUsageSearcher {
 
     @NotNull
-    public static List<ConcordionVariableUsage> findAllDeclarationsFrom(@Nullable PsiFile injection) {
-        if (injection == null) {
-            return emptyList();
-        }
-        PsiFile spec = getTopLevelFile(injection);
-        if (spec == null) {
-            return emptyList();
-        }
-        ConcordionVariableUsageSearcher searcher = variableUsageSearcherFor(spec);
-        if (searcher == null) {
-            return emptyList();
-        }
+    public static List<ConcordionVariableUsage> findAllDeclarationsFrom(@NotNull PsiFile injection) {
 
-        return new TextReverseSearcher(spec.getText(), "#", searcher.findEndOfScopePosition(injection)).stream()
-                .map(pos -> usageInfo(spec, pos))
-                .filter(Objects::nonNull)
-                .map(searcher::createUsage)
-                .filter(ConcordionVariableUsage::isDeclaration)
+        return declarations(injection, "")
                 .collect(toList());
     }
 
     @Nullable
     public static ConcordionVariableUsage findDeclaration(@NotNull ConcordionVariableInternal variable) {
-        PsiFile spec = getTopLevelFile(variable);
-        if (spec == null) {
-            return null;
-        }
         String varName = variable.getName();
         if (varName == null) {
             return null;
         }
-        ConcordionVariableUsageSearcher searcher = variableUsageSearcherFor(spec);
-        if (searcher == null) {
-            return null;
-        }
 
-        return new TextReverseSearcher(spec.getText(), varName, searcher.findEndOfScopePosition(variable)).stream()
-                .map(pos -> usageInfo(spec, pos))
-                .filter(Objects::nonNull)
-                .map(searcher::createUsage)
+        return declarations(variable, varName)
                 .filter(usage -> usage.isUsageOf(varName))
-                .filter(ConcordionVariableUsage::isDeclaration)
                 .findFirst().orElse(null);
     }
 
@@ -66,6 +39,23 @@ public abstract class ConcordionVariableUsageSearcher {
 
     @NotNull
     protected abstract ConcordionVariableUsage createUsage(@NotNull UsageInfo usageInfo);
+
+    @NotNull
+    private static Stream<ConcordionVariableUsage> declarations(@NotNull PsiElement injection, @NotNull String name) {
+        PsiFile spec = getTopLevelFile(injection);
+        if (spec == null) {
+            return Stream.empty();
+        }
+        ConcordionVariableUsageSearcher searcher = variableUsageSearcherFor(spec);
+        if (searcher == null) {
+            return Stream.empty();
+        }
+        return new TextReverseSearcher(spec.getText(), "#" + name, searcher.findEndOfScopePosition(injection)).stream()
+                .map(pos -> usageInfo(spec, pos))
+                .filter(Objects::nonNull)
+                .map(searcher::createUsage)
+                .filter(ConcordionVariableUsage::isDeclaration);
+    }
 
     @Nullable
     private static UsageInfo usageInfo(@NotNull PsiFile htmlSpec, int position) {

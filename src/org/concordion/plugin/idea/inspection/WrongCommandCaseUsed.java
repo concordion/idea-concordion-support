@@ -26,9 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Set;
 
-import static java.util.stream.Collectors.toSet;
 import static org.concordion.plugin.idea.ConcordionCommand.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
@@ -45,12 +43,7 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
     public void settingsChanged(@NotNull ConcordionSettingsState newSettings) {
         ConcordionCommandsCaseType caseType = newSettings.getCommandsCaseType();
 
-        pattern = caseType == ConcordionCommandsCaseType.BOTH ? null : newPattern(
-                commands()
-                        .filter(command -> !command.fitsForCaseType(caseType))
-                        .map(ConcordionCommand::text)
-                        .collect(toSet())
-        );
+        pattern = caseType == ConcordionCommandsCaseType.BOTH ? null : newPattern(caseType);
     }
 
     @NotNull
@@ -73,11 +66,11 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
     @Nullable
     private ConcordionElementPattern.Capture<PsiElement> pattern;
 
-    private ConcordionElementPattern.Capture<PsiElement> newPattern(Set<String> wrongCaseExamples) {
+    private ConcordionElementPattern.Capture<PsiElement> newPattern(ConcordionCommandsCaseType caseType) {
         return concordionElement().andOr(
                 concordionElement().withLanguage(ConcordionLanguage.INSTANCE).withParent(ConcordionEmbeddedCommand.class),
                 concordionElement().withLanguage(XMLLanguage.INSTANCE).withParent(XmlAttribute.class).withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE).withFoundTestFixture().withConcordionXmlAttribute()
-        ).withCommandTextIn(wrongCaseExamples);
+        ).withCommand(command -> !command.fitsForCaseType(caseType));
     }
 
     private static final String ACTION_NAME = "Fix command case";
