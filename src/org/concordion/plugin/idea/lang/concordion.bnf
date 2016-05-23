@@ -28,10 +28,7 @@
   ]
 }
 
-file ::= expressionCommand? dictionaryValueCommand?;
-
-private expressionCommand ::= embeddedCommand? (setExpression|iterateExpression|ognlExpressionStart)
-private dictionaryValueCommand ::= embeddedCommand DICTIONARY
+file ::= (embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart))*;
 
 embeddedCommand ::= COMMAND '='
 

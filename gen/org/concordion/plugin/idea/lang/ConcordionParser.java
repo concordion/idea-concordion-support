@@ -118,19 +118,6 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // embeddedCommand DICTIONARY
-  static boolean dictionaryValueCommand(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dictionaryValueCommand")) return false;
-    if (!nextTokenIs(b, COMMAND)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = embeddedCommand(b, l + 1);
-    r = r && consumeToken(b, DICTIONARY);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // COMMAND '='
   public static boolean embeddedCommand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "embeddedCommand")) return false;
@@ -140,37 +127,6 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMAND);
     r = r && consumeToken(b, EQ);
     exit_section_(b, m, EMBEDDED_COMMAND, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // embeddedCommand? (setExpression|iterateExpression|ognlExpressionStart)
-  static boolean expressionCommand(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expressionCommand")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = expressionCommand_0(b, l + 1);
-    r = r && expressionCommand_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // embeddedCommand?
-  private static boolean expressionCommand_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expressionCommand_0")) return false;
-    embeddedCommand(b, l + 1);
-    return true;
-  }
-
-  // setExpression|iterateExpression|ognlExpressionStart
-  private static boolean expressionCommand_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "expressionCommand_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = setExpression(b, l + 1);
-    if (!r) r = iterateExpression(b, l + 1);
-    if (!r) r = ognlExpressionStart(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -187,29 +143,47 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // expressionCommand? dictionaryValueCommand?
+  // (embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart))*
   static boolean file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!file_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "file", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart)
+  private static boolean file_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = file_0(b, l + 1);
-    r = r && file_1(b, l + 1);
+    r = file_0_0(b, l + 1);
+    r = r && file_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // expressionCommand?
-  private static boolean file_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_0")) return false;
-    expressionCommand(b, l + 1);
+  // embeddedCommand?
+  private static boolean file_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0_0")) return false;
+    embeddedCommand(b, l + 1);
     return true;
   }
 
-  // dictionaryValueCommand?
-  private static boolean file_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_1")) return false;
-    dictionaryValueCommand(b, l + 1);
-    return true;
+  // DICTIONARY|setExpression|iterateExpression|ognlExpressionStart
+  private static boolean file_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DICTIONARY);
+    if (!r) r = setExpression(b, l + 1);
+    if (!r) r = iterateExpression(b, l + 1);
+    if (!r) r = ognlExpressionStart(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
