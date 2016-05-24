@@ -30,7 +30,7 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy']
+    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:3.0.6']
     version '2016.1'
 //    sandboxDirectory "$projectDir/idea-sandbox-markdown"
 //    sandboxDirectory "$projectDir/idea-sandbox-markdown-support"
