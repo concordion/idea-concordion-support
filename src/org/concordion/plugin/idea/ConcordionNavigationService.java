@@ -46,7 +46,7 @@ public class ConcordionNavigationService {
             return null;
         }
 
-        PsiClass testFixture = getChildOfType(
+        PsiClass testFixture = findChildOfType(
                 cache.getOrCompute(getIdentityKey(spec), () -> findCorrespondingSpecFile(
                         spec.getContainingDirectory(),
                         possibleFixtures(specName)
@@ -94,7 +94,7 @@ public class ConcordionNavigationService {
     @Nullable
     public PsiFile pairedFile(@NotNull PsiFile file) {
         return testFixtureExtensions.contains(file.getFileType().getDefaultExtension())
-                ? correspondingSpec(getChildOfType(file, PsiClass.class))
+                ? correspondingSpec(findChildOfType(file, PsiClass.class))
                 : getParentOfType(correspondingTestFixture(file), PsiFile.class);
     }
 

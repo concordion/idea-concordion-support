@@ -33,7 +33,7 @@ intellij {
     plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:3.0.6']
     version '2016.1'
 //    sandboxDirectory "$projectDir/idea-sandbox-markdown"
-//    sandboxDirectory "$projectDir/idea-sandbox-markdown-support"
+    sandboxDirectory "$projectDir/idea-sandbox-markdown-support"
     downloadSources false
     updateSinceUntilBuild false
 }

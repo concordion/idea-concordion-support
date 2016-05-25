@@ -1,0 +1,8 @@
+<idea-plugin url="https://www.jetbrains.com/idea">
+    <extensions defaultExtensionNs="org.concordion.plugin.idea.lang">
+        <testFixture implementation="org.concordion.plugin.idea.fixtures.ConcordionScalaTestFixture"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+
+    </extensions>
+</idea-plugin>
