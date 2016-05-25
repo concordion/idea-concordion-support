@@ -3,6 +3,7 @@
         <testFixture implementation="org.concordion.plugin.idea.fixtures.ConcordionScalaTestFixture"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.lineMarkerProvider language="Scala" implementationClass="org.concordion.plugin.idea.marker.ScalaTestFixtureLineMarkerProvider"/>
 
     </extensions>
 </idea-plugin>

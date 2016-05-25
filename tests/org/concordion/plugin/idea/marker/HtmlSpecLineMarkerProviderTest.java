@@ -51,4 +51,11 @@ public class HtmlSpecLineMarkerProviderTest extends ConcordionCodeInsightFixture
 
         assertHasGutters(testFixture, htmlSpec);
     }
+
+    public void testMarksScala() {
+        VirtualFile testFixture = copyTestFixtureToConcordionProject("Spec.scala");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Spec.xhtml");
+
+        assertHasGutters(testFixture, htmlSpec);
+    }
 }

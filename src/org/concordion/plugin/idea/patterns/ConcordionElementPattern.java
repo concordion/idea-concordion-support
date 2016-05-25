@@ -26,6 +26,7 @@ import static org.concordion.plugin.idea.specifications.ConcordionSpecifications
 public class ConcordionElementPattern<T extends PsiElement, Self extends ConcordionElementPattern<T, Self>> extends PsiElementPattern<T, Self> {
 
     public static final int PARENT_OF_THE_PARENT = 2;
+    public static final int PARENT_OF_THE_PARENT_OF_THE_PARENT = 3;
 
     public ConcordionElementPattern(final Class<T> aClass) {
         super(aClass);
