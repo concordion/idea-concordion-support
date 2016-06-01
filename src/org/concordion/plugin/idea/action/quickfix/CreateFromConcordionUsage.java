@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
-
 public abstract class CreateFromConcordionUsage<T extends PsiElement> extends BaseIntentionAction {
 
     @Nullable protected final PsiClass fixture;
@@ -40,7 +38,7 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
 
-        PsiElement created = createdMember(project, elementFactory(fixture));
+        PsiElement created = createdMember(project);
 
         Navigatable descriptor = EditSourceUtil.getDescriptor(created);
         if (descriptor != null) {
@@ -48,5 +46,5 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
         }
     }
 
-    protected abstract PsiMember createdMember(@NotNull Project project, @NotNull JVMElementFactory factory);
+    protected abstract PsiMember createdMember(@NotNull Project project);
 }

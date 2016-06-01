@@ -2,6 +2,7 @@ package org.concordion.plugin.idea.fixtures;
 
 import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.*;
+import org.concordion.plugin.idea.action.quickfix.factories.ConcordionFixtureMemberFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +18,18 @@ import static org.concordion.plugin.idea.Namespaces.CONCORDION_EXTENSIONS;
 
 public abstract class AbstractConcordionTestFixture<T extends PsiElement> implements ConcordionTestFixture {
 
-    private final Set<String> extensions;
-    private final Class<T> codeReferenceType;
+    @NotNull private final Set<String> extensions;
+    @NotNull private final Class<T> codeReferenceType;
+    @NotNull private final ConcordionFixtureMemberFactory memberFactory;
 
-    protected AbstractConcordionTestFixture(String extension, Class<T> codeReferenceType) {
+    protected AbstractConcordionTestFixture(
+            @NotNull String extension,
+            @NotNull Class<T> codeReferenceType,
+            @NotNull ConcordionFixtureMemberFactory memberFactory
+    ) {
         this.extensions = ImmutableSet.of(extension);
         this.codeReferenceType = codeReferenceType;
+        this.memberFactory = memberFactory;
     }
 
     @NotNull
@@ -76,6 +83,12 @@ public abstract class AbstractConcordionTestFixture<T extends PsiElement> implem
         int namespaceIndex = literals.indexOf(CONCORDION_EXTENSIONS.namespace);
         int prefixIndex = namespaceIndex - 1;
         return prefixIndex >= 0 && prefixIndex < literals.size() ? literals.get(prefixIndex) : null;
+    }
+
+    @NotNull
+    @Override
+    public ConcordionFixtureMemberFactory memberFactory(@NotNull PsiClass testFixture) {
+        return memberFactory;
     }
 
     @Nullable

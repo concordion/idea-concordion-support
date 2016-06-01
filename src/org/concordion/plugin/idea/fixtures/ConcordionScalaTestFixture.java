@@ -2,6 +2,8 @@ package org.concordion.plugin.idea.fixtures;
 
 import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.*;
+import org.concordion.plugin.idea.action.quickfix.factories.JavaFixtureMemberFactory;
+import org.concordion.plugin.idea.action.quickfix.factories.ScalaFixtureMemberFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.scala.lang.psi.api.base.ScStableCodeReferenceElement;
@@ -17,7 +19,7 @@ import static org.concordion.plugin.idea.Namespaces.CONCORDION_EXTENSIONS;
 public class ConcordionScalaTestFixture extends AbstractConcordionTestFixture<ScStableCodeReferenceElement> {
 
     public ConcordionScalaTestFixture() {
-        super("scala", ScStableCodeReferenceElement.class);
+        super("scala", ScStableCodeReferenceElement.class, new ScalaFixtureMemberFactory());
     }
 
     @Nullable
@@ -30,11 +32,5 @@ public class ConcordionScalaTestFixture extends AbstractConcordionTestFixture<Sc
     @Override
     protected PsiElement findAnnotationParameters(@NotNull PsiAnnotation annotation) {
         return findChildOfType(annotation, ScArgumentExprList.class);
-    }
-
-    @NotNull
-    @Override
-    public JVMElementFactory elementFactory(@NotNull PsiClass testFixture) {
-        throw new UnsupportedOperationException();
     }
 }

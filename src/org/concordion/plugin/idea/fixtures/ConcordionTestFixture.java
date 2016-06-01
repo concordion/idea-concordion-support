@@ -4,6 +4,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.JVMElementFactory;
 import com.intellij.psi.PsiClass;
 import org.concordion.plugin.idea.ConcordionExtension;
+import org.concordion.plugin.idea.action.quickfix.factories.ConcordionFixtureMemberFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,5 +41,5 @@ public interface ConcordionTestFixture extends ConcordionExtension {
     String extensionNamespace(@NotNull PsiClass testFixture);
 
     @NotNull
-    JVMElementFactory elementFactory(@NotNull PsiClass testFixture);
+    ConcordionFixtureMemberFactory memberFactory(@NotNull PsiClass testFixture);
 }

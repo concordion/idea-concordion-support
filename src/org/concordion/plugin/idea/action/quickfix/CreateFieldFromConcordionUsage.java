@@ -6,25 +6,21 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.psi.PsiModifier.PUBLIC;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.findString;
+import static org.concordion.plugin.idea.action.quickfix.factories.MemberCreationParameters.memberIn;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.memberFactory;
 
 public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<ConcordionField> {
 
-    public CreateFieldFromConcordionUsage(@Nullable PsiClass javaRunner, @NotNull ConcordionField source) {
-        super(javaRunner, source, "Create field from usage");
+    public CreateFieldFromConcordionUsage(@Nullable PsiClass fixture, @NotNull ConcordionField source) {
+        super(fixture, source, "Create field from usage");
     }
 
     @Override
-    protected PsiMember createdMember(@NotNull Project project, @NotNull JVMElementFactory factory) {
+    protected PsiMember createdMember(@NotNull Project project) {
 
-        PsiType defaultFieldType = findString(project);
-
-        PsiField createdField = factory.createField(source.getName(), defaultFieldType);
-        createdField.getModifierList().setModifierProperty(PUBLIC, true);
-
-        createdField = (PsiField) fixture.add(createdField);
-
-        return createdField;
+        return memberFactory(fixture).createField(
+                memberIn(fixture).withSignature(source.getName(), findString(project))
+        );
     }
 }
