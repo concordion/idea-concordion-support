@@ -77,6 +77,20 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("protectedMethod");
     }
 
+    public void testCompleteConcordionExpressionWithScalaFixtureMethods() {
+
+        copyTestFixtureToConcordionProject("Methods.scala");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Methods.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        myFixture.completeBasic();
+        assertThat(myFixture.getLookupElementStrings())
+                .contains("publicMethod")
+                .contains("protectedMethod")//is generated to java public method so that concordion can see it
+                .contains("staticMethod")
+                .doesNotContain("privateMethod");
+    }
+
     public void testCompleteWithVariablesOfCurrentScope() {
 
         copyTestFixtureToConcordionProject("Variables.java");
