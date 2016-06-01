@@ -127,12 +127,6 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
                 Collection<String> extensions = configuredExtensions(context.get(TEST_FIXTURE));
                 context.put(CONCORDION_EXTENSIONS, extensions);
 
-                System.out.println("------------------");
-                System.out.println(spec.getName());
-                System.out.println(canGuessPrefix);
-                System.out.println(extensionPrefix);
-                System.out.println(extensions.size());
-
                 return (canGuessPrefix || extensionPrefix != null) && !extensions.isEmpty();
             }
         });

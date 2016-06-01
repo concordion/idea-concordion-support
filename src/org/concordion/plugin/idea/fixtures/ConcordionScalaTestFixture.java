@@ -14,83 +14,27 @@ import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.stream.Collectors.*;
 import static org.concordion.plugin.idea.Namespaces.CONCORDION_EXTENSIONS;
 
-public class ConcordionScalaTestFixture implements ConcordionTestFixture {
+public class ConcordionScalaTestFixture extends AbstractConcordionTestFixture<ScStableCodeReferenceElement> {
 
-    @NotNull
-    @Override
-    public Set<String> fileExtensions() {
-        return ImmutableSet.of("scala");
-    }
-
-    @Override
-    public boolean isConcordionFixture(@NotNull PsiClass testFixture) {
-        PsiAnnotation runWithAnnotation = findAnnotationInClassHierarchy(testFixture, JUNIT_RUN_WITH_ANNOTATION);
-        if (runWithAnnotation == null) {
-            return false;
-        }
-
-        ScArgumentExprList annotationArguments = findChildOfType(runWithAnnotation, ScArgumentExprList.class);
-        ScStableCodeReferenceElement runner = findChildOfType(annotationArguments, ScStableCodeReferenceElement.class);
-
-        return runner != null && CONCORDION_RUNNER.equals(runner.getCanonicalText());
-    }
-
-    @Override
-    public boolean fullOgnlEnabled(@NotNull PsiClass testFixture) {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public Set<String> configuredExtensions(@NotNull PsiClass testFixture) {
-        PsiAnnotation extensionsAnnotation = findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
-        if (extensionsAnnotation == null) {
-            return ImmutableSet.of();
-        }
-        ScArgumentExprList annotationArguments = findChildOfType(extensionsAnnotation, ScArgumentExprList.class);
-        return findChildrenOfType(annotationArguments, ScStableCodeReferenceElement.class).stream()
-                .map(ScStableCodeReferenceElement::getCanonicalText)
-                .collect(toSet());
+    public ConcordionScalaTestFixture() {
+        super("scala", ScStableCodeReferenceElement.class);
     }
 
     @Nullable
     @Override
-    public String extensionNamespace(@NotNull PsiClass testFixture) {
-        PsiAnnotation options = findAnnotationInClassHierarchy(testFixture, CONCORDION_OPTIONS_ANNOTATION);
-        if (options == null) {
-            return null;
-        }
+    protected String qualifiedReference(@NotNull ScStableCodeReferenceElement codeReference) {
+        return codeReference.getCanonicalText();
+    }
 
-
-        ScArgumentExprList annotationArguments = findChildOfType(options, ScArgumentExprList.class);
-        List<String> literals = findChildrenOfType(annotationArguments, PsiLiteral.class).stream()
-                .map(PsiLiteral::getValue)
-                .map(Object::toString)
-                .collect(toList());
-
-        int namespaceIndex = literals.indexOf(CONCORDION_EXTENSIONS.namespace);
-        int prefixIndex = namespaceIndex - 1;
-        return prefixIndex >= 0 && prefixIndex < literals.size() ? literals.get(prefixIndex) : null;
+    @Nullable
+    @Override
+    protected PsiElement findAnnotationParameters(@NotNull PsiAnnotation annotation) {
+        return findChildOfType(annotation, ScArgumentExprList.class);
     }
 
     @NotNull
     @Override
     public JVMElementFactory elementFactory(@NotNull PsiClass testFixture) {
         throw new UnsupportedOperationException();
-    }
-
-    @Nullable
-    private static PsiAnnotation findAnnotationInClassHierarchy(@NotNull PsiClass psiClass, @NotNull String qualifiedName) {
-        for (PsiClass current = psiClass; current != null; current = current.getSuperClass()) {
-            PsiModifierList modifiers = current.getModifierList();
-            if (modifiers == null) {
-                continue;
-            }
-            PsiAnnotation annotation = modifiers.findAnnotation(qualifiedName);
-            if (annotation != null) {
-                return annotation;
-            }
-        }
-        return null;
     }
 }
