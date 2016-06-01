@@ -1,4 +1,4 @@
 package com.test;
 
-public class ResolvingVariables {
+public class RegularClass {
 }

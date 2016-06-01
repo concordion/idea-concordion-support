@@ -9,11 +9,11 @@ import org.concordion.ext.ExecuteOnlyIfExtension;
 import org.concordion.ext.ScreenshotExtension;
 
 @RunWith(ConcordionRunner.class)
-@Extensions({
+@Extensions([
         EmbedExtension.class,
         ExecuteOnlyIfExtension.class,
         ScreenshotExtension.class
-})
+])
 class ExtensionsCommands {
 
 }

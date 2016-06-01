@@ -4,6 +4,12 @@
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider language="Scala" implementationClass="org.concordion.plugin.idea.marker.ScalaTestFixtureLineMarkerProvider"/>
-
+        <localInspection language="Scala"
+                         id="scalaTestFixtureIsNotAnnotatedWithConcordionRunner"
+                         groupName="Concordion"
+                         displayName="Test fixture is not annotated with @RunWith(ConcordionRunner.class)"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.concordion.plugin.idea.inspection.ScalaTestFixtureIsNotAnnotatedWithConcordionRunner"/>
     </extensions>
 </idea-plugin>
