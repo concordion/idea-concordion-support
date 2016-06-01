@@ -59,8 +59,8 @@ public class ConcordionGroovyTestFixture implements ConcordionTestFixture {
             return null;
         }
 
-        List<String> literals = findChildrenOfType(options.getParameterList(), PsiLiteralExpression.class).stream()
-                .map(PsiLiteralExpression::getValue)
+        List<String> literals = findChildrenOfType(options.getParameterList(), PsiLiteral.class).stream()
+                .map(PsiLiteral::getValue)
                 .map(Object::toString)
                 .collect(toList());
 

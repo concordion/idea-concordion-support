@@ -136,4 +136,16 @@ public class ConcordionEmbeddedCommandsCompletionContributorTest extends Concord
         assertThat(myFixture.getLookupElementStrings())
                 .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
     }
+
+    public void testCompleteExtensionsCommandsWithScalaSpec() {
+
+        copyTestFixtureToConcordionProject("EmbeddedCommandsWithExtensions.scala");
+        VirtualFile spec = copySpecToConcordionProject("EmbeddedCommandsWithExtensions.md");
+
+        myFixture.configureFromExistingVirtualFile(spec);
+        myFixture.completeBasic();
+
+        assertThat(myFixture.getLookupElementStrings())
+                .containsAll(EXTENSION_COMMANDS_WITH_EXT_PREFIX);
+    }
 }

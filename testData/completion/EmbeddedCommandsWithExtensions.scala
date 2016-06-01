@@ -8,14 +8,14 @@ import org.concordion.ext.ScreenshotExtension;
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
 
-@RunWith(ConcordionRunner.class)
-@Extensions([
-        EmbedExtension.class,
-        ExecuteOnlyIfExtension.class,
-        ScreenshotExtension.class
-])
+@RunWith(classOf[ConcordionRunner])
+@Extensions({
+        classOf[EmbedExtension],
+        classOf[ExecuteOnlyIfExtension],
+        classOf[ScreenshotExtension]
+})
 @ConcordionOptions(
-        declareNamespaces = ["ext", "urn:concordion-extensions:2010"]
+        declareNamespaces = {"ext", "urn:concordion-extensions:2010"}
 )
 class EmbeddedCommandsWithExtensions {
 

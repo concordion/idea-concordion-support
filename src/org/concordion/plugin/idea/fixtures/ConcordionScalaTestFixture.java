@@ -7,10 +7,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.scala.lang.psi.api.base.ScStableCodeReferenceElement;
 import org.jetbrains.plugins.scala.lang.psi.api.expr.ScArgumentExprList;
 
+import java.util.List;
 import java.util.Set;
 
-import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
-import static com.intellij.psi.util.PsiTreeUtil.findChildrenOfType;
+import static com.intellij.psi.util.PsiTreeUtil.*;
+import static java.util.stream.Collectors.*;
+import static org.concordion.plugin.idea.Namespaces.CONCORDION_EXTENSIONS;
 
 public class ConcordionScalaTestFixture implements ConcordionTestFixture {
 
@@ -41,13 +43,34 @@ public class ConcordionScalaTestFixture implements ConcordionTestFixture {
     @NotNull
     @Override
     public Set<String> configuredExtensions(@NotNull PsiClass testFixture) {
-        return ImmutableSet.of();
+        PsiAnnotation extensionsAnnotation = findAnnotationInClassHierarchy(testFixture, CONCORDION_EXTENSIONS_ANNOTATION);
+        if (extensionsAnnotation == null) {
+            return ImmutableSet.of();
+        }
+        ScArgumentExprList annotationArguments = findChildOfType(extensionsAnnotation, ScArgumentExprList.class);
+        return findChildrenOfType(annotationArguments, ScStableCodeReferenceElement.class).stream()
+                .map(ScStableCodeReferenceElement::getCanonicalText)
+                .collect(toSet());
     }
 
     @Nullable
     @Override
     public String extensionNamespace(@NotNull PsiClass testFixture) {
-        return null;
+        PsiAnnotation options = findAnnotationInClassHierarchy(testFixture, CONCORDION_OPTIONS_ANNOTATION);
+        if (options == null) {
+            return null;
+        }
+
+
+        ScArgumentExprList annotationArguments = findChildOfType(options, ScArgumentExprList.class);
+        List<String> literals = findChildrenOfType(annotationArguments, PsiLiteral.class).stream()
+                .map(PsiLiteral::getValue)
+                .map(Object::toString)
+                .collect(toList());
+
+        int namespaceIndex = literals.indexOf(CONCORDION_EXTENSIONS.namespace);
+        int prefixIndex = namespaceIndex - 1;
+        return prefixIndex >= 0 && prefixIndex < literals.size() ? literals.get(prefixIndex) : null;
     }
 
     @NotNull
