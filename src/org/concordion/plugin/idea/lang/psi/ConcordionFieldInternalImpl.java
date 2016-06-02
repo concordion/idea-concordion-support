@@ -2,13 +2,11 @@ package org.concordion.plugin.idea.lang.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static java.util.Collections.emptyList;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
-import static java.lang.Character.toUpperCase;
 
 public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMember implements ConcordionFieldInternal {
 
@@ -48,7 +46,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
             return null;
         }
         return firstNotNull(
-                () -> findMethodInClass(containingClass, correspondingGetterName(name), emptyList()),
+                () -> findMethodInClass(containingClass, getterFor(name), emptyList()),
                 () -> findFieldInClass(containingClass, name)
         );
     }
@@ -65,9 +63,5 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
             return mapValueParameterType(findType(getContainingClass().getQualifiedName(), getProject()));
         }
         return null;
-    }
-
-    private String correspondingGetterName(@NotNull String name) {
-        return  "get" + toUpperCase(name.charAt(0)) + name.substring(1);
     }
 }

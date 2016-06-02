@@ -12,7 +12,7 @@ public class MemberCreationParameters {
 
     @NotNull public final PsiClass fixture;
     @NotNull public NameAndType member = new NameAndType("", PsiType.NULL);
-    @NotNull public List<NameAndType> nameAndTypes = new ArrayList<>();
+    @NotNull public List<NameAndType> parameters = new ArrayList<>();
 
     @NotNull
     public static MemberCreationParameters memberIn(@NotNull PsiClass fixture) {
@@ -31,7 +31,7 @@ public class MemberCreationParameters {
 
     @NotNull
     public MemberCreationParameters withParameter(@NotNull String name, @NotNull PsiType type) {
-        this.nameAndTypes.add(new NameAndType(name, type));
+        this.parameters.add(new NameAndType(name, type));
         return this;
     }
 

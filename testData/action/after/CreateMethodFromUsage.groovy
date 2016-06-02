@@ -4,7 +4,7 @@ import org.concordion.integration.junit4.ConcordionRunner
 import org.junit.runner.RunWith
 
 @RunWith(ConcordionRunner.class)
-class CreateFromUsage {
+class CreateMethodFromUsage {
 
     public A field
 
@@ -12,7 +12,7 @@ class CreateFromUsage {
         null
     }
 
-    java.lang.String createMe(java.lang.String arg, com.test.CreateFromUsage.A field, com.test.CreateFromUsage.A method, java.lang.String param3, java.lang.String param4, java.lang.String param5) {
+    java.lang.String createMe(java.lang.String arg, com.test.CreateMethodFromUsage.A field, com.test.CreateMethodFromUsage.A method, java.lang.String param3, java.lang.String param4, java.lang.String param5) {
     }
 
     class A {

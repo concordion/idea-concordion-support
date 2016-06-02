@@ -31,7 +31,7 @@ public class GroovyFixtureMemberFactory implements ConcordionFixtureMemberFactor
 
         PsiMethod method = factory.createMethod(parameters.member.name, parameters.member.type);
         method.getModifierList().setModifierProperty(PUBLIC, true);
-        for (MemberCreationParameters.NameAndType param : parameters.nameAndTypes) {
+        for (MemberCreationParameters.NameAndType param : parameters.parameters) {
             method.getParameterList().add(factory.createParameter(param.name, param.type));
         }
 

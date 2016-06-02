@@ -33,4 +33,16 @@ public class CreateMethodFromConcordionUsageTest extends ConcordionCodeInsightFi
 
         myFixture.checkResultByFile("/src/com/test/CreateMethodFromUsage.groovy", "after/CreateMethodFromUsage.groovy", false);
     }
+
+    public void testCreateMethodFromUsageInScala() throws InterruptedException {
+
+        copyTestFixtureToConcordionProject("CreateMethodFromUsage.scala");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CreateMethodFromUsage.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        executeIntention("Create method from usage");
+
+        myFixture.checkResultByFile("/src/com/test/CreateMethodFromUsage.scala", "after/CreateMethodFromUsage.scala", false);
+    }
 }

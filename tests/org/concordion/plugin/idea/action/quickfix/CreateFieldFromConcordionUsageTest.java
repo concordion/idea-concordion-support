@@ -33,4 +33,16 @@ public class CreateFieldFromConcordionUsageTest extends ConcordionCodeInsightFix
 
         myFixture.checkResultByFile("/src/com/test/CreateFieldFromUsage.groovy", "after/CreateFieldFromUsage.groovy", false);
     }
+
+    public void testCreateFieldFromUsageInScala() throws InterruptedException {
+
+        copyTestFixtureToConcordionProject("CreateFieldFromUsage.scala");
+        VirtualFile htmlSpec = copySpecToConcordionProject("CreateFieldFromUsage.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        executeIntention("Create field from usage");
+
+        myFixture.checkResultByFile("/src/com/test/CreateFieldFromUsage.scala", "after/CreateFieldFromUsage.scala", false);
+    }
 }

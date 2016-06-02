@@ -29,7 +29,7 @@ public class JavaFixtureMemberFactory implements ConcordionFixtureMemberFactory 
 
         PsiMethod method = factory.createMethod(parameters.member.name, parameters.member.type);
         method.getModifierList().setModifierProperty(PUBLIC, true);
-        for (MemberCreationParameters.NameAndType param : parameters.nameAndTypes) {
+        for (MemberCreationParameters.NameAndType param : parameters.parameters) {
             method.getParameterList().add(factory.createParameter(param.name, param.type));
         }
         method.getBody().add(factory.createStatementFromText("return null;", null));
