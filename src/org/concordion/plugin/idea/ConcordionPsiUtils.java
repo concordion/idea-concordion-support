@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 import static com.intellij.psi.PsiModifier.*;
 import static com.intellij.psi.util.PsiTreeUtil.*;
-import static java.lang.Character.toUpperCase;
+import static java.lang.Character.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.*;
@@ -225,7 +225,7 @@ public final class ConcordionPsiUtils {
 
     @NotNull
     public static String getterFor(@NotNull String name) {
-        return  "get" + toUpperCase(name.charAt(0)) + name.substring(1);
+        return "get" + (isUpperCase(name.charAt(1)) ? name : toUpperCase(name.charAt(0)) + name.substring(1));
     }
 
     @NotNull

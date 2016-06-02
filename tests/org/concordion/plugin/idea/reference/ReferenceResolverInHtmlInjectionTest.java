@@ -61,6 +61,20 @@ public class ReferenceResolverInHtmlInjectionTest extends ConcordionCodeInsightF
         assertThat(javaGetter.getName()).isEqualTo("getPropertyToResolve");
     }
 
+    public void testResolveGetterAsFieldWithOneLetterFirstWord() {
+
+        copyTestFixtureToConcordionProject("OneLetterFirstWordGetter.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("OneLetterFirstWordGetter.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        ConcordionField concordionField = elementUnderCaret();
+        PsiMethod javaGetter = resolveReferences(concordionField);
+
+        assertThat(javaGetter).isNotNull();
+        assertThat(javaGetter.getName()).isEqualTo("getiAmPropertyToResolve");
+    }
+
     public void testResolveMethod() {
 
         copyTestFixtureToConcordionProject("MethodReference.java");
