@@ -225,7 +225,7 @@ public final class ConcordionPsiUtils {
 
     @NotNull
     public static String getterFor(@NotNull String name) {
-        return "get" + (isUpperCase(name.charAt(1)) ? name : toUpperCase(name.charAt(0)) + name.substring(1));
+        return "get" + (name.length() >= 2 && isUpperCase(name.charAt(1)) ? name : toUpperCase(name.charAt(0)) + name.substring(1));
     }
 
     @NotNull
