@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.8</version>
+  <version>0.9</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -21,6 +21,12 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.9<br/>
+    <ul>
+        <li>Better syntax support for concordion expressions in md specs</li>
+        <li>Groovy test fixture support</li>
+        <li>Scala test fixture support</li>
+    </ul>
     Version 0.8<br/>
     <ul>
         <li>Configuring plugin to use only spinal-case or CamelCase commands</li>
