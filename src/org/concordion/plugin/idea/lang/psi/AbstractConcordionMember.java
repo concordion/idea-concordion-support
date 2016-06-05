@@ -14,18 +14,20 @@ import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
 
-    protected PsiElementCache<PsiClass> containingClass = new PsiElementCache<>(PsiClass::getQualifiedName);
-    protected PsiElementCache<PsiMember> containingMember = new PsiElementCache<>(ConcordionPsiUtils::memberIdentity);
+    protected final PsiElementCache<PsiClass> containingClass = new PsiElementCache<>(PsiClass::getQualifiedName);
+    protected final PsiElementCache<PsiMember> containingMember = new PsiElementCache<>(ConcordionPsiUtils::memberIdentity);
 
     public AbstractConcordionMember(@NotNull ASTNode node) {
         super(node);
     }
 
+    @Nullable
     @Override
     public PsiClass getContainingClass() {
         return containingClass.getOrCompute(nullToEmpty(getName()), this::determineContainingClass);
     }
 
+    @Nullable
     @Override
     public PsiMember getContainingMember() {
         return containingMember.getOrCompute(nullToEmpty(getName()), this::determineContainingMember);
@@ -34,8 +36,7 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     @Nullable
     protected PsiClass determineContainingClass() {
         if (getParent() instanceof ConcordionOgnlExpressionStart) {
-            PsiFile htmlRunner = getTopLevelFile(this);
-            return ConcordionNavigationService.getInstance(getProject()).correspondingTestFixture(htmlRunner);
+            return ConcordionNavigationService.getInstance(getProject()).correspondingTestFixture(getTopLevelFile(this));
         } else {
             ConcordionPsiElement parent = getConcordionParent();
             if (parent == null) {

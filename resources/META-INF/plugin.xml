@@ -26,6 +26,7 @@
         <li>Better syntax support for concordion expressions in md specs</li>
         <li>Groovy test fixture support</li>
         <li>Scala test fixture support</li>
+        <li>Improved cache</li>
     </ul>
     Version 0.8<br/>
     <ul>

@@ -13,9 +13,6 @@ import static org.concordion.plugin.idea.ConcordionPsiUtils.arrayDimensionsUsed;
 
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
 
-    //TODO find a good way to cache (no outdated, ok with renaming), use PsiCachedValuesFactory?
-    protected PsiType type;
-
     public AbstractConcordionPsiElement(@NotNull ASTNode node) {
         super(node);
     }

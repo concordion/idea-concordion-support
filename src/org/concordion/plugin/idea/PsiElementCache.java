@@ -4,43 +4,40 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class PsiElementCache<T extends PsiElement> {
 
-    private final Function<T, String> identityFunction;
-    private final Map<String, CachedPsiElement<T>> cache;
+    @NotNull private final Function<T, String> identityFunction;
+    @NotNull private final Map<String, CachedPsiElement> cache = new HashMap<>();
 
     public PsiElementCache(@NotNull Function<T, String> identityFunction) {
-        this(identityFunction, new WeakHashMap<>());
-    }
-
-    public PsiElementCache(@NotNull Function<T, String> identityFunction, @NotNull Map<String, CachedPsiElement<T>> cache) {
         this.identityFunction = identityFunction;
-        this.cache = cache;
     }
 
-    public void put(@NotNull String key, @Nullable T value) {
-        if (value != null) {
-            cache.put(key, new CachedPsiElement<>(identityFunction, value));
+    public void put(@NotNull String key, @Nullable T element) {
+        if (element != null) {
+            cache.put(key, new CachedPsiElement(element));
         }
     }
 
     @Nullable
     public T get(@NotNull String key) {
-        CachedPsiElement<T> cached = cache.get(key);
+        CachedPsiElement cached = cache.get(key);
         if (cached == null) {
             return null;
         }
-        if (!cached.isValid()) {
+        T t = cached.getIfValid();
+        if (t == null) {
             cache.remove(key);
             return null;
         }
-        return cached.get();
+        return t;
     }
 
     @Nullable
@@ -53,24 +50,33 @@ public class PsiElementCache<T extends PsiElement> {
         return t;
     }
 
-    protected static class CachedPsiElement<T extends PsiElement> {
+    public void clear() {
+        cache.clear();
+    }
 
-        private final Function<T, String> identityFunction;
-        private final T element;
-        private final String identity;
+    public int size() {
+        return cache.size();
+    }
 
-        public CachedPsiElement(Function<T, String> identityFunction, T element) {
-            this.identityFunction = identityFunction;
-            this.element = element;
-            this.identity = identityFunction.apply(element);
+    private class CachedPsiElement {
+
+        @NotNull private final WeakReference<T> element;
+        @Nullable private final String originalIdentity;
+
+        public CachedPsiElement(@NotNull T element) {
+            this.element = new WeakReference<>(element);
+            this.originalIdentity = identityFunction.apply(element);
         }
 
-        public boolean isValid() {
-            return Objects.equals(identity, identityFunction.apply(element)) && element.isValid();
-        }
-
-        public T get() {
-            return element;
+        @Nullable
+        public T getIfValid() {
+            T elementRef = element.get();
+            if (elementRef == null
+                    || !Objects.equals(originalIdentity, identityFunction.apply(elementRef))
+                    || !elementRef.isValid()) {
+                return null;
+            }
+            return elementRef;
         }
     }
 }
