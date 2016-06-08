@@ -46,8 +46,7 @@ public class ConcordionToMdInjectorTest extends ConcordionCodeInsightFixtureTest
                 .hasNoInjectedFragments();
     }
 
-    //TODO fix
-    public void ignoredTestDoesNotInjectInRegularLinksWithTitle() {
+    public void testDoesNotInjectInRegularLinksWithTitle() {
 
         copyTestFixtureToConcordionProject("RegularLinks.java");
         VirtualFile mdSpec = copySpecToConcordionProject("RegularLinks.md");

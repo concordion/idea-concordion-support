@@ -20,8 +20,9 @@ public class ConcordionToHtmlInjector implements MultiHostInjector {
 
     private static final ConcordionElementPattern.Capture<XmlAttributeValue> TAGS_TO_INJECT = concordionElement(XmlAttributeValue.class)
             .withConfiguredSpecOfType(ConcordionHtmlSpecification.INSTANCE)
-            .withFoundTestFixture()
-            .withConcordionXmlAttribute();
+            .withConcordionXmlAttribute()
+            .withMinTextLength(2)
+            .withFoundTestFixture();
 
     @Override
     public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {

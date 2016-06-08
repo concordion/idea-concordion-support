@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
@@ -33,12 +33,14 @@ public class CompleteInformation {
 
         List<LookupElement> lookups = new ArrayList<>();
 
-        filterOverriddenMembers(psiClass.getAllFields()).stream()
+        stream(psiClass.getAllFields())
+                .filter(onlyUniqueSignature())
                 .filter(ConcordionPsiUtils::concordionVisibleField)
                 .map(CompleteInformation::toFieldLookup)
                 .collect(toCollection(() -> lookups));
 
-        filterOverriddenMembers(psiClass.getAllMethods()).stream()
+        stream(psiClass.getAllMethods())
+                .filter(onlyUniqueSignature())
                 .filter(ConcordionPsiUtils::concordionVisibleMethod)
                 .map(CompleteInformation::toMethodLookup)
                 .collect(toCollection(() -> lookups));
@@ -96,13 +98,9 @@ public class CompleteInformation {
     }
 
     @NotNull
-    private static <T extends PsiMember> Collection<T> filterOverriddenMembers(@NotNull T[] members) {
-        return stream(members).collect(toMap(
-                CompleteInformation::signature,
-                Function.identity(),
-                (u, v) -> u,
-                HashMap::new
-        )).values();
+    private static <T extends PsiMember> Predicate<T> onlyUniqueSignature() {
+        Set<String> seenSignatures = new HashSet<>();
+        return  member -> seenSignatures.add(signature(member));
     }
 
     @Nullable

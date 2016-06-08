@@ -3,7 +3,6 @@ package org.concordion.plugin.idea.patterns;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.util.ProcessingContext;
 import org.concordion.internal.MultiPattern;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
@@ -57,7 +57,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withFoundSpecOfAnyType") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                PsiClass testFixture = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+                PsiClass testFixture = getParentOfType(element, PsiClass.class);
                 if (testFixture == null) {
                     return false;
                 }
@@ -136,7 +136,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withConcordionXmlAttribute") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
+                XmlAttribute attribute = getParentOfType(element, XmlAttribute.class);
                 return attribute != null && Namespaces.knownNamespace(attribute.getNamespace());
             }
         });
@@ -165,6 +165,15 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 return !pattern.matches(element.getText());
+            }
+        });
+    }
+
+    public Self withMinTextLength(int length) {
+        return with(new PatternCondition<T>("withTextMatches") {
+            @Override
+            public boolean accepts(@NotNull T element, ProcessingContext context) {
+                return element.getText().length() >= length;
             }
         });
     }
