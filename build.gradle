@@ -30,8 +30,8 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:3.0.6']
-    version '2016.1.3'
+    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:3.0.6', 'git4idea']
+    version '2016.1'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false
@@ -54,6 +54,21 @@ ext {
             "${projectDir}/markdown/lib/parboiled-java-1.1.6-repacked.jar",
             "${projectDir}/markdown/lib/pegdown-1.4.2-repacked.jar"
     )
+    markdownNavigatorPlugin = files(
+            "${projectDir}/markdownNavigator/lib/asm-all-asm4.jar",
+            "${projectDir}/markdownNavigator/lib/commons-io-2.4.jar",
+            "${projectDir}/markdownNavigator/lib/commons-validator-1.4.1.jar",
+            "${projectDir}/markdownNavigator/lib/idea-multimarkdown.jar",
+            "${projectDir}/markdownNavigator/lib/idea-multimarkdown-javafx.jar",
+            "${projectDir}/markdownNavigator/lib/javax.json-1.0.4.jar",
+            "${projectDir}/markdownNavigator/lib/kotlin-reflect.jar",
+            "${projectDir}/markdownNavigator/lib/kotlin-runtime.jar",
+            "${projectDir}/markdownNavigator/lib/Loboevolution.jar",
+            "${projectDir}/markdownNavigator/lib/parboiled-core-asm4.jar",
+            "${projectDir}/markdownNavigator/lib/parboiled-java-asm4.jar",
+            "${projectDir}/markdownNavigator/lib/pegdown-1.6.7.jar",
+            "${projectDir}/markdownNavigator/lib/smart-data.jar"
+    )
 }
 
 configurations {
@@ -74,6 +89,7 @@ sourceSets {
 dependencies {
     compileWith markdownSupportPlugin
     compileWith markdownPlugin
+    compileWith markdownNavigatorPlugin
 
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
@@ -93,5 +109,13 @@ task testMarkdownIntegration(type: Test) {
     testClassesDir = sourceSets.testMd.output.classesDir
 }
 
+task testMarkdownNavigatorIntegration(type: Test) {
+    classpath += markdownNavigatorPlugin
+    classpath += sourceSets.testMd.compileClasspath
+    classpath += sourceSets.testMd.runtimeClasspath
+    testClassesDir = sourceSets.testMd.output.classesDir
+}
+
 check.dependsOn testMarkdownSupportIntegration
 check.dependsOn testMarkdownIntegration
+check.dependsOn testMarkdownNavigatorIntegration

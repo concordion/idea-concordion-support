@@ -8,6 +8,7 @@
   <depends>JUnit</depends>
   <depends optional="true" config-file="markdown-support-integration.xml">org.intellij.plugins.markdown</depends>
   <depends optional="true" config-file="markdown-integration.xml">net.nicoulaj.idea.markdown</depends>
+  <depends optional="true" config-file="markdown-navigator-integration.xml">com.vladsch.idea.multimarkdown</depends>
   <depends optional="true" config-file="groovy-integration.xml">org.intellij.groovy</depends>
   <depends optional="true" config-file="scala-integration.xml">org.intellij.scala</depends>
 
