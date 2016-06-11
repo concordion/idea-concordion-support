@@ -2,19 +2,21 @@ package org.concordion.plugin.idea.menu;
 
 import com.intellij.ide.fileTemplates.actions.CreateFromTemplateAction;
 import com.intellij.ide.fileTemplates.impl.BundledFileTemplate;
+import com.intellij.ide.fileTemplates.impl.DefaultTemplate;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiPackage;
 import org.concordion.plugin.idea.ConcordionExtension;
-import org.concordion.plugin.idea.fixtures.ConcordionTestFixture;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
-import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.stream.Stream;
+
 import static java.util.Optional.ofNullable;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.fixtures;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specifications;
 
 public class ConcordionSpecMenu extends DefaultActionGroup {
 
@@ -25,8 +27,8 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
         presentation.setIcon(ConcordionIcons.ICON);
 
         add(specAndFixtureDialog());
-        add(createTemplatesMenuFor(ConcordionTestFixture.EP_NAME, "Fixture"));
-        add(createTemplatesMenuFor(ConcordionSpecification.EP_NAME, "Specification"));
+        add(createTemplatesMenuFor(fixtures(), "Fixture"));
+        add(createTemplatesMenuFor(specifications(), "Specification"));
     }
 
     @NotNull
@@ -41,20 +43,24 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
 
     @NotNull
     private static DefaultActionGroup createTemplatesMenuFor(
-            @NotNull ExtensionPointName<? extends ConcordionExtension> extension,
+            @NotNull Stream<? extends ConcordionExtension> extensions,
             @NotNull String name
     ) {
         DefaultActionGroup templates = new DefaultActionGroup();
         templates.setPopup(true);
         templates.getTemplatePresentation().setText(name);
 
-        for (ConcordionExtension ext : extension.getExtensions()) {
-            if (ext.template() != null) {
-                templates.add(new CreateFromTemplateAction(new BundledFileTemplate(ext.template(), true)));
-            }
-        }
+        extensions
+                .map(ConcordionExtension::template)
+                .map(ConcordionSpecMenu::createFromTemplateAction)
+                .forEach(templates::add);
 
         return templates;
+    }
+
+    @NotNull
+    private static CreateFromTemplateAction createFromTemplateAction(@NotNull DefaultTemplate template) {
+        return new CreateFromTemplateAction(new BundledFileTemplate(template, true));
     }
 
     @Nullable

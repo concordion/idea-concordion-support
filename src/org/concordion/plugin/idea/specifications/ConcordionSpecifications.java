@@ -6,11 +6,10 @@ import org.concordion.plugin.idea.variables.ConcordionVariableUsageSearcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import static org.concordion.plugin.idea.ConcordionExtensionUtils.extension;
-
+import static org.concordion.plugin.idea.ConcordionExtension.*;
 
 public final class ConcordionSpecifications {
 
@@ -39,6 +38,11 @@ public final class ConcordionSpecifications {
     @Nullable
     public static ConcordionVariableUsageSearcher variableUsageSearcherFor(@NotNull PsiFile file) {
         return specExtension(file).map(ConcordionSpecification::variablesUsageSearcher).orElse(null);
+    }
+
+    @NotNull
+    public static Stream<ConcordionSpecification> specifications() {
+        return extensions(ConcordionSpecification.EP_NAME);
     }
 
     @NotNull

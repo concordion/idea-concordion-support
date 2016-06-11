@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.fixtures;
 
 import com.google.common.collect.ImmutableSet;
-import com.intellij.psi.JVMElementFactory;
 import com.intellij.psi.PsiClass;
 import org.concordion.plugin.idea.action.quickfix.factories.ConcordionFixtureMemberFactory;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static org.concordion.plugin.idea.ConcordionExtensionUtils.extension;
+import static org.concordion.plugin.idea.ConcordionExtension.*;
 
 public final class ConcordionTestFixtures {
 
@@ -38,6 +38,11 @@ public final class ConcordionTestFixtures {
     @Nullable
     public static ConcordionFixtureMemberFactory memberFactory(@NotNull PsiClass testFixture) {
         return fixtureExtension(testFixture).map(fixture -> fixture.memberFactory(testFixture)).orElse(null);
+    }
+
+    @NotNull
+    public static Stream<ConcordionTestFixture> fixtures() {
+        return extensions(ConcordionTestFixture.EP_NAME);
     }
 
     @NotNull

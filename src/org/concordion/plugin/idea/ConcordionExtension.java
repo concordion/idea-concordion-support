@@ -2,15 +2,17 @@ package org.concordion.plugin.idea;
 
 import com.intellij.ide.fileTemplates.impl.DefaultTemplate;
 import com.intellij.lang.Language;
+import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
 
 public interface ConcordionExtension {
@@ -21,7 +23,7 @@ public interface ConcordionExtension {
     @NotNull
     Set<String> fileExtensions();
 
-    @Nullable
+    @NotNull
     default DefaultTemplate template() {
         String name = language().getDisplayName();
         String extension = ofNullable(language().getAssociatedFileType()).map(FileType::getDefaultExtension).orElse("");
@@ -43,11 +45,22 @@ public interface ConcordionExtension {
         return fileExtensions().stream();
     }
 
-    default boolean usableWith(@NotNull String fileExtension) {
-        return fileExtensions().contains(fileExtension);
-    }
-
     default boolean usableWith(@NotNull PsiFile file) {
         return fileExtensions().contains(file.getFileType().getDefaultExtension());
+    }
+
+    @NotNull
+    static <T extends ConcordionExtension> Stream<T> extensions(
+            @NotNull ExtensionPointName<T> extensionPoint
+    ) {
+        return stream(extensionPoint.getExtensions());
+    }
+
+    @NotNull
+    static <T extends ConcordionExtension> Optional<T> extension(
+            @NotNull ExtensionPointName<T> extensionPoint,
+            @NotNull PsiFile file
+    ) {
+        return extensions(extensionPoint).filter(e -> e.usableWith(file)).findFirst();
     }
 }
