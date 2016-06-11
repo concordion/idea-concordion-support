@@ -178,6 +178,10 @@
   </extensions>
 
   <actions>
+    <action id="newConcordionSpec"
+            class="org.concordion.plugin.idea.menu.ConcordionSpecMenu">
+      <add-to-group group-id="NewGroup" anchor="last"/>
+    </action>
     <action id="navigateBetweenConcordionSpecFiles"
             text="Navigate between concordion spec and fixture"
             description="Navigate between concordion spec and fixture"
