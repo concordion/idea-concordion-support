@@ -1,5 +1,7 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.impl.BundledFileTemplate;
 import com.intellij.ide.fileTemplates.impl.DefaultTemplate;
 import com.intellij.lang.Language;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -38,6 +40,11 @@ public interface ConcordionExtension {
                 template,
                 null
         );
+    }
+
+    @NotNull
+    default FileTemplate fileTemplate() {
+        return new BundledFileTemplate(template(), true);
     }
 
     @NotNull
