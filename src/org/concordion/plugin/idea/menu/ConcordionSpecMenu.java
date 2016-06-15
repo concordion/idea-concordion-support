@@ -36,7 +36,7 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
         return new AnAction("Spec and fixture") {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-//                new ConcordionNewSpecAndFixtureDialog(anActionEvent.getProject(), packageFromEvent(anActionEvent)).showAndGet();
+                new ConcordionNewSpecAndFixtureDialog(anActionEvent.getProject(), packageFromEvent(anActionEvent)).showAndGet();
             }
         };
     }
@@ -64,7 +64,7 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
     }
 
     @Nullable
-    private static String packageFromEvent(AnActionEvent event) {
+    private static String packageFromEvent(@NotNull AnActionEvent event) {
         return ofNullable(LangDataKeys.IDE_VIEW.getData(event.getDataContext()))
                 .map(DirectoryChooserUtil::getOrChooseDirectory)
                 .map(directory -> JavaDirectoryService.getInstance().getPackage(directory))
