@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.menu;
 
+import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
@@ -18,18 +19,31 @@ public class ConcordionExtensionComboBox<T extends ConcordionExtension> extends 
     @NotNull private final Project project;
     @NotNull private final String recencyKey;
 
+    @NotNull private final DefaultComboBoxModel<T> model;
+
     public ConcordionExtensionComboBox(@NotNull Project project, @NotNull String recencyKey, @NotNull Stream<T> extensions) {
         this.project = project;
         this.recencyKey = recencyKey;
-        setModel(createModel(extensions));
+        setModel(model = new DefaultComboBoxModel<T>());
         setRenderer(new ConcordionExtensionColoredListCellRendererWrapper());
+        setOptionsFrom(extensions);
     }
 
     @NotNull
     public T select() {
-        T extension = (T) getModel().getSelectedItem();
+        T extension = (T) model.getSelectedItem();
         RecentsManager.getInstance(project).registerRecentEntry(recencyKey, extension.language().getDisplayName());
         return extension;
+    }
+
+    public void forceSelect(@NotNull Language language) {
+        for (int i = 0; i < getModel().getSize(); i++) {
+            T element = model.getElementAt(i);
+            if (element.language().equals(language)) {
+                model.setSelectedItem(element);
+            }
+        }
+        setEnabled(false);
     }
 
     @Nullable
@@ -38,10 +52,8 @@ public class ConcordionExtensionComboBox<T extends ConcordionExtension> extends 
         return recentEntries != null && recentEntries.size() > 0 ? recentEntries.get(0) : null;
     }
 
-    @NotNull
-    private ComboBoxModel createModel(@NotNull Stream<T> extensions) {
+    private void setOptionsFrom(@NotNull Stream<T> extensions) {
         String lastUsed = lastUsed();
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
 
         extensions.forEach(ext -> {
             model.addElement(ext);
@@ -49,7 +61,6 @@ public class ConcordionExtensionComboBox<T extends ConcordionExtension> extends 
                 setSelectedItem(ext);
             }
         });
-        return model;
     }
 
     @Nullable

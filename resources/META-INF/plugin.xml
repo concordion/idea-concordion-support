@@ -167,6 +167,14 @@
     <xml.attributeDescriptorsProvider implementation="org.concordion.plugin.idea.schema.ConcordionHtmlAttributeDescriptorProvider"/>
 
     <intentionAction>
+      <className>org.concordion.plugin.idea.action.intention.AddMissingSpecIntentionAction</className>
+      <category>Concordion</category>
+    </intentionAction>
+    <intentionAction>
+      <className>org.concordion.plugin.idea.action.intention.AddMissingTestFixtureIntentionAction</className>
+      <category>Concordion</category>
+    </intentionAction>
+    <intentionAction>
       <className>org.concordion.plugin.idea.action.intention.SurroundWithConcordionIntentionAction</className>
       <category>Concordion</category>
     </intentionAction>

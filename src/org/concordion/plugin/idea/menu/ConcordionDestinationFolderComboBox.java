@@ -43,8 +43,9 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
     @NotNull private final PackageNameReferenceEditorCombo packageSelector;
     @NotNull private final JpsModuleSourceRootType sourceRootType;
     @NotNull private final JpsModuleSourceRootType testRootType;
+    @Nullable private PsiDirectory mandatorySelection;
 
-    @NotNull private final DefaultComboBoxModel<ConcordionDirectory> myModel;
+    @NotNull private final DefaultComboBoxModel<ConcordionDirectory> model;
 
     @NotNull
     public static ConcordionDestinationFolderComboBox sourcesSelector(@NotNull Project project, @NotNull PackageNameReferenceEditorCombo packageSelector) {
@@ -58,8 +59,13 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
 
     @Nullable
     public PsiDirectory select() {
-        ConcordionDirectory item = (ConcordionDirectory) myModel.getSelectedItem();
+        ConcordionDirectory item = (ConcordionDirectory) model.getSelectedItem();
         return item != null ? item.directory : null;
+    }
+
+    public void forceSelect(@NotNull PsiDirectory directory) {
+        this.mandatorySelection = directory;
+        setEnabled(false);
     }
 
     private ConcordionDestinationFolderComboBox(
@@ -73,7 +79,7 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
         this.sourceRootType = sourceRootType;
         this.testRootType = testRootType;
 
-        setModel(myModel = new DefaultComboBoxModel<>());
+        setModel(model = new DefaultComboBoxModel<>());
         setRenderer(new ConcordionExtensionColoredListCellRendererWrapper());
         packageSelector.getChildComponent().addDocumentListener(new DocumentAdapter() {
             @Override
@@ -84,7 +90,7 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
     }
 
     private void setOptionsFromPackageSelector() {
-        myModel.removeAllElements();
+        model.removeAllElements();
         PsiPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(packageSelector.getText());
         if (aPackage == null) {
             return;
@@ -100,16 +106,30 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
     private void addSourceOptions(@NotNull JpsModuleSourceRootType rootType, @NotNull PsiDirectory[] directories) {
         for (ModuleAndDirectories moduleAndDirectory : collectRoots(rootType)) {
             for (PsiDirectory directory : directories) {
-                VirtualFile moduleDirectory = moduleAndDirectory.moduleDirectoryFor(directory);
-                if (moduleDirectory != null) {
-                    myModel.addElement(new ConcordionDirectory(
-                            directory,
-                            ICONS.get(rootType),
-                            moduleDirectory.getName(),
-                            moduleAndDirectory.module.getName()
-                    ));
-                }
+                processDirecotry(rootType, directory, moduleAndDirectory);
             }
+        }
+    }
+
+    private void processDirecotry(
+            @NotNull JpsModuleSourceRootType rootType,
+            @NotNull PsiDirectory packageDirectory,
+            @NotNull ModuleAndDirectories moduleAndDirectories
+    ) {
+        VirtualFile moduleDirectoryForPackage = moduleAndDirectories.moduleParentDirectoryFor(packageDirectory);
+        if (moduleDirectoryForPackage == null) {
+            return;
+        }
+        ConcordionDirectory element = new ConcordionDirectory(
+                packageDirectory,
+                ICONS.get(rootType),
+                moduleDirectoryForPackage.getName(),
+                moduleAndDirectories.module.getName()
+        );
+        model.addElement(element);
+
+        if (mandatorySelection != null && moduleAndDirectories.moduleParentDirectoryFor(mandatorySelection) != null) {
+            model.setSelectedItem(element);
         }
     }
 
@@ -152,15 +172,24 @@ public class ConcordionDestinationFolderComboBox extends ComboBox {
         }
 
         @Nullable
-        public VirtualFile moduleDirectoryFor(@NotNull PsiDirectory child) {
-            String path = child.getVirtualFile().getPath();
+        public VirtualFile moduleParentDirectoryFor(@NotNull PsiDirectory child) {
+            String path = path(child);
             for (VirtualFile directory : directories) {
-                if (path.startsWith(directory.getPath())) {
+                if (parent(directory.getPath(), path)) {
                     return directory;
                 }
             }
             return null;
         }
+    }
+
+    private static boolean parent(@NotNull String possibleParent, @NotNull String possibleChild) {
+        return possibleChild.startsWith(possibleParent);
+    }
+
+    @NotNull
+    private static String path(@NotNull PsiDirectory directory) {
+        return directory.getVirtualFile().getPath();
     }
 
     private static final class ConcordionDirectory {

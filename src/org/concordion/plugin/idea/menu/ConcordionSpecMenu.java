@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.stream.Stream;
 
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.fixtures;
+import static org.concordion.plugin.idea.menu.ConcordionSpecAndFixtureCreationParameters.fromScratch;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specifications;
 
 public class ConcordionSpecMenu extends DefaultActionGroup {
@@ -28,8 +29,14 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
     private static AnAction specAndFixtureDialog() {
         return new AnAction("Spec and fixture") {
             @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                ConcordionNewSpecAndFixtureDialog.show(anActionEvent);
+            public void actionPerformed(AnActionEvent event) {
+                if (event.getProject() == null) {
+                    return;
+                }
+                new ConcordionNewSpecAndFixtureDialog(
+                        event.getProject(), fromScratch(event)
+
+                ).showAndGet();
             }
         };
     }
