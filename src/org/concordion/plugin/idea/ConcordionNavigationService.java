@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.concordion.plugin.idea.ConcordionExtensionUtils.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
@@ -148,11 +149,6 @@ public class ConcordionNavigationService {
         return spec != null
                 && fixture != null
                 && (specConfiguredInFile(spec) || isConcordionFixture(fixture));
-    }
-
-    @NotNull
-    private String removeExtension(@NotNull String fileName) {
-        return fileName.substring(0, fileName.lastIndexOf('.'));
     }
 
     @NotNull

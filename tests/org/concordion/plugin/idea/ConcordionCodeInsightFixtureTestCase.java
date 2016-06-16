@@ -27,6 +27,7 @@ import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
@@ -84,6 +85,12 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Nullable
+    protected final PsiFile findFileInProject(@NotNull String path) {
+        VirtualFile file = myFixture.getTempDirFixture().getFile(path);
+        return file != null ? PsiManager.getInstance(myFixture.getProject()).findFile(file) : null;
     }
 
     protected final void assertHasGutters(VirtualFile fixture, VirtualFile spec) {

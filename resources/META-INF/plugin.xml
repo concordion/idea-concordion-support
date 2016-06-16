@@ -158,6 +158,9 @@
     <codeInsight.lineMarkerProvider language="XHTML" implementationClass="org.concordion.plugin.idea.marker.HtmlSpecLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.concordion.plugin.idea.marker.JavaTestFixtureLineMarkerProvider"/>
 
+    <renamePsiElementProcessor implementation="org.concordion.plugin.idea.refactoring.RenameConcordionSpecProcessor"/>
+    <renamePsiElementProcessor implementation="org.concordion.plugin.idea.refactoring.RenameConcordionFixtureProcessor"/>
+
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
 
