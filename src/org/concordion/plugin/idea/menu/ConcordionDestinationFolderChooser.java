@@ -50,11 +50,11 @@ public class ConcordionDestinationFolderChooser extends ComponentWithBrowseButto
             @Override
             public void documentChanged(DocumentEvent e) {
                 if (firstInitialization) {
-                    directories = directoriesOfType(initial, project, directoriesType);
+                    directories = directories(initial, inAllProject(project, directoriesType));
                     initialDir = initial;
                     firstInitialization = false;
                 } else {
-                    directories = directoriesOfType(packageSource.getText(), project, directoriesType);
+                    directories = directories(packageSource.getText(), inAllProject(project, directoriesType));
                     initialDir = lastDir(directories);
                 }
                 useDirectory(initialDir);

@@ -6,6 +6,8 @@ import com.intellij.ide.IdeView;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.concordion.plugin.idea.SourceRootTypeUtils;
@@ -23,7 +25,6 @@ import java.util.Set;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.concordion.plugin.idea.SourceRootTypeUtils.*;
-import static org.concordion.plugin.idea.SourceRootTypeUtils.checkDirectoryBelongsToRootType;
 
 public class ConcordionSpecAndFixtureCreationParameters {
 
@@ -61,8 +62,8 @@ public class ConcordionSpecAndFixtureCreationParameters {
                 packageFromEvent(event),
                 null,
                 null,
-                smartFindDirectory(selectedDirectory, project, JavaModuleSourceRootTypes.RESOURCES),
-                smartFindDirectory(selectedDirectory, project, JavaModuleSourceRootTypes.SOURCES)
+                smartFindDirectory(selectedDirectory, JavaModuleSourceRootTypes.RESOURCES),
+                smartFindDirectory(selectedDirectory, JavaModuleSourceRootTypes.SOURCES)
         );
     }
 
@@ -77,7 +78,7 @@ public class ConcordionSpecAndFixtureCreationParameters {
                 spec,
                 null,
                 specDirectory,
-                smartFindDirectory(specDirectory, spec.getProject(), JavaModuleSourceRootTypes.SOURCES)
+                smartFindDirectory(specDirectory, JavaModuleSourceRootTypes.SOURCES)
         );
     }
 
@@ -91,7 +92,7 @@ public class ConcordionSpecAndFixtureCreationParameters {
                 packageFromDirectory(fixtureDirectory),
                 null,
                 fixture,
-                smartFindDirectory(fixtureDirectory, fixture.getProject(), JavaModuleSourceRootTypes.RESOURCES),
+                smartFindDirectory(fixtureDirectory, JavaModuleSourceRootTypes.RESOURCES),
                 fixtureDirectory
         );
     }
@@ -100,14 +101,19 @@ public class ConcordionSpecAndFixtureCreationParameters {
         return spec != null || fixture != null;
     }
 
-    //TODO select from same module
     @Nullable
     private static PsiDirectory smartFindDirectory(
             @Nullable PsiDirectory directory,
-            @NotNull Project project,
             @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes
     ) {
-        if (checkDirectoryBelongsToRootType(directory, project, sourceRootTypes)) {
+        if (directory == null) {
+            return null;
+        }
+        Module module = ModuleUtilCore.findModuleForPsiElement(directory);
+        if (module == null) {
+            return null;
+        }
+        if (directoryIn(directory, inSingleModule(module, sourceRootTypes))) {
             return directory;
         }
         Map<JpsModuleSourceRootType<?>, JpsModuleSourceRootType<?>> mySuggestions = new HashMap<>();
@@ -115,8 +121,8 @@ public class ConcordionSpecAndFixtureCreationParameters {
         sourceRootTypes.forEach(mySuggestions::remove);
 
         return mySuggestions.entrySet().stream()
-                .filter(suggestion -> checkDirectoryBelongsToRootType(directory, project, ImmutableSet.of(suggestion.getKey())))
-                .map(suggestion -> lastDir(directoriesOfType(directory, project, ImmutableSet.of(suggestion.getValue()))))
+                .filter(suggestion -> directoryIn(directory, inSingleModule(module, ImmutableSet.of(suggestion.getKey()))))
+                .map(suggestion -> lastDir(directories(directory, inSingleModule(module, ImmutableSet.of(suggestion.getValue())))))
                 .findFirst().orElse(null);
     }
 

@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentFolder;
@@ -16,64 +17,98 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
 
 public class SourceRootTypeUtils {
 
-    @NotNull
-    public static GlobalSearchScope sourceTypeSearchScope(@NotNull Project project, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
-        return GlobalSearchScopes.directoriesScope(
-                project,
-                true,
-                stream(ModuleManager.getInstance(project).getModules())
-                        .flatMap(module -> stream(ModuleRootManager.getInstance(module).getContentEntries()))
-                        .flatMap(entry -> entry.getSourceFolders(sourceRootTypes).stream())
-                        .map(ContentFolder::getFile)
-                        .toArray(VirtualFile[]::new)
-        );
-    }
-
-    public static boolean checkDirectoryBelongsToRootType(
+    public static boolean directoryIn(
             @Nullable PsiDirectory directory,
-            @NotNull Project project,
-            @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
-        return newHashSet(directoriesOfType(directory, project, sourceRootTypes)).contains(directory);
+            @NotNull PlaceToSearch search) {
+        return newHashSet(directories(directory, search)).contains(directory);
     }
 
     @NotNull
-    public static PsiDirectory[] directoriesOfType(
+    public static PsiDirectory[] directories(
             @NotNull String pkg,
-            @NotNull Project project,
-            @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
-        return directoriesOfType(JavaPsiFacade.getInstance(project).findPackage(pkg), project, sourceRootTypes);
+            @NotNull PlaceToSearch search) {
+        return directories(JavaPsiFacade.getInstance(search.project).findPackage(pkg), search);
     }
 
     @NotNull
-    public static PsiDirectory[] directoriesOfType(
+    public static PsiDirectory[] directories(
             @Nullable PsiDirectory dir,
-            @NotNull Project project,
-            @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
+            @NotNull PlaceToSearch search) {
         if (dir == null) {
             return PsiDirectory.EMPTY_ARRAY;
         }
-        return directoriesOfType(JavaDirectoryService.getInstance().getPackage(dir), project, sourceRootTypes);
+        return directories(JavaDirectoryService.getInstance().getPackage(dir), search);
     }
 
     @NotNull
-    public static PsiDirectory[] directoriesOfType(
+    public static PsiDirectory[] directories(
             @Nullable PsiPackage aPackage,
-            @NotNull Project project,
-            @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
+            @NotNull PlaceToSearch search) {
         if (aPackage == null) {
             return PsiDirectory.EMPTY_ARRAY;
         }
-        return aPackage.getDirectories(sourceTypeSearchScope(project, sourceRootTypes));
+        return aPackage.getDirectories(search.searchScope());
     }
 
     @Nullable
     public static PsiDirectory lastDir(@NotNull PsiDirectory[] directories) {
         return directories.length != 0 ? directories[directories.length - 1] : null;
+    }
+
+    @NotNull
+    public static PlaceToSearch inAllProject(@NotNull Project project, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
+        return new PlaceToSearch(
+                project,
+                sourceRootTypes,
+                stream(ModuleManager.getInstance(project).getModules()).flatMap(module -> sourceFolders(module, sourceRootTypes)).toArray(VirtualFile[]::new)
+        );
+    }
+
+    @NotNull
+    public static PlaceToSearch inSingleModule(@NotNull Module module, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
+        return new PlaceToSearch(
+                module.getProject(),
+                sourceRootTypes,
+                sourceFolders(module, sourceRootTypes).toArray(VirtualFile[]::new)
+        );
+    }
+
+    @NotNull
+    private static Stream<VirtualFile> sourceFolders(@NotNull Module module, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
+        return stream(ModuleRootManager.getInstance(module).getContentEntries())
+                .flatMap(entry -> entry.getSourceFolders(sourceRootTypes).stream())
+                .map(ContentFolder::getFile);
+    }
+
+    public static final class PlaceToSearch {
+
+        @NotNull private final Project project;
+        @NotNull private final Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes;
+        @NotNull private final VirtualFile[] directories;
+
+        public PlaceToSearch(
+                @NotNull Project project,
+                @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes,
+                @NotNull VirtualFile[] directories) {
+            this.project = project;
+            this.sourceRootTypes = sourceRootTypes;
+            this.directories = directories;
+        }
+
+        @NotNull
+        public GlobalSearchScope searchScope() {
+            return GlobalSearchScopes.directoriesScope(
+                    project,
+                    true,
+                    directories
+            );
+        }
     }
 }
