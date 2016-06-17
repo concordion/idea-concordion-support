@@ -19,11 +19,11 @@ import org.concordion.plugin.idea.fixtures.ConcordionTestFixture;
 import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 
 import javax.swing.*;
 
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.fixtures;
-import static org.concordion.plugin.idea.menu.ConcordionDestinationFolderComboBox.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specifications;
 
 public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
@@ -34,8 +34,8 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
     /* Custom initialization via createUIComponents() */ @NotNull private JPanel panel;
     /* Custom initialization via createUIComponents() */ @NotNull private EditorTextField specName;
     /* Custom initialization via createUIComponents() */ @NotNull private PackageNameReferenceEditorCombo specPackage;
-    /* Custom initialization via createUIComponents() */ @NotNull private ConcordionDestinationFolderComboBox specDestinationSelector;
-    /* Custom initialization via createUIComponents() */ @NotNull private ConcordionDestinationFolderComboBox fixtureDestinationSelector;
+    /* Custom initialization via createUIComponents() */ @NotNull private ConcordionDestinationFolderChooser specDestinationSelector;
+    /* Custom initialization via createUIComponents() */ @NotNull private ConcordionDestinationFolderChooser fixtureDestinationSelector;
     /* Custom initialization via createUIComponents() */ @NotNull private ConcordionExtensionComboBox<ConcordionSpecification> specTypeSelector;
     /* Custom initialization via createUIComponents() */ @NotNull private ConcordionExtensionComboBox<ConcordionTestFixture> fixtureTypeSelector;
 
@@ -56,8 +56,8 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
     private void createUIComponents() {
         specName = new EditorTextField(parameters.initialName);
         specPackage = new PackageNameReferenceEditorCombo(parameters.initialPackage, project, "concordion.new.package", "Concordion spec package");
-        specDestinationSelector = resourcesSelector(project, specPackage);
-        fixtureDestinationSelector = sourcesSelector(project, specPackage);
+        specDestinationSelector = new ConcordionDestinationFolderChooser(project, specPackage, parameters.specDirectory, JavaModuleSourceRootTypes.RESOURCES);
+        fixtureDestinationSelector = new ConcordionDestinationFolderChooser(project, specPackage, parameters.fixtureDirectory, JavaModuleSourceRootTypes.SOURCES);
         specTypeSelector = new ConcordionExtensionComboBox<>(project, "concordion.new.specification.type", specifications());
         fixtureTypeSelector = new ConcordionExtensionComboBox<>(project, "concordion.new.fixture.type", fixtures());
 

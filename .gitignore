@@ -3,6 +3,7 @@ out/
 idea-sandbox/
 idea-sandbox-markdown/
 idea-sandbox-markdown-support/
+idea-sandbox-markdown-navigator/
 .gradle
 .idea/
 #*.iml
