@@ -1,5 +1,7 @@
 package org.concordion.plugin.idea.menu;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.intellij.ide.IdeView;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -10,13 +12,18 @@ import org.concordion.plugin.idea.SourceRootTypeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
+import org.jetbrains.jps.model.java.JavaResourceRootType;
+import org.jetbrains.jps.model.java.JavaSourceRootType;
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.concordion.plugin.idea.SourceRootTypeUtils.*;
+import static org.concordion.plugin.idea.SourceRootTypeUtils.checkDirectoryBelongsToRootType;
 
 public class ConcordionSpecAndFixtureCreationParameters {
 
@@ -93,15 +100,32 @@ public class ConcordionSpecAndFixtureCreationParameters {
         return spec != null || fixture != null;
     }
 
-    //TODO suggest with respect to test/prod
+    //TODO select from same module
     @Nullable
     private static PsiDirectory smartFindDirectory(
             @Nullable PsiDirectory directory,
             @NotNull Project project,
             @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes
     ) {
-        return checkDirectoryBelongsToRootType(directory, project, sourceRootTypes) ? directory : lastDir(directoriesOfType(directory, project, sourceRootTypes));
+        if (checkDirectoryBelongsToRootType(directory, project, sourceRootTypes)) {
+            return directory;
+        }
+        Map<JpsModuleSourceRootType<?>, JpsModuleSourceRootType<?>> mySuggestions = new HashMap<>();
+        mySuggestions.putAll(SUGGESTIONS);
+        sourceRootTypes.forEach(mySuggestions::remove);
+
+        return mySuggestions.entrySet().stream()
+                .filter(suggestion -> checkDirectoryBelongsToRootType(directory, project, ImmutableSet.of(suggestion.getKey())))
+                .map(suggestion -> lastDir(directoriesOfType(directory, project, ImmutableSet.of(suggestion.getValue()))))
+                .findFirst().orElse(null);
     }
+
+    private static final Map<JpsModuleSourceRootType<?>, JpsModuleSourceRootType<?>> SUGGESTIONS = ImmutableMap.of(
+            JavaSourceRootType.SOURCE,  JavaResourceRootType.RESOURCE,
+            JavaSourceRootType.TEST_SOURCE, JavaResourceRootType.TEST_RESOURCE,
+            JavaResourceRootType.RESOURCE, JavaSourceRootType.SOURCE,
+            JavaResourceRootType.TEST_RESOURCE, JavaSourceRootType.TEST_SOURCE
+    );
 
     @Nullable
     private static PsiDirectory dirFromEvent(@NotNull AnActionEvent event) {
