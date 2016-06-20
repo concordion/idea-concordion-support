@@ -191,8 +191,8 @@
       <add-to-group group-id="NewGroup" anchor="last"/>
     </action>
     <action id="navigateBetweenConcordionSpecFiles"
-            text="Navigate between concordion spec and fixture"
-            description="Navigate between concordion spec and fixture"
+            text="Navigate between Concordion spec and fixture"
+            description="Navigate between Concordion spec and fixture"
             class="org.concordion.plugin.idea.action.NavigateBetweenConcordionSpecFiles">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
     </action>

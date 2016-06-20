@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Optional.ofNullable;
-import static org.apache.commons.io.FilenameUtils.removeExtension;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.removeExtension;
 import static org.concordion.plugin.idea.SourceRootTypeUtils.*;
 
 public class ConcordionSpecAndFixtureCreationParameters {

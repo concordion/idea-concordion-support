@@ -15,7 +15,7 @@ import static org.concordion.plugin.idea.specifications.ConcordionSpecifications
 
 public class AddMissingTestFixtureIntentionAction extends BaseIntentionAction {
 
-    private static final String ACTION_NAME = "Add missing concordion test fixture";
+    private static final String ACTION_NAME = "Add missing Concordion test fixture";
 
     public AddMissingTestFixtureIntentionAction() {
         setText(ACTION_NAME);

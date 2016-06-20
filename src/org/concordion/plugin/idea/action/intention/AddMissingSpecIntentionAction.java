@@ -18,7 +18,7 @@ import static org.concordion.plugin.idea.menu.ConcordionSpecAndFixtureCreationPa
 
 public class AddMissingSpecIntentionAction extends BaseIntentionAction {
 
-    private static final String ACTION_NAME = "Add missing concordion spec";
+    private static final String ACTION_NAME = "Add missing Concordion spec";
 
     public AddMissingSpecIntentionAction() {
         setText(ACTION_NAME);

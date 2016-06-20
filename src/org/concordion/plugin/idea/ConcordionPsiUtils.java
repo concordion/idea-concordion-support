@@ -234,6 +234,11 @@ public final class ConcordionPsiUtils {
     }
 
     @NotNull
+    public static String removeExtension(@NotNull String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf('.'));
+    }
+
+    @NotNull
     public static String nullToEmpty(@Nullable String str) {
         return str != null ? str : "";
     }

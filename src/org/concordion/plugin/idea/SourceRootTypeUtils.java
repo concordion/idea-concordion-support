@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -84,7 +85,8 @@ public class SourceRootTypeUtils {
     private static Stream<VirtualFile> sourceFolders(@NotNull Module module, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
         return stream(ModuleRootManager.getInstance(module).getContentEntries())
                 .flatMap(entry -> entry.getSourceFolders(sourceRootTypes).stream())
-                .map(ContentFolder::getFile);
+                .map(ContentFolder::getFile)
+                .filter(Objects::nonNull);
     }
 
     public static final class PlaceToSearch {
