@@ -20,6 +20,7 @@ import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.Optional.ofNullable;
@@ -123,6 +124,7 @@ public class ConcordionSpecAndFixtureCreationParameters {
         return mySuggestions.entrySet().stream()
                 .filter(suggestion -> directoryIn(directory, inSingleModule(module, ImmutableSet.of(suggestion.getKey()))))
                 .map(suggestion -> lastDir(directories(directory, inSingleModule(module, ImmutableSet.of(suggestion.getValue())))))
+                .filter(Objects::nonNull)
                 .findFirst().orElse(null);
     }
 

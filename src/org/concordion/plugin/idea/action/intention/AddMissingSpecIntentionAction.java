@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import static org.concordion.plugin.idea.ConcordionPsiUtils.classIn;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
 import static org.concordion.plugin.idea.menu.ConcordionSpecAndFixtureCreationParameters.fromExistingFixture;
 
 public class AddMissingSpecIntentionAction extends BaseIntentionAction {
@@ -35,7 +36,7 @@ public class AddMissingSpecIntentionAction extends BaseIntentionAction {
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
         PsiClass aClass = classIn(file);
         return aClass != null
-                && ConcordionTestFixtures.isConcordionFixture(aClass)
+                && isConcordionFixture(aClass)
                 && ConcordionNavigationService.getInstance(project).correspondingSpec(aClass) == null;
     }
 
@@ -44,6 +45,6 @@ public class AddMissingSpecIntentionAction extends BaseIntentionAction {
         new ConcordionNewSpecAndFixtureDialog(
                 project, fromExistingFixture(classIn(file))
 
-        ).showAndGet();
+        ).showDialog();
     }
 }

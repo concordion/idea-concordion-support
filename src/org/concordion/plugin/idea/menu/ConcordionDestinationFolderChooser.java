@@ -60,6 +60,7 @@ public class ConcordionDestinationFolderChooser extends ComponentWithBrowseButto
                 useDirectory(initialDir);
             }
         });
+        useDirectory(initial);
     }
 
     public void forceSelect(@NotNull PsiDirectory containingDirectory) {

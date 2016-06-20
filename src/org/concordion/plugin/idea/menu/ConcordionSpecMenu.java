@@ -36,7 +36,7 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
                 new ConcordionNewSpecAndFixtureDialog(
                         event.getProject(), fromScratch(event)
 
-                ).showAndGet();
+                ).showDialog();
             }
         };
     }

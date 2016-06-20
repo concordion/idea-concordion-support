@@ -39,6 +39,6 @@ public class AddMissingTestFixtureIntentionAction extends BaseIntentionAction {
         new ConcordionNewSpecAndFixtureDialog(
                 project, fromExistingSpec(file)
 
-        ).showAndGet();
+        ).showDialog();
     }
 }

@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
@@ -86,8 +87,14 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
         return super.doValidate();
     }
 
-    @Override
-    protected void doOKAction() {
+    public void showDialog() {
+        if (!ApplicationManager.getApplication().isUnitTestMode()) {
+            showAndGet();
+        }
+        createConcordionFiles();
+    }
+
+    public void createConcordionFiles() {
         String name = specName.getText();
 
         if (parameters.fixture == null) {
@@ -96,8 +103,6 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
         if (parameters.spec == null) {
             createConcordionFile(specTypeSelector.select(), name, specDestinationSelector.select());
         }
-
-        super.doOKAction();
     }
 
     private void createConcordionFile(@NotNull ConcordionExtension ext, @NotNull String name, @Nullable PsiDirectory destination) {

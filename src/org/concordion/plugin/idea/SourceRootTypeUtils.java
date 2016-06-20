@@ -52,7 +52,7 @@ public class SourceRootTypeUtils {
     public static PsiDirectory[] directories(
             @Nullable PsiPackage aPackage,
             @NotNull PlaceToSearch search) {
-        if (aPackage == null) {
+        if (aPackage == null || search.emptyScope()) {
             return PsiDirectory.EMPTY_ARRAY;
         }
         return aPackage.getDirectories(search.searchScope());
@@ -111,6 +111,10 @@ public class SourceRootTypeUtils {
                     true,
                     directories
             );
+        }
+
+        public boolean emptyScope() {
+            return directories.length == 0;
         }
     }
 }
