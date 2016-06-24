@@ -26,6 +26,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.VfsTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer;
+import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsState;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
@@ -169,10 +171,17 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
         }
     }
 
+    @Nullable
     protected final <T extends PsiElement> T elementUnderCaret() {
         return (T) myFixture.getFile().findElementAt(myFixture.getCaretOffset() - 1).getParent();
     }
 
+    @Nullable
+    protected final ConcordionOgnlExpressionStart expressionUnderCaret() {
+        return getParentOfType(elementUnderCaret(), ConcordionOgnlExpressionStart.class);
+    }
+
+    @Nullable
     protected final <T extends PsiElement> T resolveReferences(PsiElement e) {
         PsiReference[] references = e.getReferences();
         assertThat(references).hasSize(1);

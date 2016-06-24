@@ -8,14 +8,10 @@ import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
-
-    protected final PsiElementCache<PsiClass> containingClass = new PsiElementCache<>(PsiClass::getQualifiedName);
-    protected final PsiElementCache<PsiMember> containingMember = new PsiElementCache<>(ConcordionPsiUtils::memberIdentity);
 
     public AbstractConcordionMember(@NotNull ASTNode node) {
         super(node);
@@ -24,13 +20,13 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     @Nullable
     @Override
     public PsiClass getContainingClass() {
-        return containingClass.getOrCompute(nullToEmpty(getName()), this::determineContainingClass);
+        return determineContainingClass();
     }
 
     @Nullable
     @Override
     public PsiMember getContainingMember() {
-        return containingMember.getOrCompute(nullToEmpty(getName()), this::determineContainingMember);
+        return determineContainingMember();
     }
 
     @Nullable
