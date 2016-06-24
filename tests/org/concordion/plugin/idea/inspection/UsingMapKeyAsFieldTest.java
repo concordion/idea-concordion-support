@@ -25,13 +25,10 @@ public class UsingMapKeyAsFieldTest extends ConcordionCodeInsightFixtureTestCase
         myFixture.configureFromExistingVirtualFile(htmlSpec);
     }
 
-    /**
-     * Does not resolve jdk types and qualified names in tests
-     */
-    public void ignoredTestWarnUsingFieldAsKeyInMap() {
+    public void testWarnUsingFieldAsKeyInMap() {
 
         assertThat(myFixture.doHighlighting())
-                .has(anInfo().withSeverity(WARNING).withText("key").withDescription("Using map key as a field"), 2);
+                .has(anInfo().withSeverity(WARNING).withText("mapKey").withDescription("Using map key as a field"), 2);
     }
 
     public void testDoNotWarnUsingNestedFields() {

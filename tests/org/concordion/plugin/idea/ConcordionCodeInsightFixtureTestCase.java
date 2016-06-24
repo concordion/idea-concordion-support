@@ -14,6 +14,8 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -21,6 +23,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.MapDataContext;
 import com.intellij.testFramework.PsiTestUtil;
+import com.intellij.testFramework.VfsTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import org.concordion.plugin.idea.configuration.ConcordionConfigurationProducer;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
@@ -32,6 +35,7 @@ import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -39,12 +43,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsightFixtureTestCase {
 
-    protected VirtualFile copyTestFixtureToConcordionProject(@NotNull String javaRunner) {
-        return assertInTestPackage(myFixture.copyFileToProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner));
+    protected VirtualFile copyTestFixtureToConcordionProject(@NotNull String javaRunner, @NotNull String... templateValues) {
+        return assertInTestPackage(copyTemplateFileToConcordionProject(getTestDataPath() + '/' + javaRunner, "/src/com/test/" + javaRunner, templateValues));
     }
 
-    protected VirtualFile copySpecToConcordionProject(@NotNull String htmlSpec) {
-        return myFixture.copyFileToProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec);
+    protected VirtualFile copySpecToConcordionProject(@NotNull String htmlSpec, @NotNull String... templateValues) {
+        return copyTemplateFileToConcordionProject(getTestDataPath() + '/' + htmlSpec, "/resources/com/test/" + htmlSpec, templateValues);
+    }
+
+    protected VirtualFile copyTemplateFileToConcordionProject(
+            @NotNull String sourcePath,
+            @NotNull String targetPath,
+            @NotNull String... templateValues
+    ) {
+        File sourceFile = new File(sourcePath);
+
+        assertThat(sourceFile.exists()).isTrue();
+        assertThat(sourceFile.isFile()).isTrue();
+        assertThat(myFixture.getTempDirFixture().getFile(targetPath)).isNull();
+
+        VirtualFile targetFile = myFixture.getTempDirFixture().createFile(targetPath);
+        VfsTestUtil.assertFilePathEndsWithCaseSensitivePath(targetFile, sourcePath);
+        targetFile.putUserData(VfsTestUtil.TEST_DATA_FILE_PATH, sourceFile.getAbsolutePath());
+
+        writeAction(() -> templateValues.length == 0 ? copy(sourceFile, targetFile) : copyTemplate(sourceFile, targetFile, templateValues));
+
+        return targetFile;
+    }
+
+    private static Void copy(@NotNull File sourceFile, @NotNull VirtualFile targetFile) throws IOException {
+        targetFile.setBinaryContent(FileUtil.loadFileBytes(sourceFile));
+        return null;
+    }
+
+    private static Void copyTemplate(@NotNull File sourceFile, @NotNull VirtualFile targetFile, @NotNull String[] templateValues) throws IOException {
+        String source = FileUtil.loadFile(sourceFile);
+        for (int i = 0; i < templateValues.length; i++) {
+            source = source.replaceAll("\\$\\{" + i + "\\}", templateValues[i]);
+        }
+        VfsUtil.saveText(targetFile, source);
+        return null;
     }
 
     @Override
@@ -67,6 +105,8 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
             PsiTestUtil.addSourceRoot(myModule, src.get(), JavaSourceRootType.TEST_SOURCE);
             PsiTestUtil.addSourceRoot(myModule, resources.get(), JavaResourceRootType.TEST_RESOURCE);
 
+            //JDK
+            PsiTestUtil.addLibrary(myModule, "testData/lib/rt.jar");
             //Concordion dependencies
             PsiTestUtil.addLibrary(myModule, "testData/lib/junit-4.12.jar");
             //Concordion itself

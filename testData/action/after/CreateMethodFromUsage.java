@@ -12,7 +12,7 @@ public class CreateMethodFromUsage {
         return null;
     }
 
-    public java.lang.String createMe(java.lang.String arg, A field, A method, java.lang.String param3, java.lang.String param4, java.lang.String param5) {
+    public String createMe(String arg, A field, A method, String param3, String param4, String param5) {
         return null;
     }
 

@@ -6,5 +6,5 @@ import org.junit.runner.RunWith;
 @RunWith(ConcordionRunner.class)
 public class CreateFieldFromUsage {
 
-    public java.lang.String createMe;
+    public String createMe;
 }

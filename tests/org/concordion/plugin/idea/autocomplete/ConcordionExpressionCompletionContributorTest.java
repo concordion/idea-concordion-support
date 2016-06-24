@@ -198,10 +198,7 @@ public class ConcordionExpressionCompletionContributorTest extends ConcordionCod
                 .doesNotContain("field", "method");//this should not complete wih methods of array elements
     }
 
-    /**
-     * Does not resolve jdk types and qualified names in tests
-     */
-    public void ignoredTestCompleteWithMembersOfVerifyRowsLoopVariable() {
+    public void testCompleteWithMembersOfVerifyRowsLoopVariable() {
         //type of variable produced by verifyRows command is determined by generic parameter of the iterable
         copyTestFixtureToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.java");
         VirtualFile htmlSpec = copySpecToConcordionProject("NestedMembersOfVerifyRowsLoopVariable.html");
