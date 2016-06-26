@@ -16,7 +16,7 @@ public abstract class ConcordionVariableInternalImpl extends AbstractConcordionP
 
     @Nullable
     @Override
-    protected PsiType determineType() {
+    protected PsiType containingType() {
         ConcordionVariableUsage declaration = findDeclaration(this);
         return declaration != null ? declaration.determineType() : null;
     }

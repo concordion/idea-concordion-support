@@ -34,7 +34,7 @@ public abstract class ConcordionMethodInternalImpl extends AbstractConcordionMem
 
     @Nullable
     @Override
-    protected PsiType determineType() {
+    protected PsiType containingType() {
         PsiMethod containingMember = (PsiMethod) getContainingMember();
         return containingMember != null ? containingMember.getReturnType() : null;
     }

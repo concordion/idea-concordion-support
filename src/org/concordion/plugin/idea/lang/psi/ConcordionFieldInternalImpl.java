@@ -53,7 +53,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
 
     @Nullable
     @Override
-    protected PsiType determineType() {
+    protected PsiType containingType() {
         PsiMember containingMember = getContainingMember();
         if (containingMember instanceof PsiField) {
             return ((PsiField) containingMember).getType();

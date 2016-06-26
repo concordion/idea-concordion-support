@@ -172,9 +172,10 @@ public final class ConcordionPsiUtils {
                 }
             }
             //array passed into vararg
-            if (parameters.length == arguments.size() && validArgumentType(arguments.get(varArgIndex), parameters[varArgIndex].getType())) {
+            if (parameters.length == arguments.size() && validArgumentType(dummyArrayParameterType(arguments.get(varArgIndex)), parameters[varArgIndex].getType())) {
                 return true;
             }
+            //each element matches vararg type
             PsiType last = parameters[varArgIndex].getType().getDeepComponentType();
             for (int i = varArgIndex; i < arguments.size(); i++) {
                 if (!validArgumentType(arguments.get(i), last)) {

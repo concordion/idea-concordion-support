@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.intellij.psi.search.ProjectScope.getAllScope;
 
@@ -77,13 +78,27 @@ public final class ConcordionPsiTypeUtils {
         return nthGenericTypeFormHierarchy(1, MAP, mapPsiType);
     }
 
+    public static boolean isDummyArrayType(@NotNull PsiType type) {
+        return type.getCanonicalText().startsWith("_Dummy_.__Array__");
+    }
+
+    @NotNull
+    public static PsiType dummyArrayParameterType(@NotNull PsiType dummyArrayType) {
+        return nthGeneric(0, dummyArrayType);
+    }
+
     @Nullable
     private static PsiType nthGenericTypeFormHierarchy(int n, String qualifiedType, @NotNull PsiType currentType) {
-        return hierarchy(currentType, new HashSet<>()).stream()
+        return hierarchy(currentType)
                 .filter(st -> st.getCanonicalText().startsWith(qualifiedType))
                 .map(t -> nthGeneric(n, t))
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);
+    }
+
+    @NotNull
+    private static Stream<PsiType> hierarchy(@NotNull PsiType type) {
+        return hierarchy(type, new HashSet<>()).stream();
     }
 
     @NotNull

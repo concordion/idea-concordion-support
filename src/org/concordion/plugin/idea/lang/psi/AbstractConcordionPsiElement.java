@@ -1,5 +1,8 @@
 package org.concordion.plugin.idea.lang.psi;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.pom.java.LanguageLevel;
+import org.concordion.plugin.idea.ConcordionPsiTypeUtils;
 import org.concordion.plugin.idea.lang.ConcordionElementFactory;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -9,6 +12,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.arrayDimensionsUsed;
 
 public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement implements ConcordionPsiElement {
@@ -53,7 +57,7 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
 
     @Override
     public PsiType getType() {
-        return determineType();
+        return expressionType();
     }
 
     @Override
@@ -62,5 +66,44 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
     }
 
     @Nullable
-    protected abstract PsiType determineType();
+    protected abstract PsiType containingType();
+
+    @Nullable
+    private PsiType expressionType() {
+
+        Project project = getProject();
+        PsiType type = containingType();
+        if (type == null) {
+            return null;
+        }
+
+        if (isDummyArrayType(type)) {
+            type = dummyArrayParameterType(type);
+        }
+
+        int usedBrackets = usedBrackets();
+        int arrayDimensions = type.getArrayDimensions();
+
+        if (arrayDimensions > 0) {
+            if (usedBrackets == arrayDimensions) {
+                return type.getDeepComponentType();
+            } else if (usedBrackets < arrayDimensions) {
+                //array type
+                return JavaPsiFacade.getElementFactory(project).getArrayClassType(type, LanguageLevel.JDK_1_8);
+            } else {
+                //too much [] used
+                return null;
+            }
+        }
+
+        if (isIterable(type, project)) {
+            return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::iterableParameterType);
+        }
+
+        if (isMap(type, project)) {
+            return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::mapValueParameterType);
+        }
+
+        return type;
+    }
 }
