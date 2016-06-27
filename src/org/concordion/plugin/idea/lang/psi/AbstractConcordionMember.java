@@ -6,7 +6,6 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.psi.util.PsiUtil.resolveClassInType;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 
 public abstract class AbstractConcordionMember extends AbstractConcordionPsiElement implements ConcordionMember {
@@ -18,7 +17,14 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     @Nullable
     @Override
     public PsiClass getContainingClass() {
-        return determineContainingClass();
+        PsiClassType classType = getContainingClassType();
+        return classType != null ? classType.resolve() : null;
+    }
+
+    @Nullable
+    @Override
+    public PsiClassType getContainingClassType() {
+        return determineContainingClassType();
     }
 
     @Nullable
@@ -28,18 +34,35 @@ public abstract class AbstractConcordionMember extends AbstractConcordionPsiElem
     }
 
     @Nullable
-    private PsiClass determineContainingClass() {
+    private PsiClassType determineContainingClassType() {
         if (getParent() instanceof ConcordionOgnlExpressionStart) {
-            return ConcordionNavigationService.getInstance(getProject()).correspondingTestFixture(getTopLevelFile(this));
+            PsiClass fixture = ConcordionNavigationService.getInstance(getProject()).correspondingTestFixture(getTopLevelFile(this));
+            if (fixture == null) {
+                return null;
+            }
+            return JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(fixture);
         } else {
             ConcordionPsiElement parent = getConcordionParent();
             if (parent == null) {
                 return null;
             }
-            return resolveClassInType(parent.getType());
+            PsiType type = parent.getType();
+            if (!(type instanceof PsiClassType)) {
+                return null;
+            }
+            return (PsiClassType) type;
         }
     }
 
     @Nullable
     protected abstract PsiMember determineContainingMember();
+
+    @Nullable
+    protected PsiType resolveGenericType(@Nullable PsiType original) {
+        PsiClassType containingClassType = getContainingClassType();
+        if (containingClassType == null || original == null) {
+            return null;
+        }
+        return containingClassType.resolveGenerics().getSubstitutor().substitute(original);
+    }
 }

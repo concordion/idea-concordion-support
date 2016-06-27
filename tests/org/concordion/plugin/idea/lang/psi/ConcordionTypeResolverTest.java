@@ -38,7 +38,7 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
         assertTypeOfExpression("listMethod()", "java.util.List<java.lang.String>");
     }
 
-    public void ignoredTestTypeOfListItemReturnedByGetFromMethod() {
+    public void testTypeOfListItemReturnedByGetFromMethod() {
         assertTypeOfExpression("listMethod().get(0)", "java.lang.String");
     }
 
@@ -47,15 +47,19 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
     }
 
     public void testTypeOfMapMethod() {
-        assertTypeOfExpression("mapMethod()", "java.util.Map<java.lang.Integer,java.lang.String>");
+        assertTypeOfExpression("mapMethod()", "java.util.Map<java.lang.Character,java.lang.String>");
     }
 
-    public void ignoredTestTypeOfMapValueReturnedByGetFromMethod() {
-        assertTypeOfExpression("mapMethod().get(0)", "java.lang.String");
+    public void testTypeOfMapValueReturnedByGetFromMethod() {
+        assertTypeOfExpression("mapMethod().get('a')", "java.lang.String");
     }
 
     public void testTypeOfMapValueReturnedByBracketsFromMethod() {
-        assertTypeOfExpression("mapMethod()[0]", "java.lang.String");
+        assertTypeOfExpression("mapMethod()['a']", "java.lang.String");
+    }
+
+    public void testTypeOfMapValueReturnedByFieldFromMethod() {
+        assertTypeOfExpression("mapMethod().a", "java.lang.String");
     }
 
     public void testTypeOfUserTypeMethod() {
@@ -92,7 +96,7 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
         assertTypeOfExpression("listField", "java.util.List<java.lang.String>");
     }
 
-    public void ignoreTestTypeOfListItemReturnedByGetFromField() {
+    public void testTypeOfListItemReturnedByGetFromField() {
         assertTypeOfExpression("listField.get(0)", "java.lang.String");
     }
 
@@ -101,15 +105,19 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
     }
 
     public void testTypeOfMapField() {
-        assertTypeOfExpression("mapField", "java.util.Map<java.lang.Integer,java.lang.String>");
+        assertTypeOfExpression("mapField", "java.util.Map<java.lang.Character,java.lang.String>");
     }
 
-    public void ignoredTestTypeOfMapValueReturnedByGetFromField() {
-        assertTypeOfExpression("mapField.get(0)", "java.lang.String");
+    public void testTypeOfMapValueReturnedByGetFromField() {
+        assertTypeOfExpression("mapField.get('a')", "java.lang.String");
     }
 
     public void testTypeOfMapValueReturnedByBracketsFromField() {
-        assertTypeOfExpression("mapField[0]", "java.lang.String");
+        assertTypeOfExpression("mapField['a']", "java.lang.String");
+    }
+
+    public void testTypeOfMapValueReturnedByFieldFromField() {
+        assertTypeOfExpression("mapField.a", "java.lang.String");
     }
 
     public void testTypeOfUserTypeField() {
@@ -122,6 +130,64 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
 
     public void testTypeOfNestedMethodOfUserTypeField() {
         assertTypeOfExpression("userTypeField.nestedStringMethod()", "java.lang.String");
+    }
+
+
+
+    public void testTypeOfUnresolvedProperty() {
+        assertTypeOfExpression("iAmNotReal", null);
+    }
+
+    public void testTypeOfStringProperty() {
+        assertTypeOfExpression("stringProperty", "java.lang.String");
+    }
+
+    public void testTypeOfArrayLengthAfterProperty() {
+        assertTypeOfExpression("arrayProperty.length", PsiType.INT.getCanonicalText());
+    }
+
+    public void testTypeOfArrayItemReturnedByProperty() {
+        assertTypeOfExpression("arrayProperty[0]", "java.lang.String");
+    }
+
+    public void testTypeOfListProperty() {
+        assertTypeOfExpression("listProperty", "java.util.List<java.lang.String>");
+    }
+
+    public void testTypeOfListItemReturnedByGetFromProperty() {
+        assertTypeOfExpression("listProperty.get(0)", "java.lang.String");
+    }
+
+    public void testTypeOfListItemReturnedByBracketsFromProperty() {
+        assertTypeOfExpression("listProperty[0]", "java.lang.String");
+    }
+
+    public void testTypeOfMapProperty() {
+        assertTypeOfExpression("mapProperty", "java.util.Map<java.lang.Character,java.lang.String>");
+    }
+
+    public void testTypeOfMapValueReturnedByGetFromProperty() {
+        assertTypeOfExpression("mapProperty.get('a')", "java.lang.String");
+    }
+
+    public void testTypeOfMapValueReturnedByBracketsFromProperty() {
+        assertTypeOfExpression("mapProperty['a']", "java.lang.String");
+    }
+
+    public void testTypeOfMapValueReturnedByFieldFromProperty() {
+        assertTypeOfExpression("mapProperty.a", "java.lang.String");
+    }
+
+    public void testTypeOfUserTypeProperty() {
+        assertTypeOfExpression("userTypeProperty", "com.test.ResolvingTypeOfExpression.Nested");
+    }
+
+    public void testTypeOfNestedFieldOfUserTypeProperty() {
+        assertTypeOfExpression("userTypeProperty.nestedStringField", "java.lang.String");
+    }
+
+    public void testTypeOfNestedMethodOfUserTypeProperty() {
+        assertTypeOfExpression("userTypeProperty.nestedStringMethod()", "java.lang.String");
     }
 
 
@@ -150,7 +216,7 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
         assertTypeOfExpression("#var = listMethod()", "#var", "java.util.List<java.lang.String>");
     }
 
-    public void ignoredTestTypeOfListItemReturnedByGetFromVariable() {
+    public void testTypeOfListItemReturnedByGetFromVariable() {
         assertTypeOfExpression("#var = listMethod()", "#var.get(0)", "java.lang.String");
     }
 
@@ -159,15 +225,19 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
     }
 
     public void testTypeOfMapVariable() {
-        assertTypeOfExpression("#var = mapMethod()", "#var", "java.util.Map<java.lang.Integer,java.lang.String>");
+        assertTypeOfExpression("#var = mapMethod()", "#var", "java.util.Map<java.lang.Character,java.lang.String>");
     }
 
-    public void ignoredTestTypeOfMapValueReturnedByGetFromVariable() {
-        assertTypeOfExpression("#var = mapMethod()", "#var.get(0)", "java.lang.String");
+    public void testTypeOfMapValueReturnedByGetFromVariable() {
+        assertTypeOfExpression("#var = mapMethod()", "#var.get('a')", "java.lang.String");
     }
 
     public void testTypeOfMapValueReturnedByBracketsFromVariable() {
-        assertTypeOfExpression("#var = mapMethod()", "#var[0]", "java.lang.String");
+        assertTypeOfExpression("#var = mapMethod()", "#var['a']", "java.lang.String");
+    }
+
+    public void testTypeOfListItemReturnedByFieldFromVariable() {
+        assertTypeOfExpression("#var = mapMethod()", "#var.a", "java.lang.String");
     }
 
     public void testTypeOfUserTypeVariable() {

@@ -96,11 +96,11 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
             }
         }
 
-        if (isIterable(type, project)) {
+        if (usedBrackets > 0 && isIterable(type, project)) {
             return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::iterableParameterType);
         }
 
-        if (isMap(type, project)) {
+        if (usedBrackets > 0 && isMap(type, project)) {
             return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::mapValueParameterType);
         }
 

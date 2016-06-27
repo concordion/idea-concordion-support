@@ -24,14 +24,8 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         if (getContainingMember() != null) {
             return false;
         }
-        PsiClass psiClass = getContainingClass();
-        if (psiClass == null) {
-            return false;
-        }
-
-        PsiType containingType = findType(psiClass.getQualifiedName(), getProject());
-
-        return isMap(containingType, getProject());
+        PsiClassType type = getContainingClassType();
+        return type != null && isMap(type, getProject());
     }
 
     @Nullable
@@ -56,11 +50,11 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
     protected PsiType containingType() {
         PsiMember containingMember = getContainingMember();
         if (containingMember instanceof PsiField) {
-            return ((PsiField) containingMember).getType();
+            return resolveGenericType(((PsiField) containingMember).getType());
         } else if (containingMember instanceof PsiMethod) {
-            return ((PsiMethod) containingMember).getReturnType();
+            return resolveGenericType(((PsiMethod) containingMember).getReturnType());
         } else if (isKeyInMap()) {
-            return mapValueParameterType(findType(getContainingClass().getQualifiedName(), getProject()));
+            return mapValueParameterType(getContainingClassType());
         }
         return null;
     }
