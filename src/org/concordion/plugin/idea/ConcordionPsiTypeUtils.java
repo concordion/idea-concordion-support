@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -19,11 +20,18 @@ public final class ConcordionPsiTypeUtils {
     private ConcordionPsiTypeUtils() {
     }
 
+    public static final String OBJECT = java.lang.Object.class.getName();
     public static final String STRING = java.lang.String.class.getName();
     public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
     public static final String LIST = java.util.List.class.getName();
     public static final String MAP = java.util.Map.class.getName();
 
+    @NotNull
+    public static PsiType findObject(@NotNull Project project) {
+        return findType(OBJECT, project);
+    }
+
+    @NotNull
     public static PsiType findString(@NotNull Project project) {
         return findType(STRING, project);
     }
@@ -56,26 +64,23 @@ public final class ConcordionPsiTypeUtils {
         return PsiType.getTypeByName(qualifiedName, project, getAllScope(project));
     }
 
-    @Nullable
-    public static PsiType unwrapType(@Nullable PsiType source, int times, @NotNull Function<PsiType, PsiType> transformation) {
+    @NotNull
+    public static PsiType unwrapType(@NotNull PsiType source, int times, @NotNull Function<PsiType, PsiType> transformation) {
         PsiType unwrapped = source;
         for (int i = 0; i < times; i++) {
-            if (unwrapped == null) {
-                return null;
-            }
             unwrapped = transformation.apply(unwrapped);
         }
         return unwrapped;
     }
 
-    @Nullable
-    public static PsiType iterableParameterType(@NotNull PsiType listPsiType) {
-        return nthGenericTypeFormHierarchy(0, ITERABLE, listPsiType);
+    @NotNull
+    public static PsiType iterableParameterType(@NotNull PsiType listPsiType, @NotNull Project project) {
+        return nthGenericTypeFormHierarchy(0, ITERABLE, listPsiType).orElse(findObject(project));
     }
 
-    @Nullable
-    public static PsiType mapValueParameterType(@NotNull PsiType mapPsiType) {
-        return nthGenericTypeFormHierarchy(1, MAP, mapPsiType);
+    @NotNull
+    public static PsiType mapValueParameterType(@NotNull PsiType mapPsiType, @NotNull Project project) {
+        return nthGenericTypeFormHierarchy(1, MAP, mapPsiType).orElse(findObject(project));
     }
 
     public static boolean isDummyArrayType(@NotNull PsiType type) {
@@ -87,13 +92,13 @@ public final class ConcordionPsiTypeUtils {
         return nthGeneric(0, dummyArrayType);
     }
 
-    @Nullable
-    private static PsiType nthGenericTypeFormHierarchy(int n, String qualifiedType, @NotNull PsiType currentType) {
+    @NotNull
+    private static Optional<PsiType> nthGenericTypeFormHierarchy(int n, String qualifiedType, @NotNull PsiType currentType) {
         return hierarchy(currentType)
                 .filter(st -> st.getCanonicalText().startsWith(qualifiedType))
                 .map(t -> nthGeneric(n, t))
                 .filter(Objects::nonNull)
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     @NotNull

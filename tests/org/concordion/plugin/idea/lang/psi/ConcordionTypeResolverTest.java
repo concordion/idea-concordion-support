@@ -46,6 +46,14 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
         assertTypeOfExpression("listMethod()[0]", "java.lang.String");
     }
 
+    public void testTypeOfNonGenericListItemReturnedByGetFromMethod() {
+        assertTypeOfExpression("nonGenericListMethod().get(0)", "java.lang.Object");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByBracketsFromMethod() {
+        assertTypeOfExpression("nonGenericListMethod()[0]", "java.lang.Object");
+    }
+
     public void testTypeOfMapMethod() {
         assertTypeOfExpression("mapMethod()", "java.util.Map<java.lang.Character,java.lang.String>");
     }
@@ -104,6 +112,14 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
         assertTypeOfExpression("listField[0]", "java.lang.String");
     }
 
+    public void testTypeOfNonGenericListItemReturnedByGetFromField() {
+        assertTypeOfExpression("nonGenericListField.get(0)", "java.lang.Object");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByBracketsFromField() {
+        assertTypeOfExpression("nonGenericListField[0]", "java.lang.Object");
+    }
+
     public void testTypeOfMapField() {
         assertTypeOfExpression("mapField", "java.util.Map<java.lang.Character,java.lang.String>");
     }
@@ -160,6 +176,14 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
 
     public void testTypeOfListItemReturnedByBracketsFromProperty() {
         assertTypeOfExpression("listProperty[0]", "java.lang.String");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByGetFromProperty() {
+        assertTypeOfExpression("nonGenericListProperty.get(0)", "java.lang.Object");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByBracketsFromProperty() {
+        assertTypeOfExpression("nonGenericListProperty[0]", "java.lang.Object");
     }
 
     public void testTypeOfMapProperty() {
@@ -222,6 +246,14 @@ public class ConcordionTypeResolverTest extends ConcordionCodeInsightFixtureTest
 
     public void testTypeOfListItemReturnedByBracketsFromVariable() {
         assertTypeOfExpression("#var = listMethod()", "#var[0]", "java.lang.String");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByGetFromVariable() {
+        assertTypeOfExpression("#var = nonGenericListMethod()", "#var.get(0)", "java.lang.Object");
+    }
+
+    public void testTypeOfNonGenericListItemReturnedByBracketsFromVariable() {
+        assertTypeOfExpression("#var = nonGenericListMethod()", "#var[0]", "java.lang.Object");
     }
 
     public void testTypeOfMapVariable() {

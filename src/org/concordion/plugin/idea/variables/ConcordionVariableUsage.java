@@ -91,7 +91,7 @@ public class ConcordionVariableUsage {
             if (iterator == null) {
                 return null;
             }
-            return iterableParameterType(iterator);
+            return iterableParameterType(iterator, expr.getProject());
         }
         return null;
     }

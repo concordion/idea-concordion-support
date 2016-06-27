@@ -2,7 +2,6 @@ package org.concordion.plugin.idea.lang.psi;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import org.concordion.plugin.idea.ConcordionPsiTypeUtils;
 import org.concordion.plugin.idea.lang.ConcordionElementFactory;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -97,11 +96,11 @@ public abstract class AbstractConcordionPsiElement extends ASTWrapperPsiElement 
         }
 
         if (usedBrackets > 0 && isIterable(type, project)) {
-            return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::iterableParameterType);
+            return unwrapType(type, usedBrackets, generic -> iterableParameterType(generic, project));
         }
 
         if (usedBrackets > 0 && isMap(type, project)) {
-            return unwrapType(type, usedBrackets, ConcordionPsiTypeUtils::mapValueParameterType);
+            return unwrapType(type, usedBrackets, generic -> mapValueParameterType(generic, project));
         }
 
         return type;

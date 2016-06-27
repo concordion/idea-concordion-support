@@ -54,7 +54,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         } else if (containingMember instanceof PsiMethod) {
             return resolveGenericType(((PsiMethod) containingMember).getReturnType());
         } else if (isKeyInMap()) {
-            return mapValueParameterType(getContainingClassType());
+            return mapValueParameterType(getContainingClassType(), getProject());
         }
         return null;
     }
