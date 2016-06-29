@@ -43,3 +43,7 @@ It is built by gradle so it does not require to have intellij idea plugin sdk se
   - use method/field in concordion spec and then create its declaration (field type/return type/arguments types will be inferred from context) (**Alt + Enter** over usage)
   - surround word/selection with concordion expression (**Alt + Enter** any place in spec)
   - fix misused concordion command case (CamelCase <-> spinal-case) (**Alt + Enter** over warned command)
+- Manipulating spec and fixture pairs
+  - creation of specs or fixtures from templates via new menu
+  - creation of spec and fixture pair via new menu
+  - rename spec and fixture at the same time
