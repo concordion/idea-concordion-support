@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.fixtures;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.lang.Language;
 import com.intellij.psi.*;
 import org.concordion.plugin.idea.action.quickfix.factories.ConcordionFixtureMemberFactory;
 import org.jetbrains.annotations.NotNull;
@@ -18,18 +19,27 @@ import static org.concordion.plugin.idea.Namespaces.CONCORDION_EXTENSIONS;
 
 public abstract class AbstractConcordionTestFixture<T extends PsiElement> implements ConcordionTestFixture {
 
+    @NotNull private final Language language;
     @NotNull private final Set<String> extensions;
     @NotNull private final Class<T> codeReferenceType;
     @NotNull private final ConcordionFixtureMemberFactory memberFactory;
 
     protected AbstractConcordionTestFixture(
+            @NotNull Language language,
             @NotNull String extension,
             @NotNull Class<T> codeReferenceType,
             @NotNull ConcordionFixtureMemberFactory memberFactory
     ) {
+        this.language = language;
         this.extensions = ImmutableSet.of(extension);
         this.codeReferenceType = codeReferenceType;
         this.memberFactory = memberFactory;
+    }
+
+    @NotNull
+    @Override
+    public Language language() {
+        return language;
     }
 
     @NotNull

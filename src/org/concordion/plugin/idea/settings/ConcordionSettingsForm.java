@@ -8,9 +8,9 @@ import javax.swing.*;
 
 public class ConcordionSettingsForm {
 
-    @NotNull private JPanel settingsPanel;
-    @NotNull private JComboBox concordionCommandsCompletionType;
-    @NotNull private EnumComboBoxModel<ConcordionCommandsCaseType> concordionCommandsCompletionTypeModel;
+    /* Custom initialization via createUIComponents() */ @NotNull private JPanel settingsPanel;
+    /* Custom initialization via createUIComponents() */ @NotNull private JComboBox concordionCommandsCompletionType;
+    /* Custom initialization via createUIComponents() */ @NotNull private EnumComboBoxModel<ConcordionCommandsCaseType> concordionCommandsCompletionTypeModel;
 
     @NotNull
     public JComponent settingsPanel() {

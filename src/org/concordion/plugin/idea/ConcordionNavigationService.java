@@ -3,8 +3,6 @@ package org.concordion.plugin.idea;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.concordion.plugin.idea.fixtures.ConcordionTestFixture;
-import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,11 +13,11 @@ import java.util.stream.Stream;
 
 import static com.intellij.psi.util.PsiTreeUtil.*;
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.io.FilenameUtils.removeExtension;
-import static org.concordion.plugin.idea.ConcordionExtensionUtils.*;
-import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
-import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
+import static java.util.stream.Collectors.*;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.classIn;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.removeExtension;
+import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
+import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.*;
 
 public class ConcordionNavigationService {
 
@@ -30,8 +28,8 @@ public class ConcordionNavigationService {
     private static final String OPTIONAL_TEST_SUFFIX = "Test";
     private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
-    private final Set<String> specExtensions = allRegisteredExtensions(ConcordionSpecification.EP_NAME);
-    private final Set<String> testFixtureExtensions = allRegisteredExtensions(ConcordionTestFixture.EP_NAME);
+    private final Set<String> specExtensions = allRegisteredExtensions(specifications());
+    private final Set<String> testFixtureExtensions = allRegisteredExtensions(fixtures());
 
     private final PsiElementCache<PsiFile> cache = new PsiElementCache<>(ConcordionNavigationService::getIdentityKey);
 
@@ -47,12 +45,11 @@ public class ConcordionNavigationService {
             return null;
         }
 
-        PsiClass testFixture = findChildOfType(
+        PsiClass testFixture = classIn(
                 cache.getOrCompute(getIdentityKey(spec), () -> findCorrespondingSpecFile(
                         spec.getContainingDirectory(),
                         possibleFixtures(specName)
-                )),
-                PsiClass.class
+                ))
         );
 
         return isConcordionSpecAndFixture(spec, testFixture) ? testFixture : null;
@@ -95,7 +92,7 @@ public class ConcordionNavigationService {
     @Nullable
     public PsiFile pairedFile(@NotNull PsiFile file) {
         return testFixtureExtensions.contains(file.getFileType().getDefaultExtension())
-                ? correspondingSpec(findChildOfType(file, PsiClass.class))
+                ? correspondingSpec(classIn(file))
                 : getParentOfType(correspondingTestFixture(file), PsiFile.class);
     }
 
@@ -170,5 +167,12 @@ public class ConcordionNavigationService {
     @NotNull
     private static String getIdentityKey(@NotNull PsiFile file) {
         return file.getVirtualFile().getPath();
+    }
+
+    @NotNull
+    private static Set<String> allRegisteredExtensions(@NotNull Stream<? extends ConcordionExtension> extensions) {
+        return extensions
+                .flatMap(ConcordionExtension::fileExtensionsAsStream)
+                .collect(toSet());
     }
 }

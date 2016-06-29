@@ -1,6 +1,7 @@
 package org.concordion.plugin.idea.specifications;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.lang.Language;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.ConcordionNavigationService;
@@ -19,6 +20,16 @@ public class ConcordionMdSpecification implements ConcordionSpecification {
 
     @NotNull
     public static final ConcordionSpecification INSTANCE = new ConcordionMdSpecification();
+
+    @NotNull
+    @Override
+    public Language language() {
+        Language language = Language.findLanguageByID("Markdown");
+        if (language == null) {
+            throw new IllegalStateException("Concordion md extension must not be registered without Markdown language");
+        }
+        return language;
+    }
 
     @NotNull
     @Override

@@ -1,6 +1,8 @@
 package org.concordion.plugin.idea.specifications;
 
 import com.google.common.collect.ImmutableSet;
+import com.intellij.lang.Language;
+import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.psi.PsiFile;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.action.intention.surround.ConcordionHtmlSurrounder;
@@ -16,6 +18,12 @@ public class ConcordionHtmlSpecification implements ConcordionSpecification {
 
     @NotNull
     public static final ConcordionSpecification INSTANCE = new ConcordionHtmlSpecification();
+
+    @NotNull
+    @Override
+    public Language language() {
+        return HTMLLanguage.INSTANCE;
+    }
 
     @NotNull
     @Override

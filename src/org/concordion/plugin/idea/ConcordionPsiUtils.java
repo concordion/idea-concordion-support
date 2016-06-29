@@ -229,6 +229,16 @@ public final class ConcordionPsiUtils {
         return "get" + (name.length() >= 2 && isUpperCase(name.charAt(1)) ? name : toUpperCase(name.charAt(0)) + name.substring(1));
     }
 
+    @Nullable
+    public static PsiClass classIn(@Nullable PsiFile file) {
+        return findChildOfType(file, PsiClass.class);
+    }
+
+    @NotNull
+    public static String removeExtension(@NotNull String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf('.'));
+    }
+
     @NotNull
     public static String nullToEmpty(@Nullable String str) {
         return str != null ? str : "";
