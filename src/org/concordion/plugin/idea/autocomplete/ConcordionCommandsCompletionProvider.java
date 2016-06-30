@@ -8,8 +8,8 @@ import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionCommand;
 import org.concordion.plugin.idea.Namespaces;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
-import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.concordion.plugin.idea.specifications.ConcordionSpecification;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +43,8 @@ public class ConcordionCommandsCompletionProvider extends CompletionProvider<Com
     }
 
     @Override
-    public void settingsChanged(@NotNull ConcordionSettingsState newSettings) {
-        caseType = newSettings.getCommandsCaseType();
+    public void settingsChanged(@NotNull ConcordionSettings newState) {
+        caseType = newState.getCommandsCaseType();
     }
 
     @NotNull

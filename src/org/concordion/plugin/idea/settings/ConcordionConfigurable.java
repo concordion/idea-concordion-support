@@ -45,17 +45,17 @@ public class ConcordionConfigurable implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !ConcordionSettings.getInstance().getState().equals(getSettingsForm().createSettings());
+        return getSettingsForm().isModified();
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        ConcordionSettings.getInstance().updateState(getSettingsForm().createSettings());
+        getSettingsForm().apply();
     }
 
     @Override
     public void reset() {
-        getSettingsForm().setSettings(ConcordionSettings.getInstance().getState());
+        getSettingsForm().reset();
     }
 
     @Override

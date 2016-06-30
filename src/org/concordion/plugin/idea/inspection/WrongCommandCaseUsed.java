@@ -18,8 +18,8 @@ import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.settings.ConcordionCommandsCaseType;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
-import org.concordion.plugin.idea.settings.ConcordionSettingsState;
 import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +40,8 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
     }
 
     @Override
-    public void settingsChanged(@NotNull ConcordionSettingsState newSettings) {
-        ConcordionCommandsCaseType caseType = newSettings.getCommandsCaseType();
+    public void settingsChanged(@NotNull ConcordionSettings newState) {
+        ConcordionCommandsCaseType caseType = newState.getCommandsCaseType();
 
         pattern = caseType == ConcordionCommandsCaseType.BOTH ? null : newPattern(caseType);
     }

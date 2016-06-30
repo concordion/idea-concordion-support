@@ -4,6 +4,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -12,39 +13,35 @@ import java.util.Collection;
 
 @State(
         name = "ConcordionSettings",
-        storages = @Storage(file = "concordion_settings.xml")
+        storages = @Storage(file = "concordion.xml")
 )
-public class ConcordionSettings implements PersistentStateComponent<ConcordionSettingsState> {
+public class ConcordionSettings implements PersistentStateComponent<ConcordionSettings> {
 
     public static ConcordionSettings getInstance() {
         return ServiceManager.getService(ConcordionSettings.class);
     }
 
-    @NotNull
-    private final Collection<WeakReference<ConcordionSettingsListener>> listeners = new ArrayList<>();
+    @NotNull private ConcordionCommandsCaseType commandsCaseType = ConcordionCommandsCaseType.BOTH;
+    @NotNull private ConcordionFilesRefactoring renamePairs = ConcordionFilesRefactoring.NONE;
+    @NotNull private ConcordionFilesRefactoring movePairs = ConcordionFilesRefactoring.NONE;
+    @NotNull private ConcordionFilesRefactoring removePairs = ConcordionFilesRefactoring.NONE;
 
-    @NotNull
-    private ConcordionSettingsState state = new ConcordionSettingsState();
-
-    public void updateState(@NotNull ConcordionSettingsState state) {
-        this.state = state;
-        notifyListeners();
-    }
+    @NotNull private final Collection<WeakReference<ConcordionSettingsListener>> listeners = new ArrayList<>();
 
     public void addListener(@NotNull ConcordionSettingsListener listener) {
         listeners.add(new WeakReference<>(listener));
-        listener.settingsChanged(state);
+        listener.settingsChanged(this);
     }
 
     @NotNull
     @Override
-    public ConcordionSettingsState getState() {
-        return state;
+    public ConcordionSettings getState() {
+        return this;
     }
 
     @Override
-    public void loadState(ConcordionSettingsState state) {
-        this.state = state;
+    public void loadState(ConcordionSettings state) {
+        XmlSerializerUtil.copyBean(state, this);
         notifyListeners();
     }
 
@@ -52,8 +49,48 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
         for (WeakReference<ConcordionSettingsListener> listener : listeners) {
             ConcordionSettingsListener listenerRef = listener.get();
             if (listenerRef != null) {
-                listenerRef.settingsChanged(state);
+                listenerRef.settingsChanged(this);
             }
         }
+    }
+
+    @NotNull
+    public ConcordionCommandsCaseType getCommandsCaseType() {
+        return commandsCaseType;
+    }
+
+    public void setCommandsCaseType(@NotNull ConcordionCommandsCaseType commandsCaseType) {
+        this.commandsCaseType = commandsCaseType;
+        notifyListeners();
+    }
+
+    @NotNull
+    public ConcordionFilesRefactoring getRenamePairs() {
+        return renamePairs;
+    }
+
+    public void setRenamePairs(@NotNull ConcordionFilesRefactoring renamePairs) {
+        this.renamePairs = renamePairs;
+        notifyListeners();
+    }
+
+    @NotNull
+    public ConcordionFilesRefactoring getMovePairs() {
+        return movePairs;
+    }
+
+    public void setMovePairs(@NotNull ConcordionFilesRefactoring movePairs) {
+        this.movePairs = movePairs;
+        notifyListeners();
+    }
+
+    @NotNull
+    public ConcordionFilesRefactoring getRemovePairs() {
+        return removePairs;
+    }
+
+    public void setRemovePairs(@NotNull ConcordionFilesRefactoring removePairs) {
+        this.removePairs = removePairs;
+        notifyListeners();
     }
 }
