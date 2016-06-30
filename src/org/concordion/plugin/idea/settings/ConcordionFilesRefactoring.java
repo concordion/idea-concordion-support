@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum ConcordionFilesRefactoring {
 
-    NONE,
+    ASK,
     SELECTED_ONLY,
     BOTH;
 
@@ -17,7 +17,7 @@ public enum ConcordionFilesRefactoring {
             case Messages.NO:
                 return SELECTED_ONLY;
             default:
-                return NONE;
+                return ASK;
         }
     }
 }

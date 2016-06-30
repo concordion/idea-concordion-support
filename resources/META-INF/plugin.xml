@@ -161,6 +161,9 @@
     <renamePsiElementProcessor implementation="org.concordion.plugin.idea.refactoring.RenameConcordionSpecProcessor"/>
     <renamePsiElementProcessor implementation="org.concordion.plugin.idea.refactoring.RenameConcordionFixtureProcessor"/>
 
+    <refactoring.safeDeleteProcessor implementation="org.concordion.plugin.idea.refactoring.DeleteConcordionSpecProcessor"/>
+    <refactoring.safeDeleteProcessor implementation="org.concordion.plugin.idea.refactoring.DeleteConcordionFixtureProcessor" order="FIRST"/>
+
     <projectService serviceInterface="org.concordion.plugin.idea.ConcordionNavigationService"
                     serviceImplementation="org.concordion.plugin.idea.ConcordionNavigationService"/>
 

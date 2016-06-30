@@ -1,43 +1,43 @@
 package org.concordion.plugin.idea.refactoring;
 
-import com.intellij.refactoring.rename.RenameProcessor;
+import com.intellij.psi.PsiElement;
+import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
+import com.intellij.refactoring.safeDelete.SafeDeleteProcessor;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.classIn;
 
-public class RenameConcordionFixtureProcessorTest extends ConcordionCodeInsightFixtureTestCase {
+public class DeleteConcordionFixtureProcessorTest extends ConcordionCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
         return "testData/navigation";
     }
 
-    public void testRenameConcordionPairFromFixtureClass() {
+    public void testDeleteConcordionPairFromFixtureClass() {
 
         copyTestFixtureToConcordionProject("Spec.java");
         copySpecToConcordionProject("Spec.html");
 
-        new RenameProcessor(getProject(), classIn(findFileInProject("/src/com/test/Spec.java")), "NewSpec", false, false).run();
+        SafeDeleteProcessor.createInstance(getProject(), null, new PsiElement[]{
+                classIn(findFileInProject("/src/com/test/Spec.java"))
+        }, false, false, true).run();
 
         assertThat(findFileInProject("/src/com/test/Spec.java")).isNull();
         assertThat(findFileInProject("/resources/com/test/Spec.html")).isNull();
-
-        assertThat(findFileInProject("/src/com/test/NewSpec.java")).isNotNull();
-        assertThat(findFileInProject("/resources/com/test/NewSpec.html")).isNotNull();
     }
 
-    public void testRenameNonConcordionPairFromClass() {
+    public void testDeleteNonConcordionPairFromClass() {
 
         copyTestFixtureToConcordionProject("NoRunnerAnnotation.java");
         copySpecToConcordionProject("NoRunnerAnnotation.html");
 
-        new RenameProcessor(getProject(), classIn(findFileInProject("/src/com/test/NoRunnerAnnotation.java")), "NewNoRunnerAnnotation", false, false).run();
+        SafeDeleteProcessor.createInstance(getProject(), null, new PsiElement[]{
+                classIn(findFileInProject("/src/com/test/NoRunnerAnnotation.java"))
+        }, false, false, true).run();
 
         assertThat(findFileInProject("/src/com/test/NoRunnerAnnotation.java")).isNull();
         assertThat(findFileInProject("/resources/com/test/NoRunnerAnnotation.html")).isNotNull();
-
-        assertThat(findFileInProject("/src/com/test/NewNoRunnerAnnotation.java")).isNotNull();
-        assertThat(findFileInProject("/resources/com/test/NewNoRunnerAnnotation.html")).isNull();
     }
 }

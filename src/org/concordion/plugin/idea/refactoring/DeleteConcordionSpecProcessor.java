@@ -1,41 +1,42 @@
 package org.concordion.plugin.idea.refactoring;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.Collection;
 
-import static org.apache.commons.io.FilenameUtils.removeExtension;
-import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.deletePairedFile;
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.BOTH;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
-public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor {
+public class DeleteConcordionSpecProcessor extends AbstractSafeDeleteProcessorDelegate {
 
     @Override
-    public boolean canProcessElement(@NotNull PsiElement element) {
+    public boolean handlesElement(PsiElement element) {
         return element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
     }
 
+    @Nullable
     @Override
-    public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames, SearchScope scope) {
+    public Collection<PsiElement> getAdditionalElementsToDelete(@NotNull PsiElement element, @NotNull Collection<PsiElement> collection, boolean b) {
+
         PsiFile spec = (PsiFile) element;
         PsiClass fixture = ConcordionNavigationService.getInstance(element.getProject()).correspondingTestFixture(spec);
 
         if (fixture == null) {
-            return;
+            return ImmutableList.of();
         }
 
-        if (renamePairedFile() == BOTH) {
-            allRenames.put(
-                    fixture,
-                    removeExtension(newName)
-            );
+        if (deletePairedFile() == BOTH) {
+            return ImmutableList.of(fixture);
         }
+
+        return ImmutableSet.of();
     }
 }

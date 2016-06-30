@@ -8,34 +8,65 @@ import org.concordion.plugin.idea.settings.ConcordionFilesRefactoring;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 public class ConcordionRefactoringDialogs {
 
+    @NotNull
     public static ConcordionFilesRefactoring renamePairedFile() {
+        return modifyPairedFile(
+                "Paired concordion file detected. Should it be renamed as well?",
+                ConcordionSettings.getInstance()::getRenamePairs,
+                ConcordionSettings.getInstance()::setRenamePairs
+        );
+    }
+
+    @NotNull
+    public static ConcordionFilesRefactoring deletePairedFile() {
+        return modifyPairedFile(
+                "Paired concordion file detected. Should it be deleted as well?",
+                ConcordionSettings.getInstance()::getRemovePairs,
+                ConcordionSettings.getInstance()::setRemovePairs
+        );
+    }
+
+    @NotNull
+    private static ConcordionFilesRefactoring modifyPairedFile(
+            @NotNull String message,
+            @NotNull Supplier<ConcordionFilesRefactoring> rememberedState,
+            @NotNull Consumer<ConcordionFilesRefactoring> rememberedStateUpdater
+    ) {
         if (ApplicationManager.getApplication().isUnitTestMode()) {
             return ConcordionFilesRefactoring.BOTH;
         }
 
-        ConcordionFilesRefactoring movePairs = ConcordionSettings.getInstance().getState().getMovePairs();
-        if (movePairs != ConcordionFilesRefactoring.NONE) {
+        ConcordionFilesRefactoring movePairs = rememberedState.get();
+        if (movePairs != ConcordionFilesRefactoring.ASK) {
             return movePairs;
         }
 
-        return ConcordionFilesRefactoring.fromDialogReturnCode(Messages.showYesNoCancelDialog(
-                "Paired concordion file detected. Should it be renamed as well?",
+        return ConcordionFilesRefactoring.fromDialogReturnCode(Messages.showYesNoDialog(
+                message,
                 "Concordion",
                 "Yes",
                 "No",
-                "Cancel",
                 Messages.getQuestionIcon(),
-                new ConcordionPairedFileDoNotAskOption()));
+                new ConcordionPairedFileDoNotAskOption(rememberedStateUpdater)));
     }
 
     private static final class ConcordionPairedFileDoNotAskOption implements DialogWrapper.DoNotAskOption {
 
+        private final @NotNull Consumer<ConcordionFilesRefactoring> rememberedStateUpdater;
+
+        public ConcordionPairedFileDoNotAskOption(@NotNull Consumer<ConcordionFilesRefactoring> rememberedStateUpdater) {
+            this.rememberedStateUpdater = rememberedStateUpdater;
+        }
+
         @Override
         public void setToBeShown(boolean toBeShown, int exitCode) {
             if (exitCode != Messages.CANCEL) {
-                ConcordionSettings.getInstance().setMovePairs(ConcordionFilesRefactoring.fromDialogReturnCode(exitCode));
+                rememberedStateUpdater.accept(ConcordionFilesRefactoring.fromDialogReturnCode(exitCode));
             }
         }
 

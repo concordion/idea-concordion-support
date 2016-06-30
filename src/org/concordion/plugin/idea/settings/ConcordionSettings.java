@@ -22,9 +22,9 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     }
 
     @NotNull private ConcordionCommandsCaseType commandsCaseType = ConcordionCommandsCaseType.BOTH;
-    @NotNull private ConcordionFilesRefactoring renamePairs = ConcordionFilesRefactoring.NONE;
-    @NotNull private ConcordionFilesRefactoring movePairs = ConcordionFilesRefactoring.NONE;
-    @NotNull private ConcordionFilesRefactoring removePairs = ConcordionFilesRefactoring.NONE;
+    @NotNull private ConcordionFilesRefactoring renamePairs = ConcordionFilesRefactoring.ASK;
+    @NotNull private ConcordionFilesRefactoring movePairs = ConcordionFilesRefactoring.ASK;
+    @NotNull private ConcordionFilesRefactoring removePairs = ConcordionFilesRefactoring.ASK;
 
     @NotNull private final Collection<WeakReference<ConcordionSettingsListener>> listeners = new ArrayList<>();
 
