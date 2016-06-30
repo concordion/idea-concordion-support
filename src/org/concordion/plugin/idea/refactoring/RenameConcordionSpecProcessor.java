@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 import static org.apache.commons.io.FilenameUtils.removeExtension;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
 public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor {
@@ -29,9 +30,16 @@ public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor {
             return;
         }
 
-        allRenames.put(
-                fixture,
-                removeExtension(newName)
-        );
+        switch (renamePairedFile()) {
+            case BOTH:
+                allRenames.put(
+                        fixture,
+                        removeExtension(newName)
+                );
+                break;
+            case NONE:
+                allRenames.clear();
+                break;
+        }
     }
 }

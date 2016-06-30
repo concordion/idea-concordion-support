@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
 
 public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor {
 
@@ -29,11 +30,16 @@ public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor 
             return;
         }
 
-        String extension = getExtension(spec.getName());
-
-        allRenames.put(
-                spec,
-                newName + '.' + extension
-        );
+        switch (renamePairedFile()) {
+            case BOTH:
+                allRenames.put(
+                        spec,
+                        newName + '.' + getExtension(spec.getName())
+                );
+                break;
+            case NONE:
+                allRenames.clear();
+                break;
+        }
     }
 }
