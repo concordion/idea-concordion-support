@@ -25,8 +25,8 @@ public class ConcordionNavigationService {
         return ServiceManager.getService(project, ConcordionNavigationService.class);
     }
 
-    private static final String OPTIONAL_TEST_SUFFIX = "Test";
-    private static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
+    public static final String OPTIONAL_TEST_SUFFIX = "Test";
+    public static final String OPTIONAL_FIXTURE_SUFFIX = "Fixture";
 
     private final Set<String> specExtensions = allRegisteredExtensions(specifications());
     private final Set<String> testFixtureExtensions = allRegisteredExtensions(fixtures());

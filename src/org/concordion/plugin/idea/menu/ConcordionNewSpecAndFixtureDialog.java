@@ -24,6 +24,7 @@ import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 
 import javax.swing.*;
 
+import static org.concordion.plugin.idea.ConcordionNavigationService.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.fixtures;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specifications;
 
@@ -81,8 +82,13 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
     @Nullable
     @Override
     protected ValidationInfo doValidate() {
-        if (specName.getText().isEmpty()) {
+        String specNameText = specName.getText();
+        if (specNameText.isEmpty()) {
             return new ValidationInfo("Spec name must be set", specName);
+        }
+        if (specNameText.endsWith(OPTIONAL_TEST_SUFFIX)
+                || specNameText.endsWith(OPTIONAL_FIXTURE_SUFFIX)) {
+            return new ValidationInfo("It is illegal to use Test and Fixture suffixes for concordion files", specName);
         }
         if (specDestinationSelector.select() == null) {
             return new ValidationInfo("Spec destination must be selected. Empty directory list may indicate no resource directories configured in project or corresponding packages not present there.", specDestinationSelector);
