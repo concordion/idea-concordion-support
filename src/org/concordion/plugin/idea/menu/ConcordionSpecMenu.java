@@ -1,7 +1,13 @@
 package org.concordion.plugin.idea.menu;
 
+import com.intellij.ide.IdeView;
 import com.intellij.ide.fileTemplates.actions.CreateFromTemplateAction;
+import com.intellij.ide.projectView.impl.ModuleGroup;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiDirectory;
 import org.concordion.plugin.idea.ConcordionExtension;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +31,22 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
         add(createTemplatesMenuFor(specifications(), "Specification"));
     }
 
+    @Override
+    public void update(AnActionEvent e) {
+        e.getPresentation().setVisible(canCreate(e.getDataContext()));
+    }
+
+    private boolean canCreate(DataContext dataContext) {
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
+        IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
+        if (project == null || view == null) {
+            return false;
+        }
+        PsiDirectory[] directories = view.getDirectories();
+        return directories.length == 1
+                && JavaDirectoryService.getInstance().getPackage(directories[0]) != null;
+    }
+
     @NotNull
     private static AnAction specAndFixtureDialog() {
         return new AnAction("Spec and fixture") {
@@ -35,7 +57,6 @@ public class ConcordionSpecMenu extends DefaultActionGroup {
                 }
                 new ConcordionNewSpecAndFixtureDialog(
                         event.getProject(), fromScratch(event)
-
                 ).showDialog();
             }
         };
