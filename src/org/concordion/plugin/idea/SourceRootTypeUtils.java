@@ -67,7 +67,6 @@ public class SourceRootTypeUtils {
     public static PlaceToSearch inAllProject(@NotNull Project project, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
         return new PlaceToSearch(
                 project,
-                sourceRootTypes,
                 stream(ModuleManager.getInstance(project).getModules()).flatMap(module -> sourceFolders(module, sourceRootTypes)).toArray(VirtualFile[]::new)
         );
     }
@@ -76,7 +75,6 @@ public class SourceRootTypeUtils {
     public static PlaceToSearch inSingleModule(@NotNull Module module, @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes) {
         return new PlaceToSearch(
                 module.getProject(),
-                sourceRootTypes,
                 sourceFolders(module, sourceRootTypes).toArray(VirtualFile[]::new)
         );
     }
@@ -92,15 +90,12 @@ public class SourceRootTypeUtils {
     public static final class PlaceToSearch {
 
         @NotNull private final Project project;
-        @NotNull private final Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes;
         @NotNull private final VirtualFile[] directories;
 
-        public PlaceToSearch(
+        private PlaceToSearch(
                 @NotNull Project project,
-                @NotNull Set<? extends JpsModuleSourceRootType<?>> sourceRootTypes,
                 @NotNull VirtualFile[] directories) {
             this.project = project;
-            this.sourceRootTypes = sourceRootTypes;
             this.directories = directories;
         }
 

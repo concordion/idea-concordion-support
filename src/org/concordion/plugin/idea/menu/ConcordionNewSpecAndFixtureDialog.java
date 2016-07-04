@@ -44,7 +44,7 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
         super(project, true);
         this.project = project;
         this.parameters = parameters;
-        setTitle("Set up Concordion test and fixture");
+        setTitle("Set up Concordion specification and fixture");
         init();
     }
 
@@ -84,17 +84,22 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
         if (specName.getText().isEmpty()) {
             return new ValidationInfo("Spec name must be set", specName);
         }
+        if (specDestinationSelector.select() == null) {
+            return new ValidationInfo("Spec destination must be selected. Empty directory list may indicate no resource directories configured in project or corresponding packages not present there.", specDestinationSelector);
+        }
+        if (fixtureDestinationSelector.select() == null) {
+            return new ValidationInfo("Fixture destination must be selected. Empty directory list may indicate no source directories configured in project or corresponding packages not present there.", fixtureDestinationSelector);
+        }
         return super.doValidate();
     }
 
     public void showDialog() {
-        if (!ApplicationManager.getApplication().isUnitTestMode()) {
-            showAndGet();
+        if (ApplicationManager.getApplication().isUnitTestMode() || showAndGet()) {
+            createConcordionFiles();
         }
-        createConcordionFiles();
     }
 
-    public void createConcordionFiles() {
+    private void createConcordionFiles() {
         String name = specName.getText();
 
         if (parameters.fixture == null) {

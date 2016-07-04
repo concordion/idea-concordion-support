@@ -8,7 +8,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.concordion.plugin.idea.SourceRootTypeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +54,6 @@ public class ConcordionSpecAndFixtureCreationParameters {
     @NotNull
     public static ConcordionSpecAndFixtureCreationParameters fromScratch(@NotNull AnActionEvent event) {
 
-        Project project = event.getProject();
         PsiDirectory selectedDirectory = dirFromEvent(event);
 
         return new ConcordionSpecAndFixtureCreationParameters(
