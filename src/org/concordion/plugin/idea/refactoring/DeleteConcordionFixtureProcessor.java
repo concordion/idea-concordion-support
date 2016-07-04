@@ -13,18 +13,18 @@ import java.util.Collection;
 
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
 import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.deletePairedFile;
-import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.BOTH;
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 
 public class DeleteConcordionFixtureProcessor extends AbstractSafeDeleteProcessorDelegate {
 
     @Override
     public boolean handlesElement(PsiElement element) {
-        return element instanceof PsiClass && isConcordionFixture((PsiClass) element);
+        return refactoring != DISABLED && element instanceof PsiClass && isConcordionFixture((PsiClass) element);
     }
 
     @Nullable
     @Override
-    public Collection<PsiElement> getAdditionalElementsToDelete(@NotNull PsiElement element, @NotNull Collection<PsiElement> collection, boolean b) {
+    public Collection<PsiElement> getAdditionalElementsToDelete(@NotNull PsiElement element, @NotNull Collection<PsiElement> allElementsToDelete, final boolean askUser) {
 
         PsiClass fixture = (PsiClass) element;
         PsiFile spec = ConcordionNavigationService.getInstance(element.getProject()).correspondingSpec(fixture);
@@ -33,7 +33,7 @@ public class DeleteConcordionFixtureProcessor extends AbstractSafeDeleteProcesso
             return ImmutableList.of();
         }
 
-        if (deletePairedFile() == BOTH) {
+        if (deletePairedFile(refactoring) == BOTH) {
             return ImmutableList.of(spec);
         }
 

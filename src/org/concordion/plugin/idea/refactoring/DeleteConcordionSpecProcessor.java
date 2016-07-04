@@ -12,19 +12,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.deletePairedFile;
-import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.BOTH;
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
 public class DeleteConcordionSpecProcessor extends AbstractSafeDeleteProcessorDelegate {
 
     @Override
     public boolean handlesElement(PsiElement element) {
-        return element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
+        return refactoring != DISABLED && element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
     }
 
     @Nullable
     @Override
-    public Collection<PsiElement> getAdditionalElementsToDelete(@NotNull PsiElement element, @NotNull Collection<PsiElement> collection, boolean b) {
+    public Collection<PsiElement> getAdditionalElementsToDelete(@NotNull PsiElement element, @NotNull Collection<PsiElement> allElementsToDelete, final boolean askUser) {
 
         PsiFile spec = (PsiFile) element;
         PsiClass fixture = ConcordionNavigationService.getInstance(element.getProject()).correspondingTestFixture(spec);
@@ -33,7 +33,7 @@ public class DeleteConcordionSpecProcessor extends AbstractSafeDeleteProcessorDe
             return ImmutableList.of();
         }
 
-        if (deletePairedFile() == BOTH) {
+        if (deletePairedFile(refactoring) == BOTH) {
             return ImmutableList.of(fixture);
         }
 

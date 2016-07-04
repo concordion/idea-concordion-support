@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum ConcordionFilesRefactoring {
 
+    DISABLED,
     ASK,
     SELECTED_ONLY,
     BOTH;

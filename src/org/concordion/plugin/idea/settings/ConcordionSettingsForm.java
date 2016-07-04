@@ -10,7 +10,11 @@ public class ConcordionSettingsForm {
 
     /* Custom initialization via createUIComponents() */ @NotNull private JPanel settingsPanel;
     /* Custom initialization via createUIComponents() */ @NotNull private JComboBox concordionCommandsCompletionType;
+    /* Custom initialization via createUIComponents() */ @NotNull private JComboBox renamePairedConcordionFile;
+    /* Custom initialization via createUIComponents() */ @NotNull private JComboBox deletePairedConcordionFile;
     /* Custom initialization via createUIComponents() */ @NotNull private EnumComboBoxModel<ConcordionCommandsCaseType> concordionCommandsCompletionTypeModel;
+    /* Custom initialization via createUIComponents() */ @NotNull private EnumComboBoxModel<ConcordionFilesRefactoring> renamePairedConcordionFileModel;
+    /* Custom initialization via createUIComponents() */ @NotNull private EnumComboBoxModel<ConcordionFilesRefactoring> deletePairedConcordionFileModel;
 
     @NotNull
     public JComponent settingsPanel() {
@@ -19,18 +23,35 @@ public class ConcordionSettingsForm {
 
     private void createUIComponents() {
         concordionCommandsCompletionTypeModel = new EnumComboBoxModel<>(ConcordionCommandsCaseType.class);
+        renamePairedConcordionFileModel = new EnumComboBoxModel<>(ConcordionFilesRefactoring.class);
+        deletePairedConcordionFileModel = new EnumComboBoxModel<>(ConcordionFilesRefactoring.class);
+
         concordionCommandsCompletionType = new ComboBox(concordionCommandsCompletionTypeModel);
+        renamePairedConcordionFile = new ComboBox(renamePairedConcordionFileModel);
+        deletePairedConcordionFile = new ComboBox(deletePairedConcordionFileModel);
     }
 
     public void apply() {
-        ConcordionSettings.getInstance().setCommandsCaseType(concordionCommandsCompletionTypeModel.getSelectedItem());
+        ConcordionSettings settings = ConcordionSettings.getInstance();
+
+        settings.setCommandsCaseType(concordionCommandsCompletionTypeModel.getSelectedItem());
+        settings.setRenamePairs(renamePairedConcordionFileModel.getSelectedItem());
+        settings.setDeletePairs(deletePairedConcordionFileModel.getSelectedItem());
     }
 
     public void reset() {
-        concordionCommandsCompletionTypeModel.setSelectedItem(ConcordionSettings.getInstance().getCommandsCaseType());
+        ConcordionSettings settings = ConcordionSettings.getInstance();
+
+        concordionCommandsCompletionTypeModel.setSelectedItem(settings.getCommandsCaseType());
+        renamePairedConcordionFileModel.setSelectedItem(settings.getRenamePairs());
+        deletePairedConcordionFileModel.setSelectedItem(settings.getDeletePairs());
     }
 
     public boolean isModified() {
-        return !ConcordionSettings.getInstance().getCommandsCaseType().equals(concordionCommandsCompletionTypeModel.getSelectedItem());
+        ConcordionSettings settings = ConcordionSettings.getInstance();
+
+        return !settings.getCommandsCaseType().equals(concordionCommandsCompletionTypeModel.getSelectedItem())
+                || !settings.getRenamePairs().equals(renamePairedConcordionFileModel.getSelectedItem())
+                || !settings.getDeletePairs().equals(deletePairedConcordionFileModel.getSelectedItem());
     }
 }

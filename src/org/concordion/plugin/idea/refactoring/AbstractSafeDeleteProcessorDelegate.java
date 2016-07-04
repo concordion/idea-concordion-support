@@ -6,13 +6,30 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.safeDelete.NonCodeUsageSearchInfo;
 import com.intellij.refactoring.safeDelete.SafeDeleteProcessorDelegate;
 import com.intellij.usageView.UsageInfo;
+import org.concordion.plugin.idea.settings.ConcordionFilesRefactoring;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
+import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
-public abstract class AbstractSafeDeleteProcessorDelegate implements SafeDeleteProcessorDelegate {
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.ASK;
+
+public abstract class AbstractSafeDeleteProcessorDelegate implements SafeDeleteProcessorDelegate, ConcordionSettingsListener {
+
+    @NotNull
+    protected ConcordionFilesRefactoring refactoring = ASK;
+
+    public AbstractSafeDeleteProcessorDelegate() {
+        registerListener();
+    }
+
+    @Override
+    public void settingsChanged(@NotNull ConcordionSettings newState) {
+        refactoring = newState.getDeletePairs();
+    }
 
     @Nullable
     @Override

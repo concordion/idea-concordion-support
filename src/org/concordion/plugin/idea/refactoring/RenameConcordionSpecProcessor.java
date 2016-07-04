@@ -6,20 +6,35 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.settings.ConcordionFilesRefactoring;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
+import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
-import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.BOTH;
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
-public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor {
+public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor implements ConcordionSettingsListener {
+
+    @NotNull
+    private ConcordionFilesRefactoring refactoring = ASK;
+
+    public RenameConcordionSpecProcessor() {
+        registerListener();
+    }
+
+    @Override
+    public void settingsChanged(@NotNull ConcordionSettings newState) {
+        refactoring = newState.getRenamePairs();
+    }
 
     @Override
     public boolean canProcessElement(@NotNull PsiElement element) {
-        return element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
+        return refactoring != DISABLED && element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
     }
 
     @Override
@@ -31,7 +46,7 @@ public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor {
             return;
         }
 
-        if (renamePairedFile() == BOTH) {
+        if (renamePairedFile(refactoring) == BOTH) {
             allRenames.put(
                     fixture,
                     removeExtension(newName)

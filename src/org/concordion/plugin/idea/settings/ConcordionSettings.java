@@ -24,7 +24,7 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     @NotNull private ConcordionCommandsCaseType commandsCaseType = ConcordionCommandsCaseType.BOTH;
     @NotNull private ConcordionFilesRefactoring renamePairs = ConcordionFilesRefactoring.ASK;
     @NotNull private ConcordionFilesRefactoring movePairs = ConcordionFilesRefactoring.ASK;
-    @NotNull private ConcordionFilesRefactoring removePairs = ConcordionFilesRefactoring.ASK;
+    @NotNull private ConcordionFilesRefactoring deletePairs = ConcordionFilesRefactoring.ASK;
 
     @NotNull private final Collection<WeakReference<ConcordionSettingsListener>> listeners = new ArrayList<>();
 
@@ -85,12 +85,12 @@ public class ConcordionSettings implements PersistentStateComponent<ConcordionSe
     }
 
     @NotNull
-    public ConcordionFilesRefactoring getRemovePairs() {
-        return removePairs;
+    public ConcordionFilesRefactoring getDeletePairs() {
+        return deletePairs;
     }
 
-    public void setRemovePairs(@NotNull ConcordionFilesRefactoring removePairs) {
-        this.removePairs = removePairs;
+    public void setDeletePairs(@NotNull ConcordionFilesRefactoring deletePairs) {
+        this.deletePairs = deletePairs;
         notifyListeners();
     }
 }

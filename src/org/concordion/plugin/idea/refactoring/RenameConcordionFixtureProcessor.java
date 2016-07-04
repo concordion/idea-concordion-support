@@ -6,6 +6,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.settings.ConcordionFilesRefactoring;
+import org.concordion.plugin.idea.settings.ConcordionSettings;
+import org.concordion.plugin.idea.settings.ConcordionSettingsListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -13,13 +16,25 @@ import java.util.Map;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
 import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
-import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.BOTH;
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 
-public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor {
+public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor implements ConcordionSettingsListener {
+
+    @NotNull
+    private ConcordionFilesRefactoring refactoring = ASK;
+
+    public RenameConcordionFixtureProcessor() {
+        registerListener();
+    }
+
+    @Override
+    public void settingsChanged(@NotNull ConcordionSettings newState) {
+        refactoring = newState.getRenamePairs();
+    }
 
     @Override
     public boolean canProcessElement(@NotNull PsiElement element) {
-        return element instanceof PsiClass && isConcordionFixture((PsiClass) element);
+        return refactoring != DISABLED && element instanceof PsiClass && isConcordionFixture((PsiClass) element);
     }
 
     @Override
@@ -31,7 +46,7 @@ public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor 
             return;
         }
 
-        if (renamePairedFile() == BOTH) {
+        if (renamePairedFile(refactoring) == BOTH) {
             allRenames.put(
                     spec,
                     newName + '.' + getExtension(spec.getName())

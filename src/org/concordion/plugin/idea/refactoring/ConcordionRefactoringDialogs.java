@@ -9,41 +9,39 @@ import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ConcordionRefactoringDialogs {
 
     @NotNull
-    public static ConcordionFilesRefactoring renamePairedFile() {
+    public static ConcordionFilesRefactoring renamePairedFile(@NotNull ConcordionFilesRefactoring rememberedState) {
         return modifyPairedFile(
                 "Paired concordion file detected. Should it be renamed as well?",
-                ConcordionSettings.getInstance()::getRenamePairs,
+                rememberedState,
                 ConcordionSettings.getInstance()::setRenamePairs
         );
     }
 
     @NotNull
-    public static ConcordionFilesRefactoring deletePairedFile() {
+    public static ConcordionFilesRefactoring deletePairedFile(@NotNull ConcordionFilesRefactoring rememberedState) {
         return modifyPairedFile(
                 "Paired concordion file detected. Should it be deleted as well?",
-                ConcordionSettings.getInstance()::getRemovePairs,
-                ConcordionSettings.getInstance()::setRemovePairs
+                rememberedState,
+                ConcordionSettings.getInstance()::setDeletePairs
         );
     }
 
     @NotNull
     private static ConcordionFilesRefactoring modifyPairedFile(
             @NotNull String message,
-            @NotNull Supplier<ConcordionFilesRefactoring> rememberedState,
+            @NotNull ConcordionFilesRefactoring rememberedState,
             @NotNull Consumer<ConcordionFilesRefactoring> rememberedStateUpdater
     ) {
         if (ApplicationManager.getApplication().isUnitTestMode()) {
             return ConcordionFilesRefactoring.BOTH;
         }
 
-        ConcordionFilesRefactoring movePairs = rememberedState.get();
-        if (movePairs != ConcordionFilesRefactoring.ASK) {
-            return movePairs;
+        if (rememberedState != ConcordionFilesRefactoring.ASK) {
+            return rememberedState;
         }
 
         return ConcordionFilesRefactoring.fromDialogReturnCode(Messages.showYesNoDialog(
@@ -65,7 +63,7 @@ public class ConcordionRefactoringDialogs {
 
         @Override
         public void setToBeShown(boolean toBeShown, int exitCode) {
-            if (exitCode != Messages.CANCEL) {
+            if (!toBeShown) {
                 rememberedStateUpdater.accept(ConcordionFilesRefactoring.fromDialogReturnCode(exitCode));
             }
         }
