@@ -75,8 +75,12 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
             fixtureDestinationSelector.forceSelect(parameters.fixture.getContainingFile().getContainingDirectory());
             fixtureTypeSelector.forceSelect(parameters.fixture.getContainingFile().getLanguage());
         }
+    }
 
-        specName.requestFocus();
+    @Nullable
+    @Override
+    public JComponent getPreferredFocusedComponent() {
+        return specName.getFocusTarget();
     }
 
     @Nullable
