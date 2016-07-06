@@ -217,13 +217,6 @@ public final class ConcordionPsiUtils {
                 && !psiMethod.isConstructor();//Yes, static methods are accepted, static fields are not
     }
 
-    @Nullable
-    public static String memberIdentity(@NotNull PsiMember member) {
-        return member.getContainingClass() != null
-                ? member.getContainingClass().getQualifiedName() + ':' + member.getName()
-                : member.getName();
-    }
-
     @NotNull
     public static String getterFor(@NotNull String name) {
         return "get" + (name.length() >= 2 && isUpperCase(name.charAt(1)) ? name : toUpperCase(name.charAt(0)) + name.substring(1));
@@ -237,6 +230,11 @@ public final class ConcordionPsiUtils {
     @NotNull
     public static String removeExtension(@NotNull String fileName) {
         return fileName.substring(0, fileName.lastIndexOf('.'));
+    }
+
+    @NotNull
+    public static String getExtension(@NotNull String fileName) {
+        return fileName.substring(fileName.lastIndexOf('.') + 1);
     }
 
     @NotNull

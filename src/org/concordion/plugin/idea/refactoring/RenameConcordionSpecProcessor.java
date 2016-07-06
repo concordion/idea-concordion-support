@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-import static org.apache.commons.io.FilenameUtils.removeExtension;
+import static org.concordion.plugin.idea.ConcordionPsiUtils.removeExtension;
 import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
