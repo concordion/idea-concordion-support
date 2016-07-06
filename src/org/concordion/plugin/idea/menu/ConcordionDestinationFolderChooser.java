@@ -9,12 +9,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.ui.EditorTextField;
+import com.intellij.ui.TabbedPaneWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
 import java.util.Set;
 
 import static org.concordion.plugin.idea.SourceRootTypeUtils.*;
@@ -40,7 +42,7 @@ public class ConcordionDestinationFolderChooser extends ComponentWithBrowseButto
         getButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DirectoryChooser directoryChooser = new DirectoryChooser(project);
+                DirectoryChooser directoryChooser = createDirectoryChooserWithoutNeighborClasses(project);
                 directoryChooser.fillList(directories, initialDir, project, "");
                 directoryChooser.showAndGet();
                 useDirectory(directoryChooser.getSelectedDirectory());
@@ -99,5 +101,20 @@ public class ConcordionDestinationFolderChooser extends ComponentWithBrowseButto
         EditorTextField field = new EditorTextField();
         field.setEnabled(false);
         return field;
+    }
+
+    @NotNull
+    private static DirectoryChooser createDirectoryChooserWithoutNeighborClasses(@NotNull Project project) {
+        DirectoryChooser directoryChooser = new DirectoryChooser(project);
+
+        try {
+            Field myTabbedPaneWrapperField = directoryChooser.getClass().getDeclaredField("myTabbedPaneWrapper");
+            myTabbedPaneWrapperField.setAccessible(true);
+            ((TabbedPaneWrapper) myTabbedPaneWrapperField.get(directoryChooser)).removeTabAt(1);
+        } catch (Exception e) {
+            //Ignore
+        }
+
+        return directoryChooser;
     }
 }
