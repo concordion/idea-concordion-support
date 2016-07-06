@@ -19,7 +19,7 @@ public class DeleteConcordionFixtureProcessor extends AbstractSafeDeleteProcesso
 
     @Override
     public boolean handlesElement(PsiElement element) {
-        return refactoring != DISABLED && element instanceof PsiClass && isConcordionFixture((PsiClass) element);
+        return super.handlesElement(element) && element instanceof PsiClass && isConcordionFixture((PsiClass) element);
     }
 
     @Nullable

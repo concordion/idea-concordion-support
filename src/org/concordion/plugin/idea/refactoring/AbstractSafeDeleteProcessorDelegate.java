@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.ASK;
+import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.DISABLED;
 
 public abstract class AbstractSafeDeleteProcessorDelegate implements SafeDeleteProcessorDelegate, ConcordionSettingsListener {
 
@@ -29,6 +30,11 @@ public abstract class AbstractSafeDeleteProcessorDelegate implements SafeDeleteP
     @Override
     public void settingsChanged(@NotNull ConcordionSettings newState) {
         refactoring = newState.getDeletePairs();
+    }
+
+    @Override
+    public boolean handlesElement(PsiElement element) {
+        return refactoring != DISABLED && element != null && element.isValid();
     }
 
     @Nullable

@@ -19,7 +19,7 @@ public class DeleteConcordionSpecProcessor extends AbstractSafeDeleteProcessorDe
 
     @Override
     public boolean handlesElement(PsiElement element) {
-        return refactoring != DISABLED && element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
+        return super.handlesElement(element) && element instanceof PsiFile && specConfiguredInFile((PsiFile) element);
     }
 
     @Nullable
