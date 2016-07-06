@@ -86,15 +86,18 @@ public class ConcordionNewSpecAndFixtureDialog extends DialogWrapper {
         if (specNameText.isEmpty()) {
             return new ValidationInfo("Spec name must be set", specName);
         }
+        if (!PsiNameHelper.getInstance(project).isQualifiedName(specNameText)) {
+            return new ValidationInfo("This is not a valid specification name", specName);
+        }
         if (specNameText.endsWith(OPTIONAL_TEST_SUFFIX)
                 || specNameText.endsWith(OPTIONAL_FIXTURE_SUFFIX)) {
             return new ValidationInfo("It is illegal to use Test and Fixture suffixes for concordion files", specName);
         }
         if (specDestinationSelector.select() == null) {
-            return new ValidationInfo("Spec destination must be selected. Empty directory list may indicate no resource directories configured in project or corresponding packages not present there.", specDestinationSelector);
+            return new ValidationInfo("Spec destination must be selected.<br/> Empty directory list may indicate <li>no resource directories configured in project</li><li>selected package is not present in any of resource directories</li>", specDestinationSelector);
         }
         if (fixtureDestinationSelector.select() == null) {
-            return new ValidationInfo("Fixture destination must be selected. Empty directory list may indicate no source directories configured in project or corresponding packages not present there.", fixtureDestinationSelector);
+            return new ValidationInfo("Fixture destination must be selected.<br/> Empty directory list may indicate <li>no source directories configured in project</li><li>selected package is not present in any of source directories</li>", fixtureDestinationSelector);
         }
         return super.doValidate();
     }
