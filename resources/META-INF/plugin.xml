@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.9</version>
+  <version>0.10</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -22,6 +22,13 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.10<br/>
+    <ul>
+        <li>Create spec and fixture dialog</li>
+        <li>Better type resolving</li>
+        <li>Rename and delete paired concordion file (could be disabled in concordion settings)</li>
+        <li>Markdown navigator integration</li>
+    </ul>
     Version 0.9<br/>
     <ul>
         <li>Better syntax support for concordion expressions in md specs</li>

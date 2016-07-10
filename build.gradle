@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'net.saliman.cobertura'
 
 group 'org.concordion.plugin.idea'
-version '0.9'
+version '0.10'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
