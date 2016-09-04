@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.intellij' version '0.1.6'
+    id 'org.jetbrains.intellij' version '0.1.10'
     id 'net.saliman.cobertura' version '2.3.1'
 }
 
@@ -30,8 +30,8 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:3.0.6', 'git4idea']
-    version '2016.1'
+    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2016.2.1', 'git4idea']
+    version '2016.2.3'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false

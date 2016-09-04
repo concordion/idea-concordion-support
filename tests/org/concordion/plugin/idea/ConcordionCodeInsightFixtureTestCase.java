@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.google.common.collect.*;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;

@@ -20,11 +20,12 @@ public final class ConcordionPsiTypeUtils {
     private ConcordionPsiTypeUtils() {
     }
 
-    public static final String OBJECT = java.lang.Object.class.getName();
-    public static final String STRING = java.lang.String.class.getName();
+    public static final String OBJECT = java.lang.Object.class.getCanonicalName();
+    public static final String CLASS = java.lang.Class.class.getCanonicalName();
+    public static final String STRING = java.lang.String.class.getCanonicalName();
     public static final String ITERABLE = java.lang.Iterable.class.getCanonicalName();
-    public static final String LIST = java.util.List.class.getName();
-    public static final String MAP = java.util.Map.class.getName();
+    public static final String LIST = java.util.List.class.getCanonicalName();
+    public static final String MAP = java.util.Map.class.getCanonicalName();
 
     @NotNull
     public static PsiType findObject(@NotNull Project project) {
@@ -75,12 +76,21 @@ public final class ConcordionPsiTypeUtils {
 
     @NotNull
     public static PsiType iterableParameterType(@NotNull PsiType listPsiType, @NotNull Project project) {
-        return nthGenericTypeFormHierarchy(0, ITERABLE, listPsiType).orElse(findObject(project));
+        return nthGenericTypeFormHierarchy(0, ITERABLE, listPsiType).orElseGet(() -> findObject(project));
     }
 
     @NotNull
     public static PsiType mapValueParameterType(@NotNull PsiType mapPsiType, @NotNull Project project) {
-        return nthGenericTypeFormHierarchy(1, MAP, mapPsiType).orElse(findObject(project));
+        return nthGenericTypeFormHierarchy(1, MAP, mapPsiType).orElseGet(() -> findObject(project));
+    }
+
+    public static boolean isClassType(@NotNull PsiType type) {
+        return type.getCanonicalText().startsWith(CLASS);
+    }
+
+    @NotNull
+    public static PsiType classParameterType(@NotNull PsiType classPsiType, @NotNull Project project) {
+        return nthGenericTypeFormHierarchy(0, CLASS, classPsiType).orElseGet(() -> findObject(project));
     }
 
     public static boolean isDummyArrayType(@NotNull PsiType type) {
