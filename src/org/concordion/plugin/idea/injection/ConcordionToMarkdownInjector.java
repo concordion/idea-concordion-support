@@ -6,17 +6,13 @@ import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
-import org.concordion.plugin.idea.TextReverseSearcher;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static java.util.stream.Collectors.toList;
+import static org.concordion.plugin.idea.injection.ConcordionInjectionSearcher.findInjectionsIn;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionToMarkdownInjector implements MultiHostInjector {
@@ -32,9 +28,7 @@ public class ConcordionToMarkdownInjector implements MultiHostInjector {
             return;
         }
 
-        List<TextRange> injections = new ArrayList<>();
-        injections.addAll(findInjectionPlaces(host.getText(), '\''));
-        injections.addAll(findInjectionPlaces(host.getText(), '"'));
+        List<TextRange> injections = findInjectionsIn(host.getText());
 
         if (injections.isEmpty()) {
             return;
@@ -47,26 +41,6 @@ public class ConcordionToMarkdownInjector implements MultiHostInjector {
             registrar.addPlace(null, null, injectionHost, injection);
             registrar.doneInjecting();
         }
-    }
-
-    @NotNull
-    private List<TextRange> findInjectionPlaces(String text, char quote) {
-        return new TextReverseSearcher(text, "- " + quote).stream()
-                .map(position -> createRange(text, position, quote))
-                .filter(Objects::nonNull)
-                .collect(toList());
-    }
-
-    @Nullable
-    private TextRange createRange(String text, int position, char quote) {
-        int start = position + 3;
-        int end = text.indexOf(quote, start);
-
-        if (end == -1 || end <= start) {
-            return null;
-        }
-
-        return new TextRange(start, end);
     }
 
     @NotNull

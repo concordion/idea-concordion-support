@@ -11,11 +11,10 @@ import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.specifications.ConcordionMdSpecification;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.ConcordionPsiUtils.firstNotNull;
+import static org.concordion.plugin.idea.injection.ConcordionInjectionSearcher.findInjectionsIn;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionToMarkdownNavigatorFreeInjector implements MultiHostInjector {
@@ -26,9 +25,8 @@ public class ConcordionToMarkdownNavigatorFreeInjector implements MultiHostInjec
                 @Override
                 public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
                     String nodeType = element.getNode().getElementType().toString();
-                    return "EXPLICIT_LINK".equals(nodeType)
-                            || "REFERENCE".equals(nodeType)
-                            || nodeType.endsWith("_EXPLICIT_LINK");
+                    return "LINK_REF".equals(nodeType)
+                            || "REFERENCE".equals(nodeType);
                 }
             })
             .withFoundTestFixture();
@@ -40,34 +38,19 @@ public class ConcordionToMarkdownNavigatorFreeInjector implements MultiHostInjec
             return;
         }
 
-        String text = host.getText();
-        if (text.length() < 4) {
+        List<TextRange> injections = findInjectionsIn(host.getText());
+
+        if (injections.isEmpty()) {
             return;
         }
 
-        TextRange range = firstNotNull(
-                () -> findInjectionPlace(text, '"'),
-                () -> findInjectionPlace(text, '\'')
-        );
+        ConcordionInjection injectionHost = new ConcordionInjection(host);
 
-        if (range == null) {
-            return;
+        for (TextRange injection : injections) {
+            registrar.startInjecting(ConcordionLanguage.INSTANCE);
+            registrar.addPlace(null, null, injectionHost, injection);
+            registrar.doneInjecting();
         }
-
-        registrar
-                .startInjecting(ConcordionLanguage.INSTANCE)
-                .addPlace(null, null, new ConcordionInjection(host), range)
-                .doneInjecting();
-    }
-
-    @Nullable
-    private TextRange findInjectionPlace(String text, char quote) {
-        int injectionStart = text.indexOf("- " + quote);
-        int injectionEnd = text.indexOf(quote, injectionStart + 3);
-
-        return injectionStart != -1 && injectionEnd != -1
-                ? new TextRange(injectionStart + 3, injectionEnd)
-                : null;
     }
 
     @NotNull
