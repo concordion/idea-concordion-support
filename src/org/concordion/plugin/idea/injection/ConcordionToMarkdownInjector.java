@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.injection.ConcordionInjectionSearcher.findInjectionsIn;
+import static org.concordion.plugin.idea.injection.ConcordionFileInjectionSearcher.findInjectionsIn;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionToMarkdownInjector implements MultiHostInjector {

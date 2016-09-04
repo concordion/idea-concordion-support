@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static org.concordion.plugin.idea.injection.ConcordionInjectionSearcher.findInjectionsIn;
+import static org.concordion.plugin.idea.injection.ConcordionFileInjectionSearcher.findInjectionsIn;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class ConcordionToMarkdownNavigatorFreeInjector implements MultiHostInjector {
@@ -26,7 +26,9 @@ public class ConcordionToMarkdownNavigatorFreeInjector implements MultiHostInjec
                 public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
                     String nodeType = element.getNode().getElementType().toString();
                     return "LINK_REF".equals(nodeType)
-                            || "REFERENCE".equals(nodeType);
+                            || "REFERENCE".equals(nodeType)
+                            || "EXPLICIT_LINK".equals(nodeType)
+                            || nodeType.endsWith("_EXPLICIT_LINK");
                 }
             })
             .withFoundTestFixture();
