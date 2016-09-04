@@ -38,12 +38,13 @@ intellij {
 }
 
 ext {
+    //2016.2.20160713
     markdownSupportPlugin = files(
             "${projectDir}/markdownSupport/lib/markdown.jar",
-            "${projectDir}/markdownSupport/lib/markdown-javafx-preview.jar",
             "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
             "${projectDir}/markdownSupport/lib/Loboevolution.jar"
     )
+    //not available
     markdownPlugin = files(
             "${projectDir}/markdown/lib/asm-4.1-repacked.jar",
             "${projectDir}/markdown/lib/asm-analysis-4.1-repacked.jar",
