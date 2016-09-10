@@ -1,25 +1,24 @@
 package org.concordion.plugin.idea.settings;
 
-import org.jetbrains.annotations.NotNull;
+
+import org.concordion.plugin.idea.*;
 
 public enum ConcordionCommandsCaseType {
 
-    BOTH(true, true, "CamelCase and spinal-case"),
-    CAMEL_CASE(true, false, "CamelCase only"),
-    SPINAL_CASE(false, true, "spinal-case only");
+    BOTH(true, true),
+    CAMEL_CASE(true, false),
+    SPINAL_CASE(false, true);
 
     public final boolean camelCase;
     public final boolean spinalCase;
-    @NotNull public final String name;
 
-    ConcordionCommandsCaseType(boolean camelCase, boolean spinalCase, @NotNull String name) {
+    ConcordionCommandsCaseType(boolean camelCase, boolean spinalCase) {
         this.camelCase = camelCase;
         this.spinalCase = spinalCase;
-        this.name = name;
     }
 
     @Override
     public String toString() {
-        return name;
+        return ConcordionBundle.message("concordion.settings.case." + name());
     }
 }

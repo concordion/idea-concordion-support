@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -24,7 +25,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunner extends LocalInspecti
         return new ConcordionInspectionVisitor<>(
                 MISCONFIGURED_TEST_FIXTURE,
                 holder,
-                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)",
+                ConcordionBundle.message("concordion.inspection.fixture_not_annotated_with_runner", "@RunWith(ConcordionRunner.class)"),
                 null
         );
     }

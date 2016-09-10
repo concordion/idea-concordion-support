@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlAttribute;
-import org.concordion.plugin.idea.ConcordionCommand;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.lang.ConcordionElementFactory;
 import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
@@ -53,7 +53,7 @@ public class WrongCommandCaseUsed extends LocalInspectionTool implements Concord
         return new ConcordionInspectionVisitor<PsiElement>(
                 concordionElement(),
                 holder,
-                "Command is used in wrong case",
+                ConcordionBundle.message("concordion.inspection.wrong_command_case"),
                 new FixCommandCaseQuickFix()
         ) {
             @Override

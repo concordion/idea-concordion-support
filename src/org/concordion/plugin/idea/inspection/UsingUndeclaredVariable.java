@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 import com.intellij.codeInspection.LocalInspectionTool;
@@ -20,7 +21,7 @@ public class UsingUndeclaredVariable extends LocalInspectionTool {
         return new ConcordionInspectionVisitor<>(
                 UNDECLARED_VARIABLE,
                 holder,
-                "Using undeclared variable",
+                ConcordionBundle.message("concordion.inspection.using_undeclared_variable"),
                 null
         );
     }

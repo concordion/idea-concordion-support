@@ -13,7 +13,7 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Use Concordion commands in"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.settings.commands_case"/>
         </properties>
       </component>
       <vspacer id="fe555">
@@ -39,7 +39,7 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Rename paired Concordion files"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.settings.rename_paired_files"/>
         </properties>
       </component>
       <component id="77676" class="javax.swing.JComboBox" binding="renamePairedConcordionFile" custom-create="true">
@@ -53,7 +53,7 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Delete paired Concordion files"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.settings.delete_paired_files"/>
         </properties>
       </component>
       <component id="d536b" class="javax.swing.JComboBox" binding="deletePairedConcordionFile" custom-create="true">

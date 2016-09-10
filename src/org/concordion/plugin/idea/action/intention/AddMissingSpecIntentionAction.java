@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.fixtures.ConcordionTestFixtures;
 import org.concordion.plugin.idea.menu.ConcordionNewSpecAndFixtureDialog;
 import org.concordion.plugin.idea.menu.ConcordionSpecAndFixtureCreationParameters;
@@ -19,7 +19,7 @@ import static org.concordion.plugin.idea.menu.ConcordionSpecAndFixtureCreationPa
 
 public class AddMissingSpecIntentionAction extends BaseIntentionAction {
 
-    private static final String ACTION_NAME = "Add missing Concordion spec";
+    private static final String ACTION_NAME = ConcordionBundle.message("concordion.action.add_missing_spec");
 
     public AddMissingSpecIntentionAction() {
         setText(ACTION_NAME);

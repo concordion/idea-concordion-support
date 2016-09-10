@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.menu.ConcordionNewSpecAndFixtureDialog;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import static org.concordion.plugin.idea.specifications.ConcordionSpecifications
 
 public class AddMissingTestFixtureIntentionAction extends BaseIntentionAction {
 
-    private static final String ACTION_NAME = "Add missing Concordion test fixture";
+    private static final String ACTION_NAME = ConcordionBundle.message("concordion.action.add_missing_fixture");
 
     public AddMissingTestFixtureIntentionAction() {
         setText(ACTION_NAME);

@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 import static org.concordion.plugin.idea.ConcordionPsiUtils.removeExtension;
-import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
+import static org.concordion.plugin.idea.refactoring.ConcordionPairedFileType.FIXTURE;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePaired;
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
@@ -46,7 +47,7 @@ public class RenameConcordionSpecProcessor extends RenamePsiElementProcessor imp
             return;
         }
 
-        if (renamePairedFile(refactoring) == BOTH) {
+        if (renamePaired(FIXTURE, refactoring) == BOTH) {
             allRenames.put(
                     fixture,
                     removeExtension(newName)

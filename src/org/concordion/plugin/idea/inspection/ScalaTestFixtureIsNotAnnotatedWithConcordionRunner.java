@@ -5,6 +5,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.scala.lang.lexer.ScalaTokenTypes;
@@ -28,7 +29,7 @@ public class ScalaTestFixtureIsNotAnnotatedWithConcordionRunner extends LocalIns
         return new ConcordionInspectionVisitor<>(
                 MISCONFIGURED_TEST_FIXTURE,
                 holder,
-                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)",
+                ConcordionBundle.message("concordion.inspection.fixture_not_annotated_with_runner", "@RunWith(classOf[ConcordionRunner])"),
                 null
         );
     }

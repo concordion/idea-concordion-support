@@ -15,7 +15,8 @@ import java.util.Map;
 
 import static org.concordion.plugin.idea.ConcordionPsiUtils.getExtension;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.isConcordionFixture;
-import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePairedFile;
+import static org.concordion.plugin.idea.refactoring.ConcordionPairedFileType.SPEC;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.renamePaired;
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 
 public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor implements ConcordionSettingsListener {
@@ -46,7 +47,7 @@ public class RenameConcordionFixtureProcessor extends RenamePsiElementProcessor 
             return;
         }
 
-        if (renamePairedFile(refactoring) == BOTH) {
+        if (renamePaired(SPEC, refactoring) == BOTH) {
             allRenames.put(
                     spec,
                     newName + '.' + getExtension(spec.getName())

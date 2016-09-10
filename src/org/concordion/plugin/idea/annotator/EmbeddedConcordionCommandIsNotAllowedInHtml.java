@@ -3,6 +3,7 @@ package org.concordion.plugin.idea.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.concordion.plugin.idea.lang.psi.ConcordionEmbeddedCommand;
 import org.concordion.plugin.idea.specifications.ConcordionHtmlSpecification;
@@ -19,7 +20,7 @@ public class EmbeddedConcordionCommandIsNotAllowedInHtml implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         if (EMBEDDED_COMMAND_USAGE_IN_HTML.accepts(element)) {
-            holder.createErrorAnnotation(element, "Unexpected concordion command");
+            holder.createErrorAnnotation(element, ConcordionBundle.message("concordion.annotator.unexpected_command"));
         }
     }
 }

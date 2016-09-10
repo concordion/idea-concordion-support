@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.action.intention.surround.ConcordionSurrounder;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import static org.concordion.plugin.idea.specifications.ConcordionSpecifications
 
 public class SurroundWithConcordionIntentionAction extends BaseIntentionAction {
 
-    private static final String ACTION_NAME = "Surround with Concordion expression";
+    private static final String ACTION_NAME = ConcordionBundle.message("concordion.action.surround_with_concordion_expression");
 
     public SurroundWithConcordionIntentionAction() {
         setText(ACTION_NAME);

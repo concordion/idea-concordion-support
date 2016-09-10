@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.lang.psi.ConcordionField;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -18,7 +19,7 @@ public class UsingMapKeyAsField extends LocalInspectionTool {
                 super.visitElement(element);
 
                 if (element instanceof ConcordionField && ((ConcordionField) element).isKeyInMap()) {
-                    holder.registerProblem(element, "Using map key as a field");
+                    holder.registerProblem(element, ConcordionBundle.message("concordion.inspection.using_map_key_as_field"));
                 }
             }
         };

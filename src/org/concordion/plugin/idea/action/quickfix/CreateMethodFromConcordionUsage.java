@@ -16,7 +16,7 @@ import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.memberF
 public class CreateMethodFromConcordionUsage extends CreateFromConcordionUsage<ConcordionMethod> {
 
     public CreateMethodFromConcordionUsage(@Nullable PsiClass fixture, @NotNull ConcordionMethod source) {
-        super(fixture, source, "Create method from usage");
+        super(fixture, source, "concordion.action.create_method_from_usage");
     }
 
     @Override

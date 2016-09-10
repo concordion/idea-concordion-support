@@ -3,6 +3,7 @@ package org.concordion.plugin.idea.inspection;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.lang.lexer.GroovyTokenTypes;
@@ -26,7 +27,7 @@ public class GroovyTestFixtureIsNotAnnotatedWithConcordionRunner extends LocalIn
         return new ConcordionInspectionVisitor<>(
                 MISCONFIGURED_TEST_FIXTURE,
                 holder,
-                "Test fixture is not annotated with @RunWith(ConcordionRunner.class)",
+                ConcordionBundle.message("concordion.inspection.fixture_not_annotated_with_runner", "@RunWith(ConcordionRunner.class)"),
                 null
         );
     }

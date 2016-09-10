@@ -2,6 +2,7 @@ package org.concordion.plugin.idea.annotator;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.action.quickfix.CreateFromConcordionUsage;
 import org.concordion.plugin.idea.action.quickfix.CreateMethodFromConcordionUsage;
 import org.concordion.plugin.idea.lang.psi.ConcordionMethod;
@@ -20,21 +21,23 @@ public class UnresolvedMethodAnnotator extends UnresolvedMemberAnnotator<Concord
 
     @Override
     protected String createDescription(@NotNull ConcordionMethod element) {
-        PsiClass containingClass = element.getContainingClass();
+        return ConcordionBundle.message("concordion.annotator.method_not_found", methodSignature(element), containingClassName(element));
+    }
+
+    private String methodSignature(@NotNull ConcordionMethod element) {
         Iterator<PsiType> argumentTypes = typeOfExpressions(element.getArguments().getOgnlExpressionStartList()).iterator();
 
-        StringBuilder message = new StringBuilder().append("Method ").append(element.getName()).append('(');
+        StringBuilder signature = new StringBuilder();
+        signature.append(element.getName());
+        signature.append('(');
         while(argumentTypes.hasNext()) {
-            message.append(describeArgumentType(argumentTypes.next()));
+            signature.append(describeArgumentType(argumentTypes.next()));
             if (argumentTypes.hasNext()) {
-                message.append(", ");
+                signature.append(", ");
             }
         }
-        message.append(") is not found");
-        if (containingClass != null) {
-            message.append(" in class ").append(containingClass.getName());
-        }
-        return message.toString();
+        signature.append(')');
+        return signature.toString();
     }
 
     private String describeArgumentType(PsiType argumentType) {

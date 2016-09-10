@@ -13,7 +13,7 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Name"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.name"/>
         </properties>
       </component>
       <vspacer id="4307b">
@@ -26,7 +26,7 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Package"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.package"/>
         </properties>
       </component>
       <component id="59814" class="com.intellij.refactoring.ui.PackageNameReferenceEditorCombo" binding="specPackage" custom-create="true">
@@ -40,7 +40,7 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Fixture destination"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.fixture_destination"/>
         </properties>
       </component>
       <component id="b6322" class="org.concordion.plugin.idea.menu.ConcordionDestinationFolderChooser" binding="specDestinationSelector" custom-create="true">
@@ -60,7 +60,7 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Spec destination"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.spec_destination"/>
         </properties>
       </component>
       <component id="8bb25" class="javax.swing.JLabel">
@@ -68,7 +68,7 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Spec type"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.spec_type"/>
         </properties>
       </component>
       <component id="e2ff5" class="javax.swing.JLabel">
@@ -76,7 +76,7 @@
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Fixture type"/>
+          <text resource-bundle="org/concordion/plugin/idea/bundle/ConcordionBundle" key="concordion.menu.fixture_type"/>
         </properties>
       </component>
       <component id="5b30f" class="org.concordion.plugin.idea.menu.ConcordionExtensionComboBox" binding="specTypeSelector" custom-create="true">

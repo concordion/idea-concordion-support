@@ -3,7 +3,7 @@ package org.concordion.plugin.idea.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import org.concordion.plugin.idea.ConcordionCommand;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class UnexpectedDictionaryValue implements Annotator {
 
             if (command.expression()
                     || !command.dictionaryValues().contains(element.getText())) {
-                holder.createErrorAnnotation(element, "This value can not be used here");
+                holder.createErrorAnnotation(element, ConcordionBundle.message("concordion.annotator.unexpected_dictionary_value"));
             }
         }
     }

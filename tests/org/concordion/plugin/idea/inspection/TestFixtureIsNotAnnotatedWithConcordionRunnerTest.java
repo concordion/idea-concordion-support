@@ -27,7 +27,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(javaTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testDoesNotErrorOutRegularGroovyClassWithoutHtmlSpec() {
@@ -36,7 +36,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(groovyTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testDoesNotErrorOutRegularScalaClassWithoutHtmlSpec() {
@@ -45,7 +45,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(scalaTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testDoesNotErrorOutAnnotatedTestFixture() {
@@ -56,7 +56,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(javaTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testDoesNotErrorOutAnnotatedGroovyTestFixture() {
@@ -67,7 +67,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(groovyTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testDoesNotErrorOutAnnotatedScalaTestFixture() {
@@ -78,7 +78,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(scalaTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
     public void testErrorOutNotAnnotatedTestFixture() {
@@ -89,7 +89,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
+                .has(javaTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
     }
 
     public void testErrorOutNotAnnotatedGroovyTestFixture() {
@@ -100,7 +100,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
+                .has(groovyTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
     }
 
     public void testErrorOutNotAnnotatedScalaTestFixture() {
@@ -111,7 +111,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
+                .has(scalaTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerNotAnnotated"));
     }
 
     public void testErrorOutTestFixtureAnnotatedWithDifferentRunner() {
@@ -122,7 +122,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
+                .has(javaTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
 
     }
 
@@ -134,7 +134,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
+                .has(groovyTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
 
     }
 
@@ -146,7 +146,7 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .has(testFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
+                .has(scalaTestFixtureIsNotAnnotatedWithConcordionRunner().withText("RunnerWrongAnnotated"));
 
     }
 
@@ -159,10 +159,18 @@ public class TestFixtureIsNotAnnotatedWithConcordionRunnerTest extends Concordio
         myFixture.configureFromExistingVirtualFile(testFixture);
 
         assertThat(myFixture.doHighlighting())
-                .hasNo(testFixtureIsNotAnnotatedWithConcordionRunner());
+                .hasNo(javaTestFixtureIsNotAnnotatedWithConcordionRunner());
     }
 
-    private Info testFixtureIsNotAnnotatedWithConcordionRunner() {
+    private Info javaTestFixtureIsNotAnnotatedWithConcordionRunner() {
         return anInfo().withSeverity(ERROR).withDescription("Test fixture is not annotated with @RunWith(ConcordionRunner.class)");
+    }
+
+    private Info groovyTestFixtureIsNotAnnotatedWithConcordionRunner() {
+        return anInfo().withSeverity(ERROR).withDescription("Test fixture is not annotated with @RunWith(ConcordionRunner.class)");
+    }
+
+    private Info scalaTestFixtureIsNotAnnotatedWithConcordionRunner() {
+        return anInfo().withSeverity(ERROR).withDescription("Test fixture is not annotated with @RunWith(classOf[ConcordionRunner])");
     }
 }

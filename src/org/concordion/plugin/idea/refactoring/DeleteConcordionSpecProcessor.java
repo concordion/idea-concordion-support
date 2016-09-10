@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.deletePairedFile;
+import static org.concordion.plugin.idea.refactoring.ConcordionPairedFileType.FIXTURE;
+import static org.concordion.plugin.idea.refactoring.ConcordionRefactoringDialogs.deletePaired;
 import static org.concordion.plugin.idea.settings.ConcordionFilesRefactoring.*;
 import static org.concordion.plugin.idea.specifications.ConcordionSpecifications.specConfiguredInFile;
 
@@ -33,7 +34,7 @@ public class DeleteConcordionSpecProcessor extends AbstractSafeDeleteProcessorDe
             return ImmutableList.of();
         }
 
-        if (deletePairedFile(refactoring) == BOTH) {
+        if (deletePaired(FIXTURE, refactoring) == BOTH) {
             return ImmutableList.of(fixture);
         }
 

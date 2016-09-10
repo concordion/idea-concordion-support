@@ -13,7 +13,7 @@ import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.memberF
 public class CreateFieldFromConcordionUsage extends CreateFromConcordionUsage<ConcordionField> {
 
     public CreateFieldFromConcordionUsage(@Nullable PsiClass fixture, @NotNull ConcordionField source) {
-        super(fixture, source, "Create field from usage");
+        super(fixture, source, "concordion.action.create_field_from_usage");
     }
 
     @Override

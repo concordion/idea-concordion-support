@@ -4,6 +4,7 @@ import com.intellij.CommonBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.settings.ConcordionFilesRefactoring;
 import org.concordion.plugin.idea.settings.ConcordionSettings;
 import org.jetbrains.annotations.NotNull;
@@ -13,18 +14,18 @@ import java.util.function.Consumer;
 public class ConcordionRefactoringDialogs {
 
     @NotNull
-    public static ConcordionFilesRefactoring renamePairedFile(@NotNull ConcordionFilesRefactoring rememberedState) {
+    public static ConcordionFilesRefactoring renamePaired(@NotNull ConcordionPairedFileType file, @NotNull ConcordionFilesRefactoring rememberedState) {
         return modifyPairedFile(
-                "Paired concordion file detected. Should it be renamed as well?",
+                ConcordionBundle.message("concordion.refactoring.rename_paired." + file.name()),
                 rememberedState,
                 ConcordionSettings.getInstance()::setRenamePairs
         );
     }
 
     @NotNull
-    public static ConcordionFilesRefactoring deletePairedFile(@NotNull ConcordionFilesRefactoring rememberedState) {
+    public static ConcordionFilesRefactoring deletePaired(@NotNull ConcordionPairedFileType file, @NotNull ConcordionFilesRefactoring rememberedState) {
         return modifyPairedFile(
-                "Paired concordion file detected. Should it be deleted as well?",
+                ConcordionBundle.message("concordion.refactoring.delete_paired." + file.name()),
                 rememberedState,
                 ConcordionSettings.getInstance()::setDeletePairs
         );

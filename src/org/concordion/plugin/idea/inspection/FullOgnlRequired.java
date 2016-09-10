@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.inspection;
 
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.lang.psi.ConcordionIterateExpression;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import org.concordion.plugin.idea.lang.psi.ConcordionSetExpression;
@@ -10,8 +11,6 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
 import org.concordion.internal.SimpleEvaluator;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Predicate;
 
 import static java.util.function.Predicate.isEqual;
 import static org.concordion.plugin.idea.ConcordionCommand.SET;
@@ -51,7 +50,7 @@ public class FullOgnlRequired extends LocalInspectionTool {
         return new ConcordionInspectionVisitor<>(
                 TOO_COMPLEX_CONCORDION_EXPRESSION,
                 holder,
-                "Too complex expression",
+                ConcordionBundle.message("concordion.inspection.too_complex_expression_require_full_ognl"),
                 null
         );
     }

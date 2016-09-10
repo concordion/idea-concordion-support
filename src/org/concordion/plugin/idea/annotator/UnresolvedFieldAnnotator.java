@@ -1,9 +1,10 @@
 package org.concordion.plugin.idea.annotator;
 
 import com.intellij.psi.PsiClass;
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.action.quickfix.CreateFieldFromConcordionUsage;
 import org.concordion.plugin.idea.action.quickfix.CreateFromConcordionUsage;
-import org.concordion.plugin.idea.lang.psi.ConcordionField;
+import org.concordion.plugin.idea.lang.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 public class UnresolvedFieldAnnotator extends UnresolvedMemberAnnotator<ConcordionField> {
@@ -14,13 +15,7 @@ public class UnresolvedFieldAnnotator extends UnresolvedMemberAnnotator<Concordi
 
     @Override
     protected String createDescription(@NotNull ConcordionField element) {
-        PsiClass containingClass = element.getContainingClass();
-
-        StringBuilder message = new StringBuilder().append("Field ").append(element.getName()).append(" is not found");
-        if (containingClass != null) {
-            message.append(" in class ").append(containingClass.getName());
-        }
-        return message.toString();
+        return ConcordionBundle.message("concordion.annotator.field_not_found", element.getName(), containingClassName(element));
     }
 
     @Override

@@ -36,6 +36,11 @@ public abstract class UnresolvedMemberAnnotator<T extends ConcordionMember> impl
         }
     }
 
+    protected String containingClassName(@NotNull ConcordionMember member) {
+        PsiClass containingClass = member.getContainingClass();
+        return containingClass != null ? containingClass.getName()  : "";
+    }
+
     protected abstract String createDescription(@NotNull T element);
 
     protected abstract CreateFromConcordionUsage<T> createFix(@NotNull PsiClass testFixture, @NotNull T element);

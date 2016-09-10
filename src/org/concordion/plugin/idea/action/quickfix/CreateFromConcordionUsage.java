@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea.action.quickfix;
 
+import org.concordion.plugin.idea.*;
 import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.util.EditSourceUtil;
@@ -17,17 +18,17 @@ public abstract class CreateFromConcordionUsage<T extends PsiElement> extends Ba
     @Nullable protected final PsiClass fixture;
     @NotNull protected final T source;
 
-    public CreateFromConcordionUsage(@Nullable PsiClass fixture, @NotNull T source, String text) {
+    public CreateFromConcordionUsage(@Nullable PsiClass fixture, @NotNull T source, @NotNull String key) {
         this.fixture = fixture;
         this.source = source;
-        setText(text);
+        setText(ConcordionBundle.message(key));
     }
 
     @Nls
     @NotNull
     @Override
     public String getFamilyName() {
-        return "Create from usage";
+        return ConcordionBundle.message("concordion.action.create_from_usage");
     }
 
     @Override
