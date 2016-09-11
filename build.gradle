@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'net.saliman.cobertura'
 
 group 'org.concordion.plugin.idea'
-version '0.10'
+version '0.10.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -31,7 +31,7 @@ repositories {
 intellij {
     pluginName 'IdeaConcordionSupport'
     plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2016.2.1', 'git4idea']
-    version '2016.2.3'
+    version '2016.2.4'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false

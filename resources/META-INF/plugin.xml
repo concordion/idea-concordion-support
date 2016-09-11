@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.10</version>
+  <version>0.10.1</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -22,6 +22,11 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.10.1<br/>
+    <ul>
+        <li>Updates to support newer groovy plugin</li>
+        <li>Updates to support newer markdown navigator plugin</li>
+    </ul>
     Version 0.10<br/>
     <ul>
         <li>Create spec and fixture dialog</li>
