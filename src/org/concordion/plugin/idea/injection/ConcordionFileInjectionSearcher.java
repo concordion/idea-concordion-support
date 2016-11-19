@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import static java.util.stream.Collectors.*;
+import static org.concordion.plugin.idea.ConcordionCommand.EXAMPLE;
 
 public final class ConcordionFileInjectionSearcher {
 
@@ -30,8 +31,16 @@ public final class ConcordionFileInjectionSearcher {
     @NotNull
     private static Stream<TextRange> findInjectionUsingQuote(@NotNull String text, char quote) {
         return new TextReverseSearcher(text, "- " + quote).stream()
+                .filter(position -> isNotExample(text, position))
                 .map(position -> createRange(text, position, quote))
                 .filter(Objects::nonNull);
+    }
+
+    private static final int COMMAND_OFFSET = "- 'c:".length();
+
+    private static boolean isNotExample(@NotNull String text, int position) {
+        return text.length() < COMMAND_OFFSET
+                || !text.substring(position + COMMAND_OFFSET).startsWith(EXAMPLE.text());
     }
 
     @Nullable

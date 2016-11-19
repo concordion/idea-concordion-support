@@ -56,4 +56,15 @@ public class ConcordionToMdInjectorTest extends ConcordionCodeInsightFixtureTest
         assertThat(myFixture.doHighlighting())
                 .hasNoInjectedFragments();
     }
+
+    public void testNotInjectExpressionInExampleNames() {
+
+        copyTestFixtureToConcordionProject("Example.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Example.md");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNoInjectedFragments();
+    }
 }

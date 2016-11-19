@@ -1,7 +1,6 @@
 package org.concordion.plugin.idea.injection;
 
 import com.google.common.collect.ImmutableList;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -18,17 +17,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
+import static org.concordion.plugin.idea.ConcordionCommand.EXAMPLE;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
+import static org.intellij.plugins.markdown.lang.MarkdownElementTypes.*;
 
 public class ConcordionToMarkdownSupportInjector implements MultiHostInjector {
 
     private static final ConcordionElementPattern.Capture<PsiElement> LINKS_TITLES_TO_INJECT = concordionElement(PsiElement.class)
             .withConfiguredSpecOfType(ConcordionMdSpecification.INSTANCE)
-            .withElementType(MarkdownElementTypes.LINK_TITLE)
+            .withElementType(LINK_TITLE)
             .with(new PatternCondition<PsiElement>("notRegularLink") {
                 @Override
                 public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
-                    return destinationForLinkTitle(element).equals("-");
+                    return destinationForLinkTitle(element).equals("-")
+                            && isNotExample(element.getText());
                 }
             })
             .withMinTextLength(2)
@@ -60,5 +62,12 @@ public class ConcordionToMarkdownSupportInjector implements MultiHostInjector {
                 .map(n -> n.findChildByType(MarkdownElementTypes.LINK_DESTINATION))
                 .map(ASTNode::getText)
                 .orElse("");
+    }
+
+    private static final int COMMAND_OFFSET = "'c:".length();
+
+    private static boolean isNotExample(@NotNull String text) {
+        return text.length() < COMMAND_OFFSET
+                || !text.substring(COMMAND_OFFSET).startsWith(EXAMPLE.text());
     }
 }

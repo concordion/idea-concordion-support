@@ -28,7 +28,7 @@ public class ConcordionCommand {
     public static final ConcordionCommand SET = command("set").register();
     public static final ConcordionCommand ECHO = command("echo").register();
     public static final ConcordionCommand RUN = command("run").register();
-    public static final ConcordionCommand EXAMPLE = command("example").withDictionaryValues("").register();
+    public static final ConcordionCommand EXAMPLE = command("example").withFreeText().register();
     public static final ConcordionCommand STATUS = command("status").withDictionaryValues("ExpectedToPass", "ExpectedToFail", "Unimplemented").register();
 
     public static final ConcordionCommand VERIFY_ROWS_CAMEL = camelCaseCommand("verifyRows").register();
@@ -144,6 +144,11 @@ public class ConcordionCommand {
     @NotNull
     private ConcordionCommand withDictionaryValues(@NotNull String... values) {
         return new ConcordionCommand(text, caseType, ImmutableList.copyOf(values), extension, specSpecific);
+    }
+
+    @NotNull
+    private ConcordionCommand withFreeText() {
+        return new ConcordionCommand(text, caseType, ImmutableList.of(), extension, specSpecific);
     }
 
     @NotNull
