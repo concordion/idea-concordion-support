@@ -30,15 +30,15 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2016.2.1', 'git4idea']
-    version '2016.2.5'
+    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2016.3.3', 'git4idea']
+    version '2016.3'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false
 }
 
 ext {
-    //2016.2.20160713
+    //2016.3.20161109
     markdownSupportPlugin = files(
             "${projectDir}/markdownSupport/lib/markdown.jar",
             "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
