@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
-import static org.concordion.plugin.idea.ConcordionCommand.EXAMPLE;
+import static org.concordion.plugin.idea.ConcordionCommand.EXECUTE;
 import static org.concordion.plugin.idea.ConcordionInjectionUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 import static org.concordion.plugin.idea.fixtures.ConcordionTestFixtures.*;
@@ -138,9 +138,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
                 XmlAttribute attribute = getParentOfType(element, XmlAttribute.class);
-                return attribute != null
-                        && Namespaces.knownNamespace(attribute.getNamespace())
-                        && !EXAMPLE.text().equals(attribute.getLocalName());
+                return attribute != null && Namespaces.knownNamespace(attribute.getNamespace());
             }
         });
     }
@@ -185,7 +183,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
         return with(new PatternCondition<T>("withCommand") {
             @Override
             public boolean accepts(@NotNull T element, ProcessingContext context) {
-                ConcordionCommand command = commandOf(element);
+                ConcordionCommand command = commandOf(element).orElse(EXECUTE);
                 context.put(CONCORDION_COMMAND, command);
                 return predicate.test(command);
             }

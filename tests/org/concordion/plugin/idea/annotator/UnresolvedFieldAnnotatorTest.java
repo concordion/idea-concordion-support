@@ -45,4 +45,15 @@ public class UnresolvedFieldAnnotatorTest extends ConcordionCodeInsightFixtureTe
         assertThat(myFixture.doHighlighting())
                 .hasNo(anInfo().withSeverity(ERROR).withText("length"));
     }
+
+    public void testDoesNotErrorOutExamples() {
+
+        copyTestFixtureToConcordionProject("Example.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Example.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+
+        assertThat(myFixture.doHighlighting())
+                .hasNo(anInfo().withSeverity(ERROR).withText("MyExample1"));
+    }
 }

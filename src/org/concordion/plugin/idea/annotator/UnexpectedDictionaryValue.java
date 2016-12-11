@@ -8,6 +8,7 @@ import org.concordion.plugin.idea.lang.psi.ConcordionTypes;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 
+import static org.concordion.plugin.idea.ConcordionCommand.EXECUTE;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.commandOf;
 import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
@@ -19,7 +20,7 @@ public class UnexpectedDictionaryValue implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         if (CAPTURE.accepts(element)) {
-            ConcordionCommand command = commandOf(element);
+            ConcordionCommand command = commandOf(element).orElse(EXECUTE);
 
             if (command.expression()
                     || !command.dictionaryValues().contains(element.getText())) {

@@ -5,6 +5,7 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.Nullable;
 
 import static java.util.Collections.emptyList;
+import static org.concordion.plugin.idea.ConcordionCommand.EXAMPLE;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 import static org.concordion.plugin.idea.ConcordionPsiUtils.*;
 
@@ -16,7 +17,7 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
 
     @Override
     public boolean isResolvable() {
-        return getContainingMember() != null || isKeyInMap();
+        return getContainingMember() != null || isKeyInMap() || isExampleName();
     }
 
     @Override
@@ -26,6 +27,11 @@ public abstract class ConcordionFieldInternalImpl extends AbstractConcordionMemb
         }
         PsiClassType type = getContainingClassType();
         return type != null && isMap(type, getProject());
+    }
+
+    @Override
+    public boolean isExampleName() {
+        return commandOf(this).orElse(EXAMPLE).equals(EXAMPLE);
     }
 
     @Nullable

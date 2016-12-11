@@ -128,8 +128,8 @@ public final class ConcordionPsiUtils {
     }
 
     @NotNull
-    public static ConcordionCommand commandOf(@NotNull PsiElement element) {
-        return ofNullable(commandTextOf(element)).map(ConcordionCommand::findCommandByText).orElse(EXECUTE);
+    public static Optional<ConcordionCommand> commandOf(@NotNull PsiElement element) {
+        return ofNullable(commandTextOf(element)).map(ConcordionCommand::findCommandByText);
     }
 
     public static int arrayDimensionsUsed(@NotNull ConcordionPsiElement concordionPsiElement) {
