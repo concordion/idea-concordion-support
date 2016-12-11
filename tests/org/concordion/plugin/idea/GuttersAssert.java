@@ -2,7 +2,7 @@ package org.concordion.plugin.idea;
 
 import com.intellij.codeInsight.daemon.GutterMark;
 import org.assertj.core.api.AbstractAssert;
-import org.concordion.plugin.idea.marker.LineMarker;
+import org.concordion.plugin.idea.lang.ConcordionLanguage;
 
 import java.util.Collection;
 
@@ -34,7 +34,7 @@ public class GuttersAssert extends AbstractAssert<GuttersAssert, Collection<Gutt
 
     private long countConcordionGutter() {
         return actual.stream()
-                .filter(g -> LineMarker.CONCORDION_TOOLTIP.equals(g.getTooltipText()))
+                .filter(g -> ConcordionLanguage.INSTANCE.getDisplayName().equals(g.getTooltipText()))
                 .count();
     }
 }

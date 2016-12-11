@@ -1,18 +1,22 @@
 package org.concordion.plugin.idea.marker;
 
+import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import org.concordion.plugin.idea.ConcordionNavigationService;
+import org.concordion.plugin.idea.lang.ConcordionIcons;
+import org.concordion.plugin.idea.lang.ConcordionLanguage;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
-
-import static org.concordion.plugin.idea.marker.LineMarker.infoFor;
 
 public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
 
@@ -37,7 +41,7 @@ public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
         ProcessingContext context = new ProcessingContext();
         if (pattern.accepts(element, context)) {
 
-            return infoFor(context.get(key));
+            return concordionFileInfoFor(context.get(key));
         }
 
         return null;
@@ -46,5 +50,27 @@ public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
     @Override
     public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
 
+    }
+
+    @NotNull
+    private static LineMarkerInfo<PsiElement> concordionFileInfoFor(@NotNull PsiElement element) {
+        return new LineMarkerInfo<>(
+                element,
+                element.getTextRange(),
+                ConcordionIcons.ICON,
+                Pass.UPDATE_ALL,
+                AbstractLineMarkerProvider::generateTooltipForConcordionFile,
+                AbstractLineMarkerProvider::navigateToPairedFile,
+                GutterIconRenderer.Alignment.CENTER
+        );
+    }
+
+    @NotNull
+    private static String generateTooltipForConcordionFile(@NotNull PsiElement element) {
+        return ConcordionLanguage.INSTANCE.getDisplayName();
+    }
+
+    private static void navigateToPairedFile(@NotNull MouseEvent event, @NotNull PsiElement element) {
+        ConcordionNavigationService.getInstance(element.getProject()).navigateToPairedFile(element.getContainingFile());
     }
 }
