@@ -22,6 +22,7 @@ DIGIT=[0-9]
 WHITE_SPACE_CHAR=[\ \n\r\t\f]
 
 IDENTIFIER={ALPHA} [:jletterdigit:]*
+EXAMPLE_NAME=([:jletterdigit:]|\-)*
 
 INTEGER_LITERAL=(0|([1-9]({DIGIT})*))
 
@@ -58,7 +59,8 @@ COMMAND=({COMMAND_PREFIX}":"{COMMAND_NAME})|{SHORT_COMMAND}
 "key"            { return ConcordionTypes.DICTIONARY; }
 "linked"         { return ConcordionTypes.DICTIONARY; }
 
-{IDENTIFIER} { return ConcordionTypes.IDENTIFIER; }
+{IDENTIFIER}     { return ConcordionTypes.IDENTIFIER; }
+{EXAMPLE_NAME}   { return ConcordionTypes.EXAMPLE_NAME; }
 
 "("  { return ConcordionTypes.LPARENTH; }
 ")"  { return ConcordionTypes.RPARENTH; }

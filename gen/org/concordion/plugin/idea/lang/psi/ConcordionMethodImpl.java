@@ -15,8 +15,12 @@ public class ConcordionMethodImpl extends ConcordionMethodInternalImpl implement
     super(node);
   }
 
+  public void accept(@NotNull ConcordionVisitor visitor) {
+    visitor.visitMethod(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitMethod(this);
+    if (visitor instanceof ConcordionVisitor) accept((ConcordionVisitor)visitor);
     else super.accept(visitor);
   }
 

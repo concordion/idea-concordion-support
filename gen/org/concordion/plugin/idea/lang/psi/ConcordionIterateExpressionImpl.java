@@ -16,8 +16,12 @@ public class ConcordionIterateExpressionImpl extends ASTWrapperPsiElement implem
     super(node);
   }
 
+  public void accept(@NotNull ConcordionVisitor visitor) {
+    visitor.visitIterateExpression(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitIterateExpression(this);
+    if (visitor instanceof ConcordionVisitor) accept((ConcordionVisitor)visitor);
     else super.accept(visitor);
   }
 

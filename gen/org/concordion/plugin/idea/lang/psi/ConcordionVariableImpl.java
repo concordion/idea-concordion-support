@@ -15,8 +15,12 @@ public class ConcordionVariableImpl extends ConcordionVariableInternalImpl imple
     super(node);
   }
 
+  public void accept(@NotNull ConcordionVisitor visitor) {
+    visitor.visitVariable(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitVariable(this);
+    if (visitor instanceof ConcordionVisitor) accept((ConcordionVisitor)visitor);
     else super.accept(visitor);
   }
 

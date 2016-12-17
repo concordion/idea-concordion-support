@@ -16,8 +16,12 @@ public class ConcordionEmbeddedCommandImpl extends ASTWrapperPsiElement implemen
     super(node);
   }
 
+  public void accept(@NotNull ConcordionVisitor visitor) {
+    visitor.visitEmbeddedCommand(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitEmbeddedCommand(this);
+    if (visitor instanceof ConcordionVisitor) accept((ConcordionVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ConcordionMapEntryImpl extends ASTWrapperPsiElement implements Conc
     super(node);
   }
 
+  public void accept(@NotNull ConcordionVisitor visitor) {
+    visitor.visitMapEntry(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ConcordionVisitor) ((ConcordionVisitor)visitor).visitMapEntry(this);
+    if (visitor instanceof ConcordionVisitor) accept((ConcordionVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -74,11 +74,19 @@ public class ConcordionParserTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testDictionary() {
+        doTest(true);
+    }
+
     public void testDictionaryCommand() {
         doTest(true);
     }
 
     public void testExpressionAndDictionaryCommand() {
+        doTest(true);
+    }
+
+    public void testExample() {
         doTest(true);
     }
 }

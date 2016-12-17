@@ -30,7 +30,7 @@
 
 file ::= statement*
 
-statement ::= embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart)
+statement ::= embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart|EXAMPLE_NAME)
 
 embeddedCommand ::= COMMAND '='
 

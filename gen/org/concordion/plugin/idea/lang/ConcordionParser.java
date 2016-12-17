@@ -83,10 +83,10 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   public static boolean arguments(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arguments")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<arguments>");
+    Marker m = enter_section_(b, l, _NONE_, ARGUMENTS, "<arguments>");
     r = arguments_0(b, l + 1);
     r = r && arguments_1(b, l + 1);
-    exit_section_(b, l, m, ARGUMENTS, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -236,11 +236,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   public static boolean literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "literal")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<literal>");
+    Marker m = enter_section_(b, l, _NONE_, LITERAL, "<literal>");
     r = consumeToken(b, STRING_LITERAL);
     if (!r) r = consumeToken(b, DOUBLE_LITERAL);
     if (!r) r = consumeToken(b, INTEGER_LITERAL);
-    exit_section_(b, l, m, LITERAL, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -295,11 +295,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   public static boolean mapEntry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "mapEntry")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<map entry>");
+    Marker m = enter_section_(b, l, _NONE_, MAP_ENTRY, "<map entry>");
     r = ognlExpressionStart(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && ognlExpressionStart(b, l + 1);
-    exit_section_(b, l, m, MAP_ENTRY, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -324,11 +324,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ognlExpressionNext")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, null);
+    Marker m = enter_section_(b, l, _COLLAPSE_, OGNL_EXPRESSION_NEXT, null);
     r = ognlExpressionNext_0(b, l + 1);
     r = r && ognlExpressionNext_1(b, l + 1);
     r = r && ognlExpressionNext_2(b, l + 1);
-    exit_section_(b, l, m, OGNL_EXPRESSION_NEXT, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -383,11 +383,11 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   public static boolean ognlExpressionStart(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ognlExpressionStart")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<ognl expression start>");
+    Marker m = enter_section_(b, l, _NONE_, OGNL_EXPRESSION_START, "<ognl expression start>");
     r = ognlExpressionStart_0(b, l + 1);
     r = r && ognlExpressionStart_1(b, l + 1);
     r = r && ognlExpressionStart_2(b, l + 1);
-    exit_section_(b, l, m, OGNL_EXPRESSION_START, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -451,14 +451,14 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart)
+  // embeddedCommand? (DICTIONARY|setExpression|iterateExpression|ognlExpressionStart|EXAMPLE_NAME)
   public static boolean statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<statement>");
+    Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
     r = statement_0(b, l + 1);
     r = r && statement_1(b, l + 1);
-    exit_section_(b, l, m, STATEMENT, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -469,7 +469,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DICTIONARY|setExpression|iterateExpression|ognlExpressionStart
+  // DICTIONARY|setExpression|iterateExpression|ognlExpressionStart|EXAMPLE_NAME
   private static boolean statement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statement_1")) return false;
     boolean r;
@@ -478,6 +478,7 @@ public class ConcordionParser implements PsiParser, LightPsiParser {
     if (!r) r = setExpression(b, l + 1);
     if (!r) r = iterateExpression(b, l + 1);
     if (!r) r = ognlExpressionStart(b, l + 1);
+    if (!r) r = consumeToken(b, EXAMPLE_NAME);
     exit_section_(b, m, null, r);
     return r;
   }

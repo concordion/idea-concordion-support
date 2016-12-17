@@ -32,6 +32,7 @@ public interface ConcordionTypes {
   IElementType DOT = new ConcordionTokenType(".");
   IElementType DOUBLE_LITERAL = new ConcordionTokenType("DOUBLE_LITERAL");
   IElementType EQ = new ConcordionTokenType("=");
+  IElementType EXAMPLE_NAME = new ConcordionTokenType("EXAMPLE_NAME");
   IElementType HASH = new ConcordionTokenType("#");
   IElementType IDENTIFIER = new ConcordionTokenType("IDENTIFIER");
   IElementType INTEGER_LITERAL = new ConcordionTokenType("INTEGER_LITERAL");
