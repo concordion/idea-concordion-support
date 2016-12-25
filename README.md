@@ -6,10 +6,9 @@ It can be installed from [Intellij IDEA plugins repository](https://plugins.jetb
 
 **Settings > Plugins > Browse repositories...** > search for *Concordion support*
 
-![demo](https://plugins.jetbrains.com/files/7978/screenshot_15835.png)
+![demo_html](https://plugins.jetbrains.com/files/7978/screenshot_15835.png)
 
-- [How does **Markdown support** integration look like?](https://plugins.jetbrains.com/files/7978/screenshot_15837.png)
-- [How does **Markdown** integration look like?](https://plugins.jetbrains.com/files/7978/screenshot_15836.png)
+![demo_md](https://plugins.jetbrains.com/files/7978/screenshot_15837.png)
 
 It is built by gradle so it does not require to have intellij idea plugin sdk set up to start development.
 

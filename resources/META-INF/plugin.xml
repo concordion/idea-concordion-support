@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.10.1</version>
+  <version>0.11</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -22,6 +22,10 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.11<br/>
+    <ul>
+        <li>Better example name handling</li>
+    </ul>
     Version 0.10.1<br/>
     <ul>
         <li>Updates to support newer groovy plugin</li>
