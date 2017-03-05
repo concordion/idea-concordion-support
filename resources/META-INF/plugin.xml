@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.concordion.plugin.idea.lang</id>
   <name>Concordion support</name>
-  <version>0.11</version>
+  <version>0.11.1</version>
   <vendor email="gmandnepr@gmail.com" url="https://github.com/concordion/idea-concordion-support">Ievgen Degtiarenko</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -22,6 +22,10 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.11.1<br/>
+    <ul>
+        <li>Fixes issue #13 to be compatible with idea 2017 with scala plugin installed</li>
+    </ul>
     Version 0.11<br/>
     <ul>
         <li>Better example name handling</li>
