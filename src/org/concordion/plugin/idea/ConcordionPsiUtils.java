@@ -3,7 +3,6 @@ package org.concordion.plugin.idea;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.lang.ConcordionFileType;
@@ -118,7 +117,7 @@ public final class ConcordionPsiUtils {
         if (ConcordionFileType.INSTANCE.equals(fileType)) {
             return firstNotNull(
                     () -> embeddedCommandTextOf(element),
-                    () -> attributeCommandTextOf(InjectedLanguageUtil.findInjectionHost(element))
+                    () -> attributeCommandTextOf(ConcordionInjectionUtils.findInjectionHost(element))
             );
         } else if (HtmlFileType.INSTANCE.equals(fileType) || XHtmlFileType.INSTANCE.equals(fileType)) {
             return attributeCommandTextOf(element);
