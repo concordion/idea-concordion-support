@@ -27,4 +27,12 @@ public class HtmlExampleLineMarkerProviderTest extends ConcordionCodeInsightFixt
         myFixture.configureFromExistingVirtualFile(htmlSpec);
         assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("1-example");
     }
+
+    public void testDetectsOneExamplePerInjection() {
+        copyTestFixtureToConcordionProject("Example.java");
+        VirtualFile htmlSpec = copySpecToConcordionProject("Example.html");
+
+        myFixture.configureFromExistingVirtualFile(htmlSpec);
+        assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("First Example");
+    }
 }

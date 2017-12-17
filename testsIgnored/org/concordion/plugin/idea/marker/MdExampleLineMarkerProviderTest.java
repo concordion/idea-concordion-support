@@ -20,12 +20,28 @@ public class MdExampleLineMarkerProviderTest extends ConcordionCodeInsightFixtur
         assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("FirstExample");
     }
 
+    public void testDetectsOneExamplePerInjection() {
+        copyTestFixtureToConcordionProject("Example.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Example.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+        assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("First Example");
+    }
+
     public void testDetectExamplesAsFieldsWithoutEmbeddedCommandForMd() {
         copyTestFixtureToConcordionProject("Example.java");
         VirtualFile mdSpec = copySpecToConcordionProject("Example.md");
 
         myFixture.configureFromExistingVirtualFile(mdSpec);
         assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("SecondExample");
+    }
+
+    public void testDetectsOneExamplePerInjectionWithoutEmbedded() {
+        copyTestFixtureToConcordionProject("Example.java");
+        VirtualFile mdSpec = copySpecToConcordionProject("Example.md");
+
+        myFixture.configureFromExistingVirtualFile(mdSpec);
+        assertThat(myFixture.findAllGutters()).hasConcordionExampleGutter("Second Example");
     }
 
     public void testDetectExamplesForMd() {

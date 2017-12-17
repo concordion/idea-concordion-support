@@ -8,8 +8,11 @@ import com.intellij.patterns.PatternCondition;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionBundle;
+import org.concordion.plugin.idea.lang.ConcordionFile;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
 import org.concordion.plugin.idea.lang.psi.ConcordionField;
+import org.concordion.plugin.idea.lang.psi.ConcordionOgnlExpressionStart;
+import org.concordion.plugin.idea.lang.psi.ConcordionStatement;
 import org.concordion.plugin.idea.patterns.ConcordionElementPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,16 +29,28 @@ public class ExampleLineMarkerProvider implements LineMarkerProvider {
     public static final String EXAMPLE_PREFIX = ConcordionBundle.message("concordion.example.prefix") + " ";
 
     @NotNull
-    private static final ConcordionElementPattern.Capture<?> PATTERN = concordionElement().andOr(
-            concordionElement(EXAMPLE_NAME),
-            concordionElement(ConcordionField.class)
-                    .with(new PatternCondition<ConcordionField>("exampleField") {
+    private static final ConcordionElementPattern.Capture<?> EXAMPLE_COMMAND =
+            concordionElement().with(new PatternCondition<PsiElement>("exampleCommand") {
+        @Override
+        public boolean accepts(@NotNull PsiElement element, ProcessingContext processingContext) {
+            return element.getFirstChild() != null && element.getFirstChild().getNode().getElementType().equals(EXAMPLE_NAME);
+        }
+    });
+
+    @NotNull
+    private static final ConcordionElementPattern.Capture<?> EXAMPLE_FIELD =
+            concordionElement().withChild(
+                    concordionElement(ConcordionOgnlExpressionStart.class).withChild(concordionElement(ConcordionField.class).with(new PatternCondition<ConcordionField>("exampleField") {
                         @Override
-                        public boolean accepts(@NotNull ConcordionField element, ProcessingContext context) {
-                            return element.isExampleName();
+                        public boolean accepts(@NotNull ConcordionField field, ProcessingContext processingContext) {
+                            return field.isExampleName();
                         }
-                    })
-    );
+                    }))
+            );
+
+    @NotNull
+    private static final ConcordionElementPattern.Capture<?> PATTERN =
+            concordionElement(ConcordionFile.class).withChild(concordionElement(ConcordionStatement.class).andOr(EXAMPLE_COMMAND, EXAMPLE_FIELD));
 
     @Nullable
     @Override
