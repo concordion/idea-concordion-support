@@ -8,7 +8,7 @@ import org.concordion.plugin.idea.lang.psi.ConcordionField;
 import org.concordion.plugin.idea.lang.psi.ConcordionMethod;
 import org.concordion.plugin.idea.lang.psi.ConcordionVariable;
 
-import static org.assertj.core.api.StrictAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReferenceResolverInMdInjectionTest extends ConcordionCodeInsightFixtureTestCase {
 

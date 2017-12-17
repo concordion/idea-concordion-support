@@ -4,11 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -217,15 +214,5 @@ public class ConcordionHtmlCommandsCompletionContributorTest extends ConcordionC
             }
         }
         fail(command + " is not found in completion");
-    }
-
-    @Override
-    protected void runTest() throws Throwable {
-        new WriteCommandAction(getProject()) {
-            @Override
-            protected void run(@NotNull Result result) throws Throwable {
-                ConcordionHtmlCommandsCompletionContributorTest.super.runTest();
-            }
-        }.execute();
     }
 }

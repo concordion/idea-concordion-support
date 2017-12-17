@@ -5,7 +5,7 @@ import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
 import com.intellij.refactoring.safeDelete.SafeDeleteProcessor;
 import org.concordion.plugin.idea.ConcordionCodeInsightFixtureTestCase;
 
-import static org.assertj.core.api.StrictAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteConcordionSpecProcessorTest  extends ConcordionCodeInsightFixtureTestCase {
 

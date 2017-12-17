@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.intellij' version '0.1.10'
+    id 'org.jetbrains.intellij' version '0.2.17'
     id 'net.saliman.cobertura' version '2.3.1'
 }
 
@@ -30,15 +30,15 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2016.3.8', 'git4idea']
-    version '2016.3.4'
+    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2017.2.6', 'git4idea']
+    version '2017.2'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false
 }
 
 ext {
-    //2016.3.20161109
+    //2017.2.20170419
     markdownSupportPlugin = files(
             "${projectDir}/markdownSupport/lib/markdown.jar",
             "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
@@ -113,7 +113,7 @@ dependencies {
     compileWith markdownPlugin
     compileWith markdownNavigatorPlugin
 
-    testCompile 'org.assertj:assertj-core:3.1.0'
+    testCompile 'org.assertj:assertj-core:3.8.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
 }
 

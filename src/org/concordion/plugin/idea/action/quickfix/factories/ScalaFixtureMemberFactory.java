@@ -35,7 +35,7 @@ public class ScalaFixtureMemberFactory implements ConcordionFixtureMemberFactory
         }
         methodText.append(": ").append(parameters.member.type.getPresentableText()).append(" = ???");
 
-        ScFunction method = ScalaPsiElementFactory.createMethodFromText(methodText.toString(), parameters.fixture.getManager());
+        ScFunction method = ScalaPsiElementFactory.createMethodFromText(methodText.toString(), parameters.fixture.getProject());
 
         parameters.fixture.add(method);
 
