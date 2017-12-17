@@ -21,8 +21,8 @@ public class GuttersAssert extends AbstractAssert<GuttersAssert, Collection<Gutt
 
         Assertions.assertThat(actual)
                 .extracting(GutterMark::getTooltipText)
-                .describedAs("Expects 1 concordion gutter")
-                .hasSize(1);
+                .describedAs("Expects concordion gutter")
+                .contains("Concordion");
 
         return this;
     }
@@ -32,7 +32,7 @@ public class GuttersAssert extends AbstractAssert<GuttersAssert, Collection<Gutt
         Assertions.assertThat(actual)
                 .extracting(GutterMark::getTooltipText)
                 .describedAs("Expects no concordion gutter")
-                .isEmpty();
+                .doesNotContain("Concordion");
 
         return this;
     }
