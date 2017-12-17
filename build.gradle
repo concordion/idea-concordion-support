@@ -44,17 +44,6 @@ ext {
             "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
             "${projectDir}/markdownSupport/lib/Loboevolution.jar"
     )
-    //not available
-    markdownPlugin = files(
-            "${projectDir}/markdown/lib/asm-4.1-repacked.jar",
-            "${projectDir}/markdown/lib/asm-analysis-4.1-repacked.jar",
-            "${projectDir}/markdown/lib/asm-tree-4.1-repacked.jar",
-            "${projectDir}/markdown/lib/asm-util-4.1-repacked.jar",
-            "${projectDir}/markdown/lib/idea-markdown-repacked.jar",
-            "${projectDir}/markdown/lib/parboiled-core-1.1.6-repacked.jar",
-            "${projectDir}/markdown/lib/parboiled-java-1.1.6-repacked.jar",
-            "${projectDir}/markdown/lib/pegdown-1.4.2-repacked.jar"
-    )
     //2.0.0
     markdownNavigatorPlugin = files(
             "${projectDir}/markdownNavigator/lib/asm-all-asm4.jar",
@@ -110,7 +99,6 @@ sourceSets {
 
 dependencies {
     compileWith markdownSupportPlugin
-    compileWith markdownPlugin
     compileWith markdownNavigatorPlugin
 
     testCompile 'org.assertj:assertj-core:3.8.0'
@@ -124,13 +112,6 @@ task testMarkdownSupportIntegration(type: Test) {
     testClassesDir = sourceSets.testMd.output.classesDir
 }
 
-task testMarkdownIntegration(type: Test) {
-    classpath += markdownPlugin
-    classpath += sourceSets.testMd.compileClasspath
-    classpath += sourceSets.testMd.runtimeClasspath
-    testClassesDir = sourceSets.testMd.output.classesDir
-}
-
 task testMarkdownNavigatorIntegration(type: Test) {
     classpath += markdownNavigatorPlugin
     classpath += sourceSets.testMd.compileClasspath
@@ -139,5 +120,4 @@ task testMarkdownNavigatorIntegration(type: Test) {
 }
 
 check.dependsOn testMarkdownSupportIntegration
-check.dependsOn testMarkdownIntegration
 check.dependsOn testMarkdownNavigatorIntegration
