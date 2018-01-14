@@ -22,6 +22,11 @@
 
   <change-notes><![CDATA[
 <p>
+    Version 0.12<br/>
+    <ul>
+        <li>Fixes issue #15 and #16</li>
+        <li>Drop support for markdown plugin as it is no longer available in idea repository</li>
+    </ul>
     Version 0.11.1<br/>
     <ul>
         <li>Fixes issue #13 to be compatible with idea 2017 with scala plugin installed</li>
