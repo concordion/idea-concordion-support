@@ -1,5 +1,6 @@
 package org.concordion.plugin.idea;
 
+import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.Segment;
 import com.intellij.openapi.util.TextRange;
@@ -8,7 +9,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.testFramework.LightVirtualFileBase;
 import org.concordion.plugin.idea.lang.ConcordionFileType;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +22,11 @@ public final class ConcordionInjectionUtils {
     @Nullable
     public static PsiElement findElementInHostWithManyInjections(@NotNull PsiLanguageInjectionHost host, int offset) {
         final Ref<PsiElement> ref = Ref.create();
-        InjectedLanguageUtil.enumerate(host, (injected, places) -> {
-            Segment segment = places.get(0).getHostRangeMarker();
+        InjectedLanguageManager.getInstance(host.getProject()).enumerate(host, (injected, places) -> {
+            PsiLanguageInjectionHost.Shred shred = places.get(0);
+            Segment segment = shred.getHostRangeMarker();
             if (segment != null && TextRange.create(segment).contains(offset)) {
-                ref.set(injected.findElementAt(offset - InjectedLanguageUtil.getInjectedStart(places)));
+                ref.set(injected.findElementAt(offset - shred.getRangeInsideHost().getStartOffset() - host.getTextRange().getStartOffset()));
             }
         });
         return ref.get();
@@ -41,7 +42,7 @@ public final class ConcordionInjectionUtils {
 
     @Nullable
     public static PsiFile getTopLevelFile(@NotNull PsiElement element) {
-        PsiFile topLevel = InjectedLanguageUtil.getTopLevelFile(element);
+        PsiFile topLevel = InjectedLanguageManager.getInstance(element.getProject()).getTopLevelFile(element);
         if (topLevel == null) {
             return null;
         }
@@ -62,5 +63,13 @@ public final class ConcordionInjectionUtils {
             current = ((LightVirtualFileBase) current).getOriginalFile();
         }
         return current;
+    }
+
+    @Nullable
+    public static PsiLanguageInjectionHost findInjectionHost(@Nullable PsiElement element) {
+        if (element == null) {
+            return null;
+        }
+        return InjectedLanguageManager.getInstance(element.getProject()).getInjectionHost(element);
     }
 }
