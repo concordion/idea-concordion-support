@@ -38,47 +38,38 @@ intellij {
 }
 
 ext {
-    //2017.2.20170419
+    //193.4386.21
     markdownSupportPlugin = files(
             "${projectDir}/markdownSupport/lib/markdown.jar",
-            "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
-            "${projectDir}/markdownSupport/lib/Loboevolution.jar"
+            "${projectDir}/markdownSupport/lib/markdown-0.1.33.jar",
+            "${projectDir}/markdownSupport/lib/owasp-java-html-sanitizer.jar",
+            "${projectDir}/markdownSupport/lib/resources_en.jar"
     )
-    //2.0.0
+    //2.9.7
     markdownNavigatorPlugin = files(
-            "${projectDir}/markdownNavigator/lib/asm-all-asm4.jar",
-            "${projectDir}/markdownNavigator/lib/autolink-0.5.0.jar",
+            "${projectDir}/markdownNavigator/lib/autolink-0.6.0.jar",
+            "${projectDir}/markdownNavigator/lib/boxed-json.jar",
             "${projectDir}/markdownNavigator/lib/commons-io-2.4.jar",
-            "${projectDir}/markdownNavigator/lib/commons-validator-1.4.1.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-abbreviation.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-anchorlink.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-autolink.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-definition.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-emoji.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-escaped-character.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-footnotes.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-gfm-strikethrough.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-gfm-tables.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-gfm-tasklist.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-jekyll-front-matter.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-spec-example.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-tables.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-toc.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-typographic.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-wikilink.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-ext-yaml-front-matter.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark.jar",
-            "${projectDir}/markdownNavigator/lib/flexmark-test-util.jar",
+            "${projectDir}/markdownNavigator/lib/flexmark-parent.jar",
+            "${projectDir}/markdownNavigator/lib/fontbox-2.0.8.jar",
+            "${projectDir}/markdownNavigator/lib/graphics2d-0.10.jar",
             "${projectDir}/markdownNavigator/lib/idea-multimarkdown.jar",
-            "${projectDir}/markdownNavigator/lib/idea-multimarkdown-javafx.jar",
-            "${projectDir}/markdownNavigator/lib/javax.json-1.0.4.jar",
-            "${projectDir}/markdownNavigator/lib/kotlin-reflect.jar",
-            "${projectDir}/markdownNavigator/lib/kotlin-runtime.jar",
-            "${projectDir}/markdownNavigator/lib/Loboevolution.jar",
-            "${projectDir}/markdownNavigator/lib/parboiled-core-asm4.jar",
-            "${projectDir}/markdownNavigator/lib/parboiled-java-asm4.jar",
-            "${projectDir}/markdownNavigator/lib/pegdown-1.6.7.jar",
-            "${projectDir}/markdownNavigator/lib/smart-data.jar"
+            "${projectDir}/markdownNavigator/lib/javafx-webview-debugger.jar",
+            "${projectDir}/markdownNavigator/lib/Java-WebSocket-1.3.7.jar",
+            "${projectDir}/markdownNavigator/lib/javax.json-1.1.4.jar",
+            "${projectDir}/markdownNavigator/lib/jgoodies-common-1.4.0.jar",
+            "${projectDir}/markdownNavigator/lib/jsoup-1.10.2.jar",
+            "${projectDir}/markdownNavigator/lib/openhtmltopdf-core-0.0.1-RC12.jar",
+            "${projectDir}/markdownNavigator/lib/openhtmltopdf-jsoup-dom-converter-0.0.1-RC12.jar",
+            "${projectDir}/markdownNavigator/lib/openhtmltopdf-pdfbox-0.0.1-RC12.jar",
+            "${projectDir}/markdownNavigator/lib/openhtmltopdf-rtl-support-0.0.1-RC12.jar",
+            "${projectDir}/markdownNavigator/lib/pdfbox-2.0.8.jar",
+            "${projectDir}/markdownNavigator/lib/plantuml-jar-asl-1.2019.4.jar",
+            "${projectDir}/markdownNavigator/lib/plugin-util.jar",
+            "${projectDir}/markdownNavigator/lib/reverse-regex-util.jar",
+            "${projectDir}/markdownNavigator/lib/smart-data.jar",
+            "${projectDir}/markdownNavigator/lib/tree-iteration-util.jar",
+            "${projectDir}/markdownNavigator/lib/xmpbox-2.0.8.jar"
     )
 }
 
