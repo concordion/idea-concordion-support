@@ -5,8 +5,8 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.intellij' version '0.2.17'
-    id 'net.saliman.cobertura' version '2.3.1'
+    id 'org.jetbrains.intellij' version '0.4.10'
+    id 'net.saliman.cobertura' version '2.6.1'
 }
 
 apply plugin: 'java'
@@ -109,14 +109,14 @@ task testMarkdownSupportIntegration(type: Test) {
     classpath += markdownSupportPlugin
     classpath += sourceSets.testMd.compileClasspath
     classpath += sourceSets.testMd.runtimeClasspath
-    testClassesDir = sourceSets.testMd.output.classesDir
+    testClassesDirs = sourceSets.testMd.output.classesDirs
 }
 
 task testMarkdownNavigatorIntegration(type: Test) {
     classpath += markdownNavigatorPlugin
     classpath += sourceSets.testMd.compileClasspath
     classpath += sourceSets.testMd.runtimeClasspath
-    testClassesDir = sourceSets.testMd.output.classesDir
+    testClassesDirs = sourceSets.testMd.output.classesDirs
 }
 
 check.dependsOn testMarkdownSupportIntegration
