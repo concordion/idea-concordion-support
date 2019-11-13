@@ -4,9 +4,9 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiIdentifier;
 
-import static org.concordion.plugin.idea.ConcordionContextKeys.*;
-import static org.concordion.plugin.idea.patterns.ConcordionElementPattern.*;
-import static org.concordion.plugin.idea.patterns.ConcordionPatterns.*;
+import static org.concordion.plugin.idea.ConcordionContextKeys.TEST_FIXTURE_IDENTIFIER;
+import static org.concordion.plugin.idea.patterns.ConcordionElementPattern.PARENT_OF_THE_PARENT;
+import static org.concordion.plugin.idea.patterns.ConcordionPatterns.concordionElement;
 
 public class JavaTestFixtureLineMarkerProvider extends AbstractLineMarkerProvider {
 
@@ -16,7 +16,7 @@ public class JavaTestFixtureLineMarkerProvider extends AbstractLineMarkerProvide
                         .withParent(PsiClass.class)
                         .withSuperParent(PARENT_OF_THE_PARENT, PsiFile.class)
                         .withFoundSpecOfAnyType(),
-                TEST_FIXTURE
+                TEST_FIXTURE_IDENTIFIER
         );
     }
 }

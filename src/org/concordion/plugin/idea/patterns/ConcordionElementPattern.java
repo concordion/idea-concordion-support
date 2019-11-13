@@ -66,6 +66,7 @@ public class ConcordionElementPattern<T extends PsiElement, Self extends Concord
 
                 context.put(SPEC, spec);
                 context.put(TEST_FIXTURE, testFixture);
+                context.put(TEST_FIXTURE_IDENTIFIER, element);
 
                 return spec != null;
             }

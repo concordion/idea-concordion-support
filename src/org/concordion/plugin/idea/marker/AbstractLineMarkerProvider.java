@@ -1,6 +1,5 @@
 package org.concordion.plugin.idea.marker;
 
-import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
@@ -40,7 +39,6 @@ public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
 
         ProcessingContext context = new ProcessingContext();
         if (pattern.accepts(element, context)) {
-
             return concordionFileInfoFor(context.get(key));
         }
 
@@ -58,7 +56,6 @@ public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
                 element,
                 element.getTextRange(),
                 ConcordionIcons.ICON,
-                Pass.UPDATE_ALL,
                 AbstractLineMarkerProvider::generateTooltipForConcordionFile,
                 AbstractLineMarkerProvider::navigateToPairedFile,
                 GutterIconRenderer.Alignment.CENTER

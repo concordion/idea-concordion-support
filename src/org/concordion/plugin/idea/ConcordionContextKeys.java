@@ -2,6 +2,7 @@ package org.concordion.plugin.idea;
 
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ public final class ConcordionContextKeys {
     private ConcordionContextKeys() {
     }
 
+    public static final Key<PsiElement> TEST_FIXTURE_IDENTIFIER = new Key<>("CONCORDION_TEST_FIXTURE_IDENTIFIER");
     public static final Key<PsiClass> TEST_FIXTURE = new Key<>("CONCORDION_TEST_FIXTURE");
     public static final Key<PsiFile> SPEC = new Key<>("CONCORDION_HTML_SPEC");
 

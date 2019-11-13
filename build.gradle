@@ -30,8 +30,8 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['junit', 'properties', 'Groovy', 'org.intellij.scala:2017.2.6', 'git4idea']
-    version '2017.2'
+    plugins = ['java', 'junit', 'properties', 'Groovy', 'org.intellij.scala:2019.2.28', 'git4idea']
+    version '2019.2.4'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
     updateSinceUntilBuild false
