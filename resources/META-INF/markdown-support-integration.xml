@@ -3,7 +3,6 @@
     <specification implementation="org.concordion.plugin.idea.specifications.ConcordionMdSpecification"/>
   </extensions>
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="org.concordion.plugin.idea.md.MarkdownFileTypeFactory"/>
     <multiHostInjector implementation="org.concordion.plugin.idea.injection.ConcordionToMarkdownSupportInjector"/>
     <codeInsight.lineMarkerProvider language="Markdown" implementationClass="org.concordion.plugin.idea.marker.MdSpecLineMarkerProvider"/>
     <completion.contributor language="Concordion" implementationClass="org.concordion.plugin.idea.autocomplete.ConcordionEmbeddedCommandsCompletionContributor"/>

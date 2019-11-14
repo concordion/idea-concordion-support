@@ -30,7 +30,7 @@ repositories {
 
 intellij {
     pluginName 'IdeaConcordionSupport'
-    plugins = ['java', 'junit', 'properties', 'Groovy', 'org.intellij.scala:2019.2.28', 'git4idea']
+    plugins = ['java', 'junit', 'properties', 'Groovy', 'org.intellij.scala:2019.2.37', 'git4idea']
     version '2019.2.4'
 //    sandboxDirectory "$projectDir/idea-sandbox"
     downloadSources false
@@ -38,11 +38,12 @@ intellij {
 }
 
 ext {
-    //2017.2.20170419
+    //192.5728.98
     markdownSupportPlugin = files(
             "${projectDir}/markdownSupport/lib/markdown.jar",
-            "${projectDir}/markdownSupport/lib/intellij-markdown.jar",
-            "${projectDir}/markdownSupport/lib/Loboevolution.jar"
+            "${projectDir}/markdownSupport/lib/markdown-0.1.31.jar",
+            "${projectDir}/markdownSupport/lib/owasp-java-html-sanitizer.jar",
+            "${projectDir}/markdownSupport/lib/resources_en.jar"
     )
     //2.0.0
     markdownNavigatorPlugin = files(

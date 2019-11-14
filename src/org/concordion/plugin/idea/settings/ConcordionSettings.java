@@ -13,7 +13,7 @@ import java.util.Collection;
 
 @State(
         name = "ConcordionSettings",
-        storages = @Storage(file = "concordion.xml")
+        storages = @Storage(value = "concordion.xml")
 )
 public class ConcordionSettings implements PersistentStateComponent<ConcordionSettings> {
 
