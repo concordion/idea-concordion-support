@@ -60,7 +60,7 @@ public class ReferenceResolverInMdInjectionTest extends ConcordionCodeInsightFix
         assertThat(declaration).isNotEqualTo(variable);
     }
 
-    public void testResolveVariableInReferences() {
+    public void ignoreTestResolveVariableInReferences() {
 
         copyTestFixtureToConcordionProject("VariableReferenceInReferencesSection.java");
         VirtualFile mdSpec = copySpecToConcordionProject("VariableReferenceInReferencesSection.md");
