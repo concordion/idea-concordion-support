@@ -1,11 +1,11 @@
 package org.concordion.plugin.idea.marker;
 
-import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.concordion.plugin.idea.ConcordionNavigationService;
 import org.concordion.plugin.idea.lang.ConcordionIcons;
@@ -15,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.List;
 
 public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
 
@@ -47,22 +45,15 @@ public abstract class AbstractLineMarkerProvider implements LineMarkerProvider {
         return null;
     }
 
-    @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-
-    }
-
-    @NotNull
     private static LineMarkerInfo<PsiElement> concordionFileInfoFor(@NotNull PsiElement element) {
+        PsiElement leaf = PsiTreeUtil.firstChild(element);
         return new LineMarkerInfo<>(
-                element,
-                element.getTextRange(),
+                leaf,
+                leaf.getTextRange(),
                 ConcordionIcons.ICON,
-                Pass.UPDATE_ALL,
                 AbstractLineMarkerProvider::generateTooltipForConcordionFile,
                 AbstractLineMarkerProvider::navigateToPairedFile,
-                GutterIconRenderer.Alignment.CENTER
-        );
+                GutterIconRenderer.Alignment.CENTER);
     }
 
     @NotNull
