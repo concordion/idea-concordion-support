@@ -1,4 +1,4 @@
-# IdeaConcordionSupport [![Build Status](https://travis-ci.org/concordion/idea-concordion-support.svg)](https://travis-ci.org/concordion/idea-concordion-support)
+# IdeaConcordionSupport [![Build Status](https://travis-ci.com/concordion/idea-concordion-support.svg)](https://travis-ci.com/concordion/idea-concordion-support)
 
 This plugin provides support for [concordion](http://concordion.org/) framework.
 
