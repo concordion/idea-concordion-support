@@ -3,24 +3,30 @@ package org.concordion.plugin.idea;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import org.concordion.plugin.idea.lang.ConcordionFileType;
 import org.concordion.plugin.idea.lang.psi.*;
-import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.intellij.psi.PsiModifier.*;
-import static com.intellij.psi.util.PsiTreeUtil.*;
-import static java.lang.Character.*;
-import static java.util.Arrays.*;
+import static com.intellij.psi.PsiModifier.PUBLIC;
+import static com.intellij.psi.PsiModifier.STATIC;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
+import static com.intellij.psi.util.PsiTreeUtil.getParentOfType;
+import static java.lang.Character.isUpperCase;
+import static java.lang.Character.toUpperCase;
+import static java.util.Arrays.stream;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.*;
-import static org.concordion.plugin.idea.ConcordionCommand.*;
+import static java.util.stream.Collectors.toList;
+import static org.concordion.plugin.idea.ConcordionCommand.ASSERT_EQUALS_SPINAL;
 import static org.concordion.plugin.idea.ConcordionPsiTypeUtils.*;
 
 public final class ConcordionPsiUtils {
@@ -28,7 +34,7 @@ public final class ConcordionPsiUtils {
     private ConcordionPsiUtils() {
     }
 
-    public static final PsiType DYNAMIC = new PsiPrimitiveType("?", new PsiAnnotation[0]);
+    public static final PsiType DYNAMIC = PsiType.NULL;
 
     @NotNull
     public static List<PsiType> typeOfExpressions(@NotNull List<ConcordionOgnlExpressionStart> starts) {

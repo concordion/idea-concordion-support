@@ -90,7 +90,7 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
     protected void setUp() throws Exception {
         super.setUp();
 
-        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(myModule).getSourceRoots();
+        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(myFixture.getModule()).getSourceRoots();
         if (sourceRoots.length == 1) {
             VirtualFile root = sourceRoots[0];
             Ref<VirtualFile> src = new Ref<>();
@@ -102,20 +102,20 @@ public abstract class ConcordionCodeInsightFixtureTestCase extends JavaCodeInsig
                 return null;
             });
 
-            PsiTestUtil.removeSourceRoot(myModule, root);
-            PsiTestUtil.addSourceRoot(myModule, src.get(), JavaSourceRootType.TEST_SOURCE);
-            PsiTestUtil.addSourceRoot(myModule, resources.get(), JavaResourceRootType.TEST_RESOURCE);
+            PsiTestUtil.removeSourceRoot(myFixture.getModule(), root);
+            PsiTestUtil.addSourceRoot(myFixture.getModule(), src.get(), JavaSourceRootType.TEST_SOURCE);
+            PsiTestUtil.addSourceRoot(myFixture.getModule(), resources.get(), JavaResourceRootType.TEST_RESOURCE);
 
             //JDK
-            PsiTestUtil.addLibrary(myModule, "testData/lib/rt.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/rt.jar");
             //Concordion dependencies
-            PsiTestUtil.addLibrary(myModule, "testData/lib/junit-4.12.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/junit-4.12.jar");
             //Concordion itself
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-2.0.0.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/concordion-2.0.0.jar");
             //Concordion extensions
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-embed-extension-1.1.2.jar");
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-executeonlyif-extension-0.2.1.jar");
-            PsiTestUtil.addLibrary(myModule, "testData/lib/concordion-screenshot-extension-1.2.0.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/concordion-embed-extension-1.1.2.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/concordion-executeonlyif-extension-0.2.1.jar");
+            PsiTestUtil.addLibrary(myFixture.getModule(), "testData/lib/concordion-screenshot-extension-1.2.0.jar");
         }
     }
 
